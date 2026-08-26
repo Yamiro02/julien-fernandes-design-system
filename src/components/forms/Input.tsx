@@ -21,9 +21,9 @@ export function Input({
      aliase `--control-md` depuis le rail unique, mais la classe reste pour l'API
      et pour le jour où le rail redivergerait. */
   const cls = cn(
-    'jf-input',
-    size !== 'md' && 'jf-input--' + size,
-    surface === 'card' && 'jf-input--on-card',
+    'ds-input',
+    size !== 'md' && 'ds-input--' + size,
+    surface === 'card' && 'ds-input--on-card',
     invalid && 'is-error',
     className,
   );

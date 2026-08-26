@@ -11,6 +11,6 @@ export interface SeparatorProps extends HTMLAttributes<HTMLDivElement> {
 export function Separator({
   orientation = 'horizontal', label, className = '', ...rest
 }: SeparatorProps): JSX.Element {
-  const cls = cn('jf-sep', orientation === 'vertical' && 'jf-sep--vertical', label ? 'jf-sep--label' : '', className);
+  const cls = cn('ds-sep', orientation === 'vertical' && 'ds-sep--vertical', label ? 'ds-sep--label' : '', className);
   return <div role="separator" aria-orientation={orientation} className={cls} {...rest}>{label || null}</div>;
 }

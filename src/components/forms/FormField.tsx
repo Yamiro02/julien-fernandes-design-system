@@ -20,16 +20,16 @@ export function FormField({
   label, htmlFor, help, error, required = false, className = '', children,
 }: FormFieldProps): JSX.Element {
   return (
-    <div className={cn('jf-field', className)}>
+    <div className={cn('ds-field', className)}>
       {label ? (
-        <label className="jf-label" htmlFor={htmlFor}>
+        <label className="ds-label" htmlFor={htmlFor}>
           {label}{required ? <span style={{ color: 'var(--primary)' }}> *</span> : null}
         </label>
       ) : null}
       {children}
       {error ? (
-        <span className="jf-error"><Icon name="circle-alert" size="0.875rem" strokeWidth={2.5} />{error}</span>
-      ) : help ? <span className="jf-help">{help}</span> : null}
+        <span className="ds-error"><Icon name="circle-alert" size="0.875rem" strokeWidth={2.5} />{error}</span>
+      ) : help ? <span className="ds-help">{help}</span> : null}
     </div>
   );
 }

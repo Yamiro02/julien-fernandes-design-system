@@ -7,11 +7,12 @@
    jetons qu'un fichier de marque doit fournir — il ne le remplit pas.
 
        @import "@julienfernandes/ds/core.css";        <- CE fichier
-       @import "@julienfernandes/ds/brand-jf.css";    <- ou votre brand-<client>.css
+       @import "./brand-<vous>.css";                  <- la vôtre, copiée du gabarit
 
    POURQUOI DEUX FICHIERS, ET PAS UN OVERRIDE EN CASCADE. Importer le système complet
    puis redéclarer par-dessus laisserait un jeton oublié retomber EN SILENCE sur la
-   valeur de Julien : le client livrerait du corail sans le savoir. Avec deux fichiers,
+   valeur d'origine : on livrerait la couleur de quelqu'un d'autre sans le savoir. Avec
+   deux fichiers,
    un jeton manquant fait que la variable n'existe pas — et ça casse à l'écran. C'est
    la même logique que `--text-*: initial` dans theme.css, qui supprime l'échelle typo
    native de Tailwind : une régression doit CASSER au lieu de DÉRIVER.
@@ -42,7 +43,7 @@
 /* Le reset va dans `base`, les états de composants dans `components` — leur ordre relatif
    est inchangé (base reste avant patterns), et TOUS DEUX passent SOUS `utilities`. C'est
    ce qui permet à un utilitaire Tailwind passé par `className` de l'emporter sur une règle
-   `.jf-*`, exactement comme sous Tailwind v3 où les utilitaires étaient émis hors couche,
+   `.ds-*`, exactement comme sous Tailwind v3 où les utilitaires étaient émis hors couche,
    après ce fichier, et gagnaient à l'ordre de source.
    Les deux ou aucun : ne couvrir que patterns.css laisserait base.css gagner sur lui. */
 @import './tokens/base.css' layer(base);

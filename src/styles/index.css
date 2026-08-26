@@ -1,15 +1,19 @@
-/* Le design system de Julien Fernandes, monté : le SOCLE plus SA marque.
-   C'est l'entrée historique (`@julienfernandes/ds/styles.css`) et elle ne change pas de
-   comportement — pour les apps de Julien, importer ce fichier reste le bon geste.
+/* L'ENTRÉE PAR DÉFAUT du template : le SOCLE plus la marque de PLACEHOLDER.
+   C'est la ligne que `npm run rebrand` repointe vers votre fichier de marque. Ne la
+   modifiez pas à la main sans raison : le script la cherche telle quelle.
 
-   POUR FABRIQUER LE DS D'UN CLIENT, n'importez PAS ce fichier : il embarque la marque
-   Julien. Importez le socle et la marque du client, séparément :
+       import '@julienfernandes/ds/styles.css';
+
+   La palette livrée ici est grise et fade EXPRÈS. Si vous la reconnaissez encore à la
+   recette, c'est que vous ne l'avez pas remplacée.
+
+   POUR MONTER UNE MARQUE PRÉCISE sans passer par ce fichier, importez les deux fichiers
+   séparément — c'est le montage explicite, celui que fait une app de production :
 
        @import "@julienfernandes/ds/core.css";
-       @import "./brand-<client>.css";          <- copié de brand.template.css
+       @import "./brand-<vous>.css";                   <- la vôtre
+       @import "@julienfernandes/ds/brand-jf.css";     <- ou l'instance de référence livrée
 
-   L'ordre compte peu — les jetons sont hors couche et la marque ne fait que remplir des
-   `:root` / `.dark` que le socle laisse vides — mais gardez la marque en second : c'est
-   la lecture qui décrit ce qui se passe. */
+   Explicite plutôt que silencieux : une app doit dire quelle marque elle monte. */
 @import './core.css';
-@import './brand-jf.css';
+@import './brand-acme.css';

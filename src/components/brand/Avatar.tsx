@@ -1,16 +1,25 @@
 import type { HTMLAttributes } from 'react';
 import { cn } from '../../lib/cn';
+import { BRAND_MONOGRAM, BRAND_NAME } from '../../brand';
 
 /**
- * Cut-out portrait with an optional orange halo behind the shoulders.
- * No portrait file was supplied with the kit — without `src` it falls back to a
- * muted JF monogram placeholder. Drop the real cut-out PNG in assets/ and pass it.
+ * Portrait détouré, avec un halo de marque optionnel derrière les épaules.
+ * Sans `src`, il retombe sur un monogramme en sourdine. Déposez le PNG détouré dans
+ * assets/ et passez-le.
+ *
+ * Le monogramme de repli était écrit EN DUR en JSX — deux initiales de marque dans un
+ * composant du socle. Le balayage de la palette de recette ne pouvait pas le voir : il lit
+ * le CSS calculé, pas le texte rendu par React. Il vient désormais de `src/brand.ts`, et la
+ * prop `initials` l'emporte.
  */
 export interface AvatarProps extends HTMLAttributes<HTMLSpanElement> {
   /** Cut-out portrait (transparent PNG). */
   src?: string;
+  /** Texte alternatif. Défaut : `BRAND_NAME` de `src/brand.ts`. */
   alt?: string;
-  /** CSS length, always rem. */
+  /** Le monogramme de repli, sans `src`. Défaut : `BRAND_MONOGRAM` de `src/brand.ts`. */
+  initials?: string;
+  /** Longueur CSS, toujours en rem. */
   size?: string;
   halo?: boolean;
 }
@@ -23,7 +32,8 @@ const AVATAR_HALO =
   + 'color-mix(in srgb, var(--brand-to) 16%, transparent) 55%, transparent 78%)';
 
 export function Avatar({
-  src, alt = 'Avatar', size = '4rem', halo = true, className = '', style, ...rest
+  src, alt = BRAND_NAME, initials = BRAND_MONOGRAM, size = '4rem', halo = true,
+  className = '', style, ...rest
 }: AvatarProps): JSX.Element {
   return (
     <span
@@ -48,7 +58,7 @@ export function Avatar({
           background: 'var(--muted)', border: '1px solid var(--border)', color: 'var(--text-muted)',
           fontFamily: 'var(--font-display)', fontSize: 'calc(' + size + ' * 0.34)',
           letterSpacing: 'var(--tracking-heading)',
-        }}>JF</span>
+        }}>{initials}</span>
       )}
     </span>
   );

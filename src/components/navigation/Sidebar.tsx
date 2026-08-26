@@ -31,7 +31,7 @@ export interface SidebarProps extends HTMLAttributes<HTMLElement> {
   collapsible?: boolean;
   /** Overrides the persisted initial state. */
   defaultCollapsed?: boolean;
-  /** localStorage key for the collapsed state. Default 'jf-sidebar-collapsed'. */
+  /** localStorage key for the collapsed state. Default 'ds-sidebar-collapsed'. */
   storageKey?: string;
   /** Mobile drawer open state (under 64rem). */
   open?: boolean;
@@ -42,7 +42,7 @@ export interface SidebarProps extends HTMLAttributes<HTMLElement> {
 
 export function Sidebar({
   sections = [], footer, brand, brandCollapsed, collapsible = true, defaultCollapsed,
-  storageKey = 'jf-sidebar-collapsed',
+  storageKey = 'ds-sidebar-collapsed',
   open = false, onClose, staticLayout = false, className = '', children, ...rest
 }: SidebarProps): JSX.Element {
   const [collapsed, setCollapsed] = useState<boolean>(() => {
@@ -56,19 +56,19 @@ export function Sidebar({
   });
   return (
     <Fragment>
-      {open ? <div className="jf-appshell__scrim" onClick={onClose} /> : null}
+      {open ? <div className="ds-appshell__scrim" onClick={onClose} /> : null}
       <aside
-        className={cn('jf-sidebar', collapsed && 'is-collapsed', open && 'is-open', staticLayout && 'jf-sidebar--static', className)}
+        className={cn('ds-sidebar', collapsed && 'is-collapsed', open && 'is-open', staticLayout && 'ds-sidebar--static', className)}
         {...rest}
       >
-        <div className="jf-sidebar__head">
+        <div className="ds-sidebar__head">
           {collapsed
             ? brandCollapsed ?? <Logo variant="monogram" height="1.5rem" />
             : brand ?? <Logo variant="wordmark" height="1.25rem" />}
           {collapsible ? (
             <button
               type="button"
-              className="jf-sidebar__toggle"
+              className="ds-sidebar__toggle"
               aria-label={collapsed ? 'Déplier la navigation' : 'Replier la navigation'}
               aria-expanded={!collapsed}
               onClick={toggle}
@@ -77,29 +77,29 @@ export function Sidebar({
             </button>
           ) : null}
         </div>
-        <nav className="jf-sidebar__nav">
+        <nav className="ds-sidebar__nav">
           {sections.map((s, i) => (
             <Fragment key={i}>
-              {s.title ? <span className="jf-sidebar__title">{s.title}</span> : null}
+              {s.title ? <span className="ds-sidebar__title">{s.title}</span> : null}
               {(s.items || []).map(it => {
                 const Tag = (it.href ? 'a' : 'button') as ElementType;
                 return (
                   <Tag
                     key={it.label}
                     {...(it.href ? { href: it.href } : { type: 'button' })}
-                    className={cn('jf-sidenav', it.active && 'is-active')}
+                    className={cn('ds-sidenav', it.active && 'is-active')}
                     aria-current={it.active ? 'page' : undefined}
                     title={collapsed ? it.label : undefined}
                     onClick={it.onClick}
                   >
-                    {it.icon}<span className="jf-sidenav__label">{it.label}</span>
+                    {it.icon}<span className="ds-sidenav__label">{it.label}</span>
                   </Tag>
                 );
               })}
             </Fragment>
           ))}
         </nav>
-        {footer ? <div className="jf-sidebar__foot">{footer}</div> : null}
+        {footer ? <div className="ds-sidebar__foot">{footer}</div> : null}
         {children}
       </aside>
     </Fragment>

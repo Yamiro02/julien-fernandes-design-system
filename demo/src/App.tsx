@@ -49,7 +49,7 @@ export function App() {
   useEffect(() => {
     if (!appScale) return;
     const el = document.createElement('style');
-    el.id = 'jf-app-scale';
+    el.id = 'ds-app-scale';
     el.textContent = appScaleCss;
     document.head.appendChild(el);
     return () => el.remove();

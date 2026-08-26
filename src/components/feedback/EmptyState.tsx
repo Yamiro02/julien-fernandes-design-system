@@ -14,7 +14,7 @@ export function EmptyState({
   icon, title, description, action, className = '', ...rest
 }: EmptyStateProps): JSX.Element {
   return (
-    <div className={cn('jf-empty', className)} {...rest}>
+    <div className={cn('ds-empty', className)} {...rest}>
       {icon ? <Pastille size="panneau" tone="brand" outlined>{icon}</Pastille> : null}
       <div style={{ display: 'flex', flexDirection: 'column', gap: '0.1875rem', alignItems: 'center' }}>
         <h4 style={{ margin: 0 }}>{title}</h4>

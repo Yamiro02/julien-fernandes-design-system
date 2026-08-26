@@ -22,16 +22,16 @@ export function Toast({
 }: ToastProps): JSX.Element {
   const t = TONES[tone] || TONES.info;
   return (
-    <div className={cn('jf-toast', className)} role="status" {...rest}>
-      <span className="jf-toast__icon" style={{ background: t.bg, color: t.fg }}>
+    <div className={cn('ds-toast', className)} role="status" {...rest}>
+      <span className="ds-toast__icon" style={{ background: t.bg, color: t.fg }}>
         <Icon name={t.icon} size="0.9375rem" strokeWidth={2.5} />
       </span>
       <div style={{ display: 'flex', flexDirection: 'column', gap: '0.125rem', flex: 1 }}>
-        <span className="jf-toast__title">{title}</span>
-        {description ? <span className="jf-toast__desc">{description}</span> : null}
+        <span className="ds-toast__title">{title}</span>
+        {description ? <span className="ds-toast__desc">{description}</span> : null}
       </div>
       {onClose ? (
-        <button type="button" className="jf-toast__close" aria-label="Fermer" onClick={onClose}>
+        <button type="button" className="ds-toast__close" aria-label="Fermer" onClick={onClose}>
           <Icon name="x" size="1rem" />
         </button>
       ) : null}

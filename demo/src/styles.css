@@ -20,6 +20,6 @@
 /* Tailwind v4 ne détecte les sources qu’à partir de la racine de la démo. Celles du
    design system vivent un cran au-dessus : on les déclare, comme le faisait la liste
    `content` de la v3. Sans effet aujourd’hui — les composants rendent des classes
-   .jf-* et pas des utilitaires — mais la vitrine reste exacte le jour où l’un d’eux
+   .ds-* et pas des utilitaires — mais la vitrine reste exacte le jour où l’un d’eux
    en écrira un. */
 @source '../../src';

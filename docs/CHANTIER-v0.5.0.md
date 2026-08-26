@@ -100,6 +100,15 @@ Contenu à déplacer : `--ink-deep` · `--gradient-thumbnail` · `--gradient-thu
 les `@utility` `bg-thumbnail*` et `bg-grid*` · `GridBackground` · le mode `hot` de `Halo` · les
 icônes de plateformes de `Icon` (youtube, instagram, tiktok…).
 
+**Correction apportée à l'exécution.** Ce paragraphe a été écrit avant la scission `core.css` /
+`brand-*.css` : il disait « déplacer les jetons », c'est-à-dire mettre leurs **valeurs** dans
+l'extension. Ce serait la seule pièce du paquet à porter des valeurs de marque hors d'un fichier
+de marque — et une marque de test devrait les charger puis les écraser en cascade, exactement
+l'override silencieux que §1.1 refuse. `brand-content.css` est donc **symétrique de `core.css`** :
+structure, `@utility`, correspondances de thème, et le **contrat** des sept jetons. Les valeurs
+restent dans le fichier de marque, dans un bloc optionnel. Ce sont les règles et les utilitaires
+qui déménagent, pas les valeurs.
+
 ---
 
 ## 2. Les défauts vérifiés
@@ -278,11 +287,18 @@ tout son code*.
 c'est le placeholder du chemin « copie » — celui que `rebrand.mjs` réécrit. Publier les apps de
 production contre un paquet nommé « acme » n'aurait aucun sens.
 
-#### Les cinq gestes
+#### Les six gestes
 
 1. **Le préfixe `.jf-` devient `.ds-`.** 580 occurrences, 43 fichiers. Mécanique. Un template
    client ne trimballe pas les initiales de quelqu'un d'autre — et le template retrouvé avait déjà
    tranché ainsi.
+
+   **Dans le même passage, cinq jetons neutres prennent un nom de rôle** : `--ink` `--ink-soft`
+   `--ink-deep` `--cream` `--cream-alt` → `--tone-dark` `--tone-dark-soft` `--tone-deep`
+   `--tone-light` `--tone-light-alt`, comme le template. 32 occurrences, 7 fichiers. « Encre » et
+   « crème » sont la métaphore matière de Julien ; un client au neutre gris-bleu lit un contrat qui
+   lui ment. L'argument de calendrier est le vrai : **une fois v0.5.0 publiée, renommer un jeton
+   public est un changement cassant** — là, c'est un `sed` dans le passage qui en fait déjà 580.
 2. **`src/brand.ts`**, porté du template : le seul endroit où l'identité textuelle est écrite, avec
    des **valeurs de placeholder** (`Acme` / `AC`). Les props de marque posées au sous-lot 3
    (`brand`, `homeLabel`, `wordmark`) restent — c'est la bonne API React — mais leurs valeurs par
@@ -300,6 +316,35 @@ production contre un paquet nommé « acme » n'aurait aucun sens.
    la palette de Julien — exactement le silence qu'on élimine partout ailleurs.
 5. **La prose de la vitrine se généralise.** Laissée en voix de Julien au sous-lot 3, les pages
    Marque et Fondations ne décrivent plus « capitales Anton » ni « DM Sans 400 ».
+6. **La règle d'Anton quitte le socle.** `tokens/base.css:7` pose `text-transform:uppercase` +
+   `font-weight:var(--weight-regular)` sur `h1→h4`, et le répète sur `.display` et `.display-xl` ;
+   `patterns.css:91` fait exactement pareil sur `.jf-card__title`. Ce n'est pas de la structure :
+   c'est le fait qu'Anton est une condensée à capitales qui n'a qu'une graisse. Sous une serif, tout
+   le titrage du système rend en **CAPITALES 400**. Le balayage du sous-lot 3 ne pouvait pas
+   l'attraper — il lit les couleurs et les familles, pas `text-transform`. Le template a déjà la
+   réponse : deux jetons de marque, `--heading-transform` et `--heading-weight`.
+
+   **La frontière est nette : les deux jetons gouvernent exactement les règles qui posent
+   `font-family:var(--font-display)`**, et rien d'autre. Les capitales de `.eyebrow`, `.chip`,
+   `.jf-sidebar__title` et `.jf-cal__wd` restent en dur : elles sont en `--font-body`, et là les
+   capitales sont une convention de taille et de rôle — une micro-étiquette de 11 px — pas une règle
+   de la face display. `.jf-cal__label` garde son `capitalize` : c'est un nom de mois, c'est de
+   l'i18n.
+
+   Deux cas particuliers. **Le logo** lit les deux jetons lui aussi — le template, lui, garde
+   `uppercase` en dur sur `.ds-logo`. On s'en écarte : sans ça, un client dont le mot-marque n'est
+   pas en capitales obtient un logo qui l'est. Chez Julien, `--heading-transform:uppercase` rend
+   `['Julien','Fernandes']` en capitales exactement comme aujourd'hui ; le cas rare — titrage en
+   capitales mais mot-marque en casse mixte — se règle par une ligne `text-transform` sur `.ds-logo`
+   dans le fichier de marque. Et **`Avatar.tsx:51` rend un `'JF'` littéral** : le monogramme de
+   Julien, en dur dans un composant du socle, que le balayage ne pouvait pas voir non plus parce
+   qu'il est en JSX et pas en CSS. Il prend `BRAND_MONOGRAM` par défaut et une prop `initials`.
+
+   Les valeurs vont dans le fichier de **marque**, pas dans `tokens/typography.css` : l'échelle des
+   quatre graisses est structurelle, le choix de celle que porte le titrage ne l'est pas.
+   `brand-jf.css` : `uppercase` + `var(--weight-regular)`. `brand-acme.css` et
+   `brand.template.css` : `none` + `var(--weight-bold)`, avec les deux cas du GETTING-STARTED en
+   commentaire — condensée à capitales → `uppercase` + 400 ; grotesque classique → `none` + 700.
 
 #### Ce que ça change pour les apps de Julien
 
@@ -310,6 +355,10 @@ Elles importeront **`core.css` + `brand-jf.css`** au lieu de recevoir sa marque 
 `npm run demo` affiche une vitrine cohérente à la marque de test, **sans qu'aucun geste manuel ne
 soit nécessaire** — l'import a suivi. Et `grep -ri "julien\|fernandes\|jf-"` sur `src/` sort
 **vide**, hors `brand-jf.css` et `docs/BRAND-JULIEN-FERNANDES.md`, qui sont l'instance de référence.
+
+Et trois greps de plus : `text-transform:uppercase` ne subsiste dans `src/styles/` que sur les
+règles en `--font-body` ; `'JF'` sort vide de `src/` ; et sous `brand-test.css` (la serif), un `h1`
+de la vitrine rend en casse d'origine, graisse 700.
 
 ### Sous-lot 6 — Ménage, littéraux, durées
 

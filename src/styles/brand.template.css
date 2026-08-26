@@ -7,7 +7,8 @@
        @import "@julienfernandes/ds/core.css";
        @import "./brand-acme.css";
 
-   N'IMPORTEZ PAS `styles.css` : il embarque la marque Julien.
+   N'IMPORTEZ PAS `styles.css` : il embarque la marque de PLACEHOLDER livrée avec le
+   template, et vous livreriez du gris sans le voir.
 
    CE QUI SE PASSE SI VOUS EN OUBLIEZ UN. Rien ne retombe sur une valeur par défaut :
    la variable n'existe pas, la propriété qui l'emploie est invalide, et ça se VOIT.
@@ -18,7 +19,7 @@
    du socle, elles ne sont pas substituables — c'est ce qui fait que deux design systems
    nés de ce template se ressemblent en STRUCTURE tout en n'ayant rien en commun.
 
-   COMBIEN : 59 jetons OBLIGATOIRES en `:root`, dont 34 à redéclarer en `.dark`.
+   COMBIEN : 61 jetons OBLIGATOIRES en `:root`, dont 34 à redéclarer en `.dark`.
    Plus 7 jetons MÉTIER, optionnels, en bas du bloc — commentés : ils ne servent qu'aux
    miniatures et cartes motion, une app d'interface ne les déclare pas.
 
@@ -36,7 +37,8 @@
 /* ---------- 2 · ÉCARTS D'ACCESSIBILITÉ ASSUMÉS ----------
    `check-contrast.mjs` mesure VOTRE palette et fait tomber le build sur toute paire
    sous le seuil qui n'est pas déclarée ici. La liste est VIDE au départ, exprès : les
-   renoncements de Julien ne sont pas les vôtres, et vous ne devez hériter d'aucun.
+   renoncements d'une autre marque ne sont pas les vôtres, et vous ne devez en hériter
+   d'aucun.
 
    Lancez le contrôle, lisez ce qu'il refuse, puis pour chaque paire : corrigez le jeton,
    ou assumez-la ici AVEC sa raison. Un écart assumé est une décision écrite.
@@ -57,15 +59,16 @@
   --border:; --input:;
 
   /* UN CRAN DE SÉPARATION depuis la surface courante. 15 sites : le survol de 13 règles,
-     le rail de .jf-progress, le point haut du shimmer de .jf-skel. Ce n'est PAS une teinte
+     le rail de .ds-progress, le point haut du shimmer de .ds-skel. Ce n'est PAS une teinte
      de marque — c'est un pas de surface : plus SOMBRE que sa porteuse en thème clair, plus
      CLAIR qu'elle en thème sombre. Visez le même ÉCART DE LUMINANCE dans les deux thèmes ;
-     chez Julien il vaut 1,084 et 1,088. N'y mettez pas une couleur de survol franche : la
+     dans l'instance de référence il vaut 1,084 et 1,088. N'y mettez pas une couleur de
+     survol franche : la
      barre de progression et le squelette la prendraient aussi. */
   --surface-alt:;
 
   /* Neutres nommés — l'encre et le papier de la marque, indépendamment du thème actif. */
-  --ink:; --ink-soft:; --cream:; --cream-alt:;
+  --tone-dark:; --tone-dark-soft:; --tone-light:; --tone-light-alt:;
   --text-secondary:; --text-muted:; --text-inverted:;
 
   /* Marque — remplissages. */
@@ -87,8 +90,8 @@
   /* LES JUMEAUX LISIBLES — le point le plus facile à rater du contrat.
      --primary et --destructive sont des couleurs de REMPLISSAGE : un aplat, une bordure.
      Posées comme couleur de TEXTE sur une surface claire, elles n'atteignent pas 4,5:1 —
-     chez Julien le corail mesure 3,12 sur --background, et c'était la couleur de TOUS les
-     liens. Ces deux jetons-ci sont la même marque, rendue LISIBLE : plus foncée en thème
+     dans l'instance de référence, le corail mesure 3,12 sur --background — c'était la
+     couleur de TOUS les liens. Ces deux jetons-ci sont la même marque, rendue LISIBLE : plus foncée en thème
      clair, plus claire en thème sombre.
      Le contrat exige >= 4,5:1 sur --background, --card, --popover, --secondary, --accent
      et --surface-alt, dans les DEUX thèmes. check-contrast.mjs le vérifie. */
@@ -115,6 +118,17 @@
   --font-body:;     /* @kind font — texte et UI */
   --font-mono:;     /* @kind font — code, méta technique */
 
+  /* LE RÉGIME DE TITRAGE — deux jetons, et c'est le réglage qu'on rate le plus souvent.
+     Ils gouvernent h1→h4, .display, .display-xl, .ds-card__title et .ds-logo : exactement
+     les règles qui posent --font-display, et rien d'autre. Ils appartiennent à la marque
+     parce qu'ils découlent de la FACE que vous avez choisie :
+       · condensée à capitales (Anton, Oswald, Bebas…)  ->  uppercase + var(--weight-regular)
+       · grotesque classique  (Inter, Geist, DM Sans…)  ->  none + var(--weight-bold)
+     Si votre mot-marque n'est pas en capitales mais votre titrage si, ajoutez ici
+     `.ds-logo{text-transform:none}` : le logo lit ces jetons comme le reste du titrage. */
+  --heading-transform:none;
+  --heading-weight:var(--weight-bold);
+
   /* Relief de marque — la LUEUR. À distinguer des ombres neutres du socle
      (--shadow-sm/md/lg/knob), qui décrivent une élévation et ne se substituent pas.
      Une marque sans lueur peut les mettre à `none` : les quatre jetons doivent EXISTER. */
@@ -130,7 +144,7 @@
      Le contrat des sept est écrit en tête de `src/styles/brand-content.css`.
      Le pendant JavaScript est sur `@julienfernandes/ds/brand-content` :
      `GridBackground`, `HaloHot`, `ContentIcon`. */
-  /* --ink-deep:; --gradient-thumbnail:; --gradient-thumbnail-fit:;
+  /* --tone-deep:; --gradient-thumbnail:; --gradient-thumbnail-fit:;
      --grid-cell:; --grid-cell-lg:; --grid-line:; --shadow-accent-hot:; */
 }
 

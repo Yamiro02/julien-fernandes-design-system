@@ -18,8 +18,11 @@
  * FICHIER DE MARQUE, avec sa raison, et reprise dans `docs/accessibilite.md`. Sinon le
  * build tombe. Le script porte la mécanique, la marque porte ses renoncements.
  *
- * Usage : node check-contrast.mjs [--table]   (TOKENS=chemin/vers/colors.css pour un
- * autre fichier de marque — c'est ainsi qu'on recette un brand-*.css.)
+ * Usage : node check-contrast.mjs [--table]
+ * Il mesure la marque que `styles.css` MONTE — il lit son `@import`, il ne la devine pas.
+ * Un dossier rebrandé mesure donc la palette du client, pas celle du template.
+ * TOKENS=<chemin> en mesure une autre : c'est ainsi qu'on recette l'instance de référence,
+ * la palette de recette, ou celle d'un client avant de l'installer.
  */
 import fs from 'node:fs';
 
@@ -33,7 +36,20 @@ const over = (fg, alpha, bg) => { const f = hex(fg), b = hex(bg);
   return '#' + f.map((c, i) => Math.round(c * alpha + b[i] * (1 - alpha)).toString(16).padStart(2, '0')).join(''); };
 
 /* ---------- lecture des jetons ---------- */
-const TOKENS = process.env.TOKENS || 'src/styles/brand-jf.css';
+/* La marque mesurée par défaut est celle que `styles.css` MONTE — lue dans son @import,
+   pas codée en dur. Sans ça, un dossier rebrandé continuerait de mesurer la palette de
+   placeholder pendant que la vitrine rend celle du client : une paire qui fait échouer
+   son audit passerait au vert. */
+function marqueParDéfaut() {
+  const entry = 'src/styles/index.css';
+  try {
+    const m = /@import\s+'\.\/(brand-[^']+\.css)'/.exec(
+      fs.readFileSync(entry, 'utf8').replace(/\/\*[\s\S]*?\*\//g, ''));
+    if (m) return 'src/styles/' + m[1];
+  } catch { /* pas d'entrée lisible : on retombe sur le placeholder */ }
+  return 'src/styles/brand-acme.css';
+}
+const TOKENS = process.env.TOKENS || marqueParDéfaut();
 const brut = fs.readFileSync(TOKENS, 'utf8');
 const src = brut.replace(/\/\*[\s\S]*?\*\//g, '');
 const block = sel => { const i = src.indexOf(sel + '{');
@@ -75,51 +91,51 @@ function pairs(theme) {
   add('Texte', 'texte courant sur --card', g('--foreground'), g(C), 4.5, '16 / 400');
   add('Texte', '--text-secondary sur --card', g('--text-secondary'), g(C), 4.5, '16 / 400');
   add('Texte', '.caption — --text-muted sur --card', g('--text-muted'), g(C), 4.5, '13 / 500');
-  add('Texte', '.jf-input::placeholder', g('--text-muted'), g('--secondary'), 4.5, '15 / 400');
-  add('Texte', '.jf-tooltip__bubble', theme === 'light' ? g('--text-inverted') : g('--ink'),
-                                      theme === 'light' ? g('--ink') : g('--cream-alt'), 4.5, '13 / 600');
+  add('Texte', '.ds-input::placeholder', g('--text-muted'), g('--secondary'), 4.5, '15 / 400');
+  add('Texte', '.ds-tooltip__bubble', theme === 'light' ? g('--text-inverted') : g('--tone-dark'),
+                                      theme === 'light' ? g('--tone-dark') : g('--tone-light-alt'), 4.5, '13 / 600');
 
   add('Lien', 'a{} au repos sur --background', g('--primary-readable'), g(B), 4.5, '16 / 400');
   add('Lien', 'a{} au repos sur --card', g('--primary-readable'), g(C), 4.5, '16 / 400');
   add('Lien', 'a:hover — dérivé vers --foreground', over(g('--primary-readable'), .8, g('--foreground')), g(B), 4.5, '16 / 400');
 
-  add('Marque-contenu', '.jf-navlink.is-active', g('--primary-readable'), g('--secondary'), 4.5, '16 / 500');
-  add('Marque-contenu', '.jf-sidenav.is-active', g('--primary-readable'), g('--surface-alt'), 4.5, '15 / 500');
-  add('Marque-contenu', '.jf-badge--accent', g('--primary-readable'), g('--accent'), 4.5, '12 / 700');
-  add('Marque-contenu', '.jf-banner--info', g('--primary-readable'), g('--accent'), 4.5, '15 / 400');
-  add('Marque-contenu', '.jf-cal__day.is-today', g('--primary-readable'), g(C), 4.5, '14 / 700');
-  add('Marque-contenu', '.jf-pastille--brand — icône', g('--primary-readable'), over(g('--brand-from'), softAlpha[0], g(C)), 3, 'icône');
-  add('Marque-contenu', '.jf-icon-btn[aria-pressed] — icône', g('--primary-readable'), g('--accent'), 3, 'icône');
-  add('Marque-contenu', '.jf-error', g('--destructive-readable'), g(C), 4.5, '13 / 500');
-  add('Marque-contenu', '.jf-dropdown__item--danger', g('--destructive-readable'), g('--popover'), 4.5, '14 / 400');
-  add('Marque-contenu', '.jf-actionsheet__item--danger', g('--destructive-readable'), g('--popover'), 4.5, '15 / 500');
+  add('Marque-contenu', '.ds-navlink.is-active', g('--primary-readable'), g('--secondary'), 4.5, '16 / 500');
+  add('Marque-contenu', '.ds-sidenav.is-active', g('--primary-readable'), g('--surface-alt'), 4.5, '15 / 500');
+  add('Marque-contenu', '.ds-badge--accent', g('--primary-readable'), g('--accent'), 4.5, '12 / 700');
+  add('Marque-contenu', '.ds-banner--info', g('--primary-readable'), g('--accent'), 4.5, '15 / 400');
+  add('Marque-contenu', '.ds-cal__day.is-today', g('--primary-readable'), g(C), 4.5, '14 / 700');
+  add('Marque-contenu', '.ds-pastille--brand — icône', g('--primary-readable'), over(g('--brand-from'), softAlpha[0], g(C)), 3, 'icône');
+  add('Marque-contenu', '.ds-icon-btn[aria-pressed] — icône', g('--primary-readable'), g('--accent'), 3, 'icône');
+  add('Marque-contenu', '.ds-error', g('--destructive-readable'), g(C), 4.5, '13 / 500');
+  add('Marque-contenu', '.ds-dropdown__item--danger', g('--destructive-readable'), g('--popover'), 4.5, '14 / 400');
+  add('Marque-contenu', '.ds-actionsheet__item--danger', g('--destructive-readable'), g('--popover'), 4.5, '15 / 500');
 
   for (const n of ['coral', 'amber', 'danger', 'warning', 'success', 'neutral']) {
-    add('Pill', `.jf-badge--${n} sur --card`, g(`--pill-${n}-fg`), on(`--pill-${n}-bg`, C), 4.5, '12 / 700');
-    add('Pill', `.jf-badge--${n} sur --background`, g(`--pill-${n}-fg`), on(`--pill-${n}-bg`, B), 4.5, '12 / 700');
+    add('Pill', `.ds-badge--${n} sur --card`, g(`--pill-${n}-fg`), on(`--pill-${n}-bg`, C), 4.5, '12 / 700');
+    add('Pill', `.ds-badge--${n} sur --background`, g(`--pill-${n}-fg`), on(`--pill-${n}-bg`, B), 4.5, '12 / 700');
   }
-  add('Pill', '.jf-badge--outline', g('--text-secondary'), g(C), 4.5, '12 / 700');
+  add('Pill', '.ds-badge--outline', g('--text-secondary'), g(C), 4.5, '12 / 700');
 
   add('Surface', 'survol — --foreground sur --surface-alt', g('--foreground'), g('--surface-alt'), 4.5, '15 / 600');
 
-  add('Marque-aplat', '.jf-btn--primary — label sur --primary à plat', g('--primary-foreground'), g('--primary'), 4.5, '15 / 600');
-  add('Marque-aplat', '.jf-btn--primary — label sur --brand-from (pire arrêt)', g('--primary-foreground'), g('--brand-from'), 4.5, '15 / 600');
-  add('Marque-aplat', '.jf-btn--primary — label sur --brand-via', g('--primary-foreground'), g('--brand-via'), 4.5, '15 / 600');
-  add('Marque-aplat', '.jf-btn--primary — label sur --brand-to', g('--primary-foreground'), g('--brand-to'), 4.5, '15 / 600');
-  add('Marque-aplat', '.jf-btn--danger — label sur --destructive', g('--destructive-foreground'), g('--destructive'), 4.5, '15 / 600');
-  add('Marque-aplat', '.jf-cal__day.is-selected', g('--primary-foreground'), g('--primary'), 4.5, '14 / 600');
+  add('Marque-aplat', '.ds-btn--primary — label sur --primary à plat', g('--primary-foreground'), g('--primary'), 4.5, '15 / 600');
+  add('Marque-aplat', '.ds-btn--primary — label sur --brand-from (pire arrêt)', g('--primary-foreground'), g('--brand-from'), 4.5, '15 / 600');
+  add('Marque-aplat', '.ds-btn--primary — label sur --brand-via', g('--primary-foreground'), g('--brand-via'), 4.5, '15 / 600');
+  add('Marque-aplat', '.ds-btn--primary — label sur --brand-to', g('--primary-foreground'), g('--brand-to'), 4.5, '15 / 600');
+  add('Marque-aplat', '.ds-btn--danger — label sur --destructive', g('--destructive-foreground'), g('--destructive'), 4.5, '15 / 600');
+  add('Marque-aplat', '.ds-cal__day.is-selected', g('--primary-foreground'), g('--primary'), 4.5, '14 / 600');
   add('Marque-aplat', '.eyebrow / .accent — dégradé clippé en texte', g('--brand-from'), g(B), 4.5, '12 / 600');
 
   add('Non-texte', 'anneau de focus --ring sur --background', g('--ring'), g(B), 3, 'contour 2px');
-  add('Non-texte', '.jf-choice coché — aplat --primary', g('--primary'), g(B), 3, 'contrôle');
-  add('Non-texte', '.jf-switch actif — piste --primary', g('--primary'), g(B), 3, 'contrôle');
-  add('Non-texte', '.jf-progress__bar sur son rail', g('--primary'), g('--surface-alt'), 3, 'graphique');
-  add('Non-texte', '.jf-input.is-error — bordure --destructive', g('--destructive'), g('--secondary'), 3, 'contour 1.5px');
-  add('Non-texte', '.jf-input — bordure --input vs page', g('--input'), g(B), 3, 'contour 1.5px');
-  add('Non-texte', '.jf-input — bordure --input vs remplissage', g('--input'), g('--secondary'), 3, 'contour 1.5px');
-  add('Non-texte', '.jf-input — remplissage vs page', g('--secondary'), g(B), 3, 'aplat');
-  add('Non-texte', '.jf-card — bordure --border vs page', g('--border'), g(B), 3, 'contour 1px');
-  add('Non-texte', '.jf-sep — filet --border sur --card', g('--border'), g(C), 3, 'filet 1px');
+  add('Non-texte', '.ds-choice coché — aplat --primary', g('--primary'), g(B), 3, 'contrôle');
+  add('Non-texte', '.ds-switch actif — piste --primary', g('--primary'), g(B), 3, 'contrôle');
+  add('Non-texte', '.ds-progress__bar sur son rail', g('--primary'), g('--surface-alt'), 3, 'graphique');
+  add('Non-texte', '.ds-input.is-error — bordure --destructive', g('--destructive'), g('--secondary'), 3, 'contour 1.5px');
+  add('Non-texte', '.ds-input — bordure --input vs page', g('--input'), g(B), 3, 'contour 1.5px');
+  add('Non-texte', '.ds-input — bordure --input vs remplissage', g('--input'), g('--secondary'), 3, 'contour 1.5px');
+  add('Non-texte', '.ds-input — remplissage vs page', g('--secondary'), g(B), 3, 'aplat');
+  add('Non-texte', '.ds-card — bordure --border vs page', g('--border'), g(B), 3, 'contour 1px');
+  add('Non-texte', '.ds-sep — filet --border sur --card', g('--border'), g(C), 3, 'filet 1px');
   return P;
 }
 

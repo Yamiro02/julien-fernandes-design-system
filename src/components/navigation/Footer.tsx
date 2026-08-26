@@ -14,9 +14,9 @@ export interface FooterProps {
   tone?: 'ink' | 'bone';
   /**
    * Ligne de lieu / signature, sous la marque. Le point médian sert de séparateur.
-   * AUCUNE valeur par défaut : elle valait « Busan · Corée du Sud », c'est-à-dire la ville
-   * de Julien codée en dur dans un composant du socle — un client ne pouvait pas la retirer
-   * sans passer une chaîne vide. Omise, la ligne n'est pas rendue.
+   * AUCUNE valeur par défaut : elle portait une ville en dur, dans un composant du SOCLE —
+   * un projet ne pouvait pas la retirer sans passer une chaîne vide. Omise, la ligne n'est
+   * pas rendue du tout.
    */
   note?: string;
   className?: string;
@@ -26,7 +26,7 @@ export function Footer({
   columns = [], social, brand, tone, note, className = '',
 }: FooterProps): JSX.Element {
   return (
-    <footer className={cn('jf-footer', className)}>
+    <footer className={cn('ds-footer', className)}>
       <div className="page" style={{
         paddingBlock: 'var(--space-7)', display: 'flex', flexWrap: 'wrap',
         gap: 'var(--space-7)', justifyContent: 'space-between',

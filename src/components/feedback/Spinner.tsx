@@ -15,7 +15,7 @@ export function Spinner({ size = 'md', className = '', style, ...rest }: Spinner
     <span
       role="status"
       aria-label="Chargement"
-      className={cn('jf-spinner', className)}
+      className={cn('ds-spinner', className)}
       style={{ width: s, height: s, ...style }}
       {...rest}
     />

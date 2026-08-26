@@ -22,11 +22,11 @@ export function Progress({
       aria-valuemax={max}
       aria-valuenow={indeterminate ? undefined : (value ?? 0)}
       aria-label={label}
-      className={cn('jf-progress', indeterminate && 'jf-progress--indeterminate', className)}
+      className={cn('ds-progress', indeterminate && 'ds-progress--indeterminate', className)}
       style={style}
       {...rest}
     >
-      <span className="jf-progress__bar" style={indeterminate ? undefined : { width: pct + '%' }} />
+      <span className="ds-progress__bar" style={indeterminate ? undefined : { width: pct + '%' }} />
     </div>
   );
 }

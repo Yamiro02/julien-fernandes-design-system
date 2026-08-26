@@ -21,7 +21,7 @@ export function DataDisplayPage() {
             </Card>
             <Card variant="feature">
               <h4>Card feature</h4>
-              <p className="caption">Lavis --grad-soft et bordure orange.</p>
+              <p className="caption">Lavis --grad-soft et bordure teintée de --primary.</p>
             </Card>
           </Grid>
         </Block>
@@ -219,7 +219,7 @@ export function DataDisplayPage() {
         </Block>
       </Section>
 
-      <Section title="Tooltip" note="Bulle ink au survol et au focus (bulle crème en sombre). Libellé court uniquement.">
+      <Section title="Tooltip" note="Bulle --tone-dark au survol et au focus ; elle s'inverse en --tone-light-alt en thème sombre. Libellé court uniquement.">
         <Block label="Placement et ouverture forcée">
           <Row>
             <Tooltip content="Copier le prompt">

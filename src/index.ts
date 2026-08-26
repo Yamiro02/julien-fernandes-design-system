@@ -1,5 +1,5 @@
 /**
- * @julienfernandes/ds — Design System Julien Fernandes.
+ * @julienfernandes/ds — le TEMPLATE de design system, et son instance de référence.
  *
  * Les styles sont un import séparé, en JS :
  *   import '@julienfernandes/ds/styles.css';
@@ -9,6 +9,10 @@
  */
 
 /* icons */
+/* L'identité textuelle — les défauts que lisent Logo, Navbar et Avatar. Exportée pour
+   qu'une app puisse les relire ; `npm run rebrand` les réécrit. */
+export { BRAND_NAME, BRAND_MONOGRAM, BRAND_WORDMARK_LINES } from './brand';
+
 export { Icon } from './components/icons/Icon';
 export type { IconProps, IconName } from './components/icons/Icon';
 

@@ -1,4 +1,4 @@
-/* Julien Fernandes — couche Tailwind v4 du design system.
+/* SOCLE — couche Tailwind v4 du design system.
    Pendant de `styles.css` : celui-ci porte les JETONS (tokens/*.css) et le reset,
    celui-là les UTILITAIRES Tailwind générés depuis ces jetons.
 
@@ -66,12 +66,12 @@
   --color-ring: var(--ring);
 
   /* ---------- Couleurs : neutres de marque ----------
-     --color-ink-deep n’est pas ici : il appartient à l’extension métier et vit dans
+     --color-tone-deep n’est pas ici : il appartient à l’extension métier et vit dans
      `brand-content.css`, avec les utilitaires qui l’emploient. */
-  --color-ink: var(--ink);
-  --color-ink-soft: var(--ink-soft);
-  --color-cream: var(--cream);
-  --color-cream-alt: var(--cream-alt);
+  --color-tone-dark: var(--tone-dark);
+  --color-tone-dark-soft: var(--tone-dark-soft);
+  --color-tone-light: var(--tone-light);
+  --color-tone-light-alt: var(--tone-light-alt);
   --color-text-secondary: var(--text-secondary);
   --color-text-muted: var(--text-muted);
   --color-text-inverted: var(--text-inverted);

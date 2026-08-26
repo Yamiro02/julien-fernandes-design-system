@@ -3,9 +3,8 @@
    jamais dans un paragraphe / bouton / libellé / valeur de formulaire, jamais sous
    1.125rem — sous ce palier, un titre retombe sur --font-body en gras.
    --font-body = texte et UI. --font-mono = code, prompts, méta technique.
-   Les trois familles sont fournies par le fichier de MARQUE (brand-jf.css chez Julien :
-   Anton, DM Sans, JetBrains Mono ; brand-test.css : une serif et une grotesque tout
-   autres). L'échelle ci-dessous vaut pour n'importe quelle famille.
+   Les trois familles sont fournies par le fichier de MARQUE. L'échelle ci-dessous vaut
+   pour n'importe quelle famille.
    Échelle en rem, px en commentaire. Ne jamais fixer un font-size px sur html/:root. */
 :root{
   /* Les FAMILLES ne sont pas ici : --font-display / --font-body / --font-mono appartiennent
@@ -27,7 +26,7 @@
   --text-chip:0.75rem;        /* 12 — --font-body 700 CAPS, tracking .14em, leading 1 */
 
   /* Tracking — en em, il suit la taille. Valeurs CALIBRÉES SUR UNE DISPLAY CONDENSÉE
-     (Anton chez Julien) : une display large ou une serif demandera moins de resserrement.
+     : une display large ou une serif demandera moins de resserrement.
      C'est l'un des rares endroits où changer de famille peut demander de retoucher un
      palier — le seul du contrat qui ne soit pas purement une couleur. */
   --tracking-display:-0.02em;    /* display-xl + display */

@@ -1,0 +1,5 @@
+/* Montage de la PALETTE DE RECETTE — froide, serif, sans un orange. Dispositif permanent :
+   si une valeur de la marque de référence transparaît ici, c'est qu'elle est restée dans
+   le socle. Voir l'en-tête de brand-test.css. */
+@import '../src/styles/core.css';
+@import './brand-test.css';

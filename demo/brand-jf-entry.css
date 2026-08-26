@@ -1,0 +1,5 @@
+/* Montage de l'INSTANCE DE RÉFÉRENCE — la marque Julien Fernandes, livrée dans le paquet.
+   C'est le montage exact que font les apps de Julien depuis la v0.5.0 : socle + marque,
+   explicitement, sans passer par `styles.css` qui livre le placeholder. */
+@import '../src/styles/core.css';
+@import '../src/styles/brand-jf.css';

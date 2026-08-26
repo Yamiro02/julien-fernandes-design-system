@@ -7,7 +7,7 @@ import { Block, Grid, Row, Section } from '../ui';
 export function BrandPage() {
   return (
     <div className="flex flex-col gap-space-7">
-      <Section title="Logo" note="Le mark est rendu en CSS : capitales Anton + point carré arrondi en dégradé, avec glow. Le point garde le dégradé sur tous les fonds ; seules les lettres s'inversent.">
+      <Section title="Logo" note="Le mark est rendu en CSS : --font-display + point carré arrondi en --brand-gradient-diagonal, avec --shadow-logo-dot. Casse et graisse suivent --heading-transform / --heading-weight, comme le titrage. Le point garde le dégradé sur tous les fonds ; seules les lettres s'inversent.">
         <Block label="Variantes">
           <Row label="wordmark"><Logo variant="wordmark" wordmark={IDENTITY.wordmark} height="1.75rem" /></Row>
           <Row label="stacked"><Logo variant="stacked" wordmark={IDENTITY.wordmark} height="1.75rem" /></Row>
@@ -21,12 +21,12 @@ export function BrandPage() {
             <Logo variant="wordmark" wordmark={IDENTITY.wordmark} height="2.5rem" />
           </Row>
         </Block>
-        <Block label="Tons" hint="ink sur crème, bone sur ink. Sans tone, les lettres suivent --foreground.">
+        <Block label="Tons" hint="tone='ink' force les lettres sombres, tone='bone' les force claires. Sans tone, elles suivent --foreground et s'inversent avec la surface.">
           <Grid cols={2}>
-            <div className="flex items-center justify-center rounded-xl border border-border p-space-6" style={{ background: 'var(--cream)' }}>
+            <div className="flex items-center justify-center rounded-xl border border-border p-space-6" style={{ background: 'var(--tone-light)' }}>
               <Logo variant="wordmark" wordmark={IDENTITY.wordmark} tone="ink" height="1.75rem" />
             </div>
-            <div className="flex items-center justify-center rounded-xl border border-border p-space-6" style={{ background: 'var(--ink)' }}>
+            <div className="flex items-center justify-center rounded-xl border border-border p-space-6" style={{ background: 'var(--tone-dark)' }}>
               <Logo variant="wordmark" wordmark={IDENTITY.wordmark} tone="bone" height="1.75rem" />
             </div>
           </Grid>
@@ -72,10 +72,10 @@ export function BrandPage() {
       <Section title="Avatar" note="Les portraits sont toujours des découpes, placées bas, halo derrière les épaules. Aucun portrait n'est fourni : sans src, le composant retombe sur le monogramme muté.">
         <Block label="Tailles et halo">
           <Row>
-            <Avatar size="2.5rem" />
-            <Avatar size="3rem" />
-            <Avatar size="4rem" />
-            <Avatar size="6rem" />
+            <Avatar size="2.5rem" initials={IDENTITY.monogram} alt={IDENTITY.personne} />
+            <Avatar size="3rem" initials={IDENTITY.monogram} alt={IDENTITY.personne} />
+            <Avatar size="4rem" initials={IDENTITY.monogram} alt={IDENTITY.personne} />
+            <Avatar size="6rem" initials={IDENTITY.monogram} alt={IDENTITY.personne} />
           </Row>
           <Row label="halo={false}">
             <Avatar size="3rem" halo={false} />
@@ -84,18 +84,18 @@ export function BrandPage() {
         </Block>
       </Section>
 
-      <Section title="GridBackground" note="Maille 28px ou 80px, lignes 1px à 5,5 %. RÉSERVÉ aux miniatures YouTube et au motion — jamais sur le site, jamais dans l'UI, jamais sur les slides.">
-        <Block label="Sur --ink-deep" hint="Le seul contexte légitime : une surface de miniature ou de motion.">
+      <Section title="GridBackground" note="Maille 28px ou 80px, filets 1px à 5,5 %. EXTENSION MÉTIER — vignettes et cartes motion uniquement, jamais le site, jamais l'UI, jamais les slides. Importée à part : @julienfernandes/ds/brand-content.">
+        <Block label="Sur --tone-deep" hint="Le seul contexte légitime : une surface de miniature ou de motion.">
           <Grid cols={2}>
-            <div className="relative overflow-hidden rounded-xl p-space-7" style={{ background: 'var(--ink-deep)' }}>
+            <div className="relative overflow-hidden rounded-xl p-space-7" style={{ background: 'var(--tone-deep)' }}>
               <GridBackground cell="sm" />
               <HaloHot />
-              <span className="relative mono text-caption" style={{ color: 'var(--cream)' }}>cell=&quot;sm&quot; · maille 28px</span>
+              <span className="relative mono text-caption" style={{ color: 'var(--tone-light)' }}>cell=&quot;sm&quot; · maille 28px</span>
             </div>
-            <div className="relative overflow-hidden rounded-xl p-space-7" style={{ background: 'var(--ink-deep)' }}>
+            <div className="relative overflow-hidden rounded-xl p-space-7" style={{ background: 'var(--tone-deep)' }}>
               <GridBackground cell="lg" />
               <HaloHot />
-              <span className="relative mono text-caption" style={{ color: 'var(--cream)' }}>cell=&quot;lg&quot; · maille 80px</span>
+              <span className="relative mono text-caption" style={{ color: 'var(--tone-light)' }}>cell=&quot;lg&quot; · maille 80px</span>
             </div>
           </Grid>
         </Block>

@@ -14,7 +14,7 @@ const WIDTHS = ['--container-shell', '--container-wide', '--container-read', '--
 export function Foundations() {
   return (
     <div className="flex flex-col gap-space-7">
-      <Section title="Couleur" note="Tout se pose sur crème ou ink. La seule couleur saturée est le dégradé de marque, rationné à l'accent. Pas de bleu.">
+      <Section title="Couleur" note="Tout se pose sur les surfaces neutres. La seule couleur saturée est le dégradé de marque, rationné à l'accent : logo, un mot de titre, sur-titre, CTA primaire, halo.">
         <Block label="Surfaces et neutres chauds">
           <div className="grid grid-cols-3 gap-space-4 sm:grid-cols-5 lg:grid-cols-9">
             {SURFACES.map(t => <Swatch key={t} token={t} border />)}
@@ -40,14 +40,14 @@ export function Foundations() {
             {PILLS.map(t => <Swatch key={t} token={t} border />)}
           </div>
         </Block>
-        <Block label="Noir profond" hint="--ink-deep est réservé aux miniatures YouTube et au motion. Jamais un fond d'interface.">
-          <Spec token="--ink-deep">
-            <span className="h-space-7 w-full rounded-md border border-border" style={{ background: 'var(--ink-deep)' }} />
+        <Block label="Noir profond" hint="--tone-deep est le plus profond du système, réservé aux surfaces d'export — vignettes, cartes motion. Jamais un fond d'interface. Jeton de l'extension métier.">
+          <Spec token="--tone-deep">
+            <span className="h-space-7 w-full rounded-md border border-border" style={{ background: 'var(--tone-deep)' }} />
           </Spec>
         </Block>
       </Section>
 
-      <Section title="Typographie" note="Anton 400 CAPS sur tous les titres. DM Sans pour le corps et l'UI. JetBrains Mono pour le code et les métadonnées techniques.">
+      <Section title="Typographie" note="--font-display sur tous les titres, avec la casse et la graisse de --heading-transform / --heading-weight. --font-body pour le corps et l'UI. --font-mono pour le code et les métadonnées techniques.">
         <Block label="Affiche et titres">
           <Spec token="--text-display-xl · miniature et motion"><span className="display-xl">On build une app</span></Spec>
           <Spec token="--text-display · hero du site"><span className="display">On build une app</span></Spec>
@@ -69,7 +69,7 @@ export function Foundations() {
           <Spec token="--font-mono"><span className="mono text-caption">npm create vite@latest app</span></Spec>
         </Block>
         <Block label="Interlignes" hint="Interface 1.5 · lecture suivie 1.7 (classe .prose).">
-          <p className="max-w-read">Interface — 1.5. Direct, concret, pédagogique mais cash. La chaleur vient de l'orange et du halo, jamais d'un emoji.</p>
+          <p className="max-w-read">Interface — 1.5. Le ton d'écriture appartient au projet ; ce qui appartient au système, c'est l'interligne : 1.5 en interface, 1.7 en colonne de lecture suivie.</p>
           <p className="prose max-w-read">Lecture suivie — 1.7. Une colonne de lecture continue respire davantage : mentions légales, article de fond, page à lire de bout en bout.</p>
         </Block>
       </Section>
@@ -108,7 +108,7 @@ export function Foundations() {
         </Block>
       </Section>
 
-      <Section title="Ombres et élévation" note="Trois niveaux teintés ink, jamais noir pur. Le glow est réservé au CTA primaire et aux éléments de marque.">
+      <Section title="Ombres et élévation" note="Trois niveaux teintés --tone-dark, jamais noir pur : la géométrie est au socle, la teinte suit l'encre de la marque. Le glow est réservé au CTA primaire et aux éléments de marque.">
         <Grid cols={3}>
           {SHADOWS.map(t => (
             <Card key={t} className="flex flex-col gap-space-3" style={{ boxShadow: `var(${t})` }}>

@@ -42,21 +42,21 @@ export function Calendar({
   const move = (m?: number, y?: number) => setView(v => new Date(v.getFullYear() + (y || 0), v.getMonth() + (m || 0), 1));
   const selKey = key(strip(value));
   return (
-    <div className={cn('jf-cal', bare && 'jf-cal--bare', className)} {...rest}>
-      <div className="jf-cal__head">
-        <button type="button" className="jf-cal__nav" aria-label="Année précédente" onClick={() => move(0, -1)}><Icon name="chevrons-left" size="1rem" /></button>
-        <button type="button" className="jf-cal__nav" aria-label="Mois précédent" onClick={() => move(-1, 0)}><Icon name="chevron-left" size="1rem" /></button>
-        <span className="jf-cal__label" aria-live="polite">{fmtMonth.format(view)}</span>
-        <button type="button" className="jf-cal__nav" aria-label="Mois suivant" onClick={() => move(1, 0)}><Icon name="chevron-right" size="1rem" /></button>
-        <button type="button" className="jf-cal__nav" aria-label="Année suivante" onClick={() => move(0, 1)}><Icon name="chevrons-right" size="1rem" /></button>
+    <div className={cn('ds-cal', bare && 'ds-cal--bare', className)} {...rest}>
+      <div className="ds-cal__head">
+        <button type="button" className="ds-cal__nav" aria-label="Année précédente" onClick={() => move(0, -1)}><Icon name="chevrons-left" size="1rem" /></button>
+        <button type="button" className="ds-cal__nav" aria-label="Mois précédent" onClick={() => move(-1, 0)}><Icon name="chevron-left" size="1rem" /></button>
+        <span className="ds-cal__label" aria-live="polite">{fmtMonth.format(view)}</span>
+        <button type="button" className="ds-cal__nav" aria-label="Mois suivant" onClick={() => move(1, 0)}><Icon name="chevron-right" size="1rem" /></button>
+        <button type="button" className="ds-cal__nav" aria-label="Année suivante" onClick={() => move(0, 1)}><Icon name="chevrons-right" size="1rem" /></button>
       </div>
-      <div className="jf-cal__grid" role="grid">
-        {heads.map(h => <span key={h} className="jf-cal__wd">{h}</span>)}
+      <div className="ds-cal__grid" role="grid">
+        {heads.map(h => <span key={h} className="ds-cal__wd">{h}</span>)}
         {Array.from({ length: offset }, (_, i) => <span key={'b' + i} />)}
         {Array.from({ length: count }, (_, i) => {
           const d = new Date(view.getFullYear(), view.getMonth(), i + 1);
           const k = key(d);
-          const cls = cn('jf-cal__day', k === selKey && 'is-selected', k === key(today) && 'is-today');
+          const cls = cn('ds-cal__day', k === selKey && 'is-selected', k === key(today) && 'is-today');
           return (
             <button
               key={k}

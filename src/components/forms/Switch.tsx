@@ -8,9 +8,9 @@ export interface SwitchProps extends Omit<InputHTMLAttributes<HTMLInputElement>,
 
 export function Switch({ label, disabled = false, className = '', ...rest }: SwitchProps): JSX.Element {
   return (
-    <label className={cn('jf-switch', disabled && 'is-disabled', className)}>
+    <label className={cn('ds-switch', disabled && 'is-disabled', className)}>
       <input type="checkbox" role="switch" disabled={disabled} {...rest} />
-      <span className="jf-switch__track"><span className="jf-switch__knob" /></span>
+      <span className="ds-switch__track"><span className="ds-switch__knob" /></span>
       {label ? <span>{label}</span> : null}
     </label>
   );

@@ -25,11 +25,11 @@ export function Table({
   return (
     <table
       className={cn(
-        'jf-table',
-        striped && 'jf-table--striped',
-        hoverable && 'jf-table--hoverable',
-        framed && 'jf-table--framed',
-        columns && 'jf-table--columns',
+        'ds-table',
+        striped && 'ds-table--striped',
+        hoverable && 'ds-table--hoverable',
+        framed && 'ds-table--framed',
+        columns && 'ds-table--columns',
         className,
       )}
       {...rest}

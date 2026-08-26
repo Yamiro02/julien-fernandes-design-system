@@ -2,9 +2,16 @@
 
 > **Ce document ne s'écrit pas à la main.** Les deux tableaux sortent de
 > `node check-contrast.mjs --table`, qui lit les valeurs réelles de
-> `src/styles/brand-jf.css` — le fichier de MARQUE. Le même contrôle tourne à chaque
+> `src/styles/brand-jf.css` — **l'instance de référence**. Depuis la v0.5.0 le dépôt est un
+> template : sa marque par défaut est un placeholder gris, et `node check-contrast.mjs` sans
+> argument mesure celle que `styles.css` monte, quelle qu'elle soit. Les tableaux ci-dessous
+> sont donc produits avec `TOKENS=src/styles/brand-jf.css`. Le même contrôle tourne à chaque
 > `npm run lint` et **fait tomber le build** si une paire passe sous son seuil sans être
 > déclarée.
+>
+> Pour mémoire, la palette de placeholder (`brand-acme.css`) n'assume que **5** écarts, tous
+> non textuels, et la palette de recette (`demo/brand-test.css`) en assume **8** — pas les
+> mêmes. C'est la preuve que la liste appartient à la marque et non au socle.
 >
 > Cible : **WCAG 2.2 niveau AA**. 4,5:1 pour le texte courant (1.4.3) · 3:1 pour le gros
 > texte, les icônes porteuses de sens et les contours de contrôle (1.4.11). Les fonds
@@ -64,40 +71,40 @@ Une sortie vide = la règle tient. Aujourd'hui : vide.
 | `texte courant sur --card` | 16 / 400 | 4,5 | 15,59 | 12,50 |
 | `--text-secondary sur --card` | 16 / 400 | 4,5 | 10,31 | 9,22 |
 | `.caption — --text-muted sur --card` | 13 / 500 | 4,5 | 5,12 | 6,47 |
-| `.jf-input::placeholder` | 15 / 400 | 4,5 | 5,47 | 6,47 |
-| `.jf-tooltip__bubble` | 13 / 600 | 4,5 | 14,52 | 15,59 |
+| `.ds-input::placeholder` | 15 / 400 | 4,5 | 5,47 | 6,47 |
+| `.ds-tooltip__bubble` | 13 / 600 | 4,5 | 14,52 | 15,59 |
 | `a{} au repos sur --background` | 16 / 400 | 4,5 | 5,36 | 7,11 |
 | `a{} au repos sur --card` | 16 / 400 | 4,5 | 5,59 | 6,12 |
 | `a:hover — dérivé vers --foreground` | 16 / 400 | 4,5 | 6,76 | 8,21 |
-| `.jf-navlink.is-active` | 16 / 500 | 4,5 | 5,97 | 6,12 |
-| `.jf-sidenav.is-active` | 15 / 500 | 4,5 | 5,16 | 5,63 |
-| `.jf-badge--accent` | 12 / 700 | 4,5 | 5,16 | 5,62 |
-| `.jf-banner--info` | 15 / 400 | 4,5 | 5,16 | 5,62 |
-| `.jf-cal__day.is-today` | 14 / 700 | 4,5 | 5,59 | 6,12 |
-| `.jf-pastille--brand — icône` | icône | 3 | 5,30 | 4,66 |
-| `.jf-icon-btn[aria-pressed] — icône` | icône | 3 | 5,16 | 5,62 |
-| `.jf-error` | 13 / 500 | 4,5 | 6,62 | 6,07 |
-| `.jf-dropdown__item--danger` | 14 / 400 | 4,5 | 6,62 | 6,07 |
-| `.jf-actionsheet__item--danger` | 15 / 500 | 4,5 | 6,62 | 6,07 |
-| `.jf-badge--coral sur --card` | 12 / 700 | 4,5 | 4,90 | 5,32 |
-| `.jf-badge--coral sur --background` | 12 / 700 | 4,5 | 4,69 | 6,15 |
-| `.jf-badge--amber sur --card` | 12 / 700 | 4,5 | 4,99 | 5,35 |
-| `.jf-badge--amber sur --background` | 12 / 700 | 4,5 | 4,82 | 6,22 |
-| `.jf-badge--danger sur --card` | 12 / 700 | 4,5 | 5,47 | 5,22 |
-| `.jf-badge--danger sur --background` | 12 / 700 | 4,5 | 5,28 | 6,00 |
-| `.jf-badge--warning sur --card` | 12 / 700 | 4,5 | 4,79 | 4,89 |
-| `.jf-badge--warning sur --background` | 12 / 700 | 4,5 | 4,59 | 5,60 |
-| `.jf-badge--success sur --card` | 12 / 700 | 4,5 | 4,94 | 6,17 |
-| `.jf-badge--success sur --background` | 12 / 700 | 4,5 | 4,75 | 7,14 |
-| `.jf-badge--neutral sur --card` | 12 / 700 | 4,5 | 4,88 | 7,46 |
-| `.jf-badge--neutral sur --background` | 12 / 700 | 4,5 | 4,70 | 8,78 |
-| `.jf-badge--outline` | 12 / 700 | 4,5 | 10,31 | 9,22 |
+| `.ds-navlink.is-active` | 16 / 500 | 4,5 | 5,97 | 6,12 |
+| `.ds-sidenav.is-active` | 15 / 500 | 4,5 | 5,16 | 5,63 |
+| `.ds-badge--accent` | 12 / 700 | 4,5 | 5,16 | 5,62 |
+| `.ds-banner--info` | 15 / 400 | 4,5 | 5,16 | 5,62 |
+| `.ds-cal__day.is-today` | 14 / 700 | 4,5 | 5,59 | 6,12 |
+| `.ds-pastille--brand — icône` | icône | 3 | 5,30 | 4,66 |
+| `.ds-icon-btn[aria-pressed] — icône` | icône | 3 | 5,16 | 5,62 |
+| `.ds-error` | 13 / 500 | 4,5 | 6,62 | 6,07 |
+| `.ds-dropdown__item--danger` | 14 / 400 | 4,5 | 6,62 | 6,07 |
+| `.ds-actionsheet__item--danger` | 15 / 500 | 4,5 | 6,62 | 6,07 |
+| `.ds-badge--coral sur --card` | 12 / 700 | 4,5 | 4,90 | 5,32 |
+| `.ds-badge--coral sur --background` | 12 / 700 | 4,5 | 4,69 | 6,15 |
+| `.ds-badge--amber sur --card` | 12 / 700 | 4,5 | 4,99 | 5,35 |
+| `.ds-badge--amber sur --background` | 12 / 700 | 4,5 | 4,82 | 6,22 |
+| `.ds-badge--danger sur --card` | 12 / 700 | 4,5 | 5,47 | 5,22 |
+| `.ds-badge--danger sur --background` | 12 / 700 | 4,5 | 5,28 | 6,00 |
+| `.ds-badge--warning sur --card` | 12 / 700 | 4,5 | 4,79 | 4,89 |
+| `.ds-badge--warning sur --background` | 12 / 700 | 4,5 | 4,59 | 5,60 |
+| `.ds-badge--success sur --card` | 12 / 700 | 4,5 | 4,94 | 6,17 |
+| `.ds-badge--success sur --background` | 12 / 700 | 4,5 | 4,75 | 7,14 |
+| `.ds-badge--neutral sur --card` | 12 / 700 | 4,5 | 4,88 | 7,46 |
+| `.ds-badge--neutral sur --background` | 12 / 700 | 4,5 | 4,70 | 8,78 |
+| `.ds-badge--outline` | 12 / 700 | 4,5 | 10,31 | 9,22 |
 | `survol — --foreground sur --surface-alt` | 15 / 600 | 4,5 | 14,38 | 11,50 |
 | `anneau de focus --ring sur --background` | contour 2px | 3 | 3,12 | 8,16 |
-| `.jf-choice coché — aplat --primary` | contrôle | 3 | 3,12 | 4,79 |
-| `.jf-switch actif — piste --primary` | contrôle | 3 | 3,12 | 4,79 |
-| `.jf-progress__bar sur son rail` | graphique | 3 | 3,00 | 3,79 |
-| `.jf-input.is-error — bordure --destructive` | contour 1.5px | 3 | 3,80 | 3,78 |
+| `.ds-choice coché — aplat --primary` | contrôle | 3 | 3,12 | 4,79 |
+| `.ds-switch actif — piste --primary` | contrôle | 3 | 3,12 | 4,79 |
+| `.ds-progress__bar sur son rail` | graphique | 3 | 3,00 | 3,79 |
+| `.ds-input.is-error — bordure --destructive` | contour 1.5px | 3 | 3,80 | 3,78 |
 
 ---
 
@@ -115,18 +122,18 @@ besoin. C'est la démonstration que la liste appartient bien à la marque.
 
 | Paire | contenu | seuil | clair | sombre |
 |---|---|--:|--:|--:|
-| `.jf-btn--primary — label sur --primary à plat` | 15 / 600 | 4,5 | 3,48 ✗ | 3,48 ✗ |
-| `.jf-btn--primary — label sur --brand-from (pire arrêt)` | 15 / 600 | 4,5 | 2,04 ✗ | 2,04 ✗ |
-| `.jf-btn--primary — label sur --brand-via` | 15 / 600 | 4,5 | 2,68 ✗ | 2,68 ✗ |
-| `.jf-btn--primary — label sur --brand-to` | 15 / 600 | 4,5 | 3,80 ✗ | 3,80 ✗ |
-| `.jf-btn--danger — label sur --destructive` | 15 / 600 | 4,5 | 3,80 ✗ | 3,80 ✗ |
-| `.jf-cal__day.is-selected` | 14 / 600 | 4,5 | 3,48 ✗ | 3,48 ✗ |
+| `.ds-btn--primary — label sur --primary à plat` | 15 / 600 | 4,5 | 3,48 ✗ | 3,48 ✗ |
+| `.ds-btn--primary — label sur --brand-from (pire arrêt)` | 15 / 600 | 4,5 | 2,04 ✗ | 2,04 ✗ |
+| `.ds-btn--primary — label sur --brand-via` | 15 / 600 | 4,5 | 2,68 ✗ | 2,68 ✗ |
+| `.ds-btn--primary — label sur --brand-to` | 15 / 600 | 4,5 | 3,80 ✗ | 3,80 ✗ |
+| `.ds-btn--danger — label sur --destructive` | 15 / 600 | 4,5 | 3,80 ✗ | 3,80 ✗ |
+| `.ds-cal__day.is-selected` | 14 / 600 | 4,5 | 3,48 ✗ | 3,48 ✗ |
 | `.eyebrow / .accent — dégradé clippé en texte` | 12 / 600 | 4,5 | 1,83 ✗ | 8,16 |
-| `.jf-input — bordure --input vs page` | contour 1.5px | 3 | 1,17 ✗ | 1,44 ✗ |
-| `.jf-input — bordure --input vs remplissage` | contour 1.5px | 3 | 1,30 ✗ | 1,24 ✗ |
-| `.jf-input — remplissage vs page` | aplat | 3 | 1,12 ✗ | 1,16 ✗ |
-| `.jf-card — bordure --border vs page` | contour 1px | 3 | 1,17 ✗ | 1,44 ✗ |
-| `.jf-sep — filet --border sur --card` | filet 1px | 3 | 1,22 ✗ | 1,24 ✗ |
+| `.ds-input — bordure --input vs page` | contour 1.5px | 3 | 1,17 ✗ | 1,44 ✗ |
+| `.ds-input — bordure --input vs remplissage` | contour 1.5px | 3 | 1,30 ✗ | 1,24 ✗ |
+| `.ds-input — remplissage vs page` | aplat | 3 | 1,12 ✗ | 1,16 ✗ |
+| `.ds-card — bordure --border vs page` | contour 1px | 3 | 1,17 ✗ | 1,44 ✗ |
+| `.ds-sep — filet --border sur --card` | filet 1px | 3 | 1,22 ✗ | 1,24 ✗ |
 
 ### 3.1 · Le blanc sur les aplats de marque — `2,04` au pire point
 
@@ -150,9 +157,9 @@ clair et 8,16:1 en sombre. Aucune information n'existe uniquement dans ce contra
 | label | sur `#f5a524` | sur `#e85d2f` | sur `#e84c3d` |
 |---|--:|--:|--:|
 | `#ffffff` (actuel) | 2,04 | 3,48 | 3,80 |
-| `--ink` `#1f1e1c` | **8,16** | **4,79** | 4,39 |
+| `--tone-dark` `#1f1e1c` | **8,16** | **4,79** | 4,39 |
 
-Passer `--primary-foreground` à `--ink` fait tenir le pire arrêt à 8,16. Le CTA devient un
+Passer `--primary-foreground` à `--tone-dark` fait tenir le pire arrêt à 8,16. Le CTA devient un
 bouton à label sombre sur dégradé chaud — c'est une décision d'identité, pas une correction
 technique, d'où le fait qu'elle ne soit pas prise ici.
 

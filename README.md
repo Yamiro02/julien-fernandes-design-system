@@ -32,7 +32,7 @@ Cinq **peer dependencies**, à la charge de l'app :
 | `tailwind-merge` | `^3` | **3.x obligatoire** |
 
 > **`tailwindcss` est marqué `optional` — voici ce que ça veut dire.** Le paquet a deux régimes.
-> Si tu n'utilises que `styles.css` et les classes `.jf-*` — un e-mail, un deck de slides, une page
+> Si tu n'utilises que `styles.css` et les classes `.ds-*` — un e-mail, un deck de slides, une page
 > sans utilitaires — Tailwind n'est pas nécessaire, et le flag évite à npm de le réclamer.
 > **Dès que tu importes `theme.css`, Tailwind >= 4 devient obligatoire** : ce fichier porte les
 > `@import "tailwindcss/…"`. Le flag ne rend pas Tailwind facultatif dans ce cas — il dit
@@ -97,7 +97,7 @@ CSS.
   une bordure encre ou corail là où on attend `--border`. C'était à ta charge en v3, le paquet
   s'en occupe maintenant.
 - **Les couches** : `@layer theme, base, components, utilities`. Le reset du DS est en `base`, les
-  états `.jf-*` en `components`. C'est ce qui permet à un utilitaire Tailwind passé en `className`
+  états `.ds-*` en `components`. C'est ce qui permet à un utilitaire Tailwind passé en `className`
   de **surcharger** un composant — `<Card className="p-space-7">` applique bien `--space-7` —
   exactement comme en v3.
 - **Le thème sombre** est le scope `.dark`, jamais un media query (`@custom-variant dark`).
@@ -184,7 +184,7 @@ de Tailwind, sur laquelle reposent les composants shadcn de ton app.
 > lève aucune erreur : il passe silencieusement de 20 px à 4 px.
 
 > **Le paquet n'est pas scanné par Tailwind.** v4 ne lit pas `node_modules`. Sans effet
-> aujourd'hui : les 36 composants s'habillent en classes `.jf-*` et n'écrivent aucun utilitaire
+> aujourd'hui : les 36 composants s'habillent en classes `.ds-*` et n'écrivent aucun utilitaire
 > Tailwind. C'est une précaution pour l'avenir — le jour où un composant du DS écrira une classe
 > Tailwind, l'app devra pointer le paquet :
 > ```css
@@ -192,9 +192,9 @@ de Tailwind, sur laquelle reposent les composants shadcn de ton app.
 > ```
 
 `tokens/base.css` fournit aussi des classes prêtes à l'emploi : `.display` `.display-xl` `.eyebrow`
-`.chip` `.accent` `.mono` `.caption` `.prose` `.halo` `.page` `.jf-logo`.
+`.chip` `.accent` `.mono` `.caption` `.prose` `.halo` `.page` `.ds-logo`.
 
-La grille fine de miniature s'appelle `.jf-grid` / `.jf-grid-lg` — préfixée depuis la 0.2.3
+La grille fine de miniature s'appelle `.ds-grid` / `.ds-grid-lg` — préfixée depuis la 0.2.3
 précisément pour ne pas entrer en collision avec la classe `grid` de Tailwind. `class="grid"` est
 donc utilisable normalement dans une app qui charge ce design system.
 
@@ -224,14 +224,14 @@ Les règles d'usage composant par composant sont dans [`docs/PROMPTS.md`](docs/P
 > **Doctrine ⋯ .** `Dropdown` est **desktop only**. Sous 64 rem, un menu ⋯ s'ouvre **toujours** en
 > `ActionSheet`, jamais en `Dropdown` : ce ne sont pas deux composants concurrents, c'est le même
 > geste sur deux tailles d'écran. La règle est tenue par le CSS — au-dessus de 64 rem,
-> `.jf-scrim--sheet` est en `display:none`, une ActionSheet modale y est impossible. Le composant
+> `.ds-scrim--sheet` est en `display:none`, une ActionSheet modale y est impossible. Le composant
 > le signale en console en développement.
 
 > **Hors périmètre** — la famille `content` (`CodeBlock`, `StepCard`, `BeforeAfter`, `QuoteBlock`)
 > est sortie du socle en 0.2.0, comme dans le design system maître.
 >
 > **Hors périmètre** — `MetricPill` a été sorti du socle : c'est un composant métier, il vit dans
-> l'app qui en a besoin. Les classes `.jf-metric*` restent dans `patterns.css` (copié verbatim), une
+> l'app qui en a besoin. Les classes `.ds-metric*` restent dans `patterns.css` (copié verbatim), une
 > app peut donc reconstruire sa propre pill de métrique sans réinventer une valeur. Le design system
 > maître l'a retiré de son côté : repo et maître sont alignés.
 
@@ -296,7 +296,7 @@ est reporté, puis porté ici.
 Pas de valeur inventée. Pas de bleu. Pas de blanc ni de noir purs (le blanc pur est réservé au
 bouton secondaire en thème clair). Pas d'emoji — seul le point médian `·`. Pas de rose `#D11A4E`.
 Jamais un pill sur un bouton ou un input. Anton 400 CAPS, titres uniquement, jamais sous
-`1.125rem`, jamais faux-gras. Grille fine et `--ink-deep` : miniatures et motion uniquement.
+`1.125rem`, jamais faux-gras. Grille fine et `--tone-deep` : miniatures et motion uniquement.
 Jamais `rounded` nu — toujours `rounded-lg` : en Tailwind v4, `rounded` est un littéral de 4 px
 hors barème, et il dérive sans rien signaler. Pas de `sparkles` : l'étoile-éclair est bannie du set
 depuis la 0.4.0, elle signe « fait par une IA ». Les actions destructives prennent `trash-2`.

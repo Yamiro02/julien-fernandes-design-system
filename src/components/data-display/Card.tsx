@@ -33,11 +33,11 @@ export interface CardProps extends Omit<HTMLAttributes<HTMLElement>, 'title'> {
   children?: ReactNode;
 }
 
-const card = cva('jf-card', {
+const card = cva('ds-card', {
   variants: {
-    variant: { default: '', interactive: 'jf-card--interactive', feature: 'jf-card--feature' },
-    size: { md: '', lg: 'jf-card--lg' },
-    flush: { true: 'jf-card--flush', false: '' },
+    variant: { default: '', interactive: 'ds-card--interactive', feature: 'ds-card--feature' },
+    size: { md: '', lg: 'ds-card--lg' },
+    flush: { true: 'ds-card--flush', false: '' },
   },
   defaultVariants: { variant: 'default', size: 'md', flush: false },
 });
@@ -55,20 +55,20 @@ export function Card({
   return (
     <Tag className={cls} {...rest}>
       {hasHeader ? (
-        <div className={['jf-card__header', headerGap === 'airy' ? 'jf-card__header--airy' : ''].filter(Boolean).join(' ')}>
+        <div className={['ds-card__header', headerGap === 'airy' ? 'ds-card__header--airy' : ''].filter(Boolean).join(' ')}>
           {icon}
           {(eyebrow || title || subtitle) ? (
-            <div className="jf-card__header-main">
+            <div className="ds-card__header-main">
               {eyebrow ? <span className="eyebrow">{eyebrow}</span> : null}
               {title ? (
-                <h3 className={['jf-card__title', titleSize === 'lg' ? 'jf-card__title--lg' : ''].filter(Boolean).join(' ')}>
+                <h3 className={['ds-card__title', titleSize === 'lg' ? 'ds-card__title--lg' : ''].filter(Boolean).join(' ')}>
                   {title}
                 </h3>
               ) : null}
-              {subtitle ? <div className="jf-card__subtitle">{subtitle}</div> : null}
+              {subtitle ? <div className="ds-card__subtitle">{subtitle}</div> : null}
             </div>
           ) : null}
-          {action ? <div className="jf-card__action">{action}</div> : null}
+          {action ? <div className="ds-card__action">{action}</div> : null}
         </div>
       ) : null}
       {children}

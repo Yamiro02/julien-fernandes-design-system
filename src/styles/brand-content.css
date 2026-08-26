@@ -19,7 +19,7 @@
    variable n'existe pas au lieu de retomber en silence sur celle de quelqu'un d'autre.
 
    LE CONTRAT — sept jetons, dans votre fichier de marque, en `:root` :
-     --ink-deep                le noir le plus profond du système. Surfaces d'export
+     --tone-deep                le noir le plus profond du système. Surfaces d'export
                                uniquement, jamais un fond d'interface.
      --gradient-thumbnail      halo de miniature, verbatim du brief historique.
      --gradient-thumbnail-fit  son jumeau dimensionné (celui qui rend — cf. §2.2).
@@ -27,8 +27,8 @@
      --grid-cell-lg            maille large, idem.
      --grid-line               couleur du filet, très basse opacité (~5,5 %).
      --shadow-accent-hot       la lueur de `.accent-hot`, en drop-shadow.
-   `brand-jf.css` les fournit pour Julien ; `brand.template.css` les liste, commentés,
-   dans son bloc optionnel.
+   `brand.template.css` les liste, commentés, dans son bloc optionnel ; l'instance de
+   référence livrée avec le paquet les renseigne.
 
    Le pendant JavaScript est sur le sous-chemin `@julienfernandes/ds/brand-content` :
    `GridBackground`, `HaloHot` et `ContentIcon`.
@@ -37,7 +37,7 @@
 /* Les correspondances Tailwind des deux jetons métier exposés en utilitaires.
    `@theme inline` et non `@theme` nu, pour la même raison qu'en tête de theme.css. */
 @theme inline {
-  --color-ink-deep: var(--ink-deep);
+  --color-tone-deep: var(--tone-deep);
   --color-grid-line: var(--grid-line);
 }
 
@@ -62,10 +62,10 @@
    sous `components` et sous `utilities`, l'ordre de cascade est inchangé. */
 @layer base {
   /* Grille fine — MINIATURES ET MOTION UNIQUEMENT. Jamais le site, l'UI ou les slides.
-     Nommée .jf-grid (et non .grid) pour ne pas entrer en collision avec la classe
+     Nommée .ds-grid (et non .grid) pour ne pas entrer en collision avec la classe
      display:grid de Tailwind. */
-  .jf-grid{position:absolute;inset:0;pointer-events:none;background-image:linear-gradient(var(--grid-line) 1px,transparent 1px),linear-gradient(90deg,var(--grid-line) 1px,transparent 1px);background-size:var(--grid-cell) var(--grid-cell)}
-  .jf-grid-lg{background-size:var(--grid-cell-lg) var(--grid-cell-lg)}
+  .ds-grid{position:absolute;inset:0;pointer-events:none;background-image:linear-gradient(var(--grid-line) 1px,transparent 1px),linear-gradient(90deg,var(--grid-line) 1px,transparent 1px);background-size:var(--grid-cell) var(--grid-cell)}
+  .ds-grid-lg{background-size:var(--grid-cell-lg) var(--grid-cell-lg)}
 
   /* Le mot-clé en dégradé, avec sa lueur — miniatures et motion uniquement. */
   .accent-hot{-webkit-text-fill-color:transparent;filter:drop-shadow(var(--shadow-accent-hot))}

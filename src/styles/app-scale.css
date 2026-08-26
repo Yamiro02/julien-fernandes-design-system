@@ -1,4 +1,4 @@
-/* Julien Fernandes — échelle d'app (OPT-IN, outils internes desktop uniquement).
+/* Échelle d'app — OPT-IN, outils internes desktop uniquement.
    N'est PAS importé par styles.css : le site public, les e-mails et les slides gardent
    le rem natif. Une app l'active en important ce fichier après styles.css.
    Paliers en % — ils MULTIPLIENT la préférence de taille du navigateur au lieu de

@@ -29,18 +29,18 @@ export function Pagination({
 }: PaginationProps): JSX.Element {
   const go = (p: number) => { if (p >= 1 && p <= pageCount && p !== page) onPageChange && onPageChange(p); };
   return (
-    <nav aria-label="Pagination" className={cn('jf-pagination', className)} {...rest}>
-      <button type="button" className="jf-page" disabled={page <= 1} aria-label="Page précédente" onClick={() => go(page - 1)}>
+    <nav aria-label="Pagination" className={cn('ds-pagination', className)} {...rest}>
+      <button type="button" className="ds-page" disabled={page <= 1} aria-label="Page précédente" onClick={() => go(page - 1)}>
         <Icon name="chevron-left" size="1rem" />
       </button>
       {pages(pageCount, page).map(p => typeof p === 'string'
-        ? <span key={p} className="jf-page jf-page--ellipsis" aria-hidden="true"><Icon name="ellipsis" size="1rem" /></span>
+        ? <span key={p} className="ds-page ds-page--ellipsis" aria-hidden="true"><Icon name="ellipsis" size="1rem" /></span>
         : (
-          <button key={p} type="button" className="jf-page" aria-current={p === page ? 'page' : undefined} onClick={() => go(p)}>
+          <button key={p} type="button" className="ds-page" aria-current={p === page ? 'page' : undefined} onClick={() => go(p)}>
             {p}
           </button>
         ))}
-      <button type="button" className="jf-page" disabled={page >= pageCount} aria-label="Page suivante" onClick={() => go(page + 1)}>
+      <button type="button" className="ds-page" disabled={page >= pageCount} aria-label="Page suivante" onClick={() => go(page + 1)}>
         <Icon name="chevron-right" size="1rem" />
       </button>
     </nav>

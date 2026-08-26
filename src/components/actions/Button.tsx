@@ -27,16 +27,16 @@ export interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   children?: ReactNode;
 }
 
-const button = cva('jf-btn', {
+const button = cva('ds-btn', {
   variants: {
     variant: {
-      primary: 'jf-btn--primary',
-      secondary: 'jf-btn--secondary',
-      ghost: 'jf-btn--ghost',
-      danger: 'jf-btn--danger',
+      primary: 'ds-btn--primary',
+      secondary: 'ds-btn--secondary',
+      ghost: 'ds-btn--ghost',
+      danger: 'ds-btn--danger',
     },
-    size: { sm: 'jf-btn--sm', md: 'jf-btn--md', lg: 'jf-btn--lg' },
-    fullWidth: { true: 'jf-btn--block', false: '' },
+    size: { sm: 'ds-btn--sm', md: 'ds-btn--md', lg: 'ds-btn--lg' },
+    fullWidth: { true: 'ds-btn--block', false: '' },
     loading: { true: 'is-loading', false: '' },
   },
   defaultVariants: { variant: 'primary', size: 'md', fullWidth: false, loading: false },

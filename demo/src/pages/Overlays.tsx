@@ -21,7 +21,7 @@ export function OverlaysPage() {
 
   return (
     <div className="flex flex-col gap-space-7">
-      <Section title="Modal" note="Panneau sur --popover, rayon 2xl, --shadow-lg, au-dessus d'un scrim ink à 45 % avec blur(2px). Largeur 23.75rem au-dessus de 64 rem ; en dessous, la MÊME modale devient une feuille basse — pleine largeur, coins hauts arrondis, poignée, entrée par le bas. Aucun JS de point de rupture : c'est du CSS.">
+      <Section title="Modal" note="Panneau sur --popover, rayon 2xl, --shadow-lg, au-dessus d'un scrim --tone-dark à 45 % avec blur(2px). Largeur 23.75rem au-dessus de 64 rem ; en dessous, la MÊME modale devient une feuille basse — pleine largeur, coins hauts arrondis, poignée, entrée par le bas. Aucun JS de point de rupture : c'est du CSS.">
         <Block label="En vrai" hint="Le focus entre dans le panneau, y est piégé, Échap ferme, le focus revient au déclencheur, et le défilement de la page est verrouillé tant que la modale est ouverte. Réduis la fenêtre sous 1024 px pour la voir en feuille basse.">
           <Row>
             <Button variant="danger" onClick={() => ouvrir('confirm')}>Supprimer ce build</Button>
@@ -102,7 +102,7 @@ export function OverlaysPage() {
       </Section>
 
       <Section title="ActionSheet" note="Le menu ⋯ sur mobile : une feuille basse d'actions, Annuler intégré. Chaque ligne fait au moins --control-md — le rail tactile, non négociable.">
-        <Block label="La doctrine ⋯" hint="Dropdown est desktop only. Sous 64 rem, un menu ⋯ ouvre TOUJOURS une ActionSheet, jamais un Dropdown. Ce ne sont pas deux composants concurrents : c'est le même geste sur deux tailles d'écran. Au-dessus de 64 rem, .jf-scrim--sheet est en display:none — une ActionSheet modale y est impossible par construction, et le composant le signale en console en développement.">
+        <Block label="La doctrine ⋯" hint="Dropdown est desktop only. Sous 64 rem, un menu ⋯ ouvre TOUJOURS une ActionSheet, jamais un Dropdown. Ce ne sont pas deux composants concurrents : c'est le même geste sur deux tailles d'écran. Au-dessus de 64 rem, .ds-scrim--sheet est en display:none — une ActionSheet modale y est impossible par construction, et le composant le signale en console en développement.">
           <Row>
             <Button variant="secondary" onClick={() => setSheet(true)}>Ouvrir le menu ⋯</Button>
           </Row>

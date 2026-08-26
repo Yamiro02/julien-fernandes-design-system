@@ -14,15 +14,15 @@ export interface IconButtonProps extends ButtonHTMLAttributes<HTMLButtonElement>
   children?: ReactNode;
 }
 
-const iconButton = cva('jf-icon-btn', {
+const iconButton = cva('ds-icon-btn', {
   variants: {
     variant: {
-      primary: 'jf-icon-btn--primary',
-      secondary: 'jf-icon-btn--secondary',
-      ghost: 'jf-icon-btn--ghost',
-      danger: 'jf-icon-btn--danger',
+      primary: 'ds-icon-btn--primary',
+      secondary: 'ds-icon-btn--secondary',
+      ghost: 'ds-icon-btn--ghost',
+      danger: 'ds-icon-btn--danger',
     },
-    size: { sm: 'jf-icon-btn--sm', md: 'jf-icon-btn--md', lg: 'jf-icon-btn--lg' },
+    size: { sm: 'ds-icon-btn--sm', md: 'ds-icon-btn--md', lg: 'ds-icon-btn--lg' },
   },
   defaultVariants: { variant: 'ghost', size: 'md' },
 });

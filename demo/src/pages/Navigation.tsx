@@ -30,14 +30,14 @@ export function NavigationPage() {
             <Navbar homeLabel={`${IDENTITY.personne} — accueil`} brand={<Logo variant="wordmark" wordmark={IDENTITY.wordmark} height="1.375rem" />} scrolled links={LINKS} cta={<Button size="sm">La newsletter</Button>} />
           </div>
         </Block>
-        <Block label="Tons du logo" hint="Sans tone, les lettres suivent --foreground : sur une section ink elles s'éclaircissent toutes seules. tone ne sert qu'à forcer.">
+        <Block label="Tons du logo" hint="Sans tone, les lettres suivent --foreground : sur une surface sombre elles s'éclaircissent toutes seules. tone ne sert qu'à forcer.">
           <div className="dark overflow-x-auto rounded-xl border border-border bg-background">
             <Navbar homeLabel={`${IDENTITY.personne} — accueil`} brand={<Logo variant="wordmark" wordmark={IDENTITY.wordmark} height="1.375rem" />} scrolled links={LINKS} cta={<Button size="sm">La newsletter</Button>} />
           </div>
           <div className="dark overflow-x-auto rounded-xl border border-border bg-background">
             <Navbar homeLabel={`${IDENTITY.personne} — accueil`} brand={<Logo variant="wordmark" wordmark={IDENTITY.wordmark} tone="ink" height="1.375rem" />} scrolled tone="ink" links={LINKS} cta={<Button size="sm">La newsletter</Button>} />
           </div>
-          <p className="caption">Le premier suit la surface ; le second force tone=&quot;ink&quot; sur fond ink, pour montrer ce que fait la prop.</p>
+          <p className="caption">Le premier suit la surface ; le second force tone=&quot;ink&quot; sur fond sombre, pour montrer ce que fait la prop.</p>
         </Block>
       </Section>
 
@@ -59,10 +59,10 @@ export function NavigationPage() {
             <Tabs items={SERIES} value="all" onChange={() => undefined} />
           </Row>
           <Row label="survol forcé sur le deuxième item">
-            <div className="jf-tabs">
-              <button type="button" className="jf-tab" aria-selected="true">Tout</button>
-              <button type="button" className="jf-tab is-hover">Build</button>
-              <button type="button" className="jf-tab">Tuto</button>
+            <div className="ds-tabs">
+              <button type="button" className="ds-tab" aria-selected="true">Tout</button>
+              <button type="button" className="ds-tab is-hover">Build</button>
+              <button type="button" className="ds-tab">Tuto</button>
             </div>
           </Row>
         </Block>
@@ -93,7 +93,7 @@ export function NavigationPage() {
                   brand={<Logo variant="wordmark" wordmark={IDENTITY.wordmark} height="1.25rem" />}
                   brandCollapsed={<Logo variant="monogram" wordmark={IDENTITY.wordmark} height="1.5rem" />}
                   staticLayout
-                  storageKey="jf-demo-sidebar"
+                  storageKey="ds-demo-sidebar"
                   sections={[
                     { title: 'Pilotage', items: [
                       { label: 'Tableau de bord', icon: <Icon name="layout-dashboard" size="1.25rem" />, active: true },
@@ -107,7 +107,7 @@ export function NavigationPage() {
                   ]}
                   footer={
                     <span className="flex items-center gap-space-3">
-                      <Avatar size="2rem" halo={false} />
+                      <Avatar size="2rem" halo={false} initials={IDENTITY.monogram} alt={IDENTITY.personne} />
                       <span className="flex flex-col">
                         <span className="text-caption font-semibold">{IDENTITY.personne}</span>
                         <span className="caption">{IDENTITY.lieu}</span>
@@ -136,7 +136,7 @@ export function NavigationPage() {
                   staticLayout
                   defaultCollapsed
                   collapsible={false}
-                  storageKey="jf-demo-sidebar-collapsed"
+                  storageKey="ds-demo-sidebar-collapsed"
                   sections={[{ items: [
                     { label: 'Tableau de bord', icon: <Icon name="layout-dashboard" size="1.25rem" />, active: true },
                     { label: 'Vidéos', icon: <Icon name="video" size="1.25rem" /> },

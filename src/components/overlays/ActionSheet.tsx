@@ -20,7 +20,7 @@ const DESKTOP = '(min-width:64.0625rem)';
  * the opener on close, role="dialog" + aria-modal. On mobile this sheet is the only thing on screen.
  *
  * ABOVE 64 rem — a rule, not a side effect: an ActionSheet NEVER opens as a modal surface
- * (`.jf-scrim--sheet` is display:none above 64 rem). It exists there only as an inline specimen
+ * (`.ds-scrim--sheet` is display:none above 64 rem). It exists there only as an inline specimen
  * with `panel`: a 20rem panel, four corners at radius 2xl, full border, no grip, no scrim.
  */
 export interface ActionSheetItem {
@@ -76,7 +76,7 @@ export function ActionSheet({
     if (typeof window === 'undefined' || !window.matchMedia(DESKTOP).matches) return;
     console.warn(
       '[ds] ActionSheet modale montée au-dessus de 64 rem : elle est INVISIBLE par construction '
-      + '(.jf-scrim--sheet est en display:none). Doctrine ⋯ : sous 64 rem un menu ⋯ ouvre une '
+      + '(.ds-scrim--sheet est en display:none). Doctrine ⋯ : sous 64 rem un menu ⋯ ouvre une '
       + 'ActionSheet, au-dessus il ouvre un Dropdown. Pour un spécimen desktop, passe `inline panel`.',
     );
   }, [open, estInline, asPanel, inline]);
@@ -89,30 +89,30 @@ export function ActionSheet({
       role="dialog"
       aria-modal={estInline ? undefined : 'true'}
       aria-label={typeof title === 'string' ? title : 'Actions'}
-      className={cn('jf-actionsheet', asPanel && 'jf-actionsheet--panneau', className)}
+      className={cn('ds-actionsheet', asPanel && 'ds-actionsheet--panneau', className)}
     >
-      <span className="jf-grip" aria-hidden="true" />
+      <span className="ds-grip" aria-hidden="true" />
       {(title || subtitle) ? (
-        <div className="jf-actionsheet__head">
-          {title ? <span className="jf-actionsheet__title">{title}</span> : null}
-          {subtitle ? <span className="jf-actionsheet__subtitle">{subtitle}</span> : null}
+        <div className="ds-actionsheet__head">
+          {title ? <span className="ds-actionsheet__title">{title}</span> : null}
+          {subtitle ? <span className="ds-actionsheet__subtitle">{subtitle}</span> : null}
         </div>
       ) : null}
       {items.map((it, i) => it.separator
-        ? <hr key={i} className="jf-sep jf-actionsheet__sep" />
+        ? <hr key={i} className="ds-sep ds-actionsheet__sep" />
         : (
           <button
             key={i}
             type="button"
             onClick={it.onSelect}
-            className={cn('jf-actionsheet__item', it.danger && 'jf-actionsheet__item--danger')}
+            className={cn('ds-actionsheet__item', it.danger && 'ds-actionsheet__item--danger')}
           >
             {it.icon}<span style={{ flex: 1 }}>{it.label}</span>
           </button>
         ))}
-      {note ? <div className="jf-actionsheet__note">{note}</div> : null}
-      <hr className="jf-sep jf-actionsheet__sep" />
-      <button type="button" className="jf-actionsheet__item jf-actionsheet__cancel" onClick={onCancel}>
+      {note ? <div className="ds-actionsheet__note">{note}</div> : null}
+      <hr className="ds-sep ds-actionsheet__sep" />
+      <button type="button" className="ds-actionsheet__item ds-actionsheet__cancel" onClick={onCancel}>
         {cancelLabel}
       </button>
     </div>
@@ -120,7 +120,7 @@ export function ActionSheet({
 
   if (estInline) return panel;
   return (
-    <div className="jf-scrim jf-scrim--sheet" style={{ position: 'fixed', zIndex: 50 }} onClick={onCancel}>
+    <div className="ds-scrim ds-scrim--sheet" style={{ position: 'fixed', zIndex: 50 }} onClick={onCancel}>
       <div onClick={e => e.stopPropagation()} style={{ width: '100%' }}>{panel}</div>
     </div>
   );

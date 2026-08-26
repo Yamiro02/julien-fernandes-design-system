@@ -12,6 +12,6 @@ export interface TextareaProps extends TextareaHTMLAttributes<HTMLTextAreaElemen
 export function Textarea({
   invalid = false, rows = 4, surface = 'page', className = '', ...rest
 }: TextareaProps): JSX.Element {
-  const cls = cn('jf-input', 'jf-textarea', surface === 'card' && 'jf-input--on-card', invalid && 'is-error', className);
+  const cls = cn('ds-input', 'ds-textarea', surface === 'card' && 'ds-input--on-card', invalid && 'is-error', className);
   return <textarea className={cls} rows={rows} aria-invalid={invalid || undefined} {...rest} />;
 }

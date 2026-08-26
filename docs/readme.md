@@ -35,12 +35,12 @@ ambre → orange → rouge **rationné à l'accent**. Le calme du fond, la bruta
 
 | Source | Rôle |
 |---|---|
-| `uploads/prompt-claude-design-jf-v4.md` | Le brief complet v4 — fusion Yunary × Julien Fernandes. |
-| `uploads/kit-design-system-jf-v4/yunary/styles.css` + `yunary/tokens/*.css` | **Source de vérité** couleurs, espacement, rayons, ombres, motion. Reprises telles quelles. |
-| `uploads/kit-design-system-jf-v4/yunary/readme.md` | Règles d'usage Yunary (rareté du dégradé, cards, élévation, états). Reprises intégralement. |
-| `uploads/kit-design-system-jf-v4/fonts/Anton-400.woff2` | Police de titre. Une seule graisse : 400. |
-| `uploads/kit-design-system-jf-v4/fonts/JetBrainsMono-400/500.woff2` | Police mono. |
-| `uploads/kit-design-system-jf-v4/logo/*.png` | Logos officiels, point déjà recoloré en orange `#E85D2F`. Repris **sans modification**. |
+| `uploads/prompt-claude-design-ds-v4.md` | Le brief complet v4 — fusion Yunary × Julien Fernandes. |
+| `uploads/kit-design-system-ds-v4/yunary/styles.css` + `yunary/tokens/*.css` | **Source de vérité** couleurs, espacement, rayons, ombres, motion. Reprises telles quelles. |
+| `uploads/kit-design-system-ds-v4/yunary/readme.md` | Règles d'usage Yunary (rareté du dégradé, cards, élévation, états). Reprises intégralement. |
+| `uploads/kit-design-system-ds-v4/fonts/Anton-400.woff2` | Police de titre. Une seule graisse : 400. |
+| `uploads/kit-design-system-ds-v4/fonts/JetBrainsMono-400/500.woff2` | Police mono. |
+| `uploads/kit-design-system-ds-v4/logo/*.png` | Logos officiels, point déjà recoloré en orange `#E85D2F`. Repris **sans modification**. |
 | **Code produit `app/` (08/2026)** | **Socle CSS de l’app de Julien** (`src/index.css`) : échelle typo par rôle, `control` 15, leading 1.5 / prose 1.7, `--radius-badge`, `--tracking-dense`, largeurs de conteneur par rôle, drop responsive des titres. Les ajouts **Videapro** (Anton côté app, géométrie du Détail, facteurs d’échelle, tons de format YouTube/Instagram, lecteur vidéo) sont **volontairement exclus** — projet personnel, hors marque. |
 
 Aucun Figma n’a été fourni. Le code produit `app/` est désormais la référence vivante du socle :
@@ -127,7 +127,7 @@ La chaleur vient de l'orange et du halo.
 La seule couleur saturée est le dégradé de marque, et il est **rationné à l'accent**.
 Le blanc pur `#FFFFFF` (`--secondary`) est **réservé, en thème clair, aux contrôles posés à même
 le layout** : bouton secondaire, navbar, barre de tabs / filtres, barre de recherche, inputs.
-Le noir profond `#0D0C0B` (`--ink-deep`) est **réservé aux miniatures YouTube et au motion**.
+Le noir profond `#0D0C0B` (`--tone-deep`) est **réservé aux miniatures YouTube et au motion**.
 **Pas de bleu** dans le système.
 
 **Règle de rareté (non négociable).** Le dégradé et l'orange vivent en accent seulement :
@@ -186,10 +186,10 @@ Les portraits sont des **découpes** (silhouette détourée), placées bas, halo
 **Ombres.** Trois niveaux teintés ink, jamais noir pur : **sm** `0 2px 8px rgba(31,30,28,.06)`
 (card au repos) · **md** `0 10px 28px …/.09` (flottant / hover) · **lg** `0 20px 48px …/.12`
 (modales, dropdowns). En `.dark`, l'élévation s'approfondit — `rgba(0,0,0,.34/.46/.58)` : c'est la
-seule occurrence de noir pur du système hors `--ink-deep`, et c'est une ombre, jamais une surface.
+seule occurrence de noir pur du système hors `--tone-deep`, et c'est une ombre, jamais une surface.
 Plus le **glow** `--shadow-glow` / `-lg`, réservé au CTA primaire et aux éléments de marque,
 et **`--shadow-knob`** `0 1px 2px rgba(31,30,28,.28)` — le seul relief 1px du système, pour le knob
-du `Switch` (ink-tinté, jamais noir pur). Le knob est en **`--cream-alt`**, pas en blanc pur : la
+du `Switch` (ink-tinté, jamais noir pur). Le knob est en **`--tone-light-alt`**, pas en blanc pur : la
 seule exception blanc reste le bouton secondaire en thème clair.
 
 **Élévation.** fond (1) → card (2, `--shadow-sm`, `--shadow-md` au hover) →
@@ -251,7 +251,7 @@ de métrique. Livrés en pills, toasts et bannières.
 
 ## Logo
 
-Le mark est **rendu en CSS** (composant `Logo` / utilitaire `.jf-logo`) : lettres Anton CAPS +
+Le mark est **rendu en CSS** (composant `Logo` / utilitaire `.ds-logo`) : lettres Anton CAPS +
 **point carré arrondi en dégradé de marque** (`--brand-gradient-diagonal`, rayon 25 %,
 glow `0 0 12px rgba(240,128,41,.5)`) — décision utilisateur, qui remplace l'aplat orange du
 brief v4. Le point garde le dégradé sur **tous** les fonds ; seules les lettres s'inversent :
@@ -279,7 +279,7 @@ eyebrow / icon / title / subtitle / action), `Pastille` (la tuile d'icône : 5 t
 par contexte — carte · dialogue · panneau · héros · écran —, 2 formes, 8 tons ; elle remplace
 les tuiles internes de `Modal` et `EmptyState`), `Badge` (2 rembourrages : md `--badge-h`,
 dense `--badge-h-dense`), `Tooltip`, `Table`, `Separator`. (`MetricPill` est sorti du socle — composant métier,
-il vit dans l'app qui en a besoin ; les classes `.jf-metric*` restent dans `patterns.css`.)
+il vit dans l'app qui en a besoin ; les classes `.ds-metric*` restent dans `patterns.css`.)
 
 **`components/feedback/`** — `Toast`, `Banner`, `EmptyState`, `Skeleton`, `SkeletonCard`,
 `Spinner`, `Progress`.
@@ -316,10 +316,10 @@ marqueur « fait par une IA ». Les actions destructives utilisent `trash-2`.
 - `thumbnail.html` — vignette du design system.
 
 **`tokens/`** — `fonts.css` (DM Sans + `@font-face` Anton & JetBrains Mono) · `colors.css`
-(`:root` crème + `.dark` ink + `--ink-deep` + halos + pills) · `typography.css` (familles, échelle,
+(`:root` crème + `.dark` ink + `--tone-deep` + halos + pills) · `typography.css` (familles, échelle,
 tracking, leading, graisses) · `scales.css` (espacement, rayons, rail, ombres, grille, motion —
 chaque token dimensionnel porte son équivalent px en commentaire) · `base.css` (reset + utilitaires
-`.display` `.eyebrow` `.chip` `.accent` `.halo` `.jf-grid` `.page` `.mono` `.caption`) ·
+`.display` `.eyebrow` `.chip` `.accent` `.halo` `.ds-grid` `.page` `.mono` `.caption`) ·
 `app-scale.css` (**opt-in apps desktop**, hors `styles.css` — paliers d'échelle par largeur d'écran).
 
 **`assets/`** — `fonts/` (Anton-400, JetBrainsMono-400/500) · `logo/` (les PNG fournis, non modifiés).
@@ -381,6 +381,6 @@ Pas de Title Case. Pas de faux gras sur Anton (400 uniquement, jamais `-webkit-t
 Pas d'Anton en bas de casse, ni sous `1.125rem`, ni dans un paragraphe / bouton / label.
 Pas de glassmorphism. Pas d'ombres grises non teintées. Pas de pill sur un bouton, un input ou
 une barre de tabs. Pas de barre de tabs fondue dans le fond de sa surface porteuse.
-Pas de grille sur le site, l'UI ou les slides. Pas de `--ink-deep` en fond d'interface.
+Pas de grille sur le site, l'UI ou les slides. Pas de `--tone-deep` en fond d'interface.
 Pas de card blanche, pas de fond blanc. Pas d'emoji. Pas de rose `#D11A4E`.
 Pas de valeur inventée : si elle n'est ni dans Yunary ni dans le brief, elle est listée ci-dessus.

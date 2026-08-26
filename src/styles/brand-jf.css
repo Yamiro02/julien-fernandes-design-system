@@ -20,7 +20,7 @@
    Le blanc pur (`--secondary`) est réservé, en clair, aux contrôles posés à même le
    layout — bouton secondaire, navbar, barre d'onglets, recherche, champs — jamais un
    fond de page, jamais une carte. Le noir pur n'existe que dans les ombres `.dark`
-   et dans `--ink-deep`.
+   et dans `--tone-deep`.
    ═══════════════════════════════════════════════════════════════════════════════ */
 
 /* ---------- 1 · POLICES ----------
@@ -44,31 +44,31 @@
 
    Chaque entrée est reprise et argumentée dans docs/accessibilite.md. */
 
-/* @a11y-assume: .jf-btn--primary — label sur --primary à plat
+/* @a11y-assume: .ds-btn--primary — label sur --primary à plat
    Blanc sur la marque chaude. Identité orange : le blanc ne peut pas y tenir 4,5:1
    sans assombrir le dégradé jusqu'au brun. Voir docs/accessibilite.md §3.1. */
-/* @a11y-assume: .jf-btn--primary — label sur --brand-from (pire arrêt)
+/* @a11y-assume: .ds-btn--primary — label sur --brand-from (pire arrêt)
    Pire arrêt du dégradé du CTA, 2,04. Même raison. Voir §3.1. */
-/* @a11y-assume: .jf-btn--primary — label sur --brand-via
+/* @a11y-assume: .ds-btn--primary — label sur --brand-via
    Arrêt médian du dégradé du CTA. Même raison. Voir §3.1. */
-/* @a11y-assume: .jf-btn--primary — label sur --brand-to
+/* @a11y-assume: .ds-btn--primary — label sur --brand-to
    Arrêt sombre du dégradé du CTA. Même raison. Voir §3.1. */
-/* @a11y-assume: .jf-btn--danger — label sur --destructive
+/* @a11y-assume: .ds-btn--danger — label sur --destructive
    Blanc sur le rouge de danger : convention de l'industrie, assumée. Voir §3.1. */
-/* @a11y-assume: .jf-cal__day.is-selected
+/* @a11y-assume: .ds-cal__day.is-selected
    Même famille que le CTA : label blanc sur aplat de marque. Voir §3.1. */
 /* @a11y-assume: .eyebrow / .accent — dégradé clippé en texte
    LA signature de la marque : un mot en dégradé par titre. La corriger serait la
    supprimer. Ne porte jamais une information unique. Voir §3.2. */
-/* @a11y-assume: .jf-input — bordure --input vs page
+/* @a11y-assume: .ds-input — bordure --input vs page
    Neutres doux : c'est l'identité du système. Voir §3.3. */
-/* @a11y-assume: .jf-input — bordure --input vs remplissage
+/* @a11y-assume: .ds-input — bordure --input vs remplissage
    Neutres doux : c'est l'identité du système. Voir §3.3. */
-/* @a11y-assume: .jf-input — remplissage vs page
+/* @a11y-assume: .ds-input — remplissage vs page
    Neutres doux : c'est l'identité du système. Voir §3.3. */
-/* @a11y-assume: .jf-card — bordure --border vs page
+/* @a11y-assume: .ds-card — bordure --border vs page
    Neutres doux : c'est l'identité du système. Voir §3.3. */
-/* @a11y-assume: .jf-sep — filet --border sur --card
+/* @a11y-assume: .ds-sep — filet --border sur --card
    Neutres doux : c'est l'identité du système. Voir §3.3. */
 
 /* ---------- 3 · JETONS ---------- */
@@ -83,8 +83,8 @@
   --border:#e5e1da; --input:#e5e1da;
 
   /* UN CRAN DE SÉPARATION depuis la surface courante, quelle qu'elle soit. Quatre emplois
-     sur 15 sites : le survol (13 règles), le rail de .jf-progress, le point haut du shimmer
-     de .jf-skel. Ce n'est PAS une teinte — c'est un PAS DE SURFACE : plus sombre que sa
+     sur 15 sites : le survol (13 règles), le rail de .ds-progress, le point haut du shimmer
+     de .ds-skel. Ce n'est PAS une teinte — c'est un PAS DE SURFACE : plus sombre que sa
      porteuse en clair, plus clair qu'elle en sombre.
      Nommé sur la surface et non sur le survol parce qu'il appartient au CONTRAT DE MARQUE :
      un client qui lit « survol » y met une couleur de survol franche, et ses barres de
@@ -96,7 +96,7 @@
      Valeurs calées sur l'écart CLAIR carte -> survol : 1,084 en clair, 1,088 en sombre. */
   --surface-alt:#f6ede2;
 
-  --ink:#1f1e1c; --ink-soft:#2b2a28; --cream:#f6f2ec; --cream-alt:#faf7f2;
+  --tone-dark:#1f1e1c; --tone-dark-soft:#2b2a28; --tone-light:#f6f2ec; --tone-light-alt:#faf7f2;
   --text-secondary:#3d3c3a; --text-muted:#6b6966; --text-inverted:#f2efea;
 
   /* Brand — accent only */
@@ -142,7 +142,7 @@
      carte, et --muted-foreground dessus ne mesure que 4,40 sur --card, 4,23 sur --background.
      Seul pill sous le seuil. Assombri d'un cran, même famille de gris chaud : 4,88 / 4,70. */
   --pill-neutral-bg:color-mix(in srgb,var(--muted-foreground) 12%,transparent); --pill-neutral-fg:#646260;
-  --overlay-play-bg:color-mix(in srgb,var(--ink) 42%,transparent);
+  --overlay-play-bg:color-mix(in srgb,var(--tone-dark) 42%,transparent);
   /* Vert sémantique. N'existait pas : le bandeau de succès portait #639922 en dur dans
      patterns.css, et le fond de la pilule répétait le même vert en rgba. Un seul endroit
      maintenant, et le fond en dérive. */
@@ -155,6 +155,15 @@
   --font-display:'Anton','Impact','Haettenschweiler','Arial Narrow',sans-serif; /* @kind font */
   --font-body:'DM Sans',system-ui,sans-serif;  /* @kind font */
   --font-mono:'JetBrains Mono',ui-monospace,'SFMono-Regular',monospace; /* @kind font */
+
+  /* LE RÉGIME DE TITRAGE. Il découle de la face display et appartient donc à la marque,
+     pas au socle : l'échelle des quatre graisses est structurelle, le choix de celle que
+     porte le titrage ne l'est pas. Ces deux jetons gouvernent h1→h4, .display, .display-xl,
+     .ds-card__title et .ds-logo — exactement les règles en --font-display.
+     Anton est une CONDENSÉE À CAPITALES qui n'a qu'une graisse : uppercase + 400.
+     Une grotesque classique (Inter, Geist, DM Sans) veut none + 700. */
+  --heading-transform:uppercase;
+  --heading-weight:var(--weight-regular);
 
   /* ---------- Relief de marque ----------
      La LUEUR, par opposition aux ombres neutres du socle (--shadow-sm/md/lg/knob), qui
@@ -174,12 +183,12 @@
 
   /* ---------- MÉTIER — OPTIONNEL : miniatures YouTube et cartes motion ----------
      RIEN DE TOUT CECI N'EST DE L'INTERFACE. Ces sept jetons ne servent QUE si le projet
-     importe `brand-content.css`, l'extension qui porte `.jf-grid`, `.accent-hot` et les
+     importe `brand-content.css`, l'extension qui porte `.ds-grid`, `.accent-hot` et les
      utilitaires `bg-thumbnail*` / `bg-grid*`. Une app d'interface ne les déclare pas et
      n'importe pas l'extension.
      Les VALEURS restent ici, avec le reste de la marque, parce que c'est là que vivent
      toutes les valeurs de ce paquet ; l'extension, elle, n'en porte aucune. */
-  --ink-deep:#0d0c0b;   /* le plus profond du système — surfaces d'export uniquement */
+  --tone-deep:#0d0c0b;   /* le plus profond du système — surfaces d'export uniquement */
   /* Halo de miniature, plus chaud. Littéral repris VERBATIM du brief historique.
      SIGNALÉ : il ne peut pas rendre — avec `closest-side` et un centre à 110 %, le rayon
      vaut 10 % de la hauteur de la boîte tandis que le centre est 10 % SOUS elle : le
@@ -203,7 +212,7 @@
      exactement --card — que parce qu'il faisait aussi office de survol ; libéré de ce
      rôle, il reprend le wash chaud du clair, transposé sur fond sombre : même surcroît
      de chroma qu'en clair (+13 contre +12) et même écart avec la carte (1,090 contre
-     1,084). Répare du même coup .jf-badge--accent et .jf-banner--info, invisibles sur
+     1,084). Répare du même coup .ds-badge--accent et .ds-banner--info, invisibles sur
      une carte en sombre. */
   --accent:#392e29; --accent-foreground:#f2efea;
   --surface-alt:#31302e;

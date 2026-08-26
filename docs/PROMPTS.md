@@ -94,7 +94,7 @@ The Julien Fernandes mark — CSS-rendered: Anton caps + gradient rounded-square
 
 - The dot carries `--brand-gradient-diagonal` + glow on EVERY surface; only the letters invert.
 - Never fake-bold, outline or letterspace the mark.
-- Plain-HTML pages use the same mark via `.jf-logo` / `.jf-logo__dot` (tokens/base.css).
+- Plain-HTML pages use the same mark via `.ds-logo` / `.ds-logo__dot` (tokens/base.css).
 - `assets/logo/*.png` (flat-orange dot) remain as static exports for platforms that need files.
 
 

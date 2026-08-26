@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import type { ReactNode } from 'react';
 import { cn } from '../../lib/cn';
 import { Logo } from '../brand/Logo';
+import { BRAND_NAME } from '../../brand';
 
 /**
  * Sticky top bar: logo left, links centre, CTA right. Sits on --secondary with a
@@ -22,8 +23,8 @@ export interface NavbarProps {
   brand?: ReactNode;
   /** Cible du lien de marque. Défaut '#'. */
   homeHref?: string;
-  /** Libellé accessible du lien de marque. GÉNÉRIQUE par défaut : aucun nom de marque n'est
-   *  codé en dur ici. Un projet peut passer « Northwind Labs — accueil ». */
+  /** Libellé accessible du lien de marque. Défaut : `BRAND_NAME` de `src/brand.ts`, suivi
+   *  de « — accueil ». Aucun nom n'est écrit en dur ici. */
   homeLabel?: string;
   /** Forces the Logo letter tone ('ink' / 'bone'). Default: letters follow --foreground. */
   tone?: 'ink' | 'bone';
@@ -34,7 +35,7 @@ export interface NavbarProps {
 }
 
 export function Navbar({
-  links = [], cta, brand, homeHref = '#', homeLabel = 'Accueil', tone,
+  links = [], cta, brand, homeHref = '#', homeLabel = BRAND_NAME + ' — accueil', tone,
   scrolled: forced, className = '', children,
 }: NavbarProps): JSX.Element {
   const [scrolled, setScrolled] = useState(false);
@@ -47,17 +48,17 @@ export function Navbar({
   }, [forced]);
   const isScrolled = forced !== undefined ? forced : scrolled;
   return (
-    <header className={cn('jf-navbar', isScrolled && 'is-scrolled', className)}>
-      <div className="page jf-navbar__inner">
+    <header className={cn('ds-navbar', isScrolled && 'is-scrolled', className)}>
+      <div className="page ds-navbar__inner">
         <a href={homeHref} aria-label={homeLabel}>
           {brand ?? <Logo variant="wordmark" tone={tone} height="1.375rem" />}
         </a>
-        <nav className="jf-navbar__links">
+        <nav className="ds-navbar__links">
           {links.map(l => (
-            <a key={l.label} href={l.href || '#'} className={cn('jf-navlink', l.active && 'is-active')}>{l.label}</a>
+            <a key={l.label} href={l.href || '#'} className={cn('ds-navlink', l.active && 'is-active')}>{l.label}</a>
           ))}
         </nav>
-        <div className="jf-navbar__cta">{children}{cta}</div>
+        <div className="ds-navbar__cta">{children}{cta}</div>
       </div>
     </header>
   );

@@ -70,7 +70,7 @@ export function Modal({
   const closeBtn = onClose ? (
     <button
       type="button"
-      className="jf-modal__close"
+      className="ds-modal__close"
       aria-label="Fermer"
       disabled={locked}
       onClick={locked ? undefined : onClose}
@@ -82,24 +82,24 @@ export function Modal({
   const panel = (
     <div
       ref={panelRef}
-      className={cn('jf-modal', className)}
+      className={cn('ds-modal', className)}
       role="dialog"
       aria-modal="true"
       aria-busy={locked || undefined}
       aria-label={typeof title === 'string' ? title : undefined}
     >
-      <span className="jf-grip" aria-hidden="true" />
+      <span className="ds-grip" aria-hidden="true" />
       {isResult ? (
         <>
           <div style={{ display: 'flex', justifyContent: 'flex-end' }}>{closeBtn}</div>
-          <div className="jf-modal__result">
+          <div className="ds-modal__result">
             <Pastille size="dialogue" tone={resultTone}>
               <Icon name={r.status === 'error' ? 'circle-x' : 'circle-check'} size="1.25rem" />
             </Pastille>
             {r.title ? <h3>{r.title}</h3> : null}
-            {r.message ? <p className="jf-modal__desc" style={{ display: 'block' }}>{r.message}</p> : null}
+            {r.message ? <p className="ds-modal__desc" style={{ display: 'block' }}>{r.message}</p> : null}
           </div>
-          <div className="jf-modal__foot" style={{ justifyContent: 'center' }}>
+          <div className="ds-modal__foot" style={{ justifyContent: 'center' }}>
             {footer || (
               <>
                 <Button variant="secondary" onClick={onClose}>Fermer</Button>
@@ -122,12 +122,12 @@ export function Modal({
           ) : null}
           {title ? <h3 style={{ margin: 0 }}>{title}</h3> : null}
           {(description || children) ? (
-            <div className="jf-modal__desc">
+            <div className="ds-modal__desc">
               {description ? <p style={{ margin: 0 }}>{description}</p> : null}
               {children}
             </div>
           ) : null}
-          {footer ? <div className="jf-modal__foot">{footer}</div> : null}
+          {footer ? <div className="ds-modal__foot">{footer}</div> : null}
         </>
       )}
     </div>
@@ -135,9 +135,9 @@ export function Modal({
 
   if (inline) return panel;
   return (
-    <div className="jf-scrim" style={{ position: 'fixed', zIndex: 50 }} onClick={locked ? undefined : onClose}>
+    <div className="ds-scrim" style={{ position: 'fixed', zIndex: 50 }} onClick={locked ? undefined : onClose}>
       <div onClick={e => e.stopPropagation()} style={{ display: 'flex', justifyContent: 'center', width: '100%' }}>
-        <div className="jf-modal-slot">{panel}</div>
+        <div className="ds-modal-slot">{panel}</div>
       </div>
     </div>
   );

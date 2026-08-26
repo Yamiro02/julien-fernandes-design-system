@@ -10,7 +10,7 @@ import { cn } from '../../lib/cn';
  * `brand-content.css` en face pour les jetons --grid-*.
  *
  * Les styles restent inline, comme dans la source. Il y a une SECONDE source pour le même
- * motif — la règle `.jf-grid` de brand-content.css — et c'est un doublon connu : le
+ * motif — la règle `.ds-grid` de brand-content.css — et c'est un doublon connu : le
  * sous-lot 6 fait passer ce composant sur la classe.
  */
 export interface GridBackgroundProps extends HTMLAttributes<HTMLSpanElement> {

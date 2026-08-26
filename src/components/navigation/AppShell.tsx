@@ -17,9 +17,9 @@ export function AppShell({
   sidebar, responsive = true, className = '', children, ...rest
 }: AppShellProps): JSX.Element {
   return (
-    <div className={cn('jf-appshell', !responsive && 'jf-appshell--static', className)} {...rest}>
+    <div className={cn('ds-appshell', !responsive && 'ds-appshell--static', className)} {...rest}>
       {sidebar}
-      <main className="jf-appshell__main">{children}</main>
+      <main className="ds-appshell__main">{children}</main>
     </div>
   );
 }

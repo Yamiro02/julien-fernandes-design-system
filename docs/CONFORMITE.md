@@ -40,7 +40,7 @@ Mesuré au rendu, dans les deux thèmes :
 | clair, barre sur une card | `#f6f2ec` `--background` | `#faf7f2` `--card` |
 | sombre, barre sur une card | `#1f1e1c` `--background` | `#2b2a28` `--card` |
 
-`.jf-page[aria-current="page"]` (Pagination) porte le **même défaut** et reste **inchangé** :
+`.ds-page[aria-current="page"]` (Pagination) porte le **même défaut** et reste **inchangé** :
 il est ouvert exprès, il sera tranché à part.
 
 ---
@@ -88,31 +88,31 @@ Aucun n'entre dans `src/styles/theme.css` : aucune app n'en a besoin comme utili
 
 ### Classes — `patterns.css`
 
-**Ajoutées** : `.jf-card__header(-main|--airy)` `.jf-card__title(--lg)` `.jf-card__subtitle`
-`.jf-card__action` · `.jf-badge--dense` · `.jf-pastille` + 5 tailles + `--rond` + 8 tons +
-`--outlined` · `.jf-modal__close:disabled` `.jf-modal__desc` `.jf-modal__foot` `.jf-modal__result`
-`.jf-modal-slot` `.jf-grip` · `.jf-actionsheet` + `__head` `__title` `__subtitle` `__item(--danger)`
-`__note` `__sep` `__cancel` · `.jf-scrim--sheet` · `.jf-actionsheet--panneau` · la feuille basse
-`@media (max-width:64rem)` + `@keyframes jf-sheet-in` · la règle desktop
-`@media (min-width:64.0625rem){.jf-scrim--sheet{display:none}}`.
+**Ajoutées** : `.ds-card__header(-main|--airy)` `.ds-card__title(--lg)` `.ds-card__subtitle`
+`.ds-card__action` · `.ds-badge--dense` · `.ds-pastille` + 5 tailles + `--rond` + 8 tons +
+`--outlined` · `.ds-modal__close:disabled` `.ds-modal__desc` `.ds-modal__foot` `.ds-modal__result`
+`.ds-modal-slot` `.ds-grip` · `.ds-actionsheet` + `__head` `__title` `__subtitle` `__item(--danger)`
+`__note` `__sep` `__cancel` · `.ds-scrim--sheet` · `.ds-actionsheet--panneau` · la feuille basse
+`@media (max-width:64rem)` + `@keyframes ds-sheet-in` · la règle desktop
+`@media (min-width:64.0625rem){.ds-scrim--sheet{display:none}}`.
 
-**Modifiées** : `.jf-badge` (+`min-height` +`box-sizing`) · `.jf-modal__close:hover` →
-`:hover:not(:disabled)` · `.jf-switch__track` et `__knob` (mesures en jetons) · la course du knob.
+**Modifiées** : `.ds-badge` (+`min-height` +`box-sizing`) · `.ds-modal__close:hover` →
+`:hover:not(:disabled)` · `.ds-switch__track` et `__knob` (mesures en jetons) · la course du knob.
 
-**Supprimées** : `.jf-modal__icon` · `.jf-empty__icon` — écart A.
+**Supprimées** : `.ds-modal__icon` · `.ds-empty__icon` — écart A.
 
 ### Composants
 
 Nouveaux : `Pastille`, `ActionSheet`, et le hook interne `useModalSurface` (non exporté depuis
 `src/index.ts`, comme dans le maître). Modifiés : `Badge` (+`pad`), `Card` (+7 slots d'en-tête),
-`Modal` (+`phase` +`result`, tuile en `Pastille`, `.jf-grip`, styles inline officialisés),
+`Modal` (+`phase` +`result`, tuile en `Pastille`, `.ds-grip`, styles inline officialisés),
 `EmptyState` (tuile en `Pastille`), `Icon` (`sparkles` retirée, `trash-2` ajoutée — 48 glyphes,
 inchangé). **38 fichiers, 43 exports nommés** (le §4 du prompt annonçait 39 : chiffre recompté).
 
 ### Écarts assumés
 
-**A. Les deux alias dépréciés sont supprimés, le maître les garde.** `.jf-modal__icon` et
-`.jf-empty__icon` sont commentés `DEPRECATED v0.3` côté maître, pour les sites d'appel des apps.
+**A. Les deux alias dépréciés sont supprimés, le maître les garde.** `.ds-modal__icon` et
+`.ds-empty__icon` sont commentés `DEPRECATED v0.3` côté maître, pour les sites d'appel des apps.
 Ce dépôt n'a **aucune app consommatrice** : rien à protéger. Divergence **permanente** et
 légitime des deux côtés — elle ne se remonte pas.
 
@@ -127,7 +127,7 @@ composité sous le knob :
 
 | | clair | sombre |
 |---|---|---|
-| remplissage `#fff` → `--cream-alt` | −5 / −8 / −13 RGB (−3,9 % de luminance) | idem, `--cream-alt` n'est pas redéfini en `.dark` |
+| remplissage `#fff` → `--tone-light-alt` | −5 / −8 / −13 RGB (−3,9 % de luminance) | idem, `--tone-light-alt` n'est pas redéfini en `.dark` |
 | ombre, rail décoché | −9 / −10 / −9 | **−14 / −15 / −13** |
 | ombre, rail coché | −10 / +1 / +4 | **−58 / −23 / −12** |
 
@@ -160,9 +160,9 @@ de remontée consolidé accompagne cette livraison.
 | `src/styles/tokens/colors.css` | ✓ verbatim v2 | seul le commentaire d'entête change : le blanc pur `--secondary` est réservé aux contrôles posés à même le layout |
 | `src/styles/tokens/typography.css` | ✓ verbatim | `diff` identique |
 | `src/styles/tokens/scales.css` | ✓ verbatim v2 | rayons contrôles resserrés (`--radius-sm` 0.625 · `--radius-md` 0.75), rail **unique** (`--control-sm` et les trois `--icon-control-*` aliasent `--control-md`), media query mobile `@media (max-width:64rem)` → `--control-md:2.75rem` |
-| `src/styles/tokens/base.css` | ✓ verbatim V4 | `.grid` / `.grid-lg` renommés `.jf-grid` / `.jf-grid-lg` — la collision avec Tailwind est morte (écart 7) |
-| `src/styles/patterns.css` | ✓ verbatim V4 | le maître a écrit les 4 règles anticipées **à l'octet près** — l'avance de phase est résorbée (écart 25) | + `.jf-table--framed` (contour 1px `--border`, `--radius-lg`, coins internes `calc(… - 1px)`, fond `--card`, en-tête `--background`) et `.jf-table--columns` (séparateurs verticaux 1px). Reste v2 pour le reste : | focus champ = bordure seule (anneau 3px supprimé) · `.jf-input` sur `--secondary`, modificateur `--on-card` · tabs hors pill · navbar toujours `--secondary` · dropdown en `--radius-lg` · bloc `content` supprimé · 7 nouveaux blocs |
-| `src/styles/index.css` | ✓ port de `styles.css` | `@import` uniquement, même ordre, mêmes commentaires. **0.3.0** : déclare l'ordre des couches et pose `layer(base)` sur `tokens/base.css`, `layer(components)` sur `patterns.css` — les tokens restent hors couche. C'est ce qui laisse un utilitaire Tailwind surcharger un `.jf-*`, comme en v3 |
+| `src/styles/tokens/base.css` | ✓ verbatim V4 | `.grid` / `.grid-lg` renommés `.ds-grid` / `.ds-grid-lg` — la collision avec Tailwind est morte (écart 7) |
+| `src/styles/patterns.css` | ✓ verbatim V4 | le maître a écrit les 4 règles anticipées **à l'octet près** — l'avance de phase est résorbée (écart 25) | + `.ds-table--framed` (contour 1px `--border`, `--radius-lg`, coins internes `calc(… - 1px)`, fond `--card`, en-tête `--background`) et `.ds-table--columns` (séparateurs verticaux 1px). Reste v2 pour le reste : | focus champ = bordure seule (anneau 3px supprimé) · `.ds-input` sur `--secondary`, modificateur `--on-card` · tabs hors pill · navbar toujours `--secondary` · dropdown en `--radius-lg` · bloc `content` supprimé · 7 nouveaux blocs |
+| `src/styles/index.css` | ✓ port de `styles.css` | `@import` uniquement, même ordre, mêmes commentaires. **0.3.0** : déclare l'ordre des couches et pose `layer(base)` sur `tokens/base.css`, `layer(components)` sur `patterns.css` — les tokens restent hors couche. C'est ce qui laisse un utilitaire Tailwind surcharger un `.ds-*`, comme en v3 |
 | `assets/fonts/` (Anton-400, JetBrainsMono-400/500) | ✓ copiés | + duplicata dans `src/styles/assets/fonts/` — voir **écart 2** |
 | `assets/logo/` (10 PNG) | ✓ copiés | non modifiés |
 | `docs/readme.md` | ✓ verbatim V3 | non modifié. Le maître y documente désormais lui-même le retrait de `MetricPill` |
@@ -180,7 +180,7 @@ qui les reçoit.
 
 | Clé du preset v3 | Namespace v4 | Tokens branchés |
 |---|---|---|
-| `colors` | `--color-*` | `--background --foreground --card(-foreground) --popover(-foreground) --primary(-foreground) --secondary(-foreground) --muted(-foreground) --accent(-foreground) --destructive(-foreground) --border --input --ring --ink --ink-soft --ink-deep --cream --cream-alt --text-secondary --text-muted --text-inverted --brand-from --brand-via --brand-to --pill-*-bg/fg --overlay-play-bg --grid-line` |
+| `colors` | `--color-*` | `--background --foreground --card(-foreground) --popover(-foreground) --primary(-foreground) --secondary(-foreground) --muted(-foreground) --accent(-foreground) --destructive(-foreground) --border --input --ring --tone-dark --tone-dark-soft --tone-deep --tone-light --tone-light-alt --text-secondary --text-muted --text-inverted --brand-from --brand-via --brand-to --pill-*-bg/fg --overlay-play-bg --grid-line` |
 | `backgroundImage` | **`@utility bg-*`** — pas de namespace v4 | `--brand-gradient --brand-gradient-diagonal --grad-soft --gradient-halo --gradient-thumbnail --gradient-thumbnail-fit` |
 | `backgroundSize` | **`@utility bg-*`** — pas de namespace v4 | `--grid-cell --grid-cell-lg` |
 | `borderRadius` | `--radius-*` | `--radius-badge --radius-sm --radius-md --radius-lg --radius-xl --radius-2xl --radius-pill`. **`--radius` (le `DEFAULT` v3) n'est pas portable** : en v4 `rounded` nu est un utilitaire statique de `0.25rem` qu'un `@utility` ne remplace pas, il fusionne avec. `--radius` vaut `var(--radius-lg)` : `rounded-lg` le couvre |
@@ -215,7 +215,7 @@ qui les reçoit.
 ### `Button`
 | Contrôle | État |
 |---|---|
-| Variantes `primary · secondary · ghost · danger` | ✓ 4/4 → `.jf-btn--*` |
+| Variantes `primary · secondary · ghost · danger` | ✓ 4/4 → `.ds-btn--*` |
 | Tailles `sm · md · lg` | ✓ 3/3 → `--control-sm` 2.375rem · base 3rem · `--control-lg` 3.25rem |
 | hover / active / focus / disabled / loading | ✓ 5/5 (`patterns.css`, + helpers `is-hover`/`is-active`/`is-focus` dans la démo) |
 | `icon` / `iconRight` / `fullWidth` / `as` | ✓ |
@@ -276,7 +276,7 @@ qui les reçoit.
 
 > **`MetricPill` est hors périmètre.** Sorti du socle le 26/08/2026 sur ta décision : c'est un
 > composant métier, il vit dans l'app qui en a besoin. Le fichier, l'export et la page de démo ont
-> été retirés. `patterns.css` conserve `.jf-metric`, `.jf-metric--solid` et `.jf-metric--coral`
+> été retirés. `patterns.css` conserve `.ds-metric`, `.ds-metric--solid` et `.ds-metric--coral`
 > (fichier copié verbatim, jamais édité) : une app peut donc reconstruire sa propre pill de métrique
 > sans réinventer une seule valeur. Voir **écart 18**.
 
@@ -296,7 +296,7 @@ qui les reçoit.
 
 ### `Tooltip`
 - Placements `top · bottom` ✓ 2/2 · `open` forcé ✓
-- Bulle `--ink` / `--text-inverted`, `--cream-alt` / `--ink` en `.dark` ✓ · `--shadow-lg` ✓ · ouverture sur `:hover` et `:focus-within` ✓
+- Bulle `--tone-dark` / `--text-inverted`, `--tone-light-alt` / `--tone-dark` en `.dark` ✓ · `--shadow-lg` ✓ · ouverture sur `:hover` et `:focus-within` ✓
 
 ---
 
@@ -327,7 +327,7 @@ qui les reçoit.
 
 ### `Modal`
 - `open` · `icon` · `iconVariant danger | brand | neutral` (✓ 3/3) · `title` · `description` · `footer` · `onClose` · `inline` ✓
-- Scrim `color-mix(--ink 45%)` + `blur(2px)` ✓ · panneau 23.75rem, `--radius-2xl`, `--shadow-lg`, `--popover` ✓
+- Scrim `color-mix(--tone-dark 45%)` + `blur(2px)` ✓ · panneau 23.75rem, `--radius-2xl`, `--shadow-lg`, `--popover` ✓
 - Tuile d'icône 2.625rem `--radius-md` ✓ · bouton fermer 2rem `--radius-sm` ✓
 - **Ajout comportemental** (écart 4) : Échap, piège de focus, restitution du focus. Aucun changement de DOM ni de style.
 
@@ -361,7 +361,7 @@ qui les reçoit.
 
 ### `Logo`
 - Variantes `wordmark · stacked · monogram` ✓ 3/3 · `tone ink | bone | (défaut --foreground)` ✓ 3/3 · `height` ✓
-- Point carré arrondi `--brand-gradient-diagonal`, rayon 25 %, glow — porté par `.jf-logo__dot` (base.css) sur **tous** les fonds ✓
+- Point carré arrondi `--brand-gradient-diagonal`, rayon 25 %, glow — porté par `.ds-logo__dot` (base.css) sur **tous** les fonds ✓
 - Aucun faux-gras, aucun outline, aucun letterspacing ✓ · `font-size = height × 1.25` ✓
 
 ### `Halo`
@@ -383,8 +383,8 @@ qui les reçoit.
 
 La famille `content/` (`CodeBlock`, `StepCard`, `BeforeAfter`, `QuoteBlock`) est sortie du socle en
 v0.2.0, conformément au kit maître v2 qui ne la contient plus. Retirés : les quatre composants,
-leurs exports, la page de démo et sa route. Le bloc `content` de `patterns.css` (`.jf-code*`,
-`.jf-quote`) a disparu avec la copie verbatim du fichier v2. Vérifié avant suppression : aucun
+leurs exports, la page de démo et sa route. Le bloc `content` de `patterns.css` (`.ds-code*`,
+`.ds-quote`) a disparu avec la copie verbatim du fichier v2. Vérifié avant suppression : aucun
 composant restant ne les importait.
 
 ## 10. Démo (`/demo`)
@@ -412,9 +412,9 @@ composant restant ne les importait.
 | `blue` / `bleu` | **0** |
 | Rose `#D11A4E` | **0** dans le code ; 2 mentions dans `docs/readme.md` qui l'interdisent |
 | Emoji / unicode décoratif | **0** (seul le point médian `·` est utilisé) |
-| Pill sur bouton, input **ou barre d'onglets** | **0** — `.jf-btn`, `.jf-icon-btn` et `.jf-input` en `--radius-md` ; `.jf-tabs` en `0.875rem` et `.jf-tab` en `--radius-sm`. `--radius-pill` ne sert plus qu'aux badges, compteurs, radio et switch |
+| Pill sur bouton, input **ou barre d'onglets** | **0** — `.ds-btn`, `.ds-icon-btn` et `.ds-input` en `--radius-md` ; `.ds-tabs` en `0.875rem` et `.ds-tab` en `--radius-sm`. `--radius-pill` ne sert plus qu'aux badges, compteurs, radio et switch |
 | Anton hors titres | **0** — `--font-display` n'apparaît que dans `StepCard` (numéro, palier `--text-heading-xl`) et `Avatar` (monogramme, voir écart 14) |
-| `--ink-deep` dans l'UI | **0** — présent uniquement dans les spécimens de la démo, explicitement étiquetés « miniatures et motion » |
+| `--tone-deep` dans l'UI | **0** — présent uniquement dans les spécimens de la démo, explicitement étiquetés « miniatures et motion » |
 | Grille fine dans l'UI | **0** — uniquement dans `GridBackground` |
 | Exports `src/index.ts` ↔ `.d.ts` sources v2 | **36 / 37** — seul `MetricPill` manque, retiré volontairement (écart 18). Aucun autre manquant, aucun en trop (+ les sous-composants `THead` `TBody` `Tr` `Th` `Td` et l'utilitaire `cn`) |
 | Preset : littéral de couleur ou de taille | **0** — uniquement des `var(--…)` |
@@ -526,12 +526,12 @@ Le contrat expose `as?: keyof JSX.IntrinsicElements` mais étend `ButtonHTMLAttr
 `<Button as="a" href="/x">` ne compile donc pas. **Question : j'ajoute `AnchorHTMLAttributes` au
 contrat en 0.2.0 ?**
 
-**7. Collision de nom : `.grid`.** — ✅ **RÉSOLU en V4** : renommée `.jf-grid`.
+**7. Collision de nom : `.grid`.** — ✅ **RÉSOLU en V4** : renommée `.ds-grid`.
 `tokens/base.css` définit `.grid { position:absolute; inset:0; … }` (la grille fine).
 Tailwind définit `.grid { display:grid }`. Toute app consommatrice qui écrit `class="grid"` hérite
 donc du `position:absolute` — la mise en page casse. Je l'ai rencontré en montant la démo.
 Je n'ai pas touché aux tokens : `GridBackground` pose ses styles inline (comme la source), et la
-démo n'utilise jamais la classe `grid` nue. **Question : on renomme en `.jf-grid` en 0.2.0 ?**
+démo n'utilise jamais la classe `grid` nue. **Question : on renomme en `.ds-grid` en 0.2.0 ?**
 C'est la seule solution propre côté consommateur.
 
 **8. Preflight Tailwind.**
@@ -546,7 +546,7 @@ la source à l'identique et je montre les deux cas dans la démo. **Question : o
 `undefined` (suivre la surface) en 0.2.0 ?**
 
 **10. `Navbar` n'a pas de traitement étroit.**
-`.jf-navbar__inner` ne passe jamais à la ligne : sous ~48rem, le CTA déborde. Aucune valeur de
+`.ds-navbar__inner` ne passe jamais à la ligne : sous ~48rem, le CTA déborde. Aucune valeur de
 point de rupture n'existe dans les sources — je n'en ai pas inventé.
 
 **11. Le token `--radius-badge` n'est posé par aucun composant.**
@@ -578,7 +578,7 @@ source embarquait un `<polygon>` — même glyphe, même silhouette.
 
 **16. Preset — pas de `keyframes` ni d'`animation`.**
 Les durées (150 / 200 / 300 ms, 1.4 s) sont des **littéraux documentés**, pas des tokens : les mettre
-dans le preset violerait « uniquement des `var(--…)` ». `.jf-skel` et `.jf-spin` les portent déjà,
+dans le preset violerait « uniquement des `var(--…)` ». `.ds-skel` et `.ds-spin` les portent déjà,
 et `scales.css` définit `@keyframes shimmer`.
 
 **17. Preset — l'échelle d'espacement est nommée, pas numérique.**
@@ -594,7 +594,7 @@ Tailwind, comme le fait shadcn.
 Composant métier : une pill de métrique (vues, durée, date de publication) appartient à l'app qui
 affiche ces métriques, pas au socle générique de la marque. Retirés : `src/components/data-display/
 MetricPill.tsx`, l'export de `src/index.ts`, la section de la démo, l'entrée du tableau du README.
-**Non touchés** : `patterns.css` garde `.jf-metric`, `.jf-metric--solid` et `.jf-metric--coral`
+**Non touchés** : `patterns.css` garde `.ds-metric`, `.ds-metric--solid` et `.ds-metric--coral`
 (copie verbatim, jamais éditée), et `colors.css` garde `--overlay-play-bg` et `--pill-coral-*`.
 Une app qui a besoin d'une pill de métrique la reconstruit donc sur les classes déjà livrées, sans
 inventer de valeur. **Résolu par le kit V3.** Le projet maître a supprimé `MetricPill.jsx`, `MetricPill.d.ts` et la
@@ -617,7 +617,7 @@ seule l'URL d'installation change, et le README porte la bonne.
 ### Mise à jour v2 (0.2.0)
 
 **20. Focus des champs : l'anneau 3px a disparu.**
-`patterns.css` v2 pose `.jf-input:focus{border-color:var(--ring)}` — une seule bordure, plus de
+`patterns.css` v2 pose `.ds-input:focus{border-color:var(--ring)}` — une seule bordure, plus de
 `box-shadow: 0 0 0 3px`. Idem en erreur : bordure `--destructive` seule. **Cela contredit le
 `readme.md` v1** qui imposait l'anneau (« sur les inputs un anneau `box-shadow: 0 0 0 3px … 22% »).
 Le `readme.md` v2 a été copié en même temps, la règle y est donc à jour. Signalé parce que c'est un
@@ -652,7 +652,7 @@ maître. Le port n'a eu qu'à copier et suivre — aucune décision locale.
 | # | Écart | Résolution V4 | Vérifié |
 |---|---|---|---|
 | **6** | `Button` : `href` non typé, `<Button as="a" href>` ne compilait pas | `href?: string` ajouté au contrat | la démo Actions repasse un vrai `href`, `tsc` passe |
-| **7** | `.grid` de `base.css` écrasait la classe `grid` de Tailwind (`position:absolute`) | renommée `.jf-grid` / `.jf-grid-lg` | 4 éléments `.grid` dans la démo, **0** en `position:absolute`, tous en `display:grid`. Le contournement `inline-grid w-full` est retiré de la vitrine |
+| **7** | `.grid` de `base.css` écrasait la classe `grid` de Tailwind (`position:absolute`) | renommée `.ds-grid` / `.ds-grid-lg` | 4 éléments `.grid` dans la démo, **0** en `position:absolute`, tous en `display:grid`. Le contournement `inline-grid w-full` est retiré de la vitrine |
 | **9** | `Navbar` / `Footer` : `tone='ink'` par défaut → wordmark sombre sur fond sombre | le défaut passe à `undefined`, les lettres suivent `--foreground` | sur ink sans `tone` : `#f2efea` ; avec `tone="ink"` : `#1f1e1c`. La prop force toujours |
 | **21** | `Icon.d.ts` du maître typait 39 noms pour 48 tracés | union portée à 48 | le port était déjà à 48 : contrat et implémentation enfin d'accord |
 | **25** | `patterns.css` portait 4 règles en avance sur le maître | le maître les a écrites **à l'identique** | `diff` avec le kit V4 : aucune différence |
@@ -669,7 +669,7 @@ demandant de couper le preflight (pour que `base.css` garde ses titres Anton), `
 écrivait `border-width:1px` sur un `border-style:none` : **rien à l'écran, sans erreur**.
 Mesuré avant correction : **35 éléments de la démo utilisaient `border`, les 35 étaient inertes.**
 Le bug datait de la Phase 9 (v0.1.0) et personne ne l'avait vu, parce que toutes les bordures
-visibles venaient des classes `.jf-*` de `patterns.css`, qui écrivent `border: 1px solid …` en
+visibles venaient des classes `.ds-*` de `patterns.css`, qui écrivent `border: 1px solid …` en
 toutes lettres.
 Corrigé dans la vitrine par un `@layer base` qui restaure ce seul morceau, et **la consigne du
 README est complétée** : une app qui coupe le preflight doit faire pareil, sinon elle hérite du
@@ -692,10 +692,10 @@ La passe doctrine demandait de poser en classes ce qui était inline. Le texte e
 suivra »), mais elle n'y est pas encore. `patterns.css` n'est donc plus byte-identique au kit V3 :
 il porte **exactement** ces quatre lignes en plus, et rien d'autre.
 ```
-.jf-input--sm{min-height:var(--control-sm)}
-.jf-input--lg{min-height:var(--control-lg)}
-.jf-navbar__links{display:flex;align-items:center;gap:var(--space-6)}
-.jf-navbar__cta{display:flex;align-items:center;gap:var(--space-3)}
+.ds-input--sm{min-height:var(--control-sm)}
+.ds-input--lg{min-height:var(--control-lg)}
+.ds-navbar__links{display:flex;align-items:center;gap:var(--space-6)}
+.ds-navbar__cta{display:flex;align-items:center;gap:var(--space-3)}
 ```
 Aucune valeur inventée : `--control-sm`, `--control-lg`, `--space-6` et `--space-3` existent déjà.
 **À réconcilier au prochain kit** — si le maître écrit ces règles différemment, c'est sa version

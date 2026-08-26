@@ -29,23 +29,23 @@
    La liste repart de ZÉRO : aucun des renoncements de Julien n'est hérité. Ceux qui
    suivent sont ceux de CETTE palette, mesurés sur elle. */
 
-/* @a11y-assume: .jf-btn--primary — label sur --brand-from (pire arrêt)
+/* @a11y-assume: .ds-btn--primary — label sur --brand-from (pire arrêt)
    Le vert clair du départ de dégradé ne tient pas le blanc. Assumé par le dispositif
    de test, qui n'est pas un produit livré. */
-/* @a11y-assume: .jf-btn--primary — label sur --brand-via
+/* @a11y-assume: .ds-btn--primary — label sur --brand-via
    Même dégradé, arrêt médian. */
 /* @a11y-assume: .eyebrow / .accent — dégradé clippé en texte
    Le dégradé clippé en texte pique au même endroit que chez Julien : c'est une
    propriété de la TECHNIQUE, pas de la palette. Résultat intéressant du test. */
-/* @a11y-assume: .jf-input — bordure --input vs page
+/* @a11y-assume: .ds-input — bordure --input vs page
    Contours doux, choix repris du template. */
-/* @a11y-assume: .jf-input — bordure --input vs remplissage
+/* @a11y-assume: .ds-input — bordure --input vs remplissage
    Contours doux, choix repris du template. */
-/* @a11y-assume: .jf-input — remplissage vs page
+/* @a11y-assume: .ds-input — remplissage vs page
    Contours doux, choix repris du template. */
-/* @a11y-assume: .jf-card — bordure --border vs page
+/* @a11y-assume: .ds-card — bordure --border vs page
    Contours doux, choix repris du template. */
-/* @a11y-assume: .jf-sep — filet --border sur --card
+/* @a11y-assume: .ds-sep — filet --border sur --card
    Contours doux, choix repris du template. */
 
 /* ---------- 3 · JETONS ---------- */
@@ -63,7 +63,7 @@
   --surface-alt:#e7edf3;
 
   /* Neutres nommés */
-  --ink:#0f1d2a; --ink-soft:#1c2f40; --cream:#eef2f6; --cream-alt:#f8fafc;
+  --tone-dark:#0f1d2a; --tone-dark-soft:#1c2f40; --tone-light:#eef2f6; --tone-light-alt:#f8fafc;
   --text-secondary:#2b3f50; --text-muted:#4d6070; --text-inverted:#f1f6fa;
 
   /* Marque — remplissages. Vert -> cyan -> bleu. Zéro orange. */
@@ -91,13 +91,19 @@
   --pill-success-bg:color-mix(in srgb,var(--success) 16%,transparent); --pill-success-fg:#1c5f3c;
   --pill-neutral-bg:color-mix(in srgb,var(--muted-foreground) 12%,transparent); --pill-neutral-fg:#41525f;
   --success:#2f8f5b;
-  --overlay-play-bg:color-mix(in srgb,var(--ink) 42%,transparent);
+  --overlay-play-bg:color-mix(in srgb,var(--tone-dark) 42%,transparent);
 
   /* Familles — une SERIF en display, une grotesque géométrique en texte.
      Replis SYSTÈME : le test reste probant hors réseau. */
   --font-display:'Playfair Display',Georgia,'Times New Roman',serif; /* @kind font */
   --font-body:'Space Grotesk','Trebuchet MS',Verdana,sans-serif;     /* @kind font */
   --font-mono:'IBM Plex Mono','Courier New',monospace;               /* @kind font */
+
+  /* Le régime de titrage — l'autre moitié du test. Une serif en CAPITALES 400, c'est ce
+     que rendait le socle avant que ces deux jetons existent : la règle d'Anton appliquée
+     à une face qui ne la demande pas. Ici, casse d'origine et gras. */
+  --heading-transform:none;
+  --heading-weight:var(--weight-bold);
 
   /* Relief de marque — la lueur suit le dégradé : cyan et bleu, jamais ambre. */
   --shadow-glow:0 6px 18px rgba(14,143,168,.30), 0 2px 6px rgba(34,85,164,.22);
@@ -107,7 +113,7 @@
 
   /* MÉTIER — déclaré ici uniquement parce que la vitrine rend la page Marque, qui
      montre miniatures et grille. Une app d'interface ne les déclare pas. */
-  --ink-deep:#05090d;
+  --tone-deep:#05090d;
   --gradient-thumbnail:radial-gradient(closest-side at 50% 110%, rgba(14,143,168,.55) 0%, rgba(34,85,164,.28) 45%, transparent 72%); /* @kind color */
   --gradient-thumbnail-fit:radial-gradient(70% 55% at 50% 100%, rgba(14,143,168,.55) 0%, rgba(34,85,164,.28) 45%, transparent 72%); /* @kind color */
   --grid-cell:28px;

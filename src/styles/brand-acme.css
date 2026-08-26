@@ -1,0 +1,175 @@
+/* ═══════════════════════════════════════════════════════════════════════════════
+   MARQUE — PLACEHOLDER.                                        ✏️  À REMPLACER
+   ═══════════════════════════════════════════════════════════════════════════════
+   C'est la marque livrée PAR DÉFAUT avec ce template : gris neutre, un accent indigo,
+   une grotesque système. Elle est volontairement FADE — si vous la reconnaissez encore
+   à la recette, c'est que vous ne l'avez pas remplacée.
+
+   C'est le meilleur test d'un template : pas un fichier de test en plus, qu'on pense à
+   lancer, mais un défaut qu'on ne peut pas oublier de remplacer.
+
+   Deux façons de la remplacer :
+     · copier `brand.template.css` en `brand-<vous>.css`, le remplir, et changer l'import
+       de `styles.css` — c'est ce que `npm run rebrand` fait pour vous ;
+     · ou éditer ce fichier en place, si vous ne comptez pas suivre le template en amont.
+
+   RÈGLES DE STRUCTURE — elles ne changent pas d'une marque à l'autre :
+   1. Le thème CLAIR est `:root`, le SOMBRE est le scope `.dark`. Jamais un media query :
+      on veut pouvoir poser une section sombre dans une page claire.
+   2. Vous ne renommez AUCUN jeton. Les composants et `patterns.css` lisent ces noms-là.
+      Vous ne changez que les valeurs à droite du `:`.
+   3. Chaque `--x` de fond a son `--x-foreground` : un fond ne se pose jamais sans la
+      couleur de texte qui garantit son contraste.
+   4. L'accent est RATIONNÉ : logo, un mot de titre, le sur-titre, le CTA primaire, le
+      halo. Jamais un grand aplat, jamais un fond de page.
+   5. Les surfaces se distinguent par de PETITS écarts. Si `--card` vaut `--background`,
+      les cartes disparaissent — gardez un écart.
+   6. Contraste minimum : 4,5:1 texte courant, 3:1 gros titres et bordures porteuses de
+      sens. Vérifiez `--text-muted` sur `--card`, c'est le couple qui casse.
+      `node check-contrast.mjs` le vérifie pour vous, et fait tomber le build.
+
+   MÉTHODE LA PLUS RAPIDE : partez d'un thème shadcn / TweakCN, collez ses valeurs dans le
+   bloc « Surfaces », puis réglez l'accent et les dégradés à la main.
+   ═══════════════════════════════════════════════════════════════════════════════ */
+
+/* ---------- 1 · POLICES ----------
+   Aucune webfont : le placeholder tourne sur des faces SYSTÈME, pour qu'un dossier
+   fraîchement copié rende sans réseau et sans un octet à télécharger. Posez ici les
+   @font-face de votre marque. */
+
+/* ---------- 2 · ÉCARTS D'ACCESSIBILITÉ ASSUMÉS ----------
+   Lancez `node check-contrast.mjs`, lisez ce qu'il refuse, et pour chaque paire : corrigez
+   le jeton, ou assumez-la ici AVEC sa raison, en bloc `@a11y-assume:`.
+
+   AUCUN ÉCART DE TEXTE ici, exprès : c'est réglable par la palette, et un placeholder ne
+   doit pas apprendre à s'en accommoder. Les cinq ci-dessous sont d'une autre nature — ils
+   ne viennent PAS de la couleur choisie mais du MODÈLE DE SURFACES du socle : les surfaces
+   se distinguent par de petits écarts (règle 5), et une frontière neutre à 3:1 est un autre
+   design. Vous les retrouverez avec n'importe quelle palette ; relisez-les quand même, et
+   remontez `--border` / `--input` si votre projet doit tenir WCAG 1.4.11 au repos. */
+
+/* @a11y-assume: .ds-input — bordure --input vs page
+   Frontières douces : modèle de surfaces du socle, pas choix de palette. */
+/* @a11y-assume: .ds-input — bordure --input vs remplissage
+   Frontières douces : modèle de surfaces du socle, pas choix de palette. */
+/* @a11y-assume: .ds-input — remplissage vs page
+   Les surfaces se distinguent par de petits écarts — c'est la règle 5 de ce fichier. */
+/* @a11y-assume: .ds-card — bordure --border vs page
+   Frontières douces : modèle de surfaces du socle, pas choix de palette. */
+/* @a11y-assume: .ds-sep — filet --border sur --card
+   Frontières douces : modèle de surfaces du socle, pas choix de palette. */
+
+/* ---------- 3 · JETONS ---------- */
+:root{
+  /* Surfaces et neutres — gris froid, sans caractère. */
+  --background:#f4f4f5; --foreground:#18181b;
+  --card:#fafafa;       --card-foreground:#18181b;
+  --popover:#fafafa;    --popover-foreground:#18181b;
+  /* Surface des CONTRÔLES posés à même la page (bouton secondaire, navbar, barre
+     d'onglets, champ, recherche). Jamais un fond de page, jamais une carte. */
+  --secondary:#ffffff;  --secondary-foreground:#18181b;
+  --muted:#fafafa;      --muted-foreground:#6c6c76;
+  --accent:#e8e8ef;     --accent-foreground:#18181b;
+  --border:#e2e2e6;     --input:#e2e2e6;
+
+  /* UN CRAN DE SÉPARATION depuis la surface courante : survol, rail de progression, point
+     haut du squelette. Plus SOMBRE que sa porteuse en clair, plus CLAIR en sombre. Visez
+     le même écart de luminance dans les deux thèmes. */
+  --surface-alt:#ececef;
+
+  /* Neutres extrêmes — ils NE suivent PAS le thème. C'est ce qui permet à une bulle de
+     tooltip, un voile ou un logo forcé d'être toujours du bon côté, quel que soit le
+     thème de la page. */
+  --tone-dark:#18181b; --tone-dark-soft:#26262a;
+  --tone-light:#f4f4f5; --tone-light-alt:#fafafa;
+
+  /* Texte — 4 niveaux, pas 7. Au-delà, plus personne ne sait lequel choisir. */
+  --text-secondary:#3f3f46; --text-muted:#6c6c76; --text-inverted:#fafafa;
+
+  /* Marque — remplissages. Si votre marque n'a pas de dégradé, mettez la même valeur dans
+     les trois arrêts : tout le système continue de fonctionner, en aplat. */
+  --primary:#4f46e5; --primary-foreground:#ffffff;
+  --destructive:#b91c3c; --destructive-foreground:#ffffff;
+  --ring:#4f46e5;
+  --brand-from:#5b53e8; --brand-via:#4f46e5; --brand-to:#4338ca;
+  --brand-gradient:linear-gradient(90deg,var(--brand-from),var(--brand-via),var(--brand-to)); /* @kind color */
+  --brand-gradient-diagonal:linear-gradient(135deg,var(--brand-from),var(--brand-via),var(--brand-to)); /* @kind color */
+  --grad-soft:linear-gradient(135deg,rgba(99,102,241,.10),rgba(67,56,202,.08)); /* @kind color */
+  --gradient-halo:radial-gradient(60% 45% at 50% 100%, rgba(79,70,229,.24) 0%, rgba(67,56,202,.10) 45%, transparent 75%); /* @kind color */
+  --gradient-halo-top:radial-gradient(60% 45% at 50% 0%, rgba(79,70,229,.24) 0%, rgba(67,56,202,.10) 45%, transparent 75%); /* @kind color */
+  --gradient-halo-center:radial-gradient(55% 55% at 50% 50%, rgba(79,70,229,.24) 0%, rgba(67,56,202,.10) 45%, transparent 75%); /* @kind color */
+
+  /* LES JUMEAUX LISIBLES — le point du contrat le plus facile à rater.
+     --primary et --destructive sont des couleurs de REMPLISSAGE : posées comme couleur de
+     TEXTE sur une surface claire, elles n'atteignent pas 4,5:1. Ces deux-ci sont la même
+     marque, rendue LISIBLE : plus foncée en clair, plus claire en sombre. */
+  --primary-readable:#3730a3;
+  --destructive-readable:#9f1239;
+
+  /* Sémantique — les six pilules. Fond translucide, texte à 4,5:1 une fois le fond
+     composité sur --card ET sur --background. */
+  --pill-coral-bg:color-mix(in srgb,var(--primary) 12%,transparent);   --pill-coral-fg:#3730a3;
+  --pill-amber-bg:rgba(146,104,17,0.16);  --pill-amber-fg:#7a5610;
+  --pill-danger-bg:rgba(185,28,60,0.14);  --pill-danger-fg:#9f1239;
+  --pill-warning-bg:rgba(146,104,17,0.16); --pill-warning-fg:#7a5610;
+  --pill-success-bg:color-mix(in srgb,var(--success) 16%,transparent); --pill-success-fg:#166534;
+  --pill-neutral-bg:color-mix(in srgb,var(--muted-foreground) 12%,transparent); --pill-neutral-fg:#55555e;
+  --success:#15803d;
+  --overlay-play-bg:color-mix(in srgb,var(--tone-dark) 42%,transparent);
+
+  /* Familles — faces SYSTÈME, aucune requête réseau. Remplacez-les. */
+  --font-display:system-ui,-apple-system,'Segoe UI',Roboto,sans-serif; /* @kind font */
+  --font-body:system-ui,-apple-system,'Segoe UI',Roboto,sans-serif;    /* @kind font */
+  --font-mono:ui-monospace,'SFMono-Regular','Menlo',monospace;         /* @kind font */
+
+  /* LE RÉGIME DE TITRAGE. Il découle de la FACE display, donc il appartient à la marque.
+     Le placeholder tourne sur une grotesque système : casse d'origine et gras.
+       · condensée à capitales (Anton, Oswald, Bebas…)  ->  uppercase + var(--weight-regular)
+       · grotesque classique  (Inter, Geist, DM Sans…)  ->  none + var(--weight-bold) */
+  --heading-transform:none;
+  --heading-weight:var(--weight-bold);
+
+  /* Relief de marque — la LUEUR, à distinguer des ombres neutres du socle qui décrivent
+     une élévation. Une marque sans lueur met les quatre à `none` : ils doivent EXISTER. */
+  --shadow-glow:0 6px 18px rgba(79,70,229,.24), 0 2px 6px rgba(67,56,202,.18);
+  --shadow-glow-lg:0 10px 28px rgba(79,70,229,.34), 0 4px 12px rgba(67,56,202,.24);
+  --shadow-glow-sm:0 2px 8px rgba(79,70,229,.20);
+  --shadow-logo-dot:0 0 12px rgba(79,70,229,.45);
+}
+.dark{
+  --background:#111113; --foreground:#f4f4f5;
+  --card:#1c1c1f;       --card-foreground:#f4f4f5;
+  --popover:#1c1c1f;    --popover-foreground:#f4f4f5;
+  --secondary:#1c1c1f;  --secondary-foreground:#f4f4f5;
+  --muted:#1c1c1f;      --muted-foreground:#a1a1ac;
+  --accent:#242430;     --accent-foreground:#f4f4f5;
+  --border:#2e2e33;     --input:#2e2e33; --ring:#a5b4fc;
+  --surface-alt:#232326;
+  --text-secondary:#d4d4d8; --text-muted:#a1a1ac; --text-inverted:#18181b;
+  /* Le sombre ÉCLAIRCIT ses remplissages de marque et bascule le label sur l'encre. Un
+     indigo assez foncé pour porter du blanc ne se lit plus sur un fond #111113 : c'est
+     l'arbitrage que toute marque à accent saturé rencontre, et le contrat le permet —
+     --primary et --primary-foreground sont deux jetons, redéclarables par thème. */
+  --primary:#7c7ef5;    --primary-foreground:#18181b;
+  --destructive:#e11d48; --destructive-foreground:#ffffff;
+  --brand-from:#7c7ef5; --brand-via:#8b8df7; --brand-to:#818cf8;
+  --brand-gradient:linear-gradient(90deg,var(--brand-from),var(--brand-via),var(--brand-to)); /* @kind color */
+  --brand-gradient-diagonal:linear-gradient(135deg,var(--brand-from),var(--brand-via),var(--brand-to)); /* @kind color */
+  --shadow-glow:0 6px 18px rgba(124,126,245,.22), 0 2px 6px rgba(99,102,241,.16);
+  --shadow-glow-lg:0 10px 28px rgba(124,126,245,.30), 0 4px 12px rgba(99,102,241,.22);
+  --shadow-glow-sm:0 2px 8px rgba(124,126,245,.18);
+  --shadow-logo-dot:0 0 12px rgba(124,126,245,.40);
+  --primary-readable:#a5b4fc;
+  --destructive-readable:#fda4af;
+  --grad-soft:linear-gradient(135deg,rgba(99,102,241,.16),rgba(67,56,202,.12)); /* @kind color */
+  /* MÊME EXPRESSION qu'en :root, et il FAUT la répéter : un jeton dont la valeur contient
+     var(X) est substitué sur l'élément où il est DÉCLARÉ. Sans ces deux lignes, les fonds
+     figeraient la valeur CLAIRE dans toute section .dark imbriquée.
+     `node check-dark-substitution.mjs` refuse ce cas. */
+  --pill-coral-bg:color-mix(in srgb,var(--primary) 12%,transparent);   --pill-coral-fg:#a5b4fc;
+  --pill-amber-fg:#e0be6a;
+  --pill-danger-fg:#fda4af;
+  --pill-warning-fg:#e0be6a;
+  --pill-success-fg:#86efac;
+  --pill-neutral-bg:color-mix(in srgb,var(--muted-foreground) 12%,transparent); --pill-neutral-fg:#d4d4d8;
+}

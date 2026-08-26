@@ -14,13 +14,13 @@ const BANNER_ICONS: Record<string, IconName> = {
   danger: 'triangle-alert', warning: 'triangle-alert', success: 'circle-check', info: 'info',
 };
 
-const banner = cva('jf-banner', {
+const banner = cva('ds-banner', {
   variants: {
     tone: {
-      danger: 'jf-banner--danger',
-      warning: 'jf-banner--warning',
-      success: 'jf-banner--success',
-      info: 'jf-banner--info',
+      danger: 'ds-banner--danger',
+      warning: 'ds-banner--warning',
+      success: 'ds-banner--success',
+      info: 'ds-banner--info',
     },
   },
   defaultVariants: { tone: 'info' },

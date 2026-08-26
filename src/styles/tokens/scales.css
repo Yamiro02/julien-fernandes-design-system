@@ -1,4 +1,4 @@
-/* Julien Fernandes — spacing, radius, control rail, shadows, motion. Yunary values, unchanged.
+/* SOCLE — espacement, rayons, rail de contrôles, ombres, motion. Aucune valeur de marque.
    Every dimensional token is rem, px equivalent in comment.
    Kept in px, and only these: hairline borders (1px/1.5px); box/text/drop-shadow
    offsets, blurs and spreads; the focus ring (2px, offset 2–3px, 3px ring);
@@ -45,7 +45,7 @@
   --badge-h-dense:1.5rem;   /* 24 — lines up with a status pill on the same row */
 
   /* Pastille — the icon tile. Sizes named BY CONTEXT, never by measure. ADDED v0.3.
-     dialogue and panneau are the former .jf-modal__icon / .jf-empty__icon literals, promoted. */
+     dialogue and panneau are the former .ds-modal__icon / .ds-empty__icon literals, promoted. */
   --pastille-carte:2.25rem;     /* 36 */
   --pastille-dialogue:2.625rem; /* 42 */
   --pastille-panneau:3.25rem;   /* 52 */
@@ -68,14 +68,14 @@
 
   /* Ombres — trois niveaux teintés d'encre, jamais du noir pur.
      La GÉOMÉTRIE (décalage, flou, opacité) appartient au socle et ne se substitue pas ;
-     la TEINTE suit --ink, que la marque fournit déjà. Écrites en rgba(31,30,28,…) elles
-     emportaient l'encre de Julien dans le socle : c'étaient, après la couche marque, les
-     quatre dernières valeurs de Julien que le balayage de brand-test trouvait encore à
-     l'écran. Le rendu est identique — color-mix avec transparent donne exactement
+     la TEINTE suit --tone-dark, que la marque fournit déjà. Écrites en rgba(31,30,28,…) elles
+     emportaient une encre de marque dans le socle : c'étaient, après la scission, les
+     quatre dernières valeurs de la marque de référence que le balayage de la palette de
+     recette trouvait encore à l'écran. Le rendu est identique — color-mix avec transparent donne exactement
      rgba(<ink>, <taux>). */
-  --shadow-sm:0 2px 8px color-mix(in srgb,var(--ink) 6%,transparent);
-  --shadow-md:0 10px 28px color-mix(in srgb,var(--ink) 9%,transparent);
-  --shadow-lg:0 20px 48px color-mix(in srgb,var(--ink) 12%,transparent);
+  --shadow-sm:0 2px 8px color-mix(in srgb,var(--tone-dark) 6%,transparent);
+  --shadow-md:0 10px 28px color-mix(in srgb,var(--tone-dark) 9%,transparent);
+  --shadow-lg:0 20px 48px color-mix(in srgb,var(--tone-dark) 12%,transparent);
   --shadow-soft:var(--shadow-sm);
   --shadow-soft-lg:var(--shadow-lg);
   /* Switch geometry — ADDED v0.3. Les 4 mesures du switch, jetons plutôt que littéraux :
@@ -86,8 +86,8 @@
   --switch-inset:0.1875rem;  /* 3 */
 
   /* Knob de Switch — ADDED v0.3. Le seul relief 1px du système ; ink-tinté, jamais noir pur.
-     Remplace le littéral inventé rgba(0,0,0,.2) de .jf-switch__knob. */
-  --shadow-knob:0 1px 2px color-mix(in srgb,var(--ink) 28%,transparent);
+     Remplace le littéral inventé rgba(0,0,0,.2) de .ds-switch__knob. */
+  --shadow-knob:0 1px 2px color-mix(in srgb,var(--tone-dark) 28%,transparent);
   /* Les LUEURS ne sont pas ici. --shadow-glow / -lg / -sm et --shadow-logo-dot décrivent
      une chaleur, pas une élévation : ils appartiennent à la marque et vivent dans
      brand-jf.css. Les quatre ombres ci-dessus décrivent une hauteur — elles restent au

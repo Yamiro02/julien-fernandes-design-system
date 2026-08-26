@@ -14,11 +14,11 @@ export interface TooltipProps {
 export function Tooltip({
   content, placement = 'top', open, className = '', children,
 }: TooltipProps): JSX.Element {
-  const cls = cn('jf-tooltip', placement === 'bottom' && 'jf-tooltip--bottom', open && 'is-open', className);
+  const cls = cn('ds-tooltip', placement === 'bottom' && 'ds-tooltip--bottom', open && 'is-open', className);
   return (
     <span className={cls} tabIndex={0}>
       {children}
-      <span className="jf-tooltip__bubble" role="tooltip">{content}</span>
+      <span className="ds-tooltip__bubble" role="tooltip">{content}</span>
     </span>
   );
 }

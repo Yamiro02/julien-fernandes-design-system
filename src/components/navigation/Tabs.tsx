@@ -18,13 +18,13 @@ export interface TabsProps extends Omit<HTMLAttributes<HTMLDivElement>, 'onChang
 
 export function Tabs({ items = [], value, onChange, onCard = false, className = '', ...rest }: TabsProps): JSX.Element {
   return (
-    <div className={cn('jf-tabs', onCard && 'jf-tabs--on-card', className)} role="tablist" {...rest}>
+    <div className={cn('ds-tabs', onCard && 'ds-tabs--on-card', className)} role="tablist" {...rest}>
       {items.map(it => (
         <button
           key={it.value}
           type="button"
           role="tab"
-          className="jf-tab"
+          className="ds-tab"
           aria-selected={value === it.value}
           onClick={() => onChange && onChange(it.value)}
         >

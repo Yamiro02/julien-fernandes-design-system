@@ -16,15 +16,15 @@ export function Select({
   options = [], invalid = false, surface = 'page', className = '', ...rest
 }: SelectProps): JSX.Element {
   return (
-    <span className="jf-select">
+    <span className="ds-select">
       <select
-        className={cn('jf-input', surface === 'card' && 'jf-input--on-card', invalid && 'is-error', className)}
+        className={cn('ds-input', surface === 'card' && 'ds-input--on-card', invalid && 'is-error', className)}
         aria-invalid={invalid || undefined}
         {...rest}
       >
         {options.map(o => <option key={o.value} value={o.value}>{o.label}</option>)}
       </select>
-      <Icon name="chevron-down" size="1.125rem" className="jf-select__chev" />
+      <Icon name="chevron-down" size="1.125rem" className="ds-select__chev" />
     </span>
   );
 }

@@ -14,7 +14,7 @@ export function Skeleton({
 }: SkeletonProps): JSX.Element {
   return (
     <span
-      className={cn('jf-skel', className)}
+      className={cn('ds-skel', className)}
       aria-hidden="true"
       style={{ display: 'block', width, height, borderRadius: radius, ...style }}
       {...rest}

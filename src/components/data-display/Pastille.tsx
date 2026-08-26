@@ -18,27 +18,27 @@ export interface PastilleProps extends HTMLAttributes<HTMLSpanElement> {
   children?: ReactNode;
 }
 
-const pastille = cva('jf-pastille', {
+const pastille = cva('ds-pastille', {
   variants: {
     size: {
-      carte: 'jf-pastille--carte',
-      dialogue: 'jf-pastille--dialogue',
-      panneau: 'jf-pastille--panneau',
-      heros: 'jf-pastille--heros',
-      ecran: 'jf-pastille--ecran',
+      carte: 'ds-pastille--carte',
+      dialogue: 'ds-pastille--dialogue',
+      panneau: 'ds-pastille--panneau',
+      heros: 'ds-pastille--heros',
+      ecran: 'ds-pastille--ecran',
     },
-    shape: { square: '', round: 'jf-pastille--rond' },
+    shape: { square: '', round: 'ds-pastille--rond' },
     tone: {
-      brand: 'jf-pastille--brand',
-      coral: 'jf-pastille--coral',
-      amber: 'jf-pastille--amber',
-      success: 'jf-pastille--success',
-      warning: 'jf-pastille--warning',
-      danger: 'jf-pastille--danger',
-      neutral: 'jf-pastille--neutral',
-      inverse: 'jf-pastille--inverse',
+      brand: 'ds-pastille--brand',
+      coral: 'ds-pastille--coral',
+      amber: 'ds-pastille--amber',
+      success: 'ds-pastille--success',
+      warning: 'ds-pastille--warning',
+      danger: 'ds-pastille--danger',
+      neutral: 'ds-pastille--neutral',
+      inverse: 'ds-pastille--inverse',
     },
-    outlined: { true: 'jf-pastille--outlined', false: '' },
+    outlined: { true: 'ds-pastille--outlined', false: '' },
   },
   defaultVariants: { size: 'dialogue', shape: 'square', tone: 'brand', outlined: false },
 });

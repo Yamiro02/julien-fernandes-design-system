@@ -16,19 +16,19 @@ export interface BadgeProps extends HTMLAttributes<HTMLSpanElement> {
   children?: ReactNode;
 }
 
-const badge = cva('jf-badge', {
+const badge = cva('ds-badge', {
   variants: {
     tone: {
-      coral: 'jf-badge--coral',
-      amber: 'jf-badge--amber',
-      danger: 'jf-badge--danger',
-      warning: 'jf-badge--warning',
-      success: 'jf-badge--success',
-      neutral: 'jf-badge--neutral',
-      accent: 'jf-badge--accent',
-      outline: 'jf-badge--outline',
+      coral: 'ds-badge--coral',
+      amber: 'ds-badge--amber',
+      danger: 'ds-badge--danger',
+      warning: 'ds-badge--warning',
+      success: 'ds-badge--success',
+      neutral: 'ds-badge--neutral',
+      accent: 'ds-badge--accent',
+      outline: 'ds-badge--outline',
     },
-    pad: { md: '', dense: 'jf-badge--dense' },
+    pad: { md: '', dense: 'ds-badge--dense' },
   },
   defaultVariants: { tone: 'neutral', pad: 'md' },
 });

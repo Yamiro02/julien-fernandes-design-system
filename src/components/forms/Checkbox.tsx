@@ -11,9 +11,9 @@ export function Checkbox({
   label, checked, defaultChecked, disabled = false, className = '', ...rest
 }: CheckboxProps): JSX.Element {
   return (
-    <label className={cn('jf-choice', disabled && 'is-disabled', className)}>
+    <label className={cn('ds-choice', disabled && 'is-disabled', className)}>
       <input type="checkbox" checked={checked} defaultChecked={defaultChecked} disabled={disabled} {...rest} />
-      <span className="jf-choice__box"><Icon name="check" size="0.8125rem" strokeWidth={3} /></span>
+      <span className="ds-choice__box"><Icon name="check" size="0.8125rem" strokeWidth={3} /></span>
       {label ? <span>{label}</span> : null}
     </label>
   );

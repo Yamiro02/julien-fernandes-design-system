@@ -39,20 +39,20 @@ export function DatePicker({
   }, [open]);
   const fmt = new Intl.DateTimeFormat(locale, { day: 'numeric', month: 'long', year: 'numeric' });
   return (
-    <span className={cn('jf-datepicker', className)} ref={ref} {...rest}>
+    <span className={cn('ds-datepicker', className)} ref={ref} {...rest}>
       <button
         type="button"
         disabled={disabled}
         aria-haspopup="dialog"
         aria-expanded={open}
-        className={cn('jf-input', 'jf-datepicker__trigger', surface === 'card' && 'jf-input--on-card', invalid && 'is-error')}
+        className={cn('ds-input', 'ds-datepicker__trigger', surface === 'card' && 'ds-input--on-card', invalid && 'is-error')}
         onClick={() => setOpen(o => !o)}
       >
-        <span className={value ? '' : 'jf-datepicker__ph'}>{value ? fmt.format(value) : placeholder}</span>
+        <span className={value ? '' : 'ds-datepicker__ph'}>{value ? fmt.format(value) : placeholder}</span>
         <Icon name="calendar" size="1.25rem" />
       </button>
       {open ? (
-        <span className="jf-datepicker__pop" role="dialog" aria-label="Choisir une date">
+        <span className="ds-datepicker__pop" role="dialog" aria-label="Choisir une date">
           <Calendar
             bare
             value={value}
