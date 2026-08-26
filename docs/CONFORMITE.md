@@ -416,6 +416,11 @@ Une app qui a besoin d'une pill de métrique la reconstruit donc sur les classes
 inventer de valeur. `docs/readme.md` et `docs/PROMPTS.md` la mentionnent encore : ce sont des copies
 verbatim de la source design, elles ne sont pas éditées.
 
+**Réaffirmé le 26/08/2026 sur la mise à jour v2.** Le diff v2 du projet maître demande de le
+réintégrer en le présentant comme un oubli du portage (« le repo v1 a oublié MetricPill »). Ce n'en
+est pas un : c'est une décision de périmètre. Elle tient. **Action côté projet maître** : sortir
+`MetricPill` du socle Claude Design, sinon chaque diff le redemandera.
+
 **19. Le dépôt réel n'est pas celui de la spec.**
 `portage-github/README.md` annonce `julienfernandes/design-system` et
 `npm i github:julienfernandes/design-system#vX.Y.Z`. Le dépôt qui existe est
