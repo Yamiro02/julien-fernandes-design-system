@@ -31,22 +31,10 @@ export function Banner({
 }: BannerProps): JSX.Element {
   return (
     <div className={[banner({ tone }), className].filter(Boolean).join(' ')} role="note" {...rest}>
-      <Icon name={BANNER_ICONS[tone]} size="1.125rem" strokeWidth={2} style={{ marginTop: '0.0625rem' }} />
-      <div style={{ display: 'flex', flexDirection: 'column', gap: '0.125rem', flex: 1 }}>
-        {title ? (
-          <span style={{
-            fontSize: '0.875rem',
-            fontWeight: 'var(--weight-semibold)',
-            color: tone === 'info' ? 'var(--foreground)' : 'inherit',
-          }}>{title}</span>
-        ) : null}
-        {children ? (
-          <span style={{
-            fontSize: 'var(--text-caption)',
-            lineHeight: 'var(--leading-normal)',
-            color: 'var(--text-secondary)',
-          }}>{children}</span>
-        ) : null}
+      <Icon name={BANNER_ICONS[tone]} size="1.125rem" strokeWidth={2} className="ds-banner__icon" />
+      <div className="ds-banner__main">
+        {title ? <span className="ds-banner__title">{title}</span> : null}
+        {children ? <span className="ds-banner__text">{children}</span> : null}
       </div>
       {action}
     </div>

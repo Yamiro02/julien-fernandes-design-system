@@ -28,20 +28,17 @@ export function Footer({
 }: FooterProps): JSX.Element {
   return (
     <footer className={cn('ds-footer', className)}>
-      <div className="page" style={{
-        paddingBlock: 'var(--space-7)', display: 'flex', flexWrap: 'wrap',
-        gap: 'var(--space-7)', justifyContent: 'space-between',
-      }}>
-        <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--space-3)', maxWidth: '20rem' }}>
+      <div className="page ds-footer__inner">
+        <div className="ds-footer__brand">
           {brand ?? <Logo variant="wordmark" letters={letters} height="1.25rem" />}
-          {note ? <p style={{ fontSize: 'var(--text-caption)', color: 'var(--text-muted)' }}>{note}</p> : null}
+          {note ? <p className="ds-footer__note">{note}</p> : null}
         </div>
-        <div style={{ display: 'flex', flexWrap: 'wrap', gap: 'var(--space-7)' }}>
+        <div className="ds-footer__cols">
           {columns.map(col => (
-            <div key={col.title} style={{ display: 'flex', flexDirection: 'column', gap: 'var(--space-3)' }}>
+            <div key={col.title} className="ds-footer__col">
               <span className="eyebrow">{col.title}</span>
               {col.links.map(l => (
-                <a key={l.label} href={l.href || '#'} style={{ fontSize: 'var(--text-caption)', color: 'var(--text-secondary)' }}>
+                <a key={l.label} href={l.href || '#'} className="ds-footer__link">
                   {l.label}
                 </a>
               ))}
@@ -50,7 +47,7 @@ export function Footer({
         </div>
       </div>
       {social ? (
-        <div className="page" style={{ paddingBottom: 'var(--space-6)', display: 'flex', gap: 'var(--space-3)' }}>
+        <div className="page ds-footer__social">
           {social}
         </div>
       ) : null}

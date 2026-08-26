@@ -16,14 +16,9 @@ export function EmptyState({
   return (
     <div className={cn('ds-empty', className)} {...rest}>
       {icon ? <Pastille size="panneau" tone="brand" outlined>{icon}</Pastille> : null}
-      <div style={{ display: 'flex', flexDirection: 'column', gap: '0.1875rem', alignItems: 'center' }}>
-        <h4 style={{ margin: 0 }}>{title}</h4>
-        {description ? (
-          <p style={{
-            maxWidth: '20rem', color: 'var(--muted-foreground)',
-            fontSize: '0.84375rem', lineHeight: 1.5,
-          }}>{description}</p>
-        ) : null}
+      <div className="ds-empty__main">
+        <h4 className="ds-empty__title">{title}</h4>
+        {description ? <p className="ds-empty__desc">{description}</p> : null}
       </div>
       {action}
     </div>

@@ -10,23 +10,20 @@ export interface ToastProps extends Omit<HTMLAttributes<HTMLDivElement>, 'title'
   onClose?: () => void;
 }
 
-const TONES: Record<string, { icon: IconName; bg: string; fg: string }> = {
-  success: { icon: 'check', bg: 'var(--pill-success-bg)', fg: 'var(--pill-success-fg)' },
-  danger: { icon: 'x', bg: 'var(--pill-danger-bg)', fg: 'var(--pill-danger-fg)' },
-  warning: { icon: 'triangle-alert', bg: 'var(--pill-warning-bg)', fg: 'var(--pill-warning-fg)' },
-  info: { icon: 'info', bg: 'var(--pill-neutral-bg)', fg: 'var(--muted-foreground)' },
+const TONE_ICONS: Record<string, IconName> = {
+  success: 'check', danger: 'x', warning: 'triangle-alert', info: 'info',
 };
 
 export function Toast({
   tone = 'info', title, description, onClose, className = '', ...rest
 }: ToastProps): JSX.Element {
-  const t = TONES[tone] || TONES.info;
+  const t: string = TONE_ICONS[tone] ? tone : 'info';
   return (
     <div className={cn('ds-toast', className)} role="status" {...rest}>
-      <span className="ds-toast__icon" style={{ background: t.bg, color: t.fg }}>
-        <Icon name={t.icon} size="0.9375rem" strokeWidth={2.5} />
+      <span className={`ds-toast__icon ds-toast__icon--${t}`}>
+        <Icon name={TONE_ICONS[t]} size="0.9375rem" strokeWidth={2.5} />
       </span>
-      <div style={{ display: 'flex', flexDirection: 'column', gap: '0.125rem', flex: 1 }}>
+      <div className="ds-toast__body">
         <span className="ds-toast__title">{title}</span>
         {description ? <span className="ds-toast__desc">{description}</span> : null}
       </div>

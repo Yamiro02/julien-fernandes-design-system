@@ -91,15 +91,15 @@ export function Modal({
       <span className="ds-grip" aria-hidden="true" />
       {isResult ? (
         <>
-          <div style={{ display: 'flex', justifyContent: 'flex-end' }}>{closeBtn}</div>
+          <div className="ds-modal__head ds-modal__head--end">{closeBtn}</div>
           <div className="ds-modal__result">
             <Pastille size="dialogue" tone={resultTone}>
               <Icon name={r.status === 'error' ? 'circle-x' : 'circle-check'} size="1.25rem" />
             </Pastille>
             {r.title ? <h3>{r.title}</h3> : null}
-            {r.message ? <p className="ds-modal__desc" style={{ display: 'block' }}>{r.message}</p> : null}
+            {r.message ? <p className="ds-modal__desc ds-modal__desc--block">{r.message}</p> : null}
           </div>
-          <div className="ds-modal__foot" style={{ justifyContent: 'center' }}>
+          <div className="ds-modal__foot ds-modal__foot--center">
             {footer || (
               <>
                 <Button variant="secondary" onClick={onClose}>Fermer</Button>
@@ -115,15 +115,15 @@ export function Modal({
       ) : (
         <>
           {(icon || closeBtn) ? (
-            <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between' }}>
+            <div className="ds-modal__head">
               {icon ? <Pastille size="dialogue" tone={TILE_TONE[iconVariant] ?? 'danger'}>{icon}</Pastille> : null}
               {closeBtn}
             </div>
           ) : null}
-          {title ? <h3 style={{ margin: 0 }}>{title}</h3> : null}
+          {title ? <h3 className="ds-modal__title">{title}</h3> : null}
           {(description || children) ? (
             <div className="ds-modal__desc">
-              {description ? <p style={{ margin: 0 }}>{description}</p> : null}
+              {description ? <p className="ds-modal__text">{description}</p> : null}
               {children}
             </div>
           ) : null}
@@ -134,9 +134,11 @@ export function Modal({
   );
 
   if (inline) return panel;
+  /* Le rang du voile (--z-modal, au-dessus du tiroir mobile) et son position:fixed
+     vivent dans .ds-scrim — plus aucun style inline à surcharger. */
   return (
-    <div className="ds-scrim" style={{ position: 'fixed', zIndex: 50 }} onClick={locked ? undefined : onClose}>
-      <div onClick={e => e.stopPropagation()} style={{ display: 'flex', justifyContent: 'center', width: '100%' }}>
+    <div className="ds-scrim" onClick={locked ? undefined : onClose}>
+      <div onClick={e => e.stopPropagation()} className="ds-modal-wrap">
         <div className="ds-modal-slot">{panel}</div>
       </div>
     </div>

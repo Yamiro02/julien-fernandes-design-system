@@ -1,4 +1,4 @@
-import type { CSSProperties, HTMLAttributes, ReactNode } from 'react';
+import type { HTMLAttributes, ReactNode } from 'react';
 import { cn } from '../../lib/cn';
 
 /** Menu panel, radius 2xl, --shadow-lg. Items highlight on --accent. */
@@ -18,9 +18,8 @@ export interface DropdownProps extends HTMLAttributes<HTMLDivElement> {
 }
 
 export function Dropdown({ items = [], inline = false, className = '', ...rest }: DropdownProps): JSX.Element {
-  const style: CSSProperties | undefined = inline ? undefined : { position: 'absolute', zIndex: 40 };
   return (
-    <div className={cn('ds-dropdown', className)} role="menu" style={style} {...rest}>
+    <div className={cn('ds-dropdown', !inline && 'ds-dropdown--floating', className)} role="menu" {...rest}>
       {items.map((it, i) => it.separator
         ? <hr key={i} className="ds-dropdown__sep" />
         : (

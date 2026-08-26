@@ -123,6 +123,21 @@
   --container-read:45rem;     /* 720 — continuous reading column (legal, forms) */
   --container-narrow:30rem;   /* 480 — centred message, empty state */
 
+  /* L'ÉCHELLE DE Z-INDEX — nommée par rôle, jamais une valeur nue dans une règle ou un JSX.
+     L'ordre EST le contrat : chaque rang doit passer au-dessus du précédent.
+       navbar   < popover  (un tooltip, un datepicker, un dropdown passent devant la barre)
+       popover  < scrim    (un voile couvre la page, popovers compris)
+       scrim    < drawer   (le tiroir mobile s'ouvre AU-DESSUS de son propre voile)
+       drawer   < modal    (une modale ouverte DEPUIS le tiroir doit le couvrir — voile
+                            et panneau ensemble : le scrim de Modal/ActionSheet est --z-modal.
+                            À 50, elle passait SOUS le tiroir (60) : présente, focus piégé
+                            dedans, et invisible.) */
+  --z-navbar:30;
+  --z-popover:40;
+  --z-scrim:50;
+  --z-drawer:60;
+  --z-modal:70;
+
   /* Ombres — trois niveaux teintés d'encre, jamais du noir pur.
      La GÉOMÉTRIE (décalage, flou, opacité) appartient au socle et ne se substitue pas ;
      la TEINTE suit --tone-dark, que la marque fournit déjà. Écrites en rgba(31,30,28,…) elles

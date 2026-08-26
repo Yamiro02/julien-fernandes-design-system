@@ -120,7 +120,7 @@ export function ActionSheet({
 
   if (estInline) return panel;
   return (
-    <div className="ds-scrim ds-scrim--sheet" style={{ position: 'fixed', zIndex: 50 }} onClick={onCancel}>
+    <div className="ds-scrim ds-scrim--sheet" onClick={onCancel}>
       <div onClick={e => e.stopPropagation()} style={{ width: '100%' }}>{panel}</div>
     </div>
   );

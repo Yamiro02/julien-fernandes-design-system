@@ -133,7 +133,7 @@
 .ds-badge--accent{background:var(--accent);color:var(--primary-readable)}
 .ds-badge--outline{background:transparent;color:var(--text-secondary);box-shadow:inset 0 0 0 1px var(--border)}
 .ds-tooltip{position:relative;display:inline-flex}
-.ds-tooltip__bubble{position:absolute;bottom:calc(100% + 0.5625rem);left:50%;transform:translateX(-50%) translateY(0.25rem);padding:0.5rem 0.75rem;border-radius:var(--radius-md);background:var(--tone-dark);color:var(--text-inverted);font-size:var(--text-caption);font-weight:var(--weight-semibold);line-height:1.3;white-space:nowrap;box-shadow:var(--shadow-lg);opacity:0;pointer-events:none;transition:opacity var(--duration-fast) var(--ease-standard),transform var(--duration-fast) var(--ease-standard);z-index:40}
+.ds-tooltip__bubble{position:absolute;bottom:calc(100% + 0.5625rem);left:50%;transform:translateX(-50%) translateY(0.25rem);padding:0.5rem 0.75rem;border-radius:var(--radius-md);background:var(--tone-dark);color:var(--text-inverted);font-size:var(--text-caption);font-weight:var(--weight-semibold);line-height:1.3;white-space:nowrap;box-shadow:var(--shadow-lg);opacity:0;pointer-events:none;transition:opacity var(--duration-fast) var(--ease-standard),transform var(--duration-fast) var(--ease-standard);z-index:var(--z-popover)}
 .ds-tooltip__bubble::after{content:"";position:absolute;left:50%;bottom:-0.25rem;width:0.5rem;height:0.5rem;background:inherit;transform:translateX(-50%) rotate(45deg)}
 .dark .ds-tooltip__bubble{background:var(--tone-light-alt);color:var(--tone-dark)}
 .ds-tooltip:hover .ds-tooltip__bubble,.ds-tooltip:focus-within .ds-tooltip__bubble,.ds-tooltip.is-open .ds-tooltip__bubble{opacity:1;transform:translateX(-50%) translateY(0)}
@@ -170,22 +170,47 @@
 .ds-banner--danger{background:var(--pill-danger-bg);border-color:color-mix(in srgb,var(--destructive) 35%,transparent);color:var(--pill-danger-fg)}
 .ds-banner--warning{background:var(--pill-warning-bg);border-color:color-mix(in srgb,var(--brand-via) 35%,transparent);color:var(--pill-warning-fg)}
 .ds-banner--success{background:var(--pill-success-bg);border-color:color-mix(in srgb,var(--success) 35%,transparent);color:var(--pill-success-fg)}
+.ds-toast__body{display:flex;flex-direction:column;gap:0.125rem;flex:1}
+/* Tons de l'icône de Toast — la paire pill du même ton, comme Badge et Banner. info lit
+   --muted-foreground : le toast neutre est une méta, pas un message de marque. */
+.ds-toast__icon--success{background:var(--pill-success-bg);color:var(--pill-success-fg)}
+.ds-toast__icon--danger{background:var(--pill-danger-bg);color:var(--pill-danger-fg)}
+.ds-toast__icon--warning{background:var(--pill-warning-bg);color:var(--pill-warning-fg)}
+.ds-toast__icon--info{background:var(--pill-neutral-bg);color:var(--muted-foreground)}
+.ds-banner__icon{margin-top:0.0625rem}
+.ds-banner__main{display:flex;flex-direction:column;gap:0.125rem;flex:1}
+.ds-banner__title{font-size:var(--text-body-sm);font-weight:var(--weight-semibold);color:inherit}
+/* En ton info le bandeau est sur --accent : le titre repasse à l'encre pleine. */
+.ds-banner--info .ds-banner__title{color:var(--foreground)}
+.ds-banner__text{font-size:var(--text-caption);line-height:var(--leading-normal);color:var(--text-secondary)}
 .ds-empty{display:flex;flex-direction:column;align-items:center;text-align:center;gap:0.75rem;padding:var(--space-6);border:1px dashed var(--border);border-radius:var(--radius-lg);background:var(--card)}
+.ds-empty__main{display:flex;flex-direction:column;gap:0.1875rem;align-items:center}
+.ds-empty__title{margin:0}
+/* 20rem : largeur max d'une colonne de texte courte — une mesure de LISIBILITÉ, pas
+   d'identité. Littéral structurel, comme les micro-espacements (voir la doctrine en tête). */
+.ds-empty__desc{max-width:20rem;color:var(--muted-foreground);font-size:var(--text-body-sm);line-height:var(--leading-normal)}
 /* Le point haut du shimmer prend --surface-alt, pas --accent : c'est un écart de
    SURFACE, pas une teinte. Sur --accent il valait --muted en sombre — dégradé plat,
    squelette immobile. */
 .ds-skel{display:block;background:linear-gradient(90deg,var(--muted) 0%,var(--surface-alt) 50%,var(--muted) 100%);background-size:560px 100%;border-radius:var(--radius-sm);animation:shimmer var(--duration-shimmer) infinite linear}
 
 /* ---------- overlays: Modal · Dropdown ---------- */
-.ds-scrim{position:absolute;inset:0;background:color-mix(in srgb,var(--tone-dark) 45%,transparent);backdrop-filter:blur(2px);-webkit-backdrop-filter:blur(2px);display:flex;align-items:center;justify-content:center;padding:var(--space-5)}
+.ds-scrim{position:fixed;inset:0;z-index:var(--z-modal);background:color-mix(in srgb,var(--tone-dark) 45%,transparent);backdrop-filter:blur(2px);-webkit-backdrop-filter:blur(2px);display:flex;align-items:center;justify-content:center;padding:var(--space-5)}
 .ds-modal{width:var(--modal-w);max-width:100%;background:var(--popover);color:var(--popover-foreground);border:1px solid var(--border);border-radius:var(--radius-2xl);box-shadow:var(--shadow-lg);padding:var(--space-5);display:flex;flex-direction:column;gap:0.875rem;box-sizing:border-box}
 .ds-modal__close{width:var(--modal-close);height:var(--modal-close);border-radius:var(--radius-sm);border:none;background:transparent;color:var(--muted-foreground);cursor:pointer;display:inline-flex;align-items:center;justify-content:center;margin-left:auto}
 .ds-modal__close:hover:not(:disabled){background:var(--surface-alt);color:var(--foreground)}
 .ds-modal__close:disabled{opacity:.4;cursor:not-allowed;background:transparent;color:var(--muted-foreground)}
+.ds-modal__head{display:flex;align-items:flex-start;justify-content:space-between}
+.ds-modal__head--end{justify-content:flex-end}
+.ds-modal__title{margin:0}
+.ds-modal__text{margin:0}
 /* Modal phases — __desc and __foot officialise Modal.jsx's inline styles, values identical. */
 .ds-modal__desc{font-size:var(--text-body-sm);color:var(--muted-foreground);line-height:1.5;display:flex;flex-direction:column;gap:var(--space-3)}
 .ds-modal__foot{display:flex;gap:0.625rem;justify-content:flex-end;margin-top:0.25rem}
+.ds-modal__desc--block{display:block}
+.ds-modal__foot--center{justify-content:center}
 .ds-modal__result{display:flex;flex-direction:column;align-items:center;text-align:center;gap:var(--space-2);padding-block:var(--space-2)}
+.ds-modal-wrap{display:flex;justify-content:center;width:100%}
 .ds-modal-slot{display:contents}
 /* Bottom-sheet grip — hidden until the modal is a sheet (under 64rem). */
 .ds-grip{display:none;flex:none;width:var(--grip-w);height:var(--space-1);margin-inline:auto;border-radius:var(--radius-pill);background:var(--border)}
@@ -208,9 +233,10 @@
    modale — la doctrine ⋯ est tenue par le CSS, sans JS de point de rupture. */
 @media (min-width:64.0625rem){.ds-scrim--sheet{display:none}}
 /* Au-dessus de 64 rem elle n'existe QU'EN spécimen : un panneau, pas une feuille — 4 coins au
-   rayon 2xl, bordure complète, pas de poignée, largeur nommée --container-narrow/1.5. */
+   rayon 2xl, bordure complète, pas de poignée, largeur nommée --actionsheet-w-panneau. */
 .ds-actionsheet--panneau{width:var(--actionsheet-w-panneau);max-width:100%;border:1px solid var(--border);border-radius:var(--radius-2xl);padding-bottom:var(--space-2)}
 .ds-actionsheet--panneau .ds-grip{display:none}
+.ds-dropdown--floating{position:absolute;z-index:var(--z-popover)}
 .ds-dropdown{width:var(--dropdown-w);padding:0.375rem;background:var(--popover);color:var(--popover-foreground);border:1px solid var(--border);border-radius:var(--radius-lg);box-shadow:var(--shadow-lg);display:flex;flex-direction:column;gap:0.125rem;box-sizing:border-box}
 .ds-dropdown__item{display:flex;align-items:center;gap:0.625rem;width:100%;padding:0.5625rem 0.6875rem;border:0;background:transparent;color:var(--foreground);font-family:var(--font-body);font-size:var(--text-body-sm);text-align:left;border-radius:var(--radius-sm);cursor:pointer;transition:background var(--duration-fast) var(--ease-standard)}
 .ds-dropdown__item:hover,.ds-dropdown__item.is-hover,.ds-dropdown__item:focus-visible{background:var(--surface-alt);outline:none}
@@ -227,7 +253,7 @@
 @keyframes ds-sheet-in{from{transform:translateY(100%)}to{transform:none}}
 
 /* ---------- navigation ---------- */
-.ds-navbar{position:sticky;top:0;z-index:30;width:100%;background:var(--secondary);border-bottom:1px solid var(--border);transition:background-color var(--duration-base) var(--ease-standard),border-color var(--duration-base) var(--ease-standard),box-shadow var(--duration-base) var(--ease-standard)}
+.ds-navbar{position:sticky;top:0;z-index:var(--z-navbar);width:100%;background:var(--secondary);border-bottom:1px solid var(--border);transition:background-color var(--duration-base) var(--ease-standard),border-color var(--duration-base) var(--ease-standard),box-shadow var(--duration-base) var(--ease-standard)}
 .ds-navbar.is-scrolled{background:color-mix(in srgb,var(--secondary) 82%,transparent);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);box-shadow:var(--shadow-sm)}
 .ds-navbar__inner{display:flex;align-items:center;justify-content:space-between;gap:var(--space-5);height:var(--navbar-h)}
 .ds-navbar__links{display:flex;align-items:center;gap:var(--space-6)}
@@ -244,6 +270,14 @@
 .ds-tabs--on-card .ds-tab[aria-selected="true"],.ds-tabs--on-card .ds-tab.is-selected{background:var(--card)}
 .ds-tab:focus-visible{outline:2px solid var(--ring);outline-offset:2px}
 .ds-footer{border-top:1px solid var(--border);background:var(--background);color:var(--text-secondary)}
+.ds-footer__inner{display:flex;flex-wrap:wrap;gap:var(--space-7);justify-content:space-between;padding-block:var(--space-7)}
+/* 20rem : lisibilité de la ligne de signature — voir .ds-empty__desc. */
+.ds-footer__brand{display:flex;flex-direction:column;gap:var(--space-3);max-width:20rem}
+.ds-footer__note{font-size:var(--text-caption);color:var(--text-muted)}
+.ds-footer__cols{display:flex;flex-wrap:wrap;gap:var(--space-7)}
+.ds-footer__col{display:flex;flex-direction:column;gap:var(--space-3)}
+.ds-footer__link{font-size:var(--text-caption);color:var(--text-secondary)}
+.ds-footer__social{display:flex;gap:var(--space-3);padding-bottom:var(--space-6)}
 
 /* ---------- separator ---------- */
 .ds-sep{border:0;margin:0;flex:none;height:1px;width:100%;background:var(--border)}
@@ -308,11 +342,11 @@
 .ds-sidebar.is-collapsed .ds-sidenav__label{display:none}
 .ds-sidebar__foot{display:flex;align-items:center;gap:var(--space-3);border-top:1px solid var(--border);padding-top:var(--space-3);margin-top:var(--space-2)}
 .ds-sidebar.is-collapsed .ds-sidebar__foot{justify-content:center}
-.ds-appshell__scrim{position:fixed;inset:0;z-index:50;background:color-mix(in srgb,var(--tone-dark) 45%,transparent);backdrop-filter:blur(2px);-webkit-backdrop-filter:blur(2px)}
+.ds-appshell__scrim{position:fixed;inset:0;z-index:var(--z-scrim);background:color-mix(in srgb,var(--tone-dark) 45%,transparent);backdrop-filter:blur(2px);-webkit-backdrop-filter:blur(2px)}
 @media (min-width:64.0625rem){.ds-appshell__scrim{display:none}}
 @media (max-width:64rem){
 .ds-appshell:not(.ds-appshell--static){grid-template-columns:1fr}
-.ds-appshell:not(.ds-appshell--static) .ds-sidebar:not(.ds-sidebar--static){position:fixed;inset-block:0;left:0;z-index:60;transform:translateX(-100%);transition:transform var(--duration-slow) var(--ease-standard)}
+.ds-appshell:not(.ds-appshell--static) .ds-sidebar:not(.ds-sidebar--static){position:fixed;inset-block:0;left:0;z-index:var(--z-drawer);transform:translateX(-100%);transition:transform var(--duration-slow) var(--ease-standard)}
 .ds-appshell:not(.ds-appshell--static) .ds-sidebar.is-open{transform:none;box-shadow:var(--shadow-lg)}
 }
 
@@ -335,4 +369,4 @@
 .ds-datepicker{position:relative;display:inline-block;width:100%}
 .ds-datepicker__trigger{display:flex;align-items:center;justify-content:space-between;gap:var(--space-3);text-align:left;cursor:pointer}
 .ds-datepicker__ph{color:var(--text-muted)}
-.ds-datepicker__pop{position:absolute;top:calc(100% + 0.5rem);left:0;z-index:40;display:block;background:var(--popover);color:var(--popover-foreground);border:1px solid var(--border);border-radius:var(--radius-lg);box-shadow:var(--shadow-lg);padding:var(--space-3)}
+.ds-datepicker__pop{position:absolute;top:calc(100% + 0.5rem);left:0;z-index:var(--z-popover);display:block;background:var(--popover);color:var(--popover-foreground);border:1px solid var(--border);border-radius:var(--radius-lg);box-shadow:var(--shadow-lg);padding:var(--space-3)}
