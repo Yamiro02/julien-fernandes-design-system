@@ -41,36 +41,28 @@ export function App() {
 
   return (
     <div className="min-h-screen bg-background text-foreground">
-      {/* Chrome de la vitrine, en deux barres empilées : la barre de marque (logo +
-          thème) puis, EN DESSOUS et non dedans, la barre des familles. Les deux
-          restent collées en haut. La Navbar du DS est présentée comme spécimen,
-          page Navigation. */}
-      <div className="sticky top-0 z-30">
-        <header className="border-b border-border bg-card">
-          <div className="page flex flex-wrap items-center justify-between gap-space-4 py-space-3">
-            <div className="flex items-baseline gap-space-3">
-              <Logo variant="wordmark" height="1.375rem" />
-              <span className="caption">Design system · recette visuelle</span>
-            </div>
-            <Tabs onCard items={THEMES} value={theme} onChange={setTheme} />
+      {/* Chrome de la vitrine : la barre de marque seule. La Navbar du DS est
+          présentée comme spécimen, page Navigation. */}
+      <header className="sticky top-0 z-30 border-b border-border bg-card">
+        <div className="page flex flex-wrap items-center justify-between gap-space-4 py-space-3">
+          <div className="flex items-baseline gap-space-3">
+            <Logo variant="wordmark" height="1.375rem" />
+            <span className="caption">Design system · recette visuelle</span>
           </div>
-        </header>
+          <Tabs onCard items={THEMES} value={theme} onChange={setTheme} />
+        </div>
+      </header>
 
-        {/* Barre des familles — surface --background, donc la barre d'onglets garde
-            son fond --secondary : elle contraste toujours avec ce qui la porte. */}
-        <nav aria-label="Familles de composants" className="border-b border-border bg-background shadow-sm">
-          <div className="page py-space-3">
-            {/* Marge négative + padding : le scroll horizontal ne rogne pas
-                l'anneau de focus des onglets. Imbriqué pour ne pas casser le
-                centrage de .page. */}
-            <div className="-mx-space-1 overflow-x-auto px-space-1">
-              <Tabs items={PAGES.map(p => ({ value: p.value, label: p.label }))} value={page} onChange={setPage} />
-            </div>
-          </div>
+      <main className="page flex flex-col gap-space-6 py-space-7">
+        {/* Les familles vivent dans le layout, pas dans le chrome : aucun fond,
+            aucune bordure. Le groupe d'onglets est posé sur --background, il garde
+            donc son fond --secondary et contraste avec la page.
+            La marge négative empêche le scroll horizontal de rogner l'anneau de
+            focus ; elle est imbriquée pour ne pas casser le centrage de .page. */}
+        <nav aria-label="Familles de composants" className="-mx-space-1 overflow-x-auto px-space-1">
+          <Tabs items={PAGES.map(p => ({ value: p.value, label: p.label }))} value={page} onChange={setPage} />
         </nav>
-      </div>
 
-      <main className="page py-space-7">
         {theme === 'split' ? (
           <div className="inline-grid w-full grid-cols-1 gap-space-5 lg:grid-cols-2">
             <Panel label="Clair">{body}</Panel>

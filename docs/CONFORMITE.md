@@ -254,7 +254,7 @@ composant restant ne les importait.
 | Aucun style custom hors tokens | ✓ uniquement des composants du DS, des utilitaires `base.css` et des utilitaires du preset (qui ne résolvent que vers des `var(--…)`) ; aucune valeur arbitraire Tailwind (`[…]`) |
 | Non publiée dans le paquet | ✓ `demo/` absent de `files` |
 | `npm run build` (démo) | ✓ `tsc --noEmit` + `vite build` sans erreur |
-| Console sans erreur, clair et sombre | ✓ en v0.1.0, vérifié au navigateur sur les 10 pages. En v0.2.0 la pane du navigateur est devenue inutilisable en fin de session : la vérification s'est faite par `vite build` (résolution statique de tous les imports), `tsc --noEmit` sur le paquet et la démo, et inspection programmatique du DOM rendu (AppShell, Sidebar, Pagination, tokens calculés). **Une passe visuelle des nouvelles pages reste à faire.** |
+| Console sans erreur, clair et sombre | ✓ en v0.1.0, vérifié au navigateur sur les 10 pages. En v0.2.0 la pane du navigateur est devenue inutilisable en fin de session : la vérification s'est faite par `vite build` (résolution statique de tous les imports), `tsc --noEmit` sur le paquet et la démo, et inspection programmatique du DOM rendu (AppShell, Sidebar, Pagination, tokens calculés). Le chrome de la vitrine et les règles d'écran ont depuis été vérifiés visuellement, en clair et en sombre. **Une passe visuelle des pages Data display, Feedback, Navigation et Formulaires reste à faire.** |
 
 ---
 
@@ -274,6 +274,29 @@ composant restant ne les importait.
 | Grille fine dans l'UI | **0** — uniquement dans `GridBackground` |
 | Exports `src/index.ts` ↔ `.d.ts` sources v2 | **36 / 37** — seul `MetricPill` manque, retiré volontairement (écart 18). Aucun autre manquant, aucun en trop (+ les sous-composants `THead` `TBody` `Tr` `Th` `Td` et l'utilitaire `cn`) |
 | Preset : littéral de couleur ou de taille | **0** — uniquement des `var(--…)` |
+
+### Règles d'écran — vérifiées à l'exécution (26/08/2026)
+
+Les media queries des tokens ont été copiées verbatim **puis mesurées au navigateur** à deux
+largeurs, de part et d'autre du seuil `64rem` (= 1024px : en media query, le rem s'évalue sur la
+taille racine initiale de 16px, pas sur celle d'`app-scale.css`).
+
+| Mesure | 1280px (desktop) | 1000px (< 64rem) | Attendu |
+|---|---|---|---|
+| `--control-md` | 3rem | **2.75rem** | rail mobile, cible tactile 44 ✓ |
+| `--control-lg` | 3.25rem | **3rem** | ✓ |
+| `--control-sm` · `--icon-control-sm/md/lg` | 3rem | **2.75rem** | alias de `--control-md`, suivent ✓ |
+| `--text-heading-xl` | 2.5rem | **1.75rem** | drop responsive des titres ✓ |
+| `--text-heading` | 1.8125rem | **1.625rem** | ✓ |
+| Button sm · md rendus | 48px | **44px** | ✓ |
+| Button lg rendu | 52px | **48px** | ✓ |
+| IconButton sm · md · lg rendus | 48px · 48px · 48px | **44px · 44px · 44px** | rail unique : un seul carré ✓ |
+| `html{font-size}` dans la démo | 16px | 16px | `app-scale.css` est opt-in, non importé ✓ |
+
+**Une nuance de mesure** : la barre d'onglets rend 46px sous 64rem, pas 44px. `--control-md` y est
+un `min-height`, donc un plancher ; le contenu de la barre (padding `--space-1` + le palier
+`--text-control`) fait naturellement 46px et l'emporte. La cible tactile de 44px est donc tenue,
+simplement dépassée de 2px. Comportement de la source, aucune valeur touchée.
 
 ---
 
