@@ -34,10 +34,16 @@ jobs:
       - run: npm ci
       - run: npm ci --prefix demo
 
-      # `lint` enchaîne typecheck + les trois gardes : collision d'utilitaires, substitution
-      # figée, contraste de la marque livrée.
-      - name: lint (typecheck · utilitaires · substitution · contraste)
+      # `lint` enchaîne typecheck + les quatre gardes : collision d'utilitaires, substitution
+      # figée, contraste de la marque livrée, cohérence code ↔ catalogue.
+      - name: lint (typecheck · utilitaires · substitution · contraste · catalogue)
         run: npm run lint
+
+      # Le garde qui lit les COMPOSANTS et la DOC (les autres lisent le CSS) : sections du
+      # catalogue ↔ exports réels, icônes citées ↔ IconName, compte annoncé ↔ décompte réel.
+      # Déjà couvert par `lint`, mais nommé ici pour que son échec se lise d'un coup d'œil.
+      - name: catalogue ↔ code
+        run: node check-catalogue.mjs
 
       - name: build du paquet
         run: npm run build

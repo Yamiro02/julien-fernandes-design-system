@@ -1,448 +1,744 @@
-# Prompts d'usage des composants
+# Catalogue d'usage des composants
 
-Docs d'usage fusionnées (anciennement un `.prompt.md` par composant).
+Le second fichier qu'un agent lit, après `PORTAGE.md`, avant d'écrire un écran.
+Une section par composant : à quoi il sert, quand ne PAS l'utiliser, un exemple minimal
+qui compile, et les états qu'il sait rendre.
 
+Ce document est **gardé par `check-catalogue.mjs`** : chaque composant exporté par
+`src/index.ts` doit avoir sa section ici, chaque section doit correspondre à un export
+réel, et chaque `<Icon name="…">` cité doit exister dans le type `IconName`. Si vous
+ajoutez un composant, ajoutez sa section — le build vous le rappellera.
+
+Les exemples supposent les imports depuis la racine du paquet :
+
+```tsx
+import { Button, Card, Icon } from '@acme/ds';
+```
 
 ---
 
 # actions
 
-
 ## Button
 
-The brand's action control — use `primary` for the single main CTA of a view, everything else is secondary/ghost.
+L'action du système. `primary` porte le dégradé de marque et la lueur : c'est LE CTA de la
+vue — un seul par écran. Tout le reste est `secondary`, `ghost` ou `danger`.
 
-```jsx
+**Ne pas l'utiliser** pour une action icône seule (c'est `IconButton`), ni pour un lien de
+navigation dans du texte (un `<a>` suffit).
+
+```tsx
 <Button variant="primary" size="lg" iconRight={<Icon name="arrow-right" />}>On build une app</Button>
-<Button variant="secondary" icon={<Icon name="youtube" />}>Voir la chaîne</Button>
+<Button variant="secondary" icon={<Icon name="play" />}>Voir la démo</Button>
 <Button variant="ghost" size="sm">Annuler</Button>
 <Button variant="danger" icon={<Icon name="triangle-alert" />}>Supprimer</Button>
 <Button loading>Génération…</Button>
+<Button as="a" href="/inscription">S'inscrire</Button>
 ```
 
-- Radius is always `--radius-md` (0.75rem). **Never a pill** — pills are for badges and counters.
-- Every button rides the shared control rail: min-height 3rem (2.75rem under 64rem). `sm` only tightens padding and type; `lg` (3.25rem) is the hero CTA.
-- Only `primary` gets `--shadow-glow`; hover deepens it to `--shadow-glow-lg` + `translateY(-1px)`, press returns `translateY(1px)`.
-- One primary button per view. Label in sentence case, French, tutoiement.
-
+- Props : `variant` (`primary·secondary·ghost·danger`) · `size` (`sm·md·lg`) · `icon` /
+  `iconRight` · `loading` (spinner + désactivé) · `fullWidth` · `as` / `href`.
+- Rayon toujours `--radius-md`. **Jamais un pill** — le pill est réservé aux badges.
+- Rail partagé : min-height 3rem (2.75rem sous 64rem). `lg` (3.25rem) = CTA de héros.
+- États rendus : repos, hover (lueur + translateY), pressé, focus-visible, désactivé,
+  loading.
 
 ## IconButton
 
-Icon-only button — copy actions, navigation toggles, close buttons.
+Bouton carré à icône seule — copier, fermer, basculer. `label` est **obligatoire** : il
+devient `aria-label` et `title`.
 
-```jsx
-<IconButton label="Copier le prompt" variant="ghost"><Icon name="copy" /></IconButton>
+**Ne pas l'utiliser** quand un libellé texte est possible : un bouton qui peut dire ce
+qu'il fait le dit.
+
+```tsx
+<IconButton label="Copier le prompt"><Icon name="copy" /></IconButton>
 <IconButton label="Fermer" variant="secondary" size="sm"><Icon name="x" size="1rem" /></IconButton>
 ```
 
-Square, radius `--radius-md`, always the same square on the shared control rail (3rem, 2.75rem under 64rem) — aligned with Button and Input. Never a pill.
-
+- Props : `variant` (`primary·secondary·ghost·danger`, défaut `ghost`) · `size`
+  (`sm·md·lg`) · `label` (requis).
+- Carré sur son propre rail (`--icon-control-*`), rayon `--radius-md`, jamais un pill.
+- États rendus : repos, hover, pressé (`aria-pressed` = actif), focus-visible, désactivé.
 
 ---
 
 # brand
 
-
 ## Avatar
 
-Portrait with halo. Portraits are always **cut-outs** — placed low, halo behind the shoulders, never centred behind the title.
+Portrait **détouré** (PNG transparent) avec halo de marque derrière les épaules. Sans
+`src`, il retombe sur un monogramme en sourdine — jamais une image cassée.
 
-```jsx
-<Avatar src="/portrait-cutout.png" size="4rem" />   {/* un asset de l'app consommatrice */}
-<Avatar size="3rem" halo={false} />   {/* placeholder — no portrait supplied yet */}
+**Ne pas l'utiliser** pour une vignette de contenu ou une image pleine : c'est un
+portrait, posé bas, jamais centré derrière un titre.
+
+```tsx
+<Avatar src="/portrait-cutout.png" size="4rem" />
+<Avatar size="3rem" halo={false} />
 ```
 
+- Props : `src` · `alt` · `initials` (monogramme de repli) · `size` (longueur CSS, rem) ·
+  `halo` (défaut `true`).
+- Les défauts (`alt`, `initials`) viennent de `src/brand.ts`.
 
 ## Halo
 
-The halo gives ink sections their warmth and cream sections their relief.
+L'atmosphère radiale de la marque. À poser dans une section `position:relative`, derrière
+le contenu. Ancré en bas par défaut — jamais plein écran, jamais un grand aplat dégradé.
 
-```jsx
-<section style={{position:'relative',overflow:'hidden'}}>
+**Ne pas l'utiliser** pour une miniature ou une carte de motion : ce halo-là est `HaloHot`,
+sur le sous-chemin optionnel `@acme/ds/brand-content`.
+
+```tsx
+<section style={{ position: 'relative', overflow: 'hidden' }}>
   <Halo placement="bottom" />
-  <div style={{position:'relative'}}>…</div>
+  <div style={{ position: 'relative' }}>…</div>
 </section>
 ```
 
-`hot` swaps in `--gradient-thumbnail` — **only** on YouTube thumbnails and motion cards.
-
+- Props : `placement` (`bottom·top·center`) · `intensity` (0–1, multiplicateur d'opacité).
+- Les dégradés viennent des utilitaires `.halo*` de `tokens/base.css` — aucune valeur ici.
 
 ## Logo
 
-The brand mark — CSS-rendered: --font-display caps + gradient rounded-square dot with glow.
+La marque, rendue **en CSS** : capitales de `--font-display` + pastille carrée arrondie en
+dégradé avec lueur. La pastille garde le dégradé sur tous les fonds ; seules les lettres
+s'inversent avec le thème. Les défauts (mot-marque, monogramme) viennent de `src/brand.ts`.
 
-```jsx
-<Logo variant="wordmark" height="1.75rem" />          {/* letters follow --foreground */}
-<Logo variant="wordmark" letters="light" height="1.75rem" />  {/* lettres claires forcées, sur une surface sombre */}
+**Ne pas** fausse-grasser, contourer ni interlettrer le mot-marque : sa casse et sa
+graisse suivent `--heading-transform` / `--heading-weight`, comme tout le titrage.
+
+```tsx
+<Logo variant="wordmark" height="1.75rem" />
+<Logo variant="wordmark" letters="light" height="1.75rem" />
 <Logo variant="monogram" height="2.5rem" />
+<Logo wordmark="Acme" dot={false} />
 ```
 
-- The dot carries `--brand-gradient-diagonal` + glow on EVERY surface; only the letters invert.
-- Never fake-bold, outline or letterspace the mark.
-- Plain-HTML pages use the same mark via `.ds-logo` / `.ds-logo__dot` (tokens/base.css).
-- `assets/logo/*.png` (flat-orange dot) remain as static exports for platforms that need files.
-
+- Props : `variant` (`wordmark·stacked·monogram`) · `letters` (`dark·light` — force la
+  couleur des lettres ; omise, elles suivent `--foreground`) · `height` · `wordmark` ·
+  `monogram` · `dot` (`false` = sans pastille ; un nœud la remplace) · `label`.
+- En HTML nu, le même mark existe en `.ds-logo` / `.ds-logo__dot` (tokens/base.css).
 
 ---
 
 # data-display
 
-
 ## Badge
 
-Status / category pill.
+Pill de statut ou de catégorie. Les tons sémantiques portent toujours **couleur + icône +
+texte**, jamais la couleur seule.
 
-```jsx
+**Ne pas l'utiliser** comme bouton ni comme métrique : un badge ne se clique pas.
+
+```tsx
 <Badge tone="success" icon={<Icon name="circle-check" size="0.875rem" strokeWidth={2.5} />}>En ligne</Badge>
 <Badge tone="danger" icon={<Icon name="circle-alert" size="0.875rem" strokeWidth={2.5} />}>Échec</Badge>
 <Badge tone="outline">Brouillon</Badge>
+<Badge tone="neutral" pad="dense">v0.1.0</Badge>
 ```
 
-Pill radius is fine here (badges, counters). Never on a button, an input or a tab bar.
-
+- Props : `tone` (`coral·amber·danger·warning·success·neutral·accent·outline`, défaut
+  `neutral`) · `pad` (`md·dense`) · `icon`.
+- Le rayon pill est légal ici — jamais sur un bouton, un champ ou une barre d'onglets.
 
 ## Card
 
-The brand's core surface — everything that isn't a page section sits on a Card.
+LA surface du système — tout ce qui n'est pas une section de page se pose sur une Card.
+Fond `--card`, bordure 1px, ombre teintée. Jamais du blanc pur. L'en-tête à slots
+(`eyebrow` / `icon` / `title` / `subtitle` / `action`) ne rend AUCUN nœud si aucun slot
+n'est passé.
 
-```jsx
+**Ne pas** imbriquer une Card dans une Card, ni poser une grille de cartes avec un gap
+sous 1.5rem.
+
+```tsx
 <Card>Contenu</Card>
-<Card variant="interactive" onClick={…}>Card cliquable</Card>
-<Card variant="feature" size="lg">Mise en avant — lavis de dégradé + bordure orange</Card>
-<Card flush><img … /><div style={{padding:'var(--card-pad)'}}>…</div></Card>
+<Card variant="interactive" onClick={() => ouvrir()}>Card cliquable</Card>
+<Card variant="feature" size="lg">Mise en avant — lavis --grad-soft + bordure de marque</Card>
+<Card icon={<Pastille size="carte"><Icon name="rocket" size="1rem" /></Pastille>}
+  title="Déployer" subtitle="En un clic" action={<IconButton label="Options"><Icon name="ellipsis" /></IconButton>}>
+  Contenu sous l'en-tête
+</Card>
+<Card flush><img src="/cover.png" alt="" style={{ width: '100%' }} /></Card>
 ```
 
-Grid gaps between cards are **≥ 1.5rem**. Never a pure-white card.
+- Props : `variant` (`default·interactive·feature`) · `size` (`md·lg`) · `flush` (sans
+  padding, media plein bord) · slots d'en-tête `eyebrow` / `icon` / `title` / `subtitle` /
+  `action` · `titleSize` (`sm·lg`) · `headerGap` (`normal·airy`) · `as`.
+- États rendus : repos ; `interactive` ajoute hover (levée + `--shadow-md`), pressé,
+  focus-visible.
 
+## Pastille
+
+La tuile d'icône du système — l'unique porteur carré-ou-rond teinté. Ses tailles sont
+nommées par **contexte**, jamais par mesure : un site d'appel n'écrit jamais un rem.
+
+**Ne pas l'utiliser** comme bouton (elle ne se clique pas) ni réinventer une tuile d'icône
+en div : c'est exactement ce que ce composant remplace.
+
+```tsx
+<Pastille size="carte"><Icon name="terminal" size="1rem" /></Pastille>
+<Pastille size="dialogue" tone="danger"><Icon name="triangle-alert" size="1.25rem" /></Pastille>
+<Pastille size="panneau" tone="brand" outlined><Icon name="folder" size="1.5rem" /></Pastille>
+<Pastille size="heros" shape="round" tone="inverse"><Icon name="rocket" size="1.5rem" /></Pastille>
+```
+
+- Props : `size` (`carte` 2.25 · `dialogue` 2.625 · `panneau` 3.25 · `heros` 4 · `ecran`
+  5rem — le rayon suit la taille) · `shape` (`square·round`) · `tone` (`brand` + les 6
+  paires sémantiques + `inverse`) · `outlined` (contour 1px currentColor à 22 %).
+- C'est elle qui rend la tuile du `Modal` et celle de l'`EmptyState`.
 
 ## Separator
 
-Thin rule between blocks. With `label`, the caption sits centred on the line.
+Filet 1px `--border` entre deux blocs. Avec `label`, la légende est centrée sur la ligne.
 
-```jsx
+**Ne pas l'utiliser** pour structurer une liste dense (l'espacement suffit) ni dans un
+menu (Dropdown et ActionSheet ont leur item `separator`).
+
+```tsx
 <Separator />
 <Separator label="Ou" />
 <Separator orientation="vertical" />
 ```
 
+- Props : `orientation` (`horizontal·vertical`) · `label` (horizontal uniquement).
 
 ## Table
 
-Composable data table for tool UIs. `framed` gives it its own contour (1px `--border`, radius-lg, fill `--card`, header on `--background`) — no Card wrapper needed; `columns` adds vertical dividers; `striped` / `hoverable` compose freely.
+Table de données composable pour les UIs d'outil : `Table > THead/TBody > Tr > Th/Td`.
+`framed` lui donne son propre cadre (1px `--border`, radius-lg, fond `--card`, en-tête sur
+`--background`) — pas de Card autour. `columns`, `striped`, `hoverable` se composent.
 
-```jsx
+**Ne pas** rendre une table vide : c'est `EmptyState` À LA PLACE de la table, jamais un
+état vide dans la table.
+
+```tsx
 <Table framed columns hoverable>
   <THead><Tr><Th>Build</Th><Th>Statut</Th></Tr></THead>
   <TBody><Tr><Td>App de lecture</Td><Td><Badge tone="success">En ligne</Badge></Td></Tr></TBody>
 </Table>
 ```
 
-Empty list: render `EmptyState` INSTEAD of an empty table — the table never carries its own empty state.
-
+- Props de `Table` : `striped` · `hoverable` · `framed` · `columns`. `THead`, `TBody`,
+  `Tr`, `Th`, `Td` acceptent leurs attributs HTML natifs.
+- États rendus : lignes au repos, alternées (`striped`), survolées (`hoverable`).
 
 ## Tooltip
 
-Short hover label.
+Bulle d'encre au survol et au focus (bulle claire en thème sombre). Un libellé court —
+jamais du contenu riche.
 
-```jsx
-<Tooltip content="Copier le prompt"><IconButton label="Copier"><Icon name="copy" /></IconButton></Tooltip>
+**Ne pas l'utiliser** pour de l'information indispensable : ce qui doit être lu vit dans
+la page, pas dans une bulle.
+
+```tsx
+<Tooltip content="Copier le prompt">
+  <IconButton label="Copier le prompt"><Icon name="copy" /></IconButton>
+</Tooltip>
 ```
 
+- Props : `content` · `placement` (`top·bottom`) · `open` (force la bulle ouverte — cartes
+  spécimens et captures).
+- États rendus : fermé, ouvert au survol, ouvert au focus clavier, forcé (`open`).
 
 ---
 
 # feedback
 
-
 ## Banner
 
-Persistent inline message.
+Message persistant, dans une page ou une Card. Toujours couleur + icône + texte.
 
-```jsx
+**Ne pas l'utiliser** pour du feedback transitoire (c'est `Toast`) ni pour une erreur de
+champ (c'est `FormField error`).
+
+```tsx
 <Banner tone="warning" title="Ce tuto date de mars">La CLI a changé depuis — la méthode reste bonne.</Banner>
+<Banner tone="info" title="Nouvelle série en ligne" action={<Button variant="secondary" size="sm">Voir</Button>} />
 ```
 
+- Props : `tone` (`danger·warning·success·info`, défaut `info`) · `title` · `children`
+  (corps) · `action` (contrôle à droite).
 
 ## EmptyState
 
-Empty list / no results. Always give the reader the next step.
+Emplacement vide en pointillés : tuile `Pastille panneau brand outlined`, titre H4 en face
+display, une description courte, et **le prochain geste**. Toujours donner au lecteur la
+suite.
 
-```jsx
+**Ne pas l'utiliser** pour une erreur (c'est `Banner` ou `Modal` result) ni pour un
+chargement (c'est `Skeleton`).
+
+```tsx
 <EmptyState icon={<Icon name="folder" size="1.5rem" />} title="Aucun build ici"
   description="Choisis une série pour voir les vidéos correspondantes."
   action={<Button variant="secondary">Voir tout</Button>} />
 ```
 
+- Props : `icon` · `title` (requis) · `description` · `action`.
 
 ## Progress
 
-Determined bar (0–100) or indeterminate sliding bar. Accent-tinted rail, `--primary` fill, thin.
+Barre fine : rail `--surface-alt`, remplissage `--primary`. Déterminée (0–max) ou
+indéterminée (barre glissante).
 
-```jsx
+**Ne pas l'utiliser** pour une attente sans notion d'avancement dans un contrôle — c'est
+`Spinner` (ou `Button loading`).
+
+```tsx
 <Progress value={64} label="Progression du build" />
 <Progress indeterminate label="Chargement" />
 ```
 
+- Props : `value` · `max` (défaut 100) · `indeterminate` · `label` (nom accessible).
+- ARIA : `role="progressbar"` + `aria-valuenow` (omis en indéterminé).
 
 ## Skeleton
 
-Loading placeholder.
+Silhouette de chargement sur `--muted`, shimmer discret. Dimensions en chaînes CSS (rem
+ou %) — c'est le style inline légitime : la valeur vient d'une prop.
 
-```jsx
+**Ne pas l'utiliser** après le premier rendu : un skeleton qui persiste est un bug
+d'affichage, pas un état.
+
+```tsx
 <Skeleton width="12rem" height="1.25rem" />
 <Skeleton height="9rem" radius="var(--radius-lg)" />
 ```
 
+- Props : `width` (défaut 100 %) · `height` (défaut 0.75rem) · `radius` (défaut
+  `--radius-sm`).
 
 ## SkeletonCard
 
-Placeholder for a loading card grid.
+Un skeleton en forme de carte média (16/9 + lignes) — un par emplacement de grille pendant
+qu'une grille de cartes charge.
 
-```jsx
-<div style={{display:'grid',gridTemplateColumns:'repeat(3,1fr)',gap:'var(--space-5)'}}>
-  {[0,1,2].map(i => <SkeletonCard key={i} />)}
+```tsx
+<div style={{ display: 'grid', gridTemplateColumns: 'repeat(3,1fr)', gap: 'var(--space-5)' }}>
+  {[0, 1, 2].map(i => <SkeletonCard key={i} />)}
 </div>
 ```
 
+- Props : `media` (le bloc 16/9, défaut `true`) · `lines` (défaut 2).
 
 ## Spinner
 
-Loading ring in `currentColor`, sizes aligned on Icon (1 / 1.25 / 1.5rem). Inside a Button, use the `loading` prop instead — it swaps the icon for a Spinner and disables the button.
+Anneau de chargement en `currentColor`, tailles alignées sur Icon (1 / 1.25 / 1.5rem).
 
-```jsx
+**Ne pas le poser** dans un `Button` : la prop `loading` du bouton le fait, et désactive
+le bouton avec.
+
+```tsx
 <Spinner size="sm" />
-<Button loading>Génération…</Button>
+<Spinner size="1.5rem" />
 ```
 
+- Props : `size` (`sm·md·lg` ou longueur CSS).
+- ARIA : `role="status"`, `aria-label="Chargement"`.
 
 ## Toast
 
-Transient feedback, bottom-right of the viewport.
+Notification transitoire, en bas à droite du viewport, sur `--popover` avec `--shadow-lg`.
+Toujours couleur + icône + texte. Le texte d'erreur est concret, jamais dramatisé.
 
-```jsx
-<Toast tone="success" title="Prompt copié" description="Colle-le dans Claude Code." onClose={…} />
+**Ne pas l'utiliser** pour un message qui doit rester lisible (c'est `Banner`) ni pour une
+confirmation bloquante (c'est `Modal`).
+
+```tsx
+<Toast tone="success" title="Prompt copié" description="Colle-le dans Claude Code." onClose={() => fermer()} />
 <Toast tone="danger" title="Ça a planté, on réessaie ?" description="Le build n'a pas pu démarrer." />
 ```
 
-Error copy is cash, never dramatised. Icon tile is 1.5rem, radius sm; glyphs at stroke-width 2.5 (check / x / triangle-alert / info).
-
+- Props : `tone` (`success·danger·warning·info`, défaut `info`) · `title` (requis) ·
+  `description` · `onClose` (rend la croix).
+- Tuile d'icône 1.5rem radius-sm, glyphes à stroke-width 2.5 (check / x / triangle-alert /
+  info).
 
 ---
 
 # forms
 
-
 ## Calendar
 
-Month view — Monday-first, fr locale, native `Date` + `Intl` only. Selected day = `--primary` fill; today = `--primary` bold. Single date, no range.
+Vue mois, lundi d'abord, locale `fr-FR` par défaut. `Date` natif + `Intl` uniquement —
+aucune dépendance. Date unique, pas de plage.
 
-```jsx
+**Ne pas l'utiliser** posé nu dans un formulaire : c'est `DatePicker` qui l'y emmène, en
+popover.
+
+```tsx
 <Calendar value={date} onChange={setDate} min={new Date()} />
+<Calendar />
 ```
 
+- Props : `value` · `onChange(Date)` · `min` / `max` · `disabledDates` · `locale` · `bare`
+  (sans le cadre — l'usage interne du DatePicker).
+- États rendus : jour au repos, survolé, sélectionné (aplat `--primary`), aujourd'hui
+  (`--primary-readable` gras), désactivé, focus-visible.
 
 ## Checkbox
 
-Checkbox with label.
+Case à cocher avec libellé. `forwardRef` : la ref atteint l'`<input>` natif —
+`register()` de react-hook-form se branche directement.
 
-```jsx
+**Ne pas l'utiliser** pour un choix exclusif (c'est `Radio`) ni pour un réglage à effet
+immédiat (c'est `Switch`).
+
+```tsx
 <Checkbox label="Je veux recevoir le prompt du build" defaultChecked />
+<Checkbox label="Sélection partielle" indeterminate />
 <Checkbox label="Option indisponible" disabled />
 ```
 
+- Props : `label` · `indeterminate` (case d'en-tête de sélection multiple : propriété DOM
+  posée par ref, trait `minus` à la place de la coche, `aria-checked="mixed"`) + les
+  attributs natifs (`checked`, `defaultChecked`, `onChange`, `disabled`…).
+- États rendus : décochée, cochée, indéterminée, hover, focus-visible, désactivée.
 
 ## DatePicker
 
-Input-styled trigger + Calendar in a popover (outside click / Escape close). Same `surface` rule as Input.
+Déclencheur façon Input (même règle de `surface`) + `Calendar` en popover. Clic extérieur
+ou Échap pour fermer — Échap et la sélection rendent le focus au déclencheur. Avec `name`,
+un `<input type="hidden">` porte la date en ISO (`YYYY-MM-DD`) pour la soumission de
+`<form>`. Avec react-hook-form : passer par `<Controller>` (composant contrôlé).
 
-```jsx
+**Ne pas l'utiliser** pour une plage de dates — le système n'en a pas.
+
+```tsx
 <DatePicker value={date} onChange={setDate} placeholder="Choisir une date" />
-<DatePicker surface="card" value={date} onChange={setDate} />
+<DatePicker surface="card" name="echeance" value={date} onChange={setDate} />
+<DatePicker invalid value={date} onChange={setDate} />
 ```
 
+- Props : `value` · `onChange(Date)` · `placeholder` · `locale` · `min` / `max` ·
+  `disabledDates` · `surface` (`page·card`) · `invalid` · `disabled` · `name`.
+- États rendus : vide, rempli, ouvert, invalide, désactivé, focus-visible.
 
 ## FormField
 
-Wraps any field with its label, help text and error.
+Enveloppe libellé + contrôle + aide/erreur. Une erreur **remplace** le texte d'aide et
+porte toujours couleur + icône + texte.
 
-```jsx
+**Ne pas** poser un libellé à la main au-dessus d'un champ : c'est ce composant qui tient
+l'anatomie.
+
+```tsx
 <FormField label="Ton email" htmlFor="mail" help="Un build décortiqué par semaine. Zéro spam.">
   <Input id="mail" placeholder="ton@email.com" />
 </FormField>
-
-<FormField label="Ton email" error="Ça a planté, on réessaie ?">
-  <Input invalid defaultValue="pas-un-email" />
+<FormField label="Ton email" htmlFor="mail2" error="Ça a planté, on réessaie ?">
+  <Input id="mail2" invalid defaultValue="pas-un-email" />
 </FormField>
 ```
 
+- Props : `label` · `htmlFor` · `help` · `error` · `required` (astérisque `--primary`).
 
 ## Input
 
-Text field — radius `--radius-md`, 1.5px border. Focus = the border turns `--ring` — one border, never an extra ring.
+Champ texte sur le rail de contrôle partagé, bordure 1.5px. Focus = la bordure passe en
+`--ring` — UNE bordure, jamais un anneau en plus. Jamais un pill. `forwardRef` sur
+l'`<input>` natif.
 
-```jsx
+**Ne pas l'utiliser** pour du texte multi-lignes (c'est `Textarea`).
+
+```tsx
 <Input placeholder="ton@email.com" />
-<Input surface="card" placeholder="ton@email.com" />   {/* inside a Card */}
+<Input surface="card" placeholder="Dans une Card" />
 <Input invalid defaultValue="pas-un-email" />
+<Input size="lg" placeholder="CTA de héros" />
 ```
 
-Never a pill. Placeholder in `--text-muted`. Fill is `--secondary` on the layout (default, like navbar/tabs/search); `surface="card"` swaps to `--background` inside a Card. Wrap in `<FormField>` for label / help / error.
-
+- Props : `size` (`sm·md·lg`) · `invalid` · `surface` (`page` = fond `--secondary`, posé
+  à même le layout · `card` = fond `--background`, dans une Card) + attributs natifs.
+- États rendus : repos, focus, invalide, désactivé — sur les deux surfaces.
 
 ## Radio
 
-Radio — always in a named group.
+Bouton radio — le seul contrôle circulaire du système. Toujours dans un groupe `name`.
+`forwardRef` sur l'`<input>` natif.
 
-```jsx
+**Ne pas l'utiliser** pour plus de ~5 options (c'est `Select`) ni pour un choix multiple
+(c'est `Checkbox`).
+
+```tsx
 <Radio name="niveau" value="debutant" label="Je débute" defaultChecked />
 <Radio name="niveau" value="avance" label="Je code déjà" />
 ```
 
+- Props : `label` + attributs natifs (`name`, `value`, `checked`, `onChange`,
+  `disabled`…).
+- États rendus : au repos, sélectionné, hover, focus-visible, désactivé.
 
 ## Select
 
-Dropdown field — same silhouette and 3rem rail as Input and Button md.
+Select **natif** sur le rail 3rem, avec un chevron Lucide. Même silhouette qu'Input et
+Button md. `forwardRef` sur le `<select>` natif.
 
-```jsx
-<Select options={[{value:'build',label:'Build'},{value:'tuto',label:'Tuto'}]} defaultValue="build" />
+**Ne pas** le remplacer par un menu custom : le natif gagne au clavier et au tactile.
+
+```tsx
+<Select options={[{ value: 'build', label: 'Build' }, { value: 'tuto', label: 'Tuto' }]} defaultValue="build" />
+<Select options={[{ value: 'a', label: 'A' }]} invalid />
 ```
 
+- Props : `options` (`{value, label}[]`) · `invalid` · `surface` (`page·card`) + attributs
+  natifs.
+- États rendus : repos, focus, invalide, désactivé — sur les deux surfaces.
 
 ## Switch
 
-Instant on/off toggle (no Save button).
+Bascule binaire à effet **immédiat** — jamais suivie d'un bouton Enregistrer. `forwardRef`
+sur l'`<input>` natif.
 
-```jsx
+**Ne pas l'utiliser** dans un formulaire soumis d'un bloc (c'est `Checkbox`).
+
+```tsx
 <Switch label="Thème sombre" defaultChecked />
+<Switch label="Notifications" disabled />
 ```
 
+- Props : `label` + attributs natifs (`checked`, `onChange`, `disabled`…). Rendu
+  `role="switch"`.
+- États rendus : off, on, hover (piste teintée vers `--primary`), focus-visible,
+  désactivé.
 
 ## Textarea
 
-Multi-line field. Keeps auto height — never set a min-height.
+Champ multi-lignes. Hauteur automatique — jamais de min-height. Redimensionnement
+vertical uniquement. Même règle de `surface` que l'Input. `forwardRef` sur le
+`<textarea>` natif.
 
-```jsx
+```tsx
 <Textarea rows={5} placeholder="Décris ton idée d'app en deux phrases." />
+<Textarea rows={3} invalid defaultValue="Trop court" />
 ```
 
+- Props : `invalid` · `rows` (défaut 4) · `surface` (`page·card`) + attributs natifs.
+- États rendus : repos, focus, invalide, désactivé.
 
 ---
 
 # icons
 
-
 ## Icon
 
-Renders a Lucide line icon — use it anywhere the design needs an icon; never emoji, never a hand-drawn SVG.
+LE système d'icônes : Lucide, exclusivement. Jamais un emoji, jamais un SVG dessiné à la
+main. 47 glyphes typés (`IconName`) — un nom hors du type est une erreur TypeScript, et
+c'est voulu.
 
-```jsx
+**Ne pas** chercher `youtube` ou `instagram` ici : les icônes de PLATEFORME vivent dans
+`ContentIcon`, sur le sous-chemin optionnel `@acme/ds/brand-content`. Et jamais
+`sparkles` : l'étoile-éclair est bannie du set.
+
+```tsx
 <Icon name="circle-check" size="1.25rem" strokeWidth={2} />
-<Icon name="arrow-right" size="1rem" style={{ color: 'var(--primary)' }} />
+<Icon name="arrow-right" size="1rem" style={{ color: 'var(--primary-readable)' }} />
 ```
 
-- Sizes: `1rem` · `1.25rem` (default) · `1.5rem`. Always rem, never px.
-- `strokeWidth`: 2 standard · 2.5 inside pills and toasts · 3 for the check glyph.
-- Colour follows `currentColor` — default `--foreground`; `--primary` only for an active icon or a CTA.
-- Third-party marks (YouTube, Instagram, GitHub) keep their own glyph and are never recoloured to brand.
-
+- Props : `name` (`IconName`) · `size` (longueur CSS, toujours rem — 1 / 1.25 / 1.5rem) ·
+  `strokeWidth` (2 standard · 2.5 dans les pills et les toasts · 3 pour la coche).
+- La couleur suit `currentColor`. Les actions destructives prennent `trash-2`.
 
 ---
 
 # navigation
 
-
 ## AppShell
 
-Tool-app skeleton: grid `[Sidebar | contenu]`. Under 64rem the sidebar becomes a drawer, driven by Sidebar's `open`/`onClose`.
+Le squelette d'app-outil : grille `[Sidebar | contenu]`. Sous 64rem, la sidebar devient un
+tiroir piloté par `open`/`onClose` de `Sidebar`.
 
-```jsx
-<AppShell sidebar={<Sidebar sections={…} footer={<Avatar size="2rem" />} open={menuOpen} onClose={close} />}>
-  {content}
+**Ne pas l'utiliser** pour un site de contenu (c'est `Navbar` + `Footer`).
+
+```tsx
+<AppShell sidebar={<Sidebar sections={sections} open={menuOpen} onClose={() => setMenuOpen(false)} />}>
+  {contenu}
 </AppShell>
 ```
 
+- Props : `sidebar` (un `<Sidebar>`) · `responsive` (défaut `true` ; `false` fige la
+  double colonne desktop).
 
 ## Footer
 
-Page footer.
+Pied de site : marque, ligne de signature optionnelle, colonnes de liens, rangée sociale.
 
-```jsx
-<Footer columns={[{title:'Séries',links:[{label:'Build'},{label:'Tuto'}]}]}
-  social={<><IconButton label="YouTube"><Icon name="youtube" /></IconButton></>} />
+```tsx
+<Footer
+  note="Busan · Corée du Sud"
+  columns={[{ title: 'Séries', links: [{ label: 'Build' }, { label: 'Tuto' }] }]}
+  social={<IconButton label="GitHub"><Icon name="github" /></IconButton>}
+/>
 ```
 
-The location line uses the middle dot: *Ville · Pays*.
-
+- Props : `columns` (`{title, links:[{label, href?}]}[]`) · `social` · `brand` (défaut :
+  le `Logo` du paquet) · `letters` · `note` (ligne de lieu/signature — AUCUN défaut :
+  omise, la ligne n'est pas rendue ; le point médian `·` sert de séparateur).
 
 ## Navbar
 
-Site header — always on `--secondary`, detached from the cream layout; scroll adds blur + shadow.
+Barre de site sticky : logo à gauche, liens au centre, CTA à droite. Toujours sur
+`--secondary` avec filet bas — un contrôle détaché du layout, jamais transparent. Au
+scroll : teinte + blur + ombre. C'est le SEUL endroit du système qui emploie
+`backdrop-filter` — pas de glassmorphism ailleurs.
 
-```jsx
-<Navbar links={[{label:'Vidéos',active:true},{label:'Séries'},{label:'À propos'}]}
-  cta={<Button size="sm">La newsletter</Button>} />
+```tsx
+<Navbar
+  links={[{ label: 'Vidéos', active: true }, { label: 'Séries' }, { label: 'À propos' }]}
+  cta={<Button size="sm">La newsletter</Button>}
+/>
 ```
 
-Blur is the only place the system uses `backdrop-filter`. No glassmorphism anywhere else.
-
+- Props : `links` (`{label, href?, active?}[]`) · `cta` · `brand` (défaut : le `Logo`) ·
+  `homeHref` / `homeLabel` · `letters` · `scrolled` (force l'état scrollé — spécimens).
+- États rendus : repos, scrollée, lien au repos / survolé / actif.
 
 ## Pagination
 
-Controlled: `page`, `pageCount`, `onPageChange`. Ellipsis beyond 7 pages; current page gets the active-tab treatment; the bar rides `--secondary` like Tabs.
+Pagination contrôlée sur une barre `--secondary` (même traitement que Tabs). Ellipse
+au-delà de 7 pages ; la page courante reçoit le traitement de l'onglet actif.
 
-```jsx
+```tsx
 <Pagination page={page} pageCount={12} onPageChange={setPage} />
 ```
 
+- Props : `page` (1-based) · `pageCount` · `onPageChange`.
+- États rendus : page au repos, survolée, courante (`aria-current="page"`), flèches
+  désactivées aux bornes, focus-visible.
 
 ## Sidebar
 
-App navigation on `--secondary`: Logo head, titled sections, active item in `--accent` + `--primary`, footer for Avatar + name. Collapsible to icons-only, persisted in localStorage (`storageKey`).
+Navigation d'app sur `--secondary` : marque en tête, sections titrées, item actif, pied
+(Avatar + nom). Repliable en icônes seules, persisté en localStorage. Sous 64rem : tiroir
+`open`/`onClose`, voile compris.
 
-```jsx
-<Sidebar sections={[{ title: 'Outils', items: [
-  { label: 'Dashboard', icon: <Icon name="layout-dashboard" />, active: true },
-  { label: 'Contenu', icon: <Icon name="video" /> }
-]}]} footer={<><Avatar size="2rem" /><span>{BRAND_NAME}</span></>} />
+```tsx
+<Sidebar
+  sections={[{ title: 'Outils', items: [
+    { label: 'Dashboard', icon: <Icon name="layout-dashboard" />, active: true },
+    { label: 'Contenu', icon: <Icon name="video" /> },
+  ] }]}
+  footer={<Avatar size="2rem" />}
+/>
 ```
 
+- Props : `sections` (`{title?, items:[{label, icon?, href?, active?, onClick?}]}[]`) ·
+  `footer` · `brand` / `brandCollapsed` · `collapsible` (défaut `true`) ·
+  `defaultCollapsed` · `storageKey` · `open` / `onClose` (tiroir mobile) · `staticLayout`.
+- États rendus : dépliée, repliée, item au repos / survolé / actif, tiroir ouvert.
 
 ## Tabs
 
-Filter a feed by series.
+Groupe d'onglets segmenté sur le rail de contrôle. La barre contraste TOUJOURS avec sa
+surface porteuse : `--secondary` sur la page, `onCard` bascule sur `--background`.
+Rectangle (barre 0.875rem · onglet `--radius-sm`) — jamais un pill, jamais fondu dans le
+fond.
 
-```jsx
-<Tabs value={tab} onChange={setTab} items={[{value:'all',label:'Tout'},{value:'build',label:'Build'},{value:'tuto',label:'Tuto'}]} />
-<Tabs onCard value={tab} onChange={setTab} items={…} />   {/* posed on a Card */}
+**Ne pas l'utiliser** pour de la navigation entre pages (c'est `Navbar` ou `Sidebar`) :
+Tabs filtre un contenu en place.
+
+```tsx
+<Tabs value={tab} onChange={setTab}
+  items={[{ value: 'all', label: 'Tout' }, { value: 'build', label: 'Build' }]} />
+<Tabs onCard value={tab} onChange={setTab} items={[{ value: 'all', label: 'Tout' }]} />
 ```
 
-The bar always contrasts with its host surface: `--secondary` on the page, `onCard` swaps to `--background` on a Card. Rectangle (0.875rem / `--radius-sm`), min-height on the control rail — never a pill, never blended into the background.
-
+- Props : `items` (`{value, label}[]`) · `value` / `onChange` (contrôlé) · `onCard`.
+- États rendus : onglet au repos, survolé, sélectionné (`aria-selected`), focus-visible.
 
 ---
 
 # overlays
 
+## ActionSheet
+
+Le menu « ⋯ » sur mobile : une feuille basse d'actions, Annuler intégré, chaque ligne au
+moins `--control-md` (le rail tactile). Surface modale complète : focus piégé, Échap
+ferme, focus rendu au déclencheur, défilement verrouillé.
+
+**DOCTRINE ⋯ — ne pas l'ouvrir au-dessus de 64rem** : `.ds-scrim--sheet` y est en
+`display:none`, une ActionSheet modale y est invisible par construction (le composant le
+signale en console en développement). Au-dessus de 64rem, le même geste ouvre un
+`Dropdown`. En spécimen desktop : `inline panel`.
+
+```tsx
+<ActionSheet
+  open={sheet}
+  onCancel={() => setSheet(false)}
+  items={[
+    { label: 'Copier le lien', icon: <Icon name="copy" size="1rem" />, onSelect: () => setSheet(false) },
+    { separator: true },
+    { label: 'Supprimer', icon: <Icon name="trash-2" size="1rem" />, danger: true },
+  ]}
+/>
+<ActionSheet inline panel items={[{ label: 'Copier le lien' }]} />
+```
+
+- Props : `open` · `title` / `subtitle` (en-tête optionnel) · `note` (légende de
+  conséquence au-dessus d'Annuler) · `items`
+  (`{label, icon?, danger?, onSelect?, separator?, className?}[]`) · `cancelLabel` ·
+  `onCancel` · `inline` (sans voile) · `panel` (spécimen desktop 20rem — implique
+  `inline`).
+- États rendus : fermée, ouverte (feuille), item au repos / survolé / danger, panneau
+  desktop.
 
 ## Dropdown
 
-Contextual menu.
+Menu contextuel — **desktop only**. Sous 64rem, un menu « ⋯ » ouvre TOUJOURS une
+`ActionSheet` : même geste, deux tailles d'écran. Panneau sur `--popover`, items éclairés
+sur `--surface-alt`.
 
-```jsx
+**Ne pas l'utiliser** comme select de formulaire (c'est `Select`).
+
+```tsx
 <Dropdown items={[
   { label: 'Copier le lien', icon: <Icon name="copy" size="1rem" /> },
+  { label: 'Ouvrir la vidéo', icon: <Icon name="play" size="1rem" />, hint: '⏎' },
   { separator: true },
-  { label: 'Supprimer', icon: <Icon name="x" size="1rem" />, danger: true }
+  { label: 'Supprimer', icon: <Icon name="trash-2" size="1rem" />, danger: true },
 ]} />
+<Dropdown inline items={[{ label: 'Spécimen dans le flux' }]} />
 ```
 
+- Props : `items` (`{label, icon?, hint?, danger?, separator?, onSelect?, className?}[]`)
+  · `inline` (rendu dans le flux, sans positionnement absolu).
+- États rendus : item au repos, survolé, danger, séparateur.
 
 ## Modal
 
-Confirmation / focused task dialog.
+Dialogue de confirmation ou de tâche focalisée, sur `--popover`, au-dessus d'un voile
+encre flouté. **Trois phases dans UN dialogue** : `confirm` → `loading` (rien ne ferme :
+Échap, voile et croix inertes) → `result` (succès ou erreur, avec « Réessayer »). Sous
+64rem, la MÊME modale devient une feuille basse — CSS seul. Focus piégé, Échap ferme,
+focus rendu au déclencheur.
 
-```jsx
-<Modal title="Supprimer ce build ?" description="Cette action est définitive."
-  footer={<><Button variant="ghost">Annuler</Button><Button variant="danger">Supprimer</Button></>}
-  onClose={…} />
+**Ne pas l'utiliser** pour du feedback passif (c'est `Toast` ou `Banner`) ni pour un menu
+d'actions (c'est `Dropdown` / `ActionSheet`).
+
+```tsx
+<Modal
+  open={open}
+  onClose={() => setOpen(false)}
+  icon={<Icon name="triangle-alert" size="1.25rem" />}
+  title="Supprimer ce build ?"
+  description="Cette action est définitive."
+  footer={<>
+    <Button variant="ghost" onClick={() => setOpen(false)}>Annuler</Button>
+    <Button variant="danger">Supprimer</Button>
+  </>}
+/>
+<Modal inline phase="result" onClose={() => setOpen(false)}
+  result={{ status: 'success', title: 'Build supprimé', message: 'Les fichiers ont été retirés.' }} />
 ```
+
+- Props : `open` · `icon` + `iconVariant` (`danger·brand·neutral·warning·success` — la
+  tuile est une `Pastille dialogue`) · `title` / `description` / `children` · `footer` ·
+  `onClose` · `phase` (`confirm·loading·result`) · `result`
+  (`{status, title?, message?, onRetry?}`) · `inline` (spécimen sans voile).
+- Un champ dans une modale : voir le spécimen « Avec un champ contrôlé » de la vitrine —
+  le piège de focus tient la frappe.
+- États rendus : les trois phases, avec et sans icône, succès et erreur, feuille basse
+  sous 64rem.

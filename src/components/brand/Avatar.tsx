@@ -4,8 +4,8 @@ import { BRAND_MONOGRAM, BRAND_NAME } from '../../brand';
 
 /**
  * Portrait détouré, avec un halo de marque optionnel derrière les épaules.
- * Sans `src`, il retombe sur un monogramme en sourdine. Déposez le PNG détouré dans
- * assets/ et passez-le.
+ * Sans `src`, il retombe sur un monogramme en sourdine. Le PNG détouré appartient à
+ * l'app consommatrice : déposez-le chez elle et passez son chemin en `src`.
  *
  * Le monogramme de repli était écrit EN DUR en JSX — deux initiales de marque dans un
  * composant du socle. Le balayage de la palette de recette ne pouvait pas le voir : il lit

@@ -11,7 +11,7 @@ concordent.
 
 ## 0.1.0 — squelette
 
-Point de départ : 37 composants, 9 pages de vitrine, le contrat de marque, les six scripts
+Point de départ : 37 composants, 9 pages de vitrine, le contrat de marque, les sept scripts
 de contrôle (`check-contract`, `check-contrast`, `check-dark-substitution`,
-`check-utility-collisions`, `check-literals`, `check-version`) — `npm run lint` en agrège
-une partie avec le typecheck — et une marque d'exemple à remplacer.
+`check-utility-collisions`, `check-literals`, `check-version`, `check-catalogue`) —
+`npm run lint` en agrège une partie avec le typecheck — et une marque d'exemple à remplacer.

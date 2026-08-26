@@ -29,7 +29,7 @@ Le socle. Il est générique, il ne porte aucune couleur, aucune police, aucun n
 ```
 src/styles/core.css · src/styles/theme.css · src/styles/patterns.css
 src/styles/tokens/base.css · tokens/typography.css · tokens/scales.css · tokens/derives.css
-src/components/**  ·  src/index.ts  ·  les trois check-*.mjs
+src/components/**  ·  src/index.ts  ·  les check-*.mjs et check-literals.sh
 ```
 
 Il n'y a **aucune exception** : tout ce qui porte de l'identité — couleurs, polices,
