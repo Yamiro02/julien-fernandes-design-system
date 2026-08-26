@@ -1,5 +1,9 @@
 import { useEffect, useState } from 'react';
-import { Logo, Tabs } from '@julienfernandes/ds';
+import { Logo, Switch, Tabs } from '@julienfernandes/ds';
+/* Le contenu VERBATIM du module opt-in, injecté à la demande par l'interrupteur
+   « Échelle d'app ». La vitrine ne l'importe jamais en dur : c'est justement la
+   règle du module (jamais le site public, les e-mails ou les slides). */
+import appScaleCss from '../../src/styles/app-scale.css?inline';
 import { Foundations } from './pages/Foundations';
 import { IconsPage } from './pages/Icons';
 import { ActionsPage } from './pages/Actions';
@@ -31,10 +35,27 @@ const THEMES = [
 export function App() {
   const [page, setPage] = useState('brand');
   const [theme, setTheme] = useState('light');
+  const [appScale, setAppScale] = useState(false);
+  const [width, setWidth] = useState(() => window.innerWidth);
 
   useEffect(() => {
     document.documentElement.classList.toggle('dark', theme === 'dark');
   }, [theme]);
+
+  useEffect(() => {
+    if (!appScale) return;
+    const el = document.createElement('style');
+    el.id = 'jf-app-scale';
+    el.textContent = appScaleCss;
+    document.head.appendChild(el);
+    return () => el.remove();
+  }, [appScale]);
+
+  useEffect(() => {
+    const onResize = () => setWidth(window.innerWidth);
+    window.addEventListener('resize', onResize);
+    return () => window.removeEventListener('resize', onResize);
+  }, []);
 
   const current = PAGES.find(p => p.value === page) ?? PAGES[0];
   const body = current.render();
@@ -49,8 +70,24 @@ export function App() {
             <Logo variant="wordmark" height="1.375rem" />
             <span className="caption">Design system · recette visuelle</span>
           </div>
-          <Tabs onCard items={THEMES} value={theme} onChange={setTheme} />
+          <div className="flex flex-wrap items-center gap-space-5">
+            <Switch
+              label="Échelle d'app"
+              checked={appScale}
+              onChange={e => setAppScale(e.target.checked)}
+            />
+            <Tabs onCard items={THEMES} value={theme} onChange={setTheme} />
+          </div>
         </div>
+        {appScale ? (
+          <div className="page pb-space-3">
+            <p className="caption">
+              Module opt-in <span className="mono">app-scale.css</span> actif · racine {scaleLabel(width)} ·
+              largeur effective ≈ {Math.round(width / factor(width))} px. Réservé aux outils internes
+              desktop — jamais le site, les e-mails ni les slides.
+            </p>
+          </div>
+        ) : null}
       </header>
 
       <main className="page flex flex-col gap-space-6 py-space-7">
@@ -73,6 +110,10 @@ export function App() {
     </div>
   );
 }
+
+/* Paliers lus dans app-scale.css — aucune valeur n'est décidée ici. */
+function factor(w: number) { return w >= 2400 ? 1.30 : w >= 1920 ? 1.26 : w >= 1600 ? 1.12 : 1.03; }
+function scaleLabel(w: number) { return Math.round(factor(w) * 100) + ' %'; }
 
 function Panel({ label, dark, children }: { label: string; dark?: boolean; children: React.ReactNode }) {
   return (
