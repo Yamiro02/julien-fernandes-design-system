@@ -86,7 +86,7 @@ export function Foundations() {
           <div className="grid grid-cols-2 gap-space-4 sm:grid-cols-4 lg:grid-cols-7">
             {RADII.map(t => (
               <div key={t} className="flex flex-col gap-space-2">
-                <span className="h-space-7 w-full border border-border bg-card" style={{ borderRadius: `var(${t})` }} />
+                <span className="h-space-7 w-full border border-border bg-background" style={{ borderRadius: `var(${t})` }} />
                 <span className="mono text-caption text-text-muted truncate">{t}</span>
               </div>
             ))}
@@ -95,7 +95,7 @@ export function Foundations() {
         <Block label="Rail de hauteur des contrôles" hint="Bouton md, Input et le trigger de Select s'alignent tous à 3rem.">
           {RAIL.map(t => (
             <Spec key={t} token={t}>
-              <span className="w-space-8 rounded-md border border-border bg-card" style={{ height: `var(${t})` }} />
+              <span className="w-space-8 rounded-md border border-border bg-background" style={{ height: `var(${t})` }} />
             </Spec>
           ))}
         </Block>

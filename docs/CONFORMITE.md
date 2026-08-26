@@ -1,4 +1,4 @@
-# Checklist de conformité — v0.2.3
+# Checklist de conformité — v0.2.4
 
 > Recette du portage du design system Julien Fernandes vers `@julienfernandes/ds`.
 > Règle appliquée : **PORT, pas réinterprétation.** Toute valeur vient des sources du kit.
@@ -515,6 +515,31 @@ maître. Le port n'a eu qu'à copier et suivre — aucune décision locale.
 | **25** | `patterns.css` portait 4 règles en avance sur le maître | le maître les a écrites **à l'identique** | `diff` avec le kit V4 : aucune différence |
 
 Il ne reste, sur les 27 écarts recensés depuis le début, **aucun écart ouvert imputable au port**.
+
+### Trouvé à la recette (0.2.4)
+
+**28. Couper le preflight rend TOUS les utilitaires `border-*` inertes.**
+Trouvé parce que les rayons et le rail n'apparaissaient pas dans la vitrine. Les utilitaires
+`border-*` de Tailwind ne posent qu'une **largeur** — ils s'appuient sur le
+`*,::before,::after{border-width:0;border-style:solid}` que seul le preflight fournit. Le DS
+demandant de couper le preflight (pour que `base.css` garde ses titres Anton), `class="border"`
+écrivait `border-width:1px` sur un `border-style:none` : **rien à l'écran, sans erreur**.
+Mesuré avant correction : **35 éléments de la démo utilisaient `border`, les 35 étaient inertes.**
+Le bug datait de la Phase 9 (v0.1.0) et personne ne l'avait vu, parce que toutes les bordures
+visibles venaient des classes `.jf-*` de `patterns.css`, qui écrivent `border: 1px solid …` en
+toutes lettres.
+Corrigé dans la vitrine par un `@layer base` qui restaure ce seul morceau, et **la consigne du
+README est complétée** : une app qui coupe le preflight doit faire pareil, sinon elle hérite du
+même bug silencieux.
+**Action côté projet maître** : ces trois lignes ont leur place dans `tokens/base.css`, qui est le
+reset du DS. Tant qu'elles n'y sont pas, chaque app doit les réécrire.
+
+**29. Un spécimen de la même couleur que son support est invisible.**
+Les pastilles de rayon et de rail étaient en `bg-card` **dans une `Card`**, elle-même en `--card` :
+fond identique, et la seule chose qui les détourait était la bordure — inerte à cause de l'écart 28.
+Deux causes pour un symptôme. Les spécimens passent sur `--background`, qui contraste avec la
+`Card` par construction. Vérifié : les 7 rayons rendent 6 · 10 · 12 · 20 · 24 · 28 · 9999 px, et le
+rail 48 · 48 · 52 · 48 · 48 · 48 px.
 
 ### Doctrine « vocabulaire » (0.2.2)
 

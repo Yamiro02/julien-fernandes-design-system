@@ -19,7 +19,7 @@ l'accent. Tout est en `rem`.
 Pas de registry : chaque app épingle une version par un tag git.
 
 ```bash
-npm i github:Yamiro02/julien-fernandes-design-system#v0.2.3
+npm i github:Yamiro02/julien-fernandes-design-system#v0.2.4
 ```
 
 `react`, `react-dom` et `tailwindcss` sont des peer dependencies — l'app les fournit.
@@ -53,6 +53,26 @@ export default {
   },
 };
 ```
+
+> **Si tu coupes le preflight, restaure le défaut de bordure.** Les utilitaires `border-*` de
+> Tailwind ne posent qu'une **largeur** : ils s'appuient sur un `border-style: solid` global que
+> seul le preflight fournit. Sans lui, `class="border"` écrit `border-width: 1px` sur un
+> `border-style: none` — soit rien du tout, silencieusement. À ajouter à ton CSS d'entrée :
+>
+> ```css
+> @tailwind base;
+>
+> @layer base {
+>   *, ::before, ::after {
+>     border-width: 0;
+>     border-style: solid;
+>     border-color: var(--border);
+>   }
+> }
+>
+> @tailwind components;
+> @tailwind utilities;
+> ```
 
 Le preset ne contient **que** des `var(--…)` : il branche les tokens sur Tailwind, il n'invente
 aucune valeur. `darkMode` est en `['class']` — le thème sombre est le scope `.dark`, jamais un
