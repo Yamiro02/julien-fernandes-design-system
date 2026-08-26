@@ -16,17 +16,17 @@ export function Foundations() {
     <div className="flex flex-col gap-space-7">
       <Section title="Couleur" note="Tout se pose sur crème ou ink. La seule couleur saturée est le dégradé de marque, rationné à l'accent. Pas de bleu.">
         <Block label="Surfaces et neutres chauds">
-          <div className="inline-grid w-full grid-cols-3 gap-space-4 sm:grid-cols-5 lg:grid-cols-9">
+          <div className="grid grid-cols-3 gap-space-4 sm:grid-cols-5 lg:grid-cols-9">
             {SURFACES.map(t => <Swatch key={t} token={t} border />)}
           </div>
         </Block>
         <Block label="Texte">
-          <div className="inline-grid w-full grid-cols-3 gap-space-4 sm:grid-cols-5">
+          <div className="grid grid-cols-3 gap-space-4 sm:grid-cols-5">
             {TEXT.map(t => <Swatch key={t} token={t} border />)}
           </div>
         </Block>
         <Block label="Marque" hint="Accent uniquement : logo, un mot de titre, eyebrow, numéro d'étape, CTA primaire, halo, glow.">
-          <div className="inline-grid w-full grid-cols-3 gap-space-4 sm:grid-cols-6">
+          <div className="grid grid-cols-3 gap-space-4 sm:grid-cols-6">
             {BRAND.map(t => <Swatch key={t} token={t} />)}
           </div>
           <Spec token="--brand-gradient · --brand-gradient-diagonal · --grad-soft">
@@ -36,7 +36,7 @@ export function Foundations() {
           </Spec>
         </Block>
         <Block label="Pills sémantiques" hint="Toujours couleur + icône + texte, jamais la couleur seule.">
-          <div className="inline-grid w-full grid-cols-3 gap-space-4 sm:grid-cols-6">
+          <div className="grid grid-cols-3 gap-space-4 sm:grid-cols-6">
             {PILLS.map(t => <Swatch key={t} token={t} border />)}
           </div>
         </Block>
@@ -83,7 +83,7 @@ export function Foundations() {
           ))}
         </Block>
         <Block label="Rayons" hint="pill est légal sur les onglets, badges et compteurs — jamais sur un bouton ni un input.">
-          <div className="inline-grid w-full grid-cols-2 gap-space-4 sm:grid-cols-4 lg:grid-cols-7">
+          <div className="grid grid-cols-2 gap-space-4 sm:grid-cols-4 lg:grid-cols-7">
             {RADII.map(t => (
               <div key={t} className="flex flex-col gap-space-2">
                 <span className="h-space-7 w-full border border-border bg-card" style={{ borderRadius: `var(${t})` }} />

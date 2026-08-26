@@ -1,11 +1,11 @@
-# Checklist de conformité — v0.2.2
+# Checklist de conformité — v0.2.3
 
 > Recette du portage du design system Julien Fernandes vers `@julienfernandes/ds`.
 > Règle appliquée : **PORT, pas réinterprétation.** Toute valeur vient des sources du kit.
 > Aucune valeur n'a été inventée. Les écarts sont listés en fin de document, sans exception.
 
-**Kit source : `Portage V3` (26/08/2026).** La v0.1.0 venait du kit v1, la v0.2.0 du kit v2 ;
-ce document reflète l'état après le kit V3 (variantes de Table, retrait de MetricPill côté maître).
+**Kit source : `Portave V4` (26/08/2026).** v0.1.0 ← kit v1 · v0.2.0 ← kit v2 · v0.2.1 ← kit V3 ·
+v0.2.3 ← kit V4, qui referme d'un coup cinq écarts restés ouverts depuis le portage initial.
 
 Sources de vérité utilisées :
 `tokens/*.css` · `patterns.css` · `components/**/*.jsx` (rendu) · `components/**/*.d.ts` (contrat de props) ·
@@ -21,8 +21,8 @@ Sources de vérité utilisées :
 | `src/styles/tokens/colors.css` | ✓ verbatim v2 | seul le commentaire d'entête change : le blanc pur `--secondary` est réservé aux contrôles posés à même le layout |
 | `src/styles/tokens/typography.css` | ✓ verbatim | `diff` identique |
 | `src/styles/tokens/scales.css` | ✓ verbatim v2 | rayons contrôles resserrés (`--radius-sm` 0.625 · `--radius-md` 0.75), rail **unique** (`--control-sm` et les trois `--icon-control-*` aliasent `--control-md`), media query mobile `@media (max-width:64rem)` → `--control-md:2.75rem` |
-| `src/styles/tokens/base.css` | ✓ verbatim | `diff` identique |
-| `src/styles/patterns.css` | ⚠ verbatim V3 **+ 4 règles en avance** | voir **écart 25** | + `.jf-table--framed` (contour 1px `--border`, `--radius-lg`, coins internes `calc(… - 1px)`, fond `--card`, en-tête `--background`) et `.jf-table--columns` (séparateurs verticaux 1px). Reste v2 pour le reste : | focus champ = bordure seule (anneau 3px supprimé) · `.jf-input` sur `--secondary`, modificateur `--on-card` · tabs hors pill · navbar toujours `--secondary` · dropdown en `--radius-lg` · bloc `content` supprimé · 7 nouveaux blocs |
+| `src/styles/tokens/base.css` | ✓ verbatim V4 | `.grid` / `.grid-lg` renommés `.jf-grid` / `.jf-grid-lg` — la collision avec Tailwind est morte (écart 7) |
+| `src/styles/patterns.css` | ✓ verbatim V4 | le maître a écrit les 4 règles anticipées **à l'octet près** — l'avance de phase est résorbée (écart 25) | + `.jf-table--framed` (contour 1px `--border`, `--radius-lg`, coins internes `calc(… - 1px)`, fond `--card`, en-tête `--background`) et `.jf-table--columns` (séparateurs verticaux 1px). Reste v2 pour le reste : | focus champ = bordure seule (anneau 3px supprimé) · `.jf-input` sur `--secondary`, modificateur `--on-card` · tabs hors pill · navbar toujours `--secondary` · dropdown en `--radius-lg` · bloc `content` supprimé · 7 nouveaux blocs |
 | `src/styles/index.css` | ✓ port de `styles.css` | `@import` uniquement, même ordre, mêmes commentaires |
 | `assets/fonts/` (Anton-400, JetBrainsMono-400/500) | ✓ copiés | + duplicata dans `src/styles/assets/fonts/` — voir **écart 2** |
 | `assets/logo/` (10 PNG) | ✓ copiés | non modifiés |
@@ -378,12 +378,12 @@ Les contrats source ne compilent pas tels quels : une prop redéclarée doit êt
 
 ### Défauts trouvés dans les sources
 
-**6. `Button` — `href` n'est pas typé.**
+**6. `Button` — `href` n'est pas typé.** — ✅ **RÉSOLU en V4** : `href?: string` est au contrat.
 Le contrat expose `as?: keyof JSX.IntrinsicElements` mais étend `ButtonHTMLAttributes`.
 `<Button as="a" href="/x">` ne compile donc pas. **Question : j'ajoute `AnchorHTMLAttributes` au
 contrat en 0.2.0 ?**
 
-**7. Collision de nom : `.grid`.**
+**7. Collision de nom : `.grid`.** — ✅ **RÉSOLU en V4** : renommée `.jf-grid`.
 `tokens/base.css` définit `.grid { position:absolute; inset:0; … }` (la grille fine).
 Tailwind définit `.grid { display:grid }`. Toute app consommatrice qui écrit `class="grid"` hérite
 donc du `position:absolute` — la mise en page casse. Je l'ai rencontré en montant la démo.
@@ -396,7 +396,7 @@ Le DS embarque son propre reset (`tokens/base.css`, qui pose `h1→h4` en Anton 
 de Tailwind est chargé après, les titres sont neutralisés. La démo le désactive
 (`corePlugins.preflight: false`) et le README documente la consigne pour les apps.
 
-**9. `Navbar` et `Footer` — `tone` vaut `'ink'` par défaut.**
+**9. `Navbar` et `Footer` — `tone` vaut `'ink'` par défaut.** — ✅ **RÉSOLU en V4** : le défaut suit `--foreground`.
 Sur une section `.dark`, le wordmark reste donc sombre sur fond sombre, sauf à passer
 `tone="bone"`. `Logo` seul, sans `tone`, suit correctement `--foreground`. J'ai porté le défaut de
 la source à l'identique et je montre les deux cas dans la démo. **Question : on passe le défaut à
@@ -481,7 +481,7 @@ Le `readme.md` v2 a été copié en même temps, la règle y est donc à jour. S
 renversement d'une règle explicite, pas un détail. Les boutons et les contrôles de choix gardent
 leur anneau `color-mix(--ring 35%)`.
 
-**21. `Icon.d.ts` du kit v2 n'a pas été mis à jour.**
+**21. `Icon.d.ts` du kit v2 n'a pas été mis à jour.** — ✅ **RÉSOLU en V4** : union à 48 noms.
 Son union `name` liste encore les 39 noms de la v1, alors que `Icon.jsx` en embarque 48. Le port
 suit le `.jsx` et le §6 de la demande — les 48 noms sont typés. **Action côté projet maître** :
 mettre le `.d.ts` à jour, sinon le prochain diff repartira d'un contrat faux.
@@ -501,9 +501,24 @@ la source. En rendu serveur (SSR), cet initialiseur ne s'exécute pas côté ser
 une divergence d'hydratation si l'état persisté diffère du défaut. Aucune app consommatrice n'est
 en SSR aujourd'hui ; signalé pour mémoire.
 
+### Refermés par le kit V4 (0.2.3)
+
+Cinq écarts ouverts depuis le portage initial ont été corrigés **en amont**, dans le design system
+maître. Le port n'a eu qu'à copier et suivre — aucune décision locale.
+
+| # | Écart | Résolution V4 | Vérifié |
+|---|---|---|---|
+| **6** | `Button` : `href` non typé, `<Button as="a" href>` ne compilait pas | `href?: string` ajouté au contrat | la démo Actions repasse un vrai `href`, `tsc` passe |
+| **7** | `.grid` de `base.css` écrasait la classe `grid` de Tailwind (`position:absolute`) | renommée `.jf-grid` / `.jf-grid-lg` | 4 éléments `.grid` dans la démo, **0** en `position:absolute`, tous en `display:grid`. Le contournement `inline-grid w-full` est retiré de la vitrine |
+| **9** | `Navbar` / `Footer` : `tone='ink'` par défaut → wordmark sombre sur fond sombre | le défaut passe à `undefined`, les lettres suivent `--foreground` | sur ink sans `tone` : `#f2efea` ; avec `tone="ink"` : `#1f1e1c`. La prop force toujours |
+| **21** | `Icon.d.ts` du maître typait 39 noms pour 48 tracés | union portée à 48 | le port était déjà à 48 : contrat et implémentation enfin d'accord |
+| **25** | `patterns.css` portait 4 règles en avance sur le maître | le maître les a écrites **à l'identique** | `diff` avec le kit V4 : aucune différence |
+
+Il ne reste, sur les 27 écarts recensés depuis le début, **aucun écart ouvert imputable au port**.
+
 ### Doctrine « vocabulaire » (0.2.2)
 
-**25. `patterns.css` porte 4 règles en avance sur le maître.**
+**25. `patterns.css` porte 4 règles en avance sur le maître.** — ✅ **RÉSOLU en V4** : écrites à l'identique côté maître.
 La passe doctrine demandait de poser en classes ce qui était inline. Le texte exact des règles
 était fourni dans la demande, et la même passe est planifiée côté maître (« le zip de référence
 suivra »), mais elle n'y est pas encore. `patterns.css` n'est donc plus byte-identique au kit V3 :

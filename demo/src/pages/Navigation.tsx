@@ -28,14 +28,14 @@ export function NavigationPage() {
             <Navbar scrolled links={LINKS} cta={<Button size="sm">La newsletter</Button>} />
           </div>
         </Block>
-        <Block label="Tons du logo" hint="tone est ink par défaut : sur une section ink il faut passer tone=&quot;bone&quot;, sinon les lettres restent sombres.">
+        <Block label="Tons du logo" hint="Sans tone, les lettres suivent --foreground : sur une section ink elles s'éclaircissent toutes seules. tone ne sert qu'à forcer.">
           <div className="dark overflow-x-auto rounded-xl border border-border bg-background">
-            <Navbar scrolled tone="bone" links={LINKS} cta={<Button size="sm">La newsletter</Button>} />
+            <Navbar scrolled links={LINKS} cta={<Button size="sm">La newsletter</Button>} />
           </div>
           <div className="dark overflow-x-auto rounded-xl border border-border bg-background">
             <Navbar scrolled tone="ink" links={LINKS} cta={<Button size="sm">La newsletter</Button>} />
           </div>
-          <p className="caption">Le second exemple montre le défaut tone=&quot;ink&quot; sur fond ink — voir docs/CONFORMITE.md.</p>
+          <p className="caption">Le premier suit la surface ; le second force tone=&quot;ink&quot; sur fond ink, pour montrer ce que fait la prop.</p>
         </Block>
       </Section>
 
@@ -146,10 +146,9 @@ export function NavigationPage() {
       </Section>
 
       <Section title="Footer" note="La ligne de localisation utilise le point médian : Busan · Corée du Sud.">
-        <Block label="Complet" hint="Comme la Navbar, tone est ink par défaut — passe tone=&quot;bone&quot; sur une section ink.">
+        <Block label="Complet" hint="Comme la Navbar, le logo suit --foreground sans tone.">
           <div className="overflow-x-auto rounded-xl border border-border">
             <Footer
-              tone="ink"
               columns={[
                 { title: 'Séries', links: [{ label: 'Build' }, { label: 'Tuto' }, { label: 'Coulisses' }] },
                 { title: 'Ressources', links: [{ label: 'La newsletter' }, { label: 'Les prompts' }] },

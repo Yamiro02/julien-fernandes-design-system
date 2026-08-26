@@ -38,7 +38,7 @@ export function IconsPage() {
         </Block>
 
         <Block label="Jeu complet" hint={`${NAMES.length} icônes disponibles.`}>
-          <div className="inline-grid w-full grid-cols-2 gap-space-3 sm:grid-cols-4 lg:grid-cols-6">
+          <div className="grid grid-cols-2 gap-space-3 sm:grid-cols-4 lg:grid-cols-6">
             {NAMES.map(name => (
               <div key={name} className="flex flex-col items-center gap-space-2 rounded-md border border-border bg-card p-space-3">
                 <Icon name={name} size="1.25rem" />

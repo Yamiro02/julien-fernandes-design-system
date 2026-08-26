@@ -101,7 +101,7 @@ export function App() {
         </nav>
 
         {theme === 'split' ? (
-          <div className="inline-grid w-full grid-cols-1 gap-space-5 lg:grid-cols-2">
+          <div className="grid grid-cols-1 gap-space-5 lg:grid-cols-2">
             <Panel label="Clair">{body}</Panel>
             <Panel label="Sombre" dark>{current.render()}</Panel>
           </div>

@@ -15,7 +15,7 @@ export interface NavLink { label: string; href?: string; active?: boolean }
 export interface NavbarProps {
   links?: NavLink[];
   cta?: ReactNode;
-  /** Logo tone — 'ink' on cream pages, 'bone' on ink pages. */
+  /** Forces the Logo letter tone ('ink' / 'bone'). Default: letters follow --foreground. */
   tone?: 'ink' | 'bone';
   /** Force the scrolled state (specimen cards / screenshots). */
   scrolled?: boolean;
@@ -24,7 +24,7 @@ export interface NavbarProps {
 }
 
 export function Navbar({
-  links = [], cta, tone = 'ink', scrolled: forced, className = '', children,
+  links = [], cta, tone, scrolled: forced, className = '', children,
 }: NavbarProps): JSX.Element {
   const [scrolled, setScrolled] = useState(false);
   useEffect(() => {

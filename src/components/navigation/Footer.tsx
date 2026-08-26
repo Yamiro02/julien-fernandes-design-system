@@ -8,6 +8,7 @@ export interface FooterColumn { title: string; links: { label: string; href?: st
 export interface FooterProps {
   columns?: FooterColumn[];
   social?: ReactNode;
+  /** Forces the Logo letter tone ('ink' / 'bone'). Default: letters follow --foreground. */
   tone?: 'ink' | 'bone';
   /** Location / signature line. Uses the middle dot separator. */
   note?: string;
@@ -15,7 +16,7 @@ export interface FooterProps {
 }
 
 export function Footer({
-  columns = [], social, tone = 'ink', note = 'Busan · Corée du Sud', className = '',
+  columns = [], social, tone, note = 'Busan · Corée du Sud', className = '',
 }: FooterProps): JSX.Element {
   return (
     <footer className={cn('jf-footer', className)}>

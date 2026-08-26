@@ -19,7 +19,7 @@ l'accent. Tout est en `rem`.
 Pas de registry : chaque app épingle une version par un tag git.
 
 ```bash
-npm i github:Yamiro02/julien-fernandes-design-system#v0.2.2
+npm i github:Yamiro02/julien-fernandes-design-system#v0.2.3
 ```
 
 `react`, `react-dom` et `tailwindcss` sont des peer dependencies — l'app les fournit.
@@ -131,10 +131,9 @@ de Tailwind, sur laquelle reposent les composants shadcn de ton app.
 `tokens/base.css` fournit aussi des classes prêtes à l'emploi : `.display` `.display-xl` `.eyebrow`
 `.chip` `.accent` `.mono` `.caption` `.prose` `.halo` `.page` `.jf-logo`.
 
-> **Attention** — `tokens/base.css` définit `.grid` (la grille fine de miniature, en
-> `position:absolute`). Ce nom entre en collision avec la classe `grid` de Tailwind : n'utilise pas
-> `class="grid"` dans une app qui charge ce design system. Voir
-> [`docs/CONFORMITE.md`](docs/CONFORMITE.md) § écart 7.
+La grille fine de miniature s'appelle `.jf-grid` / `.jf-grid-lg` — préfixée depuis la 0.2.3
+précisément pour ne pas entrer en collision avec la classe `grid` de Tailwind. `class="grid"` est
+donc utilisable normalement dans une app qui charge ce design system.
 
 ---
 

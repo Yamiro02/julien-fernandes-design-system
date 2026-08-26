@@ -50,8 +50,7 @@ export function ActionsPage() {
 
         <Block label="Pleine largeur et lien">
           <Button variant="primary" fullWidth iconRight={<Icon name="arrow-right" />}>Recevoir le prompt du build</Button>
-          <Button as="a" variant="secondary" icon={<Icon name="external-link" />}>Rendu en balise a</Button>
-          <p className="caption">Le contrat source (ButtonHTMLAttributes) ne type pas href — voir docs/CONFORMITE.md.</p>
+          <Button as="a" variant="secondary" href="#actions" icon={<Icon name="external-link" />}>Rendu en balise a</Button>
         </Block>
       </Section>
 

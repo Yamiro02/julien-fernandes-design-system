@@ -10,7 +10,7 @@ import { Spinner } from '../feedback/Spinner';
 export interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   /** primary = brand CTA (glow) · secondary = white/ink outline · ghost = bare · danger = destructive. */
   variant?: 'primary' | 'secondary' | 'ghost' | 'danger';
-  /** Height rail: sm 2.375rem · md 3rem (aligns with Input & Select) · lg 3.25rem. */
+  /** Shared control rail: every size has min-height 3rem (2.75rem under 64rem); sm tightens padding + type; lg (3.25rem) is the hero CTA. */
   size?: 'sm' | 'md' | 'lg';
   /** Leading icon node — use <Icon />. */
   icon?: ReactNode;
@@ -22,6 +22,8 @@ export interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   fullWidth?: boolean;
   /** Render as another tag, e.g. 'a' for a link-button. */
   as?: keyof JSX.IntrinsicElements;
+  /** Link target — only meaningful with as="a". */
+  href?: string;
   children?: ReactNode;
 }
 

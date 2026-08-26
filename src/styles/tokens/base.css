@@ -1,5 +1,5 @@
 /* Julien Fernandes — reset + brand utilities.
-   Utilities: .display .heading .eyebrow .chip .accent .mono .halo .grid .page */
+   Utilities: .display .heading .eyebrow .chip .accent .mono .halo .jf-grid .page */
 *,*::before,*::after{box-sizing:border-box}
 html{-webkit-text-size-adjust:100%}
 body{margin:0;background:var(--background);color:var(--foreground);font-family:var(--font-body);font-size:var(--text-body);font-weight:var(--weight-regular);line-height:var(--leading-body);-webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility}
@@ -34,9 +34,10 @@ img{max-width:100%;display:block}
 .halo-top{background:radial-gradient(60% 45% at 50% 0%, rgba(240,128,41,.30) 0%, rgba(232,76,61,.12) 45%, transparent 75%)}
 .halo-center{background:radial-gradient(55% 55% at 50% 50%, rgba(240,128,41,.30) 0%, rgba(232,76,61,.12) 45%, transparent 75%)}
 
-/* Fine grid — THUMBNAILS AND MOTION ONLY. Never the site, the UI or the slides. */
-.grid{position:absolute;inset:0;pointer-events:none;background-image:linear-gradient(var(--grid-line) 1px,transparent 1px),linear-gradient(90deg,var(--grid-line) 1px,transparent 1px);background-size:var(--grid-cell) var(--grid-cell)}
-.grid-lg{background-size:var(--grid-cell-lg) var(--grid-cell-lg)}
+/* Fine grid — THUMBNAILS AND MOTION ONLY. Never the site, the UI or the slides.
+   Named .jf-grid (not .grid) to avoid colliding with Tailwind's display:grid class. */
+.jf-grid{position:absolute;inset:0;pointer-events:none;background-image:linear-gradient(var(--grid-line) 1px,transparent 1px),linear-gradient(90deg,var(--grid-line) 1px,transparent 1px);background-size:var(--grid-cell) var(--grid-cell)}
+.jf-grid-lg{background-size:var(--grid-cell-lg) var(--grid-cell-lg)}
 
 .page{width:100%;max-width:var(--page-max);margin-inline:auto;padding-inline:var(--space-5)}
 

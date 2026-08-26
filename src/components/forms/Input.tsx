@@ -22,8 +22,7 @@ export function Input({
      et pour le jour où le rail redivergerait. */
   const cls = cn(
     'jf-input',
-    size === 'sm' && 'jf-input--sm',
-    size === 'lg' && 'jf-input--lg',
+    size !== 'md' && 'jf-input--' + size,
     surface === 'card' && 'jf-input--on-card',
     invalid && 'is-error',
     className,

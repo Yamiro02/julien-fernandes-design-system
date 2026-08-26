@@ -302,7 +302,7 @@ il vit dans l'app qui en a besoin ; les classes `.jf-metric*` restent dans `patt
 (`:root` crème + `.dark` ink + `--ink-deep` + halos + pills) · `typography.css` (familles, échelle,
 tracking, leading, graisses) · `scales.css` (espacement, rayons, rail, ombres, grille, motion —
 chaque token dimensionnel porte son équivalent px en commentaire) · `base.css` (reset + utilitaires
-`.display` `.eyebrow` `.chip` `.accent` `.halo` `.grid` `.page` `.mono` `.caption`) ·
+`.display` `.eyebrow` `.chip` `.accent` `.halo` `.jf-grid` `.page` `.mono` `.caption`) ·
 `app-scale.css` (**opt-in apps desktop**, hors `styles.css` — paliers d'échelle par largeur d'écran).
 
 **`assets/`** — `fonts/` (Anton-400, JetBrainsMono-400/500) · `logo/` (les PNG fournis, non modifiés).
