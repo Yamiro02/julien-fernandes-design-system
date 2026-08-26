@@ -39,12 +39,12 @@ export function Navbar({
     <header className={cn('jf-navbar', isScrolled && 'is-scrolled', className)}>
       <div className="page jf-navbar__inner">
         <a href="#" aria-label="Julien Fernandes — accueil"><Logo variant="wordmark" tone={tone} height="1.375rem" /></a>
-        <nav style={{ display: 'flex', alignItems: 'center', gap: 'var(--space-6)' }}>
+        <nav className="jf-navbar__links">
           {links.map(l => (
             <a key={l.label} href={l.href || '#'} className={cn('jf-navlink', l.active && 'is-active')}>{l.label}</a>
           ))}
         </nav>
-        <div style={{ display: 'flex', alignItems: 'center', gap: 'var(--space-3)' }}>{children}{cta}</div>
+        <div className="jf-navbar__cta">{children}{cta}</div>
       </div>
     </header>
   );

@@ -97,5 +97,5 @@ export { Avatar } from './components/brand/Avatar';
 export type { AvatarProps } from './components/brand/Avatar';
 
 /* utilitaire de composition de classes */
-export { cn } from './lib/cn';
+export { cn, PALIERS_TYPO } from './lib/cn';
 export type { ClassValue } from './lib/cn';

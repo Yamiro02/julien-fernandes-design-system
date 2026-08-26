@@ -1,4 +1,4 @@
-# Checklist de conformité — v0.2.1
+# Checklist de conformité — v0.2.2
 
 > Recette du portage du design system Julien Fernandes vers `@julienfernandes/ds`.
 > Règle appliquée : **PORT, pas réinterprétation.** Toute valeur vient des sources du kit.
@@ -22,14 +22,14 @@ Sources de vérité utilisées :
 | `src/styles/tokens/typography.css` | ✓ verbatim | `diff` identique |
 | `src/styles/tokens/scales.css` | ✓ verbatim v2 | rayons contrôles resserrés (`--radius-sm` 0.625 · `--radius-md` 0.75), rail **unique** (`--control-sm` et les trois `--icon-control-*` aliasent `--control-md`), media query mobile `@media (max-width:64rem)` → `--control-md:2.75rem` |
 | `src/styles/tokens/base.css` | ✓ verbatim | `diff` identique |
-| `src/styles/patterns.css` | ✓ verbatim V3 | + `.jf-table--framed` (contour 1px `--border`, `--radius-lg`, coins internes `calc(… - 1px)`, fond `--card`, en-tête `--background`) et `.jf-table--columns` (séparateurs verticaux 1px). Reste v2 pour le reste : | focus champ = bordure seule (anneau 3px supprimé) · `.jf-input` sur `--secondary`, modificateur `--on-card` · tabs hors pill · navbar toujours `--secondary` · dropdown en `--radius-lg` · bloc `content` supprimé · 7 nouveaux blocs |
+| `src/styles/patterns.css` | ⚠ verbatim V3 **+ 4 règles en avance** | voir **écart 25** | + `.jf-table--framed` (contour 1px `--border`, `--radius-lg`, coins internes `calc(… - 1px)`, fond `--card`, en-tête `--background`) et `.jf-table--columns` (séparateurs verticaux 1px). Reste v2 pour le reste : | focus champ = bordure seule (anneau 3px supprimé) · `.jf-input` sur `--secondary`, modificateur `--on-card` · tabs hors pill · navbar toujours `--secondary` · dropdown en `--radius-lg` · bloc `content` supprimé · 7 nouveaux blocs |
 | `src/styles/index.css` | ✓ port de `styles.css` | `@import` uniquement, même ordre, mêmes commentaires |
 | `assets/fonts/` (Anton-400, JetBrainsMono-400/500) | ✓ copiés | + duplicata dans `src/styles/assets/fonts/` — voir **écart 2** |
 | `assets/logo/` (10 PNG) | ✓ copiés | non modifiés |
 | `docs/readme.md` | ✓ verbatim V3 | non modifié. Le maître y documente désormais lui-même le retrait de `MetricPill` |
 | `docs/PROMPTS.md` | ✓ verbatim V3 | non modifié. **L'entorse au verbatim est résorbée** : le kit V3 a supprimé la section `## MetricPill`, la copie est de nouveau intégrale — voir **écart 18** |
 | `src/styles/app-scale.css` | ✓ verbatim v2 | module opt-in, **non importé** par `index.css` — export `./app-scale.css` |
-| `src/tailwind-preset.ts` | ✓ inchangé (commentaires) | **0 littéral** — grep hex / rgb / px / rem / ms : aucun résultat hors commentaires |
+| `src/tailwind-preset.ts` | ✓ **`fontSize` en remplacement** | v0.2.2 : le bloc `fontSize` quitte `theme.extend` pour `theme`. L'échelle native (`text-xs`…`text-9xl`) n'est plus générable — une régression casse au lieu de retomber sur `text-sm`. Tout le reste est en `extend`. | **0 littéral** — grep hex / rgb / px / rem / ms : aucun résultat hors commentaires |
 | `package.json` exports | ✓ clés de la spec | `.` · `./styles.css` · `./app-scale.css` · `./preset` · `./assets/*` — voir **écart 1** |
 | `darkMode: ['class']` | ✓ | scope `.dark`, jamais un media query |
 | `npm run build` | ✓ | tsup ESM + CJS + `.d.ts`, `tsc --noEmit` sans erreur |
@@ -276,6 +276,34 @@ composant restant ne les importait.
 | Exports `src/index.ts` ↔ `.d.ts` sources v2 | **36 / 37** — seul `MetricPill` manque, retiré volontairement (écart 18). Aucun autre manquant, aucun en trop (+ les sous-composants `THead` `TBody` `Tr` `Th` `Td` et l'utilitaire `cn`) |
 | Preset : littéral de couleur ou de taille | **0** — uniquement des `var(--…)` |
 
+### Style inline — sanctionnés, et le reste
+
+Doctrine appliquée : un `style={{…}}` n'est légitime que si sa valeur **vient de la donnée**
+(une prop). Une exception non écrite est une violation — d'où cette liste nommée.
+
+**Sanctionnés (valeur pilotée par une prop) :**
+
+| Composant | Ce qui est inline | Pourquoi |
+|---|---|---|
+| `Icon` | `width` · `height` | la prop `size` est une longueur CSS arbitraire, pas un palier fermé |
+| `Spinner` | `width` · `height` | idem — `size` accepte aussi une longueur libre |
+| `Progress` | `width` du remplissage | pourcentage calculé depuis `value` / `max` |
+| `Skeleton` | `width` · `height` · `borderRadius` | ce sont exactement les trois props du composant |
+| `Logo` | `fontSize` · `color` | dérivés de `height` et de `tone` |
+| `Avatar` | `width` · `height` · `fontSize` du monogramme | dérivés de la prop `size` |
+| `GridBackground` | `backgroundSize` + position | `cell` pilote la maille ; le reste reste inline **volontairement** pour ne pas dépendre de la classe `.grid`, qui entre en collision avec Tailwind (écart 7) |
+
+**Non sanctionnés, et assumés comme tels :** huit composants portent encore des `style={{…}}`
+purement structurels (flex, gap, marges), soit **29 blocs** — `Modal` (8), `Footer` (7), `Banner` (4),
+`EmptyState` (3), `Toast` (2), `SkeletonCard` (2), `Dropdown` (2), `FormField` (1).
+**Ils viennent verbatim des `.jsx` du design system maître.** Les retirer ici ferait diverger le
+port de sa source, ce qu'interdit la règle n°1. Par la doctrine, ce sont des violations ; par la
+règle de portage, ce sont des copies fidèles. **La correction appartient au maître** : dès que ses
+`.jsx` posent ces styles en classes, le port suivra mécaniquement. Signalé pour que ce ne soit pas
+pris pour un oubli.
+
+---
+
 ### Règles d'écran — vérifiées à l'exécution (26/08/2026)
 
 Les media queries des tokens ont été copiées verbatim **puis mesurées au navigateur** à deux
@@ -472,6 +500,38 @@ Le composant lit `localStorage` dans l'initialiseur de `useState`, entouré d'un
 la source. En rendu serveur (SSR), cet initialiseur ne s'exécute pas côté serveur mais produirait
 une divergence d'hydratation si l'état persisté diffère du défaut. Aucune app consommatrice n'est
 en SSR aujourd'hui ; signalé pour mémoire.
+
+### Doctrine « vocabulaire » (0.2.2)
+
+**25. `patterns.css` porte 4 règles en avance sur le maître.**
+La passe doctrine demandait de poser en classes ce qui était inline. Le texte exact des règles
+était fourni dans la demande, et la même passe est planifiée côté maître (« le zip de référence
+suivra »), mais elle n'y est pas encore. `patterns.css` n'est donc plus byte-identique au kit V3 :
+il porte **exactement** ces quatre lignes en plus, et rien d'autre.
+```
+.jf-input--sm{min-height:var(--control-sm)}
+.jf-input--lg{min-height:var(--control-lg)}
+.jf-navbar__links{display:flex;align-items:center;gap:var(--space-6)}
+.jf-navbar__cta{display:flex;align-items:center;gap:var(--space-3)}
+```
+Aucune valeur inventée : `--control-sm`, `--control-lg`, `--space-6` et `--space-3` existent déjà.
+**À réconcilier au prochain kit** — si le maître écrit ces règles différemment, c'est sa version
+qui gagne.
+
+**26. `src/lib/cn.ts` n'utilisait pas `tailwind-merge`.**
+La demande partait du principe qu'il appelait `twMerge` nu. Ce n'était pas le cas : `cn` était une
+concaténation sans dépendance (`filter(Boolean).join(' ')`), donc le bug décrit — le palier de
+taille supprimé du DOM — n'existait pas dans le socle. Le fond du problème, lui, était réel **pour
+les apps consommatrices** : le `cn` par défaut de shadcn utilise `twMerge` nu. J'ai donc appliqué
+l'intention plutôt que la lettre : `cn` passe à `extendTailwindMerge` avec les paliers déclarés en
+`font-size`, et `PALIERS_TYPO` est exporté pour que les apps réutilisent la même liste.
+Vérifié à l'exécution : `twMerge('text-control text-foreground')` rend `"text-foreground"` (le
+palier saute) ; la version étendue rend `"text-control text-foreground"`. Nouvelle dépendance
+runtime : `tailwind-merge` ^2.6 (v2 = Tailwind 3, cohérent avec le preset).
+
+**27. `Select` n'avait aucun style inline.**
+La demande visait « Input.tsx / Select.tsx ». Seul `Input` posait un `minHeight` inline ; `Select`
+n'a jamais eu de `style`. Rien à corriger de ce côté.
 
 ### Rien à signaler
 

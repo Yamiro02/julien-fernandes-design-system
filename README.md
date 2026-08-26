@@ -19,7 +19,7 @@ l'accent. Tout est en `rem`.
 Pas de registry : chaque app épingle une version par un tag git.
 
 ```bash
-npm i github:Yamiro02/julien-fernandes-design-system#v0.2.1
+npm i github:Yamiro02/julien-fernandes-design-system#v0.2.2
 ```
 
 `react`, `react-dom` et `tailwindcss` sont des peer dependencies — l'app les fournit.
@@ -114,6 +114,19 @@ Une section ink au milieu d'une page crème adopte le scope, elle ne peint pas u
 
 L'échelle d'espacement est **nommée** (`space-5`, pas `5`) : elle n'écrase pas l'échelle numérique
 de Tailwind, sur laquelle reposent les composants shadcn de ton app.
+
+> **L'échelle typo, elle, remplace la native.** `text-xs`, `text-sm`, `text-base`, `text-lg`… ne
+> sont plus générables : seuls les paliers sémantiques du DS existent. Une régression casse
+> visiblement au lieu de dériver en silence.
+>
+> Si ton app construit son propre `cn` avec `tailwind-merge`, réutilise la liste exportée, sinon
+> `text-control` sera classé comme une couleur et supprimé du DOM :
+> ```ts
+> import { PALIERS_TYPO } from '@julienfernandes/ds';
+> const twMerge = extendTailwindMerge({
+>   extend: { classGroups: { 'font-size': [{ text: [...PALIERS_TYPO] }] } },
+> });
+> ```
 
 `tokens/base.css` fournit aussi des classes prêtes à l'emploi : `.display` `.display-xl` `.eyebrow`
 `.chip` `.accent` `.mono` `.caption` `.prose` `.halo` `.page` `.jf-logo`.

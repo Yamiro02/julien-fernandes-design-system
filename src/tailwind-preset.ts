@@ -21,6 +21,26 @@ const preset = {
   darkMode: ['class'],
   content: [],
   theme: {
+    /* REMPLACEMENT COMPLET, pas une extension : l'échelle typo native de Tailwind
+       (text-xs, text-sm, text-base, text-lg…) n'est plus générable. Seuls les
+       paliers sémantiques du DS existent — une régression casse visiblement au
+       lieu de retomber en silence sur text-sm. */
+    fontSize: {
+      'display-xl': ['var(--text-display-xl)', { lineHeight: 'var(--leading-display)', letterSpacing: 'var(--tracking-display)' }],
+      display: ['var(--text-display)', { lineHeight: 'var(--leading-display)', letterSpacing: 'var(--tracking-display)' }],
+      'heading-xl': ['var(--text-heading-xl)', { lineHeight: 'var(--leading-display)', letterSpacing: 'var(--tracking-heading-xl)' }],
+      heading: ['var(--text-heading)', { lineHeight: 'var(--leading-heading)', letterSpacing: 'var(--tracking-heading)' }],
+      subheading: ['var(--text-subheading)', { lineHeight: 'var(--leading-heading)', letterSpacing: 'var(--tracking-subheading)' }],
+      'heading-sm': ['var(--text-heading-sm)', { lineHeight: 'var(--leading-snug)', letterSpacing: 'var(--tracking-heading-sm)' }],
+      'body-lg': ['var(--text-body-lg)', { lineHeight: 'var(--leading-body)', letterSpacing: 'var(--tracking-body-lg)' }],
+      body: ['var(--text-body)', { lineHeight: 'var(--leading-body)' }],
+      /* Tous les contrôles : boutons, champs, chips, onglets. */
+      control: 'var(--text-control)',
+      caption: ['var(--text-caption)', { lineHeight: 'var(--leading-normal)' }],
+      eyebrow: ['var(--text-eyebrow)', { lineHeight: 'var(--leading-snug)', letterSpacing: 'var(--tracking-eyebrow)' }],
+      chip: ['var(--text-chip)', { letterSpacing: 'var(--tracking-chip)' }],
+    },
+
     extend: {
       colors: {
         /* Surfaces & neutres chauds — convention shadcn */
@@ -150,21 +170,6 @@ const preset = {
         mono: 'var(--font-mono)',
       },
 
-      fontSize: {
-        'display-xl': ['var(--text-display-xl)', { lineHeight: 'var(--leading-display)', letterSpacing: 'var(--tracking-display)' }],
-        display: ['var(--text-display)', { lineHeight: 'var(--leading-display)', letterSpacing: 'var(--tracking-display)' }],
-        'heading-xl': ['var(--text-heading-xl)', { lineHeight: 'var(--leading-display)', letterSpacing: 'var(--tracking-heading-xl)' }],
-        heading: ['var(--text-heading)', { lineHeight: 'var(--leading-heading)', letterSpacing: 'var(--tracking-heading)' }],
-        subheading: ['var(--text-subheading)', { lineHeight: 'var(--leading-heading)', letterSpacing: 'var(--tracking-subheading)' }],
-        'heading-sm': ['var(--text-heading-sm)', { lineHeight: 'var(--leading-snug)', letterSpacing: 'var(--tracking-heading-sm)' }],
-        'body-lg': ['var(--text-body-lg)', { lineHeight: 'var(--leading-body)', letterSpacing: 'var(--tracking-body-lg)' }],
-        body: ['var(--text-body)', { lineHeight: 'var(--leading-body)' }],
-        /* Tous les contrôles : boutons, champs, chips, onglets. */
-        control: 'var(--text-control)',
-        caption: ['var(--text-caption)', { lineHeight: 'var(--leading-normal)' }],
-        eyebrow: ['var(--text-eyebrow)', { lineHeight: 'var(--leading-snug)', letterSpacing: 'var(--tracking-eyebrow)' }],
-        chip: ['var(--text-chip)', { letterSpacing: 'var(--tracking-chip)' }],
-      },
 
       fontWeight: {
         regular: 'var(--weight-regular)',

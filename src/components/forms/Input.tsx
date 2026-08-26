@@ -1,4 +1,4 @@
-import type { CSSProperties, InputHTMLAttributes } from 'react';
+import type { InputHTMLAttributes } from 'react';
 import { cn } from '../../lib/cn';
 
 /**
@@ -17,10 +17,16 @@ export function Input({
   size = 'md', invalid = false, surface = 'page', className = '', ...rest
 }: InputProps): JSX.Element {
   // surface: 'page' (default) = the input sits directly on the layout (fill --secondary) · 'card' = inside a card (fill --background)
-  const cls = cn('jf-input', surface === 'card' && 'jf-input--on-card', invalid && 'is-error', className);
-  const style: CSSProperties | undefined =
-    size === 'sm' ? { minHeight: 'var(--control-sm)' }
-      : size === 'lg' ? { minHeight: 'var(--control-lg)' }
-        : undefined;
-  return <input className={cls} aria-invalid={invalid || undefined} style={style} {...rest} />;
+  /* Le rail passe par des classes, jamais par un style inline : `--control-sm`
+     aliase `--control-md` depuis le rail unique, mais la classe reste pour l'API
+     et pour le jour où le rail redivergerait. */
+  const cls = cn(
+    'jf-input',
+    size === 'sm' && 'jf-input--sm',
+    size === 'lg' && 'jf-input--lg',
+    surface === 'card' && 'jf-input--on-card',
+    invalid && 'is-error',
+    className,
+  );
+  return <input className={cls} aria-invalid={invalid || undefined} {...rest} />;
 }

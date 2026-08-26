@@ -49,6 +49,8 @@
 .jf-error{display:flex;align-items:center;gap:var(--space-2);font-size:var(--text-caption);font-weight:var(--weight-medium);color:var(--destructive)}
 .jf-input{width:100%;min-height:var(--control-md);padding:0.6875rem 0.875rem;box-sizing:border-box;font-family:var(--font-body);font-size:var(--text-control);color:var(--foreground);background:var(--secondary);border:1.5px solid var(--input);border-radius:var(--radius-md);outline:none;transition:border-color 200ms var(--ease-standard),box-shadow 200ms var(--ease-standard)}
 .jf-input--on-card{background:var(--background)}
+.jf-input--sm{min-height:var(--control-sm)}
+.jf-input--lg{min-height:var(--control-lg)}
 .jf-input::placeholder{color:var(--text-muted)}
 .jf-input:focus,.jf-input.is-focus{border-color:var(--ring)}
 .jf-input.is-error,.jf-input[aria-invalid="true"]{border-color:var(--destructive)}
@@ -140,6 +142,8 @@
 .jf-navbar{position:sticky;top:0;z-index:30;width:100%;background:var(--secondary);border-bottom:1px solid var(--border);transition:background-color 200ms var(--ease-standard),border-color 200ms var(--ease-standard),box-shadow 200ms var(--ease-standard)}
 .jf-navbar.is-scrolled{background:color-mix(in srgb,var(--secondary) 82%,transparent);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);box-shadow:var(--shadow-sm)}
 .jf-navbar__inner{display:flex;align-items:center;justify-content:space-between;gap:var(--space-5);height:4.5rem}
+.jf-navbar__links{display:flex;align-items:center;gap:var(--space-6)}
+.jf-navbar__cta{display:flex;align-items:center;gap:var(--space-3)}
 .jf-navlink{font-size:var(--text-body);font-weight:var(--weight-medium);color:var(--text-secondary);text-decoration:none;padding:var(--space-2) 0;transition:color 150ms var(--ease-standard)}
 .jf-navlink:hover,.jf-navlink.is-hover{color:var(--foreground)}
 .jf-navlink.is-active{color:var(--primary)}

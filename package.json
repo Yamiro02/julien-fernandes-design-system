@@ -1,6 +1,6 @@
 {
   "name": "@julienfernandes/ds",
-  "version": "0.2.1",
+  "version": "0.2.2",
   "description": "Design System Julien Fernandes — tokens, preset Tailwind et primitives React.",
   "license": "UNLICENSED",
   "private": false,
@@ -56,7 +56,8 @@
   },
   "dependencies": {
     "class-variance-authority": "^0.7.1",
-    "lucide-react": "^0.469.0"
+    "lucide-react": "^0.469.0",
+    "tailwind-merge": "^2.6.1"
   },
   "devDependencies": {
     "@types/react": "^18.3.12",
