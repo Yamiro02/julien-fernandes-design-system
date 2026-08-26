@@ -1,6 +1,6 @@
 {
   "name": "@julienfernandes/ds",
-  "version": "0.4.0",
+  "version": "0.4.1",
   "description": "Design System Julien Fernandes — tokens, couche Tailwind v4 et primitives React.",
   "license": "UNLICENSED",
   "private": false,

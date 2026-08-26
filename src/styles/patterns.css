@@ -217,7 +217,9 @@
 .jf-tabs--on-card{background:var(--background)}
 .jf-tab{appearance:none;border:0;background:transparent;color:var(--text-muted);font-family:var(--font-body);font-size:var(--text-control);font-weight:var(--weight-semibold);padding:var(--space-2) var(--space-4);border-radius:var(--radius-sm);cursor:pointer;transition:background-color 150ms var(--ease-standard),color 150ms var(--ease-standard)}
 .jf-tab:hover,.jf-tab.is-hover{color:var(--foreground)}
-.jf-tab[aria-selected="true"],.jf-tab.is-selected{background:var(--card);color:var(--foreground);box-shadow:var(--shadow-sm)}
+.jf-tab[aria-selected="true"],.jf-tab.is-selected{background:var(--background);color:var(--foreground);box-shadow:var(--shadow-sm)}
+/* Sur une carte, la barre est en --background : l'onglet actif reprend --card pour garder l'écart. */
+.jf-tabs--on-card .jf-tab[aria-selected="true"],.jf-tabs--on-card .jf-tab.is-selected{background:var(--card)}
 .jf-tab:focus-visible{outline:2px solid var(--ring);outline-offset:2px}
 .jf-footer{border-top:1px solid var(--border);background:var(--background);color:var(--text-secondary)}
 

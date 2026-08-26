@@ -19,7 +19,7 @@ l'accent. Tout est en `rem`.
 Pas de registry : chaque app épingle une version par un tag git.
 
 ```bash
-npm i github:Yamiro02/julien-fernandes-design-system#v0.4.0
+npm i github:Yamiro02/julien-fernandes-design-system#v0.4.1
 ```
 
 Cinq **peer dependencies**, à la charge de l'app :

@@ -20,6 +20,31 @@ Sources de vérité utilisées :
 
 ---
 
+## Session v0.4.1 — la nav tab bar : l'onglet actif ne se distinguait pas
+
+Défaut d'origine, antérieur au portage, corrigé dans le maître après la livraison v0.4.0.
+L'onglet actif peignait `--card` sur une barre `--secondary` : deux blancs cassés quasi identiques
+en clair, et en `.dark` **les deux jetons valent #2b2a28** — l'écart était **nul**, l'actif ne
+tenait que par son ombre.
+
+L'actif descend désormais d'un cran de surface au lieu de rester au niveau de la barre, et la
+règle inverse traite la barre posée sur une card. Deux règles, **aucun jeton ajouté ni modifié**,
+`colors.css` intouché.
+
+Mesuré au rendu, dans les deux thèmes :
+
+| | barre | onglet actif |
+|---|---|---|
+| clair, barre sur le layout | `#ffffff` `--secondary` | `#f6f2ec` `--background` |
+| sombre, barre sur le layout | `#2b2a28` `--secondary` | `#1f1e1c` `--background` |
+| clair, barre sur une card | `#f6f2ec` `--background` | `#faf7f2` `--card` |
+| sombre, barre sur une card | `#1f1e1c` `--background` | `#2b2a28` `--card` |
+
+`.jf-page[aria-current="page"]` (Pagination) porte le **même défaut** et reste **inchangé** :
+il est ouvert exprès, il sera tranché à part.
+
+---
+
 ## Procédure — à chaque version
 
 **La ligne d'installation du `README.md` se met à jour EN MÊME TEMPS que le tag.**

@@ -44,7 +44,7 @@ export function NavigationPage() {
           <Row><Tabs items={SERIES} value={tab} onChange={setTab} /></Row>
           <p className="caption">Onglet actif : {SERIES.find(s => s.value === tab)?.label}</p>
         </Block>
-        <Block label="onCard" hint="La barre contraste toujours avec sa surface porteuse : --secondary sur la page, --background sur une card.">
+        <Block label="onCard" hint="La barre contraste avec sa surface porteuse ET l'onglet actif contraste avec la barre : il descend d'un cran de surface, jamais au niveau de la barre. Sur la page : barre --secondary, actif --background. Sur une card : barre --background, actif --card. Vérifie les deux en clair ET en sombre — en sombre, --card et --secondary valent tous les deux #2b2a28, un actif en --card y serait invisible.">
           <Row label="sur la page (défaut)"><Tabs items={SERIES} value="build" onChange={() => undefined} /></Row>
           <Row label="sur une card — onCard">
             <span className="inline-flex rounded-lg border border-border bg-card p-space-4">
