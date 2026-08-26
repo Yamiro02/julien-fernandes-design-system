@@ -26,6 +26,7 @@
       "require": "./dist/index.cjs"
     },
     "./styles.css": "./src/styles/index.css",
+    "./app-scale.css": "./src/styles/app-scale.css",
     "./preset": {
       "types": "./dist/tailwind-preset.d.ts",
       "source": "./src/tailwind-preset.ts",

@@ -71,7 +71,21 @@ import { Button, Card, Icon, StepCard } from '@julienfernandes/ds';
 </Card>
 ```
 
-### 4. Le thème sombre
+### 4. L'échelle d'app — opt-in, outils internes desktop
+
+Les outils internes desktop importent en plus un module d'échelle, qui adapte la taille racine
+par palier de largeur d'écran pour garder une mise en page effective proche de la maquette :
+
+```ts
+import '@julienfernandes/ds/styles.css';
+import '@julienfernandes/ds/app-scale.css';   // outils internes desktop uniquement
+```
+
+Les paliers sont en **%** : ils multiplient la préférence de taille de texte du navigateur au lieu
+de l'écraser — l'interdit « jamais de `font-size` px sur `html` » reste respecté. **Le site public,
+les e-mails et les slides ne l'importent jamais** : `styles.css` seul.
+
+### 5. Le thème sombre
 
 ```tsx
 document.documentElement.classList.toggle('dark', isDark);
