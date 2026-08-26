@@ -9,6 +9,9 @@ export interface DropdownItem {
   danger?: boolean;
   separator?: boolean;
   onSelect?: () => void;
+  /** Classes en plus sur le <button> de l'item — les aides d'état de la vitrine
+   *  (`is-hover`…) passent par ici. */
+  className?: string;
 }
 
 export interface DropdownProps extends HTMLAttributes<HTMLDivElement> {
@@ -28,7 +31,7 @@ export function Dropdown({ items = [], inline = false, className = '', ...rest }
             type="button"
             role="menuitem"
             onClick={it.onSelect}
-            className={cn('ds-dropdown__item', it.danger && 'ds-dropdown__item--danger')}
+            className={cn('ds-dropdown__item', it.danger && 'ds-dropdown__item--danger', it.className)}
           >
             {it.icon}
             <span style={{ flex: 1 }}>{it.label}</span>

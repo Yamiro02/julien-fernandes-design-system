@@ -31,6 +31,9 @@ export interface ActionSheetItem {
   onSelect?: () => void;
   /** Renders a hairline instead of a row. */
   separator?: boolean;
+  /** Classes en plus sur le <button> de l'item — les aides d'état de la vitrine
+   *  (`is-hover`…) passent par ici. */
+  className?: string;
 }
 
 export interface ActionSheetProps {
@@ -105,7 +108,7 @@ export function ActionSheet({
             key={i}
             type="button"
             onClick={it.onSelect}
-            className={cn('ds-actionsheet__item', it.danger && 'ds-actionsheet__item--danger')}
+            className={cn('ds-actionsheet__item', it.danger && 'ds-actionsheet__item--danger', it.className)}
           >
             {it.icon}<span style={{ flex: 1 }}>{it.label}</span>
           </button>

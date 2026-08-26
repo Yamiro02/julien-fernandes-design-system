@@ -71,6 +71,7 @@ export function FormsPage() {
             <Stack>
               <Checkbox label="Je veux recevoir le prompt du build" checked={checked} onChange={e => setChecked(e.target.checked)} />
               <Checkbox label="Non coché" defaultChecked={false} />
+              <Checkbox label="Indéterminée — sélection partielle" indeterminate />
               <Checkbox label="Hover" className="is-hover" />
               <Checkbox label="Focus" className="is-focus" defaultChecked />
               <Checkbox label="Option indisponible" disabled />
@@ -90,6 +91,7 @@ export function FormsPage() {
             <Stack>
               <Switch label="Thème sombre" checked={sombre} onChange={e => setSombre(e.target.checked)} />
               <Switch label="Non activé" />
+              <Switch label="Hover" className="is-hover" />
               <Switch label="Focus" className="is-focus" defaultChecked />
               <Switch label="Indisponible" disabled />
               <Switch label="Activé et indisponible" disabled defaultChecked />
@@ -111,7 +113,7 @@ export function FormsPage() {
       </Section>
 
       <Section title="Calendar" note="Vue mois, lundi d'abord, locale fr-FR. Date natif et Intl uniquement — aucune dépendance.">
-        <Grid cols={2}>
+        <Grid cols={3}>
           <Block label="Par défaut">
             <Calendar value={date} onChange={setDate} />
           </Block>
@@ -123,6 +125,9 @@ export function FormsPage() {
               max={new Date(2026, 9, 31)}
               disabledDates={[new Date(2026, 8, 12), new Date(2026, 8, 13)]}
             />
+          </Block>
+          <Block label="Aujourd'hui" hint="Sans value, la vue s'ouvre sur le mois courant et le jour du jour est marqué (.is-today).">
+            <Calendar />
           </Block>
         </Grid>
       </Section>

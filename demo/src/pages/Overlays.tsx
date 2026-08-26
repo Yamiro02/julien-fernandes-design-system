@@ -148,7 +148,9 @@ export function OverlaysPage() {
         <Block label="inline panel — la forme desktop" hint="Au-dessus de 64 rem elle n'existe qu'en spécimen : 20rem, quatre coins au rayon 2xl, bordure complète, sans poignée, sans voile.">
           <Row>
             <ActionSheet inline panel items={MENU} />
-            <ActionSheet inline panel items={[...MENU,
+            <ActionSheet inline panel items={[
+              { label: 'Item au repos', icon: <Icon name="file-text" size="1rem" /> },
+              { label: 'Item survolé', icon: <Icon name="file-text" size="1rem" />, className: 'is-hover' },
               { separator: true },
               { label: 'Supprimer la vidéo', icon: <Icon name="trash-2" size="1rem" />, danger: true }]} />
             <ActionSheet inline panel
@@ -174,7 +176,7 @@ export function OverlaysPage() {
             ]} />
             <Dropdown inline items={[
               { label: 'Item au repos', icon: <Icon name="file-text" size="1rem" /> },
-              { label: 'Item survolé', icon: <Icon name="file-text" size="1rem" /> },
+              { label: 'Item survolé', icon: <Icon name="file-text" size="1rem" />, className: 'is-hover' },
               { separator: true },
               { label: 'Action risquée', icon: <Icon name="triangle-alert" size="1rem" />, danger: true },
             ]} />

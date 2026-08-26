@@ -259,7 +259,7 @@ de Tailwind, sur laquelle reposent les composants shadcn de ton app.
 
 | Famille | Composants |
 |---|---|
-| `icons` | `Icon` — 46 glyphes Lucide, tailles `1rem` / `1.25rem` / `1.5rem` |
+| `icons` | `Icon` — 47 glyphes Lucide, tailles `1rem` / `1.25rem` / `1.5rem` |
 | `actions` | `Button` · `IconButton` — 4 variantes, 3 tailles, jamais un pill |
 | `forms` | `Input` · `Textarea` · `Select` · `Checkbox` · `Radio` · `Switch` · `FormField` · `Calendar` · `DatePicker` |
 | `data-display` | `Card` (+ en-tête à slots) · `Pastille` · `Badge` (2 rembourrages) · `Tooltip` · `Separator` · `Table` (+ `THead` `TBody` `Tr` `Th` `Td`) — `framed` · `columns` · `striped` · `hoverable`, composables |

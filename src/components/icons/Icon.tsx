@@ -3,7 +3,7 @@ import {
   ArrowDown, ArrowRight, ArrowUpRight, BookOpen, Calendar, Check, ChevronDown,
   ChevronLeft, ChevronRight, ChevronsLeft, ChevronsRight, CircleAlert, CircleCheck,
   CircleX, Clock, Code, Copy, Dumbbell, Ellipsis, ExternalLink, Eye, FileText, Folder,
-  Github, Info, LayoutDashboard, LoaderCircle, Mail, Menu, MessageSquare,
+  Github, Info, LayoutDashboard, LoaderCircle, Mail, Menu, MessageSquare, Minus,
   PanelLeft, Play, Plus, Quote, Rocket, Search, Settings, SlidersHorizontal,
   Terminal, Trash2, TrendingUp, TriangleAlert, User, Video, X, Zap,
   type LucideIcon,
@@ -24,7 +24,7 @@ export type IconName =
   | 'arrow-right' | 'arrow-up-right' | 'arrow-down' | 'play' | 'eye' | 'clock'
   | 'calendar' | 'copy' | 'search' | 'menu' | 'mail' | 'triangle-alert' | 'info'
   | 'circle-check' | 'circle-alert' | 'circle-x' | 'terminal' | 'code' | 'zap'
-  | 'plus' | 'trash-2' | 'external-link' | 'loader-circle'
+  | 'plus' | 'minus' | 'trash-2' | 'external-link' | 'loader-circle'
   | 'github' | 'folder' | 'trending-up' | 'user' | 'book-open'
   | 'message-square' | 'quote' | 'rocket' | 'file-text'
   | 'chevrons-left' | 'chevrons-right' | 'ellipsis' | 'panel-left'
@@ -69,6 +69,7 @@ const ICONS: Record<IconName, LucideIcon> = {
   'zap': Zap,
   'trash-2': Trash2,
   'plus': Plus,
+  'minus': Minus,
   'external-link': ExternalLink,
   'loader-circle': LoaderCircle,
   'github': Github,

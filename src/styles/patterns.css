@@ -91,6 +91,11 @@
 .ds-choice input:checked+.ds-choice__box,.ds-choice.is-checked .ds-choice__box{background:var(--primary);border-color:var(--primary)}
 .ds-choice input:checked+.ds-choice__box>*,.ds-choice.is-checked .ds-choice__box>*{opacity:1}
 .ds-choice input:checked+.ds-choice__box--radio,.ds-choice.is-checked .ds-choice__box--radio{background:var(--background)}
+/* Indéterminée — la case d'en-tête d'une sélection partielle : remplie comme cochée, mais
+   un trait (minus) à la place de la coche. La propriété DOM `indeterminate` est posée par
+   le composant via sa ref ; le CSS ne lit que la classe. */
+.ds-choice.is-indeterminate .ds-choice__box{background:var(--primary);border-color:var(--primary)}
+.ds-choice.is-indeterminate .ds-choice__box>*{opacity:1}
 .ds-choice input:focus-visible+.ds-choice__box,.ds-choice.is-focus .ds-choice__box{box-shadow:0 0 0 3px color-mix(in srgb,var(--ring) 35%,transparent)}
 .ds-choice.is-disabled{opacity:.5;cursor:not-allowed}
 .ds-choice__dot{width:var(--choice-dot);height:var(--choice-dot);border-radius:var(--radius-pill);background:var(--primary)}
@@ -100,6 +105,10 @@
    littéral inventé. Fond du knob = --tone-light-alt (jamais #fff), relief = --shadow-knob. */
 .ds-switch__track{position:relative;flex:none;width:var(--switch-w);height:var(--switch-h);border-radius:var(--radius-pill);background:var(--border);transition:background var(--duration-base) var(--ease-standard),box-shadow var(--duration-base) var(--ease-standard)}
 .ds-switch__knob{position:absolute;top:var(--switch-inset);left:var(--switch-inset);width:var(--switch-knob);height:var(--switch-knob);border-radius:var(--radius-pill);background:var(--tone-light-alt);box-shadow:var(--shadow-knob);transition:transform var(--duration-base) var(--ease-standard)}
+/* Symétrie avec .ds-choice:hover : le survol annonce l'interaction. La piste non cochée
+   se teinte vers --primary ; cochée, la règle :checked ci-dessous (plus spécifique, ou
+   plus tardive pour .is-checked) garde le plein --primary. */
+.ds-switch:hover .ds-switch__track,.ds-switch.is-hover .ds-switch__track{background:color-mix(in srgb,var(--primary) 30%,var(--border))}
 .ds-switch input:checked+.ds-switch__track,.ds-switch.is-checked .ds-switch__track{background:var(--primary)}
 .ds-switch input:checked+.ds-switch__track .ds-switch__knob,.ds-switch.is-checked .ds-switch__knob{transform:translateX(calc(var(--switch-w) - var(--switch-knob) - var(--switch-inset) * 2))}
 .ds-switch input:focus-visible+.ds-switch__track,.ds-switch.is-focus .ds-switch__track{box-shadow:0 0 0 3px color-mix(in srgb,var(--ring) 35%,transparent)}
