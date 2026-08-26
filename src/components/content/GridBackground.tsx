@@ -3,37 +3,30 @@ import { cn } from '../../lib/cn';
 
 /**
  * Grille fine, filets 1px à ~5,5 % d'opacité, maille 28px ou 80px.
- * RESTRICTION : elle appartient aux miniatures YouTube et au motion design UNIQUEMENT.
- * Jamais sur le site, jamais dans l'UI, jamais sur les slides.
+ * RESTRICTION : elle appartient aux miniatures et au motion design UNIQUEMENT. Jamais sur
+ * le site, jamais dans l'UI, jamais sur les slides.
  *
  * EXTENSION MÉTIER — s'importe depuis `@julienfernandes/ds/brand-content`, et demande
- * `brand-content.css` en face pour les jetons --grid-*.
+ * `brand-content.css` en face, qui porte les règles `.ds-grid` / `.ds-grid-lg` et les
+ * jetons de maille.
  *
- * Les styles restent inline, comme dans la source. Il y a une SECONDE source pour le même
- * motif — la règle `.ds-grid` de brand-content.css — et c'est un doublon connu : le
- * sous-lot 6 fait passer ce composant sur la classe.
+ * IL POSE LA CLASSE, il ne réécrit pas le motif. Il reconstruisait les deux
+ * `linear-gradient` en style inline pendant que `brand-content.css` portait déjà la même
+ * règle : deux sources pour un seul motif, dont une seule bougeait quand on la corrigeait.
  */
 export interface GridBackgroundProps extends HTMLAttributes<HTMLSpanElement> {
-  /** sm = 28px mesh · lg = 80px mesh. Mesh and hairline stay in px on purpose. */
+  /** sm = maille --grid-cell · lg = maille --grid-cell-lg. Les deux restent en px : la
+   *  grille ne doit pas suivre le rem. */
   cell?: 'sm' | 'lg';
 }
 
 export function GridBackground({
-  cell = 'sm', className = '', style, ...rest
+  cell = 'sm', className = '', ...rest
 }: GridBackgroundProps): JSX.Element {
-  const size = cell === 'lg' ? 'var(--grid-cell-lg)' : 'var(--grid-cell)';
   return (
     <span
       aria-hidden="true"
-      className={cn(className)}
-      style={{
-        position: 'absolute', inset: 0, pointerEvents: 'none',
-        backgroundImage:
-          'linear-gradient(var(--grid-line) 1px, transparent 1px), '
-          + 'linear-gradient(90deg, var(--grid-line) 1px, transparent 1px)',
-        backgroundSize: size + ' ' + size,
-        ...style,
-      }}
+      className={cn('ds-grid', cell === 'lg' && 'ds-grid-lg', className)}
       {...rest}
     />
   );

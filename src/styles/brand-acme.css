@@ -9,9 +9,13 @@
    lancer, mais un défaut qu'on ne peut pas oublier de remplacer.
 
    Deux façons de la remplacer :
-     · copier `brand.template.css` en `brand-<vous>.css`, le remplir, et changer l'import
-       de `styles.css` — c'est ce que `npm run rebrand` fait pour vous ;
+     · `npm run rebrand -- "@vous/ds" "Votre Marque"` — il COPIE ce fichier-ci sous le nom
+       de votre marque et repointe l'import de `styles.css` dessus. Vous remplissez ensuite
+       la copie : la vitrine rend dès la première seconde, avec votre nom ;
      · ou éditer ce fichier en place, si vous ne comptez pas suivre le template en amont.
+   `brand.template.css` est le CONTRAT, avec ses valeurs vides et ses commentaires : à lire
+   pour savoir ce qui doit exister, pas à copier — vous partiriez d'un système qui ne rend
+   rien.
 
    RÈGLES DE STRUCTURE — elles ne changent pas d'une marque à l'autre :
    1. Le thème CLAIR est `:root`, le SOMBRE est le scope `.dark`. Jamais un media query :

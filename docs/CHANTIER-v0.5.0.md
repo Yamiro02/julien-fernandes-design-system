@@ -375,8 +375,24 @@ commentaires de `theme.css` qui nomment encore Anton.
 Littéraux : `--shadow-glow-sm`, `--shadow-logo-dot`, `--gradient-halo-top`,
 `--gradient-halo-center`. Puis les 44 durées en `--duration-fast/base/slow`.
 
+**Ajouté après la revue du sous-lot 5 — trois dettes que ce lot-là a créées :**
+
+1. **Le garde de contraste ne mesure plus `brand-jf.css`.** Il lit la marque que `styles.css`
+   monte — c'est le bon réflexe, il a été trouvé par le test de la copie — mais depuis que le défaut
+   est `brand-acme.css`, `npm run lint` mesure la palette de placeholder et **plus la marque des apps
+   de production de Julien**. Le garde de substitution, lui, confronte *chaque* `brand-*.css` au
+   socle. Il faut la même symétrie ici : boucler sur les fichiers de marque, comme le voisin. Sans
+   ça, une régression dans `brand-jf.css` passe au vert. (`TOKENS=… node check-contrast.mjs`
+   fonctionne, mais un garde qu'il faut penser à invoquer n'est pas un garde.)
+2. **`tokens/typography.css` ment sur six lignes.** L'en-tête dit encore « `--font-display` …
+   TOUJOURS en capitales » et les cinq paliers de titrage sont commentés « CAPS ». Le geste 6 vient
+   de rendre ça faux, et c'est le fichier qu'un client lit pour régler sa typo. (Les « CAPS » de
+   `--text-eyebrow` et `--text-chip`, eux, restent vrais.)
+3. **L'en-tête de `brand-acme.css` décrit l'ancien `rebrand`.** Il dit que le script copie
+   `brand.template.css` ; il copie `brand-acme.css` depuis la décision 3 du sous-lot 5. Une ligne.
+
 → **Sortie :** `grep` vert sur chaque élément retiré, et aucun littéral de couleur, d'ombre ou de
-durée hors des fichiers de jetons.
+durée hors des fichiers de jetons. Et `npm run lint` mesure le contraste des DEUX marques livrées.
 
 ### Sous-lot 7 — La mise en route, les docs, la CI
 

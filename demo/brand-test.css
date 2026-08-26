@@ -114,8 +114,7 @@
   /* MÉTIER — déclaré ici uniquement parce que la vitrine rend la page Marque, qui
      montre miniatures et grille. Une app d'interface ne les déclare pas. */
   --tone-deep:#05090d;
-  --gradient-thumbnail:radial-gradient(closest-side at 50% 110%, rgba(14,143,168,.55) 0%, rgba(34,85,164,.28) 45%, transparent 72%); /* @kind color */
-  --gradient-thumbnail-fit:radial-gradient(70% 55% at 50% 100%, rgba(14,143,168,.55) 0%, rgba(34,85,164,.28) 45%, transparent 72%); /* @kind color */
+  --gradient-thumbnail:radial-gradient(70% 55% at 50% 100%, rgba(14,143,168,.55) 0%, rgba(34,85,164,.28) 45%, transparent 72%); /* @kind color */
   --grid-cell:28px;
   --grid-cell-lg:80px;
   --grid-line:rgba(238,242,246,.055);

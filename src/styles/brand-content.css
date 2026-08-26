@@ -21,8 +21,7 @@
    LE CONTRAT — sept jetons, dans votre fichier de marque, en `:root` :
      --tone-deep                le noir le plus profond du système. Surfaces d'export
                                uniquement, jamais un fond d'interface.
-     --gradient-thumbnail      halo de miniature, verbatim du brief historique.
-     --gradient-thumbnail-fit  son jumeau dimensionné (celui qui rend — cf. §2.2).
+     --gradient-thumbnail      halo de miniature. L'utilitaire s'appelle `bg-thumbnail`.
      --grid-cell               maille fine. En px EXPRÈS : la grille ne suit pas le rem.
      --grid-cell-lg            maille large, idem.
      --grid-line               couleur du filet, très basse opacité (~5,5 %).
@@ -47,9 +46,6 @@
    au passage la couleur, la position et la taille de fond de l'élément. */
 @utility bg-thumbnail {
   background-image: var(--gradient-thumbnail);
-}
-@utility bg-thumbnail-fit {
-  background-image: var(--gradient-thumbnail-fit);
 }
 @utility bg-grid {
   background-size: var(--grid-cell) var(--grid-cell);

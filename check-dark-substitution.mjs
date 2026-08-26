@@ -50,8 +50,9 @@ const DIR = process.env.STYLES || 'src/styles';
 /* Les écarts TOLÉRÉS. Chaque entrée est une dette datée, pas une dispense.
    Une entrée qui n'a plus de raison d'être doit disparaître avec son jeton. */
 const EXCEPTIONS = {
-  '--shadow-soft': 'porte bien le défaut — SUPPRIMÉ AU SOUS-LOT 6 (alias non publié de --shadow-sm). Ne pas le réparer : le retirer. L\'exception meurt avec lui.',
-  '--shadow-soft-lg': 'porte bien le défaut — SUPPRIMÉ AU SOUS-LOT 6 (alias non publié de --shadow-lg). Ne pas le réparer : le retirer. L\'exception meurt avec lui.',
+  /* VIDE, et c'est l'état normal. Les deux seules entrées qu'il ait jamais portées étaient
+     des alias non publiés, supprimés au sous-lot 6 : l'exception est morte avec le jeton,
+     comme sa note l'annonçait. Une entrée ajoutée ici doit dire POURQUOI et JUSQU'À QUAND. */
 };
 
 /* ---------- inventaire ---------- */

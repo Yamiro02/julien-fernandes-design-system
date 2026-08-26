@@ -19,12 +19,19 @@
  * build tombe. Le script porte la mécanique, la marque porte ses renoncements.
  *
  * Usage : node check-contrast.mjs [--table]
- * Il mesure la marque que `styles.css` MONTE — il lit son `@import`, il ne la devine pas.
- * Un dossier rebrandé mesure donc la palette du client, pas celle du template.
- * TOKENS=<chemin> en mesure une autre : c'est ainsi qu'on recette l'instance de référence,
- * la palette de recette, ou celle d'un client avant de l'installer.
+ * TOUTES LES MARQUES LIVRÉES, pas seulement celle que `styles.css` monte. Le dépôt en livre
+ * deux — la palette de placeholder et l'instance de référence — et les apps de production
+ * importent la SECONDE. Ne mesurer que le défaut laisserait une régression de contraste
+ * passer au vert dans celle qui est réellement déployée. Un garde qu'il faut penser à
+ * invoquer n'est pas un garde. Même découverte de fichiers que check-dark-substitution.mjs,
+ * même exclusion de `brand-content.css` (structure, sans valeurs) et de
+ * `brand.template.css` (valeurs vides) : une ligne de verdict par marque, sortie non-zéro
+ * si l'une échoue.
+ * TOKENS=<chemin> mesure UN fichier isolé — celui d'un client avant de l'installer, ou la
+ * palette de recette de la vitrine.
  */
 import fs from 'node:fs';
+import path from 'node:path';
 
 /* ---------- WCAG ---------- */
 const hex = h => { h = h.replace('#', ''); if (h.length === 3) h = [...h].map(c => c + c).join('');
@@ -36,40 +43,42 @@ const over = (fg, alpha, bg) => { const f = hex(fg), b = hex(bg);
   return '#' + f.map((c, i) => Math.round(c * alpha + b[i] * (1 - alpha)).toString(16).padStart(2, '0')).join(''); };
 
 /* ---------- lecture des jetons ---------- */
-/* La marque mesurée par défaut est celle que `styles.css` MONTE — lue dans son @import,
-   pas codée en dur. Sans ça, un dossier rebrandé continuerait de mesurer la palette de
-   placeholder pendant que la vitrine rend celle du client : une paire qui fait échouer
-   son audit passerait au vert. */
-function marqueParDéfaut() {
-  const entry = 'src/styles/index.css';
-  try {
-    const m = /@import\s+'\.\/(brand-[^']+\.css)'/.exec(
-      fs.readFileSync(entry, 'utf8').replace(/\/\*[\s\S]*?\*\//g, ''));
-    if (m) return 'src/styles/' + m[1];
-  } catch { /* pas d'entrée lisible : on retombe sur le placeholder */ }
-  return 'src/styles/brand-acme.css';
+/* Les marques à mesurer : tous les `brand-*.css` du dossier de styles, moins l'extension
+   métier (structure sans valeurs) et le gabarit (valeurs vides par construction). */
+const STYLES = process.env.STYLES || 'src/styles';
+function marquesLivrées() {
+  return fs.readdirSync(STYLES)
+    .filter(n => /^brand-.*\.css$/.test(n) && n !== 'brand-content.css' && n !== 'brand.template.css')
+    .sort()
+    .map(n => path.join(STYLES, n));
 }
-const TOKENS = process.env.TOKENS || marqueParDéfaut();
-const brut = fs.readFileSync(TOKENS, 'utf8');
-const src = brut.replace(/\/\*[\s\S]*?\*\//g, '');
-const block = sel => { const i = src.indexOf(sel + '{');
-  if (i < 0) throw new Error(`${TOKENS} : bloc ${sel} introuvable`);
-  const s = src.slice(i + sel.length + 1); let d = 1, j = 0;
-  while (d > 0) { if (s[j] === '{') d++; if (s[j] === '}') d--; j++; }
-  return s.slice(0, j - 1); };
-const parse = t => Object.fromEntries([...t.matchAll(/(--[\w-]+)\s*:\s*([^;]+);/g)].map(m => [m[1], m[2].trim()]));
-const ROOT = parse(block(':root')), DARK = parse(block('.dark'));
+const CIBLES = process.env.TOKENS ? [process.env.TOKENS] : marquesLivrées();
+function lireMarque(fichier) {
+  const brut = fs.readFileSync(fichier, 'utf8');
+  const src = brut.replace(/\/\*[\s\S]*?\*\//g, '');
+  const block = sel => { const i = src.indexOf(sel + '{');
+    if (i < 0) throw new Error(`${fichier} : bloc ${sel} introuvable`);
+    const s = src.slice(i + sel.length + 1); let d = 1, j = 0;
+    while (d > 0) { if (s[j] === '{') d++; if (s[j] === '}') d--; j++; }
+    return s.slice(0, j - 1); };
+  const parse = t => Object.fromEntries([...t.matchAll(/(--[\w-]+)\s*:\s*([^;]+);/g)].map(m => [m[1], m[2].trim()]));
+  /* Les renoncements de CETTE marque, lus dans ses propres blocs @a11y-assume. */
+  const assumées = Object.fromEntries(
+    [...brut.matchAll(/@a11y-assume:[ \t]*(.+?)[ \t]*\r?\n([\s\S]*?)\*\//g)]
+      .map(m => [m[1].trim(), m[2].replace(/\s+/g, ' ').trim()]));
+  return { ROOT: parse(block(':root')), DARK: parse(block('.dark')), assumées };
+}
 
-function resolve(v, scope, d = 0) {
+function resolve(v, scope, ROOT, fichier, d = 0) {
   if (d > 12) throw new Error('référence circulaire : ' + v);
   v = String(v).trim();
   let m = /^var\((--[\w-]+)\)$/.exec(v);
   if (m) { const next = scope[m[1]] ?? ROOT[m[1]];
-    if (next === undefined) throw new Error(`${TOKENS} : jeton ${m[1]} absent du contrat`);
-    return resolve(next, scope, d + 1); }
+    if (next === undefined) throw new Error(`${fichier} : jeton ${m[1]} absent du contrat`);
+    return resolve(next, scope, ROOT, fichier, d + 1); }
   m = /^color-mix\(in srgb,\s*(.+?)\s+([\d.]+)%\s*,\s*(.+?)\s*\)$/.exec(v);
-  if (m) { const a = resolve(m[1], scope, d + 1), p = +m[2] / 100, b = m[3].trim();
-    return b === 'transparent' ? { c: a, alpha: p } : over(a, p, resolve(b, scope, d + 1)); }
+  if (m) { const a = resolve(m[1], scope, ROOT, fichier, d + 1), p = +m[2] / 100, b = m[3].trim();
+    return b === 'transparent' ? { c: a, alpha: p } : over(a, p, resolve(b, scope, ROOT, fichier, d + 1)); }
   m = /^rgba?\(\s*([\d.]+)\s*,\s*([\d.]+)\s*,\s*([\d.]+)\s*(?:,\s*([\d.]+)\s*)?\)$/.exec(v);
   if (m) { const h = '#' + [1, 2, 3].map(i => (+m[i]).toString(16).padStart(2, '0')).join('');
     return m[4] !== undefined ? { c: h, alpha: +m[4] } : h; }
@@ -79,9 +88,9 @@ function resolve(v, scope, d = 0) {
 /* ---------- les paires du système ---------- */
 // [zone, règle, contenu, porteuse, seuil, taille]
 // `on(jeton, porteuse)` aplatit un fond translucide sur sa surface porteuse.
-function pairs(theme) {
+function pairs(theme, { ROOT, DARK }, fichier) {
   const scope = theme === 'dark' ? { ...ROOT, ...DARK } : ROOT;
-  const g = n => resolve(`var(${n})`, scope);
+  const g = n => resolve(`var(${n})`, scope, ROOT, fichier);
   const on = (n, carrier) => { const v = g(n); return typeof v === 'object' ? over(v.c, v.alpha, g(carrier)) : v; };
   const B = '--background', C = '--card', P = [];
   const add = (zone, regle, fg, bg, min, taille) => P.push({ zone, regle, fg, bg, min, taille, r: ratio(fg, bg) });
@@ -141,27 +150,33 @@ function pairs(theme) {
 
 /* ---------- les écarts ASSUMÉS ----------
    Ils ne sont PAS ici. Ils appartiennent à la MARQUE, pas au socle : les renoncements
-   de Julien ne sont pas ceux d'un client, et un client qui apporte son brand-acme.css
+   d'une marque ne sont pas ceux de la suivante, et un client qui apporte son brand-*.css
    ne doit hériter d'aucune dérogation qu'il n'a pas prise — sans quoi une paire qui le
    fait échouer à son audit passerait au vert chez lui.
-   Ce script porte la MÉCANIQUE ; le fichier de marque porte ses RENONCEMENTS, sous
-   forme de blocs de commentaire lus ici :
+   Ce script porte la MÉCANIQUE ; chaque fichier de marque porte SES renoncements, sous
+   forme de blocs de commentaire lus par `lireMarque` :
 
        /* @a11y-assume: <clé exacte de la paire>
           <la raison, sur autant de lignes qu'il faut> * /
 
    Une liste vide est un état normal — et même l'état de départ de brand.template.css. */
-const ASSUMÉES = Object.fromEntries(
-  [...brut.matchAll(/@a11y-assume:[ \t]*(.+?)[ \t]*\r?\n([\s\S]*?)\*\//g)]
-    .map(m => [m[1].trim(), m[2].replace(/\s+/g, ' ').trim()]));
 
 /* ---------- rapport ---------- */
 const F = n => n.toFixed(2).replace('.', ',');
-const light = pairs('light'), dark = pairs('dark');
-const rows = light.map((p, i) => ({ ...p, rl: p.r, rd: dark[i].r,
-  ko: p.r < p.min || dark[i].r < dark[i].min }));
+
+function mesurer(fichier) {
+  const marque = lireMarque(fichier);
+  const light = pairs('light', marque, fichier), dark = pairs('dark', marque, fichier);
+  const rows = light.map((p, i) => ({ ...p, rl: p.r, rd: dark[i].r,
+    ko: p.r < p.min || dark[i].r < dark[i].min }));
+  return { marque, rows };
+}
 
 if (process.argv.includes('--table')) {
+  /* Un seul fichier pour le tableau : TOKENS= s'il est posé, sinon la marque que
+     `styles.css` monte — c'est celle que documente docs/accessibilite.md. */
+  const fichier = process.env.TOKENS || CIBLES[0];
+  const { rows } = mesurer(fichier);
   const md = sel => { const out = ['| Paire | contenu | seuil | clair | sombre |', '|---|---|--:|--:|--:|'];
     for (const p of rows.filter(sel)) out.push(
       `| \`${p.regle}\` | ${p.taille} | ${String(p.min).replace('.', ',')} | ${F(p.rl)}${p.rl < p.min ? ' ✗' : ''} | ${F(p.rd)}${p.rd < p.min ? ' ✗' : ''} |`);
@@ -171,27 +186,37 @@ if (process.argv.includes('--table')) {
   process.exit(0);
 }
 
-const nonDéclarées = rows.filter(p => p.ko && !(p.regle in ASSUMÉES));
-const périmées = rows.filter(p => !p.ko && (p.regle in ASSUMÉES));
+let codeSortie = 0;
 
-if (nonDéclarées.length) {
-  console.error(`\n✗ contraste — ${nonDéclarées.length} paire(s) sous le seuil sans décision écrite (${TOKENS}) :\n`);
-  for (const p of nonDéclarées) console.error(
-    `    ${p.regle}\n      contenu ${p.taille} · seuil ${p.min}:1 · clair ${F(p.rl)} · sombre ${F(p.rd)}`);
-  console.error(`
+for (const fichier of CIBLES) {
+  const { marque, rows } = mesurer(fichier);
+  const nom = path.basename(fichier);
+  const nonDéclarées = rows.filter(p => p.ko && !(p.regle in marque.assumées));
+  const périmées = rows.filter(p => !p.ko && (p.regle in marque.assumées));
+
+  if (nonDéclarées.length) {
+    codeSortie = 1;
+    console.error(`\n✗ contraste — ${nom} : ${nonDéclarées.length} paire(s) sous le seuil sans décision écrite :\n`);
+    for (const p of nonDéclarées) console.error(
+      `    ${p.regle}\n      contenu ${p.taille} · seuil ${p.min}:1 · clair ${F(p.rl)} · sombre ${F(p.rd)}`);
+    console.error(`
   Deux issues, pas trois :
     · corriger le jeton fautif — c'est presque toujours une couleur de REMPLISSAGE
       (--primary, --destructive) posée comme couleur de CONTENU. Le socle a un jumeau
       lisible pour ça : --primary-readable, --destructive-readable ;
-    · ou ASSUMER l'écart : ajouter dans ${TOKENS}, en commentaire, le bloc
+    · ou ASSUMER l'écart : ajouter dans ${fichier}, en commentaire, le bloc
 
           /* @a11y-assume: <la clé exacte ci-dessus>
              <pourquoi la marque impose cet écart, et ce qui l'atténue> */
 
       et le reprendre dans docs/accessibilite.md. Un écart assumé est une décision écrite.
 `);
-  process.exit(1);
+    continue;
+  }
+  for (const p of périmées) console.warn(
+    `⚠ contraste — ${nom} : « ${p.regle} » passe désormais (${F(p.rl)} / ${F(p.rd)}), retire son @a11y-assume.`);
+  const ko = rows.filter(p => p.ko).length;
+  console.log(`✓ contraste — ${nom} : ${rows.length} paires × 2 thèmes · ${rows.length - ko} conformes · ${ko} écart${ko > 1 ? 's' : ''} assumé${ko > 1 ? 's' : ''} et documenté${ko > 1 ? 's' : ''}`);
 }
-for (const p of périmées) console.warn(
-  `⚠ contraste — « ${p.regle} » passe désormais (${F(p.rl)} / ${F(p.rd)}) : retire son @a11y-assume de ${TOKENS} et sa section de docs/accessibilite.md.`);
-console.log(`✓ contraste — ${rows.length} paires × 2 thèmes · ${rows.length - rows.filter(p => p.ko).length} conformes · ${rows.filter(p => p.ko).length} écarts assumés et documentés`);
+
+process.exit(codeSortie);

@@ -22,7 +22,7 @@
 @layer theme, base, components, utilities;
 
 /* Import SÉLECTIF : `preflight.css` est volontairement omis. Le design system
-   embarque son propre reset (`tokens/base.css` : h1→h4 en Anton capitales, liens,
+   embarque son propre reset (`tokens/base.css` : h1→h4 en --font-display, liens,
    focus) que le preflight neutraliserait. */
 @import "tailwindcss/theme.css" layer(theme);
 @import "tailwindcss/utilities.css" layer(utilities);
@@ -141,7 +141,8 @@
   --text-chip--letter-spacing: var(--tracking-chip);
 
   /* ---------- Familles ---------- */
-  /* Anton 400 CAPS — titres uniquement, jamais sous 1.125rem. */
+  /* Titres uniquement, jamais sous 1.125rem. La CASSE et la GRAISSE du titrage ne sont pas
+     ici : elles viennent de --heading-transform / --heading-weight, que la marque règle. */
   --font-display: var(--font-display);
   --font-body: var(--font-body);
   --font-mono: var(--font-mono);
@@ -178,7 +179,7 @@
      et un `@utility rounded` fusionnerait avec lui au lieu de le remplacer — le
      natif gagnerait. `--radius` valant `var(--radius-lg)`, `rounded-lg` le couvre
      à l’identique : c’est la classe à écrire. */
-  --radius-badge: var(--radius-badge);
+  --radius-xs: var(--radius-xs);
   --radius-sm: var(--radius-sm);
   --radius-md: var(--radius-md);
   --radius-lg: var(--radius-lg);
@@ -192,8 +193,6 @@
   --shadow-sm: var(--shadow-sm);
   --shadow-md: var(--shadow-md);
   --shadow-lg: var(--shadow-lg);
-  --shadow-soft: var(--shadow-soft);
-  --shadow-soft-lg: var(--shadow-soft-lg);
   /* Réservé au CTA primaire et aux éléments de marque. */
   --shadow-glow: var(--shadow-glow);
   --shadow-glow-lg: var(--shadow-glow-lg);
@@ -228,10 +227,15 @@
   --container-wide: var(--container-wide);
   --container-read: var(--container-read);
   --container-narrow: var(--container-narrow);
-  --container-page: var(--page-max);
 
   /* ---------- Motion ---------- */
   --ease-standard: var(--ease-standard);
+  /* v4 n'a pas de namespace pour transition-duration : ces jetons se consomment en
+     var(--duration-*) dans du CSS, pas en utilitaire. Ils sont exposés ici pour être
+     lisibles depuis un utilitaire arbitraire, duration-[var(--duration-fast)]. */
+  --duration-fast: var(--duration-fast);
+  --duration-base: var(--duration-base);
+  --duration-slow: var(--duration-slow);
 }
 
 /* Dégradés et trames de fond. `background-image` et `background-size` n’ont PAS de

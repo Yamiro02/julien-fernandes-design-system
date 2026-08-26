@@ -28,7 +28,7 @@ export type { GridBackgroundProps } from './components/content/GridBackground';
 export interface HaloHotProps extends Omit<HaloProps, 'placement'> {}
 
 export function HaloHot({ style, ...rest }: HaloHotProps): JSX.Element {
-  const base: CSSProperties = { background: 'var(--gradient-thumbnail-fit)', ...style };
+  const base: CSSProperties = { background: 'var(--gradient-thumbnail)', ...style };
   return <Halo style={base} {...rest} />;
 }
 

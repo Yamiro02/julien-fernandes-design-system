@@ -1,14 +1,22 @@
 /* ═══════════════════════════════════════════════════════════════════════════════
-   LE CONTRAT DE MARQUE — modèle à copier.
+   LE CONTRAT DE MARQUE — la liste de ce qui doit exister.
 
-   Copiez ce fichier en `brand-<client>.css`, renseignez chaque valeur, et importez-le
-   à la place de `brand-jf.css` :
+   CE FICHIER SE LIT, IL NE SE COPIE PAS. Ses valeurs sont vides par construction : parti
+   de lui, vous auriez un système qui ne rend rien. Pour DÉMARRER :
+
+       npm run rebrand -- "@vous/ds" "Votre Marque"
+
+   copie `brand-acme.css` — la palette de placeholder, qui rend — sous le nom de votre
+   marque, et repointe l'import de `styles.css` dessus. Vous remplissez la copie en gardant
+   ce fichier-ci ouvert à côté : c'est lui qui dit ce que chaque jeton doit tenir.
+
+   Si vous préférez monter la marque explicitement, sans passer par `styles.css` :
 
        @import "@julienfernandes/ds/core.css";
-       @import "./brand-acme.css";
+       @import "./brand-<vous>.css";
 
-   N'IMPORTEZ PAS `styles.css` : il embarque la marque de PLACEHOLDER livrée avec le
-   template, et vous livreriez du gris sans le voir.
+   N'IMPORTEZ PAS `styles.css` tel quel : il embarque la palette de PLACEHOLDER livrée avec
+   le template, et vous livreriez du gris sans le voir.
 
    CE QUI SE PASSE SI VOUS EN OUBLIEZ UN. Rien ne retombe sur une valeur par défaut :
    la variable n'existe pas, la propriété qui l'emploie est invalide, et ça se VOIT.
@@ -19,13 +27,16 @@
    du socle, elles ne sont pas substituables — c'est ce qui fait que deux design systems
    nés de ce template se ressemblent en STRUCTURE tout en n'ayant rien en commun.
 
-   COMBIEN : 61 jetons OBLIGATOIRES en `:root`, dont 34 à redéclarer en `.dark`.
-   Plus 7 jetons MÉTIER, optionnels, en bas du bloc — commentés : ils ne servent qu'aux
-   miniatures et cartes motion, une app d'interface ne les déclare pas.
+   COMBIEN : 61 jetons OBLIGATOIRES en `:root`, dont AU MOINS 34 à redéclarer en `.dark` —
+   davantage si votre marque éclaircit ses remplissages en thème sombre, ce que le
+   placeholder fait sur 43. Plus 6 jetons MÉTIER, optionnels, en bas du bloc et commentés :
+   ils ne servent qu'aux miniatures et cartes motion, une app d'interface ne les déclare pas.
 
    VÉRIFIEZ VOTRE PALETTE AVANT DE LIVRER :
-       TOKENS=./brand-acme.css node check-contrast.mjs
-       STYLES=./  node check-dark-substitution.mjs
+       TOKENS=src/styles/brand-<vous>.css node check-contrast.mjs
+       node check-dark-substitution.mjs
+   Le premier refuse toute paire sous seuil que vous n'avez pas déclarée ; le second refuse
+   un jeton qui figerait sa valeur claire dans une section sombre imbriquée.
    ═══════════════════════════════════════════════════════════════════════════════ */
 
 /* ---------- 1 · POLICES ----------
@@ -144,7 +155,7 @@
      Le contrat des sept est écrit en tête de `src/styles/brand-content.css`.
      Le pendant JavaScript est sur `@julienfernandes/ds/brand-content` :
      `GridBackground`, `HaloHot`, `ContentIcon`. */
-  /* --tone-deep:; --gradient-thumbnail:; --gradient-thumbnail-fit:;
+  /* --tone-deep:; --gradient-thumbnail:;
      --grid-cell:; --grid-cell-lg:; --grid-line:; --shadow-accent-hot:; */
 }
 

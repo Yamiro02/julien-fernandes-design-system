@@ -189,13 +189,13 @@
      Les VALEURS restent ici, avec le reste de la marque, parce que c'est là que vivent
      toutes les valeurs de ce paquet ; l'extension, elle, n'en porte aucune. */
   --tone-deep:#0d0c0b;   /* le plus profond du système — surfaces d'export uniquement */
-  /* Halo de miniature, plus chaud. Littéral repris VERBATIM du brief historique.
-     SIGNALÉ : il ne peut pas rendre — avec `closest-side` et un centre à 110 %, le rayon
-     vaut 10 % de la hauteur de la boîte tandis que le centre est 10 % SOUS elle : le
-     disque peint n'atteint jamais la zone visible, il sort vide dans tout conteneur.
-     Retiré au sous-lot 6 avec son utilitaire. Utilisez le jumeau ci-dessous. */
-  --gradient-thumbnail:radial-gradient(closest-side at 50% 110%, rgba(240,128,41,.55) 0%, rgba(232,76,61,.28) 45%, transparent 72%); /* @kind color */
-  --gradient-thumbnail-fit:radial-gradient(70% 55% at 50% 100%, rgba(240,128,41,.55) 0%, rgba(232,76,61,.28) 45%, transparent 72%); /* @kind color */
+  /* Halo de miniature, plus chaud que celui de l'interface. Il y en avait DEUX : le
+     littéral verbatim du brief historique, et son jumeau dimensionné. Le premier ne
+     pouvait pas rendre — avec `closest-side` et un centre à 110 %, le rayon vaut 10 % de la
+     hauteur de la boîte tandis que le centre est 10 % SOUS elle : le disque peint
+     n'atteignait jamais la zone visible, il sortait vide dans tout conteneur, et il était
+     pourtant exposé en `@utility bg-thumbnail`. Supprimé ; celui-ci reprend son nom. */
+  --gradient-thumbnail:radial-gradient(70% 55% at 50% 100%, rgba(240,128,41,.55) 0%, rgba(232,76,61,.28) 45%, transparent 72%); /* @kind color */
   /* La maille et le filet restent en px EXPRÈS : la grille ne doit pas suivre le rem. */
   --grid-cell:28px;
   --grid-cell-lg:80px;

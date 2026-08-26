@@ -5,7 +5,7 @@
    Demo helpers .is-hover / .is-active / .is-focus force a state in specimen cards. */
 
 /* ---------- actions: Button — values copied from Yunary Button.jsx ---------- */
-.ds-btn{display:inline-flex;align-items:center;justify-content:center;gap:0.5rem;min-height:var(--control-md);padding:0.8125rem 1.375rem;font-family:var(--font-body);font-size:var(--text-control);font-weight:var(--weight-semibold);line-height:1;border:none;border-radius:var(--radius-md);cursor:pointer;text-decoration:none;white-space:nowrap;box-sizing:border-box;outline:none;transition:transform 150ms var(--ease-standard),box-shadow 200ms var(--ease-standard),background 200ms var(--ease-standard),border-color 200ms var(--ease-standard),filter 200ms var(--ease-standard)}
+.ds-btn{display:inline-flex;align-items:center;justify-content:center;gap:0.5rem;min-height:var(--control-md);padding:0.8125rem 1.375rem;font-family:var(--font-body);font-size:var(--text-control);font-weight:var(--weight-semibold);line-height:1;border:none;border-radius:var(--radius-md);cursor:pointer;text-decoration:none;white-space:nowrap;box-sizing:border-box;outline:none;transition:transform var(--duration-fast) var(--ease-standard),box-shadow var(--duration-base) var(--ease-standard),background var(--duration-base) var(--ease-standard),border-color var(--duration-base) var(--ease-standard),filter var(--duration-base) var(--ease-standard)}
 .ds-btn--sm{gap:0.4375rem;min-height:var(--control-sm);padding:0.5625rem 1rem;font-size:0.875rem}
 .ds-btn--lg{gap:0.5625rem;min-height:var(--control-lg);padding:0.9375rem 1.625rem;font-size:var(--text-body)}
 .ds-btn--block{width:100%}
@@ -25,11 +25,11 @@
 .ds-btn--secondary:focus-visible,.ds-btn--ghost:focus-visible,.ds-btn--danger:focus-visible,.ds-btn--secondary.is-focus,.ds-btn--ghost.is-focus,.ds-btn--danger.is-focus{box-shadow:0 0 0 3px color-mix(in srgb,var(--ring) 35%,transparent)}
 .ds-btn:disabled,.ds-btn.is-disabled{opacity:.5;cursor:not-allowed;transform:none}
 .ds-btn.is-loading{cursor:progress}
-.ds-spin{animation:ds-spin 1s linear infinite;flex:none}
+.ds-spin{animation:ds-spin var(--duration-rotate) linear infinite;flex:none}
 @keyframes ds-spin{to{transform:rotate(360deg)}}
 
 /* ---------- actions: IconButton — values copied from Yunary IconButton.jsx ---------- */
-.ds-icon-btn{display:inline-flex;align-items:center;justify-content:center;width:var(--icon-control-md);height:var(--icon-control-md);padding:0;border:1.5px solid var(--border);background:var(--secondary);color:var(--foreground);border-radius:var(--radius-md);cursor:pointer;box-sizing:border-box;outline:none;transition:background 200ms var(--ease-standard),border-color 200ms var(--ease-standard),color 200ms var(--ease-standard),box-shadow 200ms var(--ease-standard)}
+.ds-icon-btn{display:inline-flex;align-items:center;justify-content:center;width:var(--icon-control-md);height:var(--icon-control-md);padding:0;border:1.5px solid var(--border);background:var(--secondary);color:var(--foreground);border-radius:var(--radius-md);cursor:pointer;box-sizing:border-box;outline:none;transition:background var(--duration-base) var(--ease-standard),border-color var(--duration-base) var(--ease-standard),color var(--duration-base) var(--ease-standard),box-shadow var(--duration-base) var(--ease-standard)}
 .ds-icon-btn--sm{width:var(--icon-control-sm);height:var(--icon-control-sm)}
 .ds-icon-btn--lg{width:var(--icon-control-lg);height:var(--icon-control-lg)}
 .ds-icon-btn--secondary:hover:not(:disabled),.ds-icon-btn--secondary.is-hover,.ds-icon-btn--ghost:hover:not(:disabled),.ds-icon-btn--ghost.is-hover{background:var(--surface-alt)}
@@ -47,7 +47,7 @@
 .ds-label{font-size:var(--text-caption);font-weight:var(--weight-semibold);color:var(--text-secondary);letter-spacing:0}
 .ds-help{font-size:var(--text-caption);color:var(--text-muted)}
 .ds-error{display:flex;align-items:center;gap:var(--space-2);font-size:var(--text-caption);font-weight:var(--weight-medium);color:var(--destructive-readable)}
-.ds-input{width:100%;min-height:var(--control-md);padding:0.6875rem 0.875rem;box-sizing:border-box;font-family:var(--font-body);font-size:var(--text-control);color:var(--foreground);background:var(--secondary);border:1.5px solid var(--input);border-radius:var(--radius-md);outline:none;transition:border-color 200ms var(--ease-standard),box-shadow 200ms var(--ease-standard)}
+.ds-input{width:100%;min-height:var(--control-md);padding:0.6875rem 0.875rem;box-sizing:border-box;font-family:var(--font-body);font-size:var(--text-control);color:var(--foreground);background:var(--secondary);border:1.5px solid var(--input);border-radius:var(--radius-md);outline:none;transition:border-color var(--duration-base) var(--ease-standard),box-shadow var(--duration-base) var(--ease-standard)}
 .ds-input--on-card{background:var(--background)}
 .ds-input--sm{min-height:var(--control-sm)}
 .ds-input--lg{min-height:var(--control-lg)}
@@ -62,9 +62,9 @@
 .ds-select__chev{position:absolute;right:var(--space-4);top:50%;transform:translateY(-50%);pointer-events:none;color:var(--text-muted)}
 .ds-choice{display:inline-flex;align-items:center;gap:0.5625rem;cursor:pointer;font-size:0.875rem;color:var(--foreground);line-height:var(--leading-snug);position:relative}
 .ds-choice input{position:absolute;opacity:0;width:0;height:0}
-.ds-choice__box{flex:none;display:inline-flex;align-items:center;justify-content:center;width:1.25rem;height:1.25rem;border:1.5px solid var(--input);background:var(--background);border-radius:0.4375rem;color:var(--primary-foreground);transition:background 150ms var(--ease-standard),border-color 150ms var(--ease-standard),box-shadow 150ms var(--ease-standard)}
+.ds-choice__box{flex:none;display:inline-flex;align-items:center;justify-content:center;width:1.25rem;height:1.25rem;border:1.5px solid var(--input);background:var(--background);border-radius:0.4375rem;color:var(--primary-foreground);transition:background var(--duration-fast) var(--ease-standard),border-color var(--duration-fast) var(--ease-standard),box-shadow var(--duration-fast) var(--ease-standard)}
 .ds-choice__box--radio{border-radius:var(--radius-pill)}
-.ds-choice__box>*{opacity:0;transition:opacity 150ms var(--ease-standard)}
+.ds-choice__box>*{opacity:0;transition:opacity var(--duration-fast) var(--ease-standard)}
 .ds-choice:hover .ds-choice__box,.ds-choice.is-hover .ds-choice__box{border-color:var(--primary)}
 .ds-choice input:checked+.ds-choice__box,.ds-choice.is-checked .ds-choice__box{background:var(--primary);border-color:var(--primary)}
 .ds-choice input:checked+.ds-choice__box>*,.ds-choice.is-checked .ds-choice__box>*{opacity:1}
@@ -76,8 +76,8 @@
 .ds-switch input{position:absolute;opacity:0;width:0;height:0}
 /* Mesures en jetons (--switch-*) : la course du knob en DÉCOULE (calc), elle n'est plus un
    littéral inventé. Fond du knob = --tone-light-alt (jamais #fff), relief = --shadow-knob. */
-.ds-switch__track{position:relative;flex:none;width:var(--switch-w);height:var(--switch-h);border-radius:var(--radius-pill);background:var(--border);transition:background 200ms var(--ease-standard),box-shadow 200ms var(--ease-standard)}
-.ds-switch__knob{position:absolute;top:var(--switch-inset);left:var(--switch-inset);width:var(--switch-knob);height:var(--switch-knob);border-radius:var(--radius-pill);background:var(--tone-light-alt);box-shadow:var(--shadow-knob);transition:transform 200ms var(--ease-standard)}
+.ds-switch__track{position:relative;flex:none;width:var(--switch-w);height:var(--switch-h);border-radius:var(--radius-pill);background:var(--border);transition:background var(--duration-base) var(--ease-standard),box-shadow var(--duration-base) var(--ease-standard)}
+.ds-switch__knob{position:absolute;top:var(--switch-inset);left:var(--switch-inset);width:var(--switch-knob);height:var(--switch-knob);border-radius:var(--radius-pill);background:var(--tone-light-alt);box-shadow:var(--shadow-knob);transition:transform var(--duration-base) var(--ease-standard)}
 .ds-switch input:checked+.ds-switch__track,.ds-switch.is-checked .ds-switch__track{background:var(--primary)}
 .ds-switch input:checked+.ds-switch__track .ds-switch__knob,.ds-switch.is-checked .ds-switch__knob{transform:translateX(calc(var(--switch-w) - var(--switch-knob) - var(--switch-inset) * 2))}
 .ds-switch input:focus-visible+.ds-switch__track,.ds-switch.is-focus .ds-switch__track{box-shadow:0 0 0 3px color-mix(in srgb,var(--ring) 35%,transparent)}
@@ -95,7 +95,7 @@
 .ds-card{background:var(--card);color:var(--card-foreground);border:1px solid var(--border);border-radius:var(--radius-lg);padding:var(--card-pad);box-shadow:var(--shadow-sm);box-sizing:border-box}
 .ds-card--lg{border-radius:var(--radius-xl);padding:var(--card-pad-lg)}
 .ds-card--flush{padding:0;overflow:hidden}
-.ds-card--interactive{cursor:pointer;transition:box-shadow 200ms var(--ease-standard),transform 200ms var(--ease-standard)}
+.ds-card--interactive{cursor:pointer;transition:box-shadow var(--duration-base) var(--ease-standard),transform var(--duration-base) var(--ease-standard)}
 .ds-card--interactive:hover,.ds-card--interactive.is-hover{transform:translateY(-2px);box-shadow:var(--shadow-md)}
 .ds-card--interactive:active,.ds-card--interactive.is-active{transform:translateY(0);box-shadow:var(--shadow-sm)}
 .ds-card--interactive:focus-visible,.ds-card--interactive.is-focus{box-shadow:0 0 0 3px color-mix(in srgb,var(--ring) 35%,transparent)}
@@ -110,11 +110,8 @@
 .ds-badge--neutral{background:var(--pill-neutral-bg);color:var(--pill-neutral-fg)}
 .ds-badge--accent{background:var(--accent);color:var(--primary-readable)}
 .ds-badge--outline{background:transparent;color:var(--text-secondary);box-shadow:inset 0 0 0 1px var(--border)}
-.ds-metric{display:inline-flex;align-items:center;gap:0.375rem;padding:0.25rem 0.6875rem;border-radius:var(--radius-pill);background:var(--pill-neutral-bg);color:var(--pill-neutral-fg);font-size:0.78125rem;font-weight:var(--weight-medium);line-height:1.3;white-space:nowrap}
-.ds-metric--solid{background:var(--overlay-play-bg);color:var(--text-inverted)}
-.ds-metric--coral{background:var(--pill-coral-bg);color:var(--pill-coral-fg)}
 .ds-tooltip{position:relative;display:inline-flex}
-.ds-tooltip__bubble{position:absolute;bottom:calc(100% + 0.5625rem);left:50%;transform:translateX(-50%) translateY(0.25rem);padding:0.5rem 0.75rem;border-radius:var(--radius-md);background:var(--tone-dark);color:var(--text-inverted);font-size:var(--text-caption);font-weight:var(--weight-semibold);line-height:1.3;white-space:nowrap;box-shadow:var(--shadow-lg);opacity:0;pointer-events:none;transition:opacity 150ms var(--ease-standard),transform 150ms var(--ease-standard);z-index:40}
+.ds-tooltip__bubble{position:absolute;bottom:calc(100% + 0.5625rem);left:50%;transform:translateX(-50%) translateY(0.25rem);padding:0.5rem 0.75rem;border-radius:var(--radius-md);background:var(--tone-dark);color:var(--text-inverted);font-size:var(--text-caption);font-weight:var(--weight-semibold);line-height:1.3;white-space:nowrap;box-shadow:var(--shadow-lg);opacity:0;pointer-events:none;transition:opacity var(--duration-fast) var(--ease-standard),transform var(--duration-fast) var(--ease-standard);z-index:40}
 .ds-tooltip__bubble::after{content:"";position:absolute;left:50%;bottom:-0.25rem;width:0.5rem;height:0.5rem;background:inherit;transform:translateX(-50%) rotate(45deg)}
 .dark .ds-tooltip__bubble{background:var(--tone-light-alt);color:var(--tone-dark)}
 .ds-tooltip:hover .ds-tooltip__bubble,.ds-tooltip:focus-within .ds-tooltip__bubble,.ds-tooltip.is-open .ds-tooltip__bubble{opacity:1;transform:translateX(-50%) translateY(0)}
@@ -155,7 +152,7 @@
 /* Le point haut du shimmer prend --surface-alt, pas --accent : c'est un écart de
    SURFACE, pas une teinte. Sur --accent il valait --muted en sombre — dégradé plat,
    squelette immobile. */
-.ds-skel{display:block;background:linear-gradient(90deg,var(--muted) 0%,var(--surface-alt) 50%,var(--muted) 100%);background-size:560px 100%;border-radius:var(--radius-sm);animation:shimmer 1.4s infinite linear}
+.ds-skel{display:block;background:linear-gradient(90deg,var(--muted) 0%,var(--surface-alt) 50%,var(--muted) 100%);background-size:560px 100%;border-radius:var(--radius-sm);animation:shimmer var(--duration-shimmer) infinite linear}
 
 /* ---------- overlays — values copied from Yunary Modal/Dropdown.jsx ---------- */
 .ds-scrim{position:absolute;inset:0;background:color-mix(in srgb,var(--tone-dark) 45%,transparent);backdrop-filter:blur(2px);-webkit-backdrop-filter:blur(2px);display:flex;align-items:center;justify-content:center;padding:var(--space-5)}
@@ -178,7 +175,7 @@
 .ds-actionsheet__head{display:flex;flex-direction:column;gap:0.125rem;padding:var(--space-1) var(--space-3) var(--space-2)}
 .ds-actionsheet__title{font-size:0.875rem;font-weight:var(--weight-semibold)}
 .ds-actionsheet__subtitle{font-size:var(--text-caption);color:var(--text-muted)}
-.ds-actionsheet__item{display:flex;align-items:center;gap:0.625rem;min-height:var(--control-md);padding:0 var(--space-3);border:0;background:transparent;color:var(--foreground);font-family:var(--font-body);font-size:var(--text-control);font-weight:var(--weight-medium);text-align:left;border-radius:var(--radius-sm);cursor:pointer;transition:background 150ms var(--ease-standard)}
+.ds-actionsheet__item{display:flex;align-items:center;gap:0.625rem;min-height:var(--control-md);padding:0 var(--space-3);border:0;background:transparent;color:var(--foreground);font-family:var(--font-body);font-size:var(--text-control);font-weight:var(--weight-medium);text-align:left;border-radius:var(--radius-sm);cursor:pointer;transition:background var(--duration-fast) var(--ease-standard)}
 .ds-actionsheet__item:hover,.ds-actionsheet__item.is-hover,.ds-actionsheet__item:focus-visible{background:var(--surface-alt);outline:none}
 .ds-actionsheet__item--danger{color:var(--destructive-readable)}
 .ds-actionsheet__note{font-size:var(--text-caption);color:var(--text-muted);line-height:var(--leading-normal);padding:var(--space-1) var(--space-3) var(--space-2)}
@@ -193,7 +190,7 @@
 .ds-actionsheet--panneau{width:20rem;max-width:100%;border:1px solid var(--border);border-radius:var(--radius-2xl);padding-bottom:var(--space-2)}
 .ds-actionsheet--panneau .ds-grip{display:none}
 .ds-dropdown{width:14.375rem;padding:0.375rem;background:var(--popover);color:var(--popover-foreground);border:1px solid var(--border);border-radius:var(--radius-lg);box-shadow:var(--shadow-lg);display:flex;flex-direction:column;gap:0.125rem;box-sizing:border-box}
-.ds-dropdown__item{display:flex;align-items:center;gap:0.625rem;width:100%;padding:0.5625rem 0.6875rem;border:0;background:transparent;color:var(--foreground);font-family:var(--font-body);font-size:0.875rem;text-align:left;border-radius:var(--radius-sm);cursor:pointer;transition:background 150ms var(--ease-standard)}
+.ds-dropdown__item{display:flex;align-items:center;gap:0.625rem;width:100%;padding:0.5625rem 0.6875rem;border:0;background:transparent;color:var(--foreground);font-family:var(--font-body);font-size:0.875rem;text-align:left;border-radius:var(--radius-sm);cursor:pointer;transition:background var(--duration-fast) var(--ease-standard)}
 .ds-dropdown__item:hover,.ds-dropdown__item.is-hover,.ds-dropdown__item:focus-visible{background:var(--surface-alt);outline:none}
 .ds-dropdown__item--danger{color:var(--destructive-readable)}
 .ds-dropdown__sep{height:1px;margin:0.25rem 0.375rem;background:var(--border);border:0}
@@ -202,23 +199,23 @@
    Inline panels (specimen cards, no scrim) are untouched: the rules require .ds-scrim. */
 @media (max-width:64rem){
 .ds-scrim{align-items:flex-end;padding:0}
-.ds-scrim .ds-modal{width:100%;max-width:none;border-radius:var(--radius-2xl) var(--radius-2xl) 0 0;border-inline:0;border-bottom:0;padding-bottom:max(var(--space-5),env(safe-area-inset-bottom));animation:ds-sheet-in 300ms var(--ease-standard)}
+.ds-scrim .ds-modal{width:100%;max-width:none;border-radius:var(--radius-2xl) var(--radius-2xl) 0 0;border-inline:0;border-bottom:0;padding-bottom:max(var(--space-5),env(safe-area-inset-bottom));animation:ds-sheet-in var(--duration-slow) var(--ease-standard)}
 .ds-scrim .ds-modal .ds-grip{display:block;margin-bottom:var(--space-2)}
 }
 @keyframes ds-sheet-in{from{transform:translateY(100%)}to{transform:none}}
 
 /* ---------- navigation ---------- */
-.ds-navbar{position:sticky;top:0;z-index:30;width:100%;background:var(--secondary);border-bottom:1px solid var(--border);transition:background-color 200ms var(--ease-standard),border-color 200ms var(--ease-standard),box-shadow 200ms var(--ease-standard)}
+.ds-navbar{position:sticky;top:0;z-index:30;width:100%;background:var(--secondary);border-bottom:1px solid var(--border);transition:background-color var(--duration-base) var(--ease-standard),border-color var(--duration-base) var(--ease-standard),box-shadow var(--duration-base) var(--ease-standard)}
 .ds-navbar.is-scrolled{background:color-mix(in srgb,var(--secondary) 82%,transparent);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);box-shadow:var(--shadow-sm)}
 .ds-navbar__inner{display:flex;align-items:center;justify-content:space-between;gap:var(--space-5);height:4.5rem}
 .ds-navbar__links{display:flex;align-items:center;gap:var(--space-6)}
 .ds-navbar__cta{display:flex;align-items:center;gap:var(--space-3)}
-.ds-navlink{font-size:var(--text-body);font-weight:var(--weight-medium);color:var(--text-secondary);text-decoration:none;padding:var(--space-2) 0;transition:color 150ms var(--ease-standard)}
+.ds-navlink{font-size:var(--text-body);font-weight:var(--weight-medium);color:var(--text-secondary);text-decoration:none;padding:var(--space-2) 0;transition:color var(--duration-fast) var(--ease-standard)}
 .ds-navlink:hover,.ds-navlink.is-hover{color:var(--foreground)}
 .ds-navlink.is-active{color:var(--primary-readable)}
 .ds-tabs{display:inline-flex;align-items:center;gap:var(--space-1);padding:var(--space-1);border-radius:0.875rem;min-height:var(--control-md);box-sizing:border-box;background:var(--secondary);border:1px solid var(--border)}
 .ds-tabs--on-card{background:var(--background)}
-.ds-tab{appearance:none;border:0;background:transparent;color:var(--text-muted);font-family:var(--font-body);font-size:var(--text-control);font-weight:var(--weight-semibold);padding:var(--space-2) var(--space-4);border-radius:var(--radius-sm);cursor:pointer;transition:background-color 150ms var(--ease-standard),color 150ms var(--ease-standard)}
+.ds-tab{appearance:none;border:0;background:transparent;color:var(--text-muted);font-family:var(--font-body);font-size:var(--text-control);font-weight:var(--weight-semibold);padding:var(--space-2) var(--space-4);border-radius:var(--radius-sm);cursor:pointer;transition:background-color var(--duration-fast) var(--ease-standard),color var(--duration-fast) var(--ease-standard)}
 .ds-tab:hover,.ds-tab.is-hover{color:var(--foreground)}
 .ds-tab[aria-selected="true"],.ds-tab.is-selected{background:var(--background);color:var(--foreground);box-shadow:var(--shadow-sm)}
 /* Sur une carte, la barre est en --background : l'onglet actif reprend --card pour garder l'écart. */
@@ -233,15 +230,15 @@
 .ds-sep--label::before,.ds-sep--label::after{content:"";flex:1;height:1px;background:var(--border)}
 
 /* ---------- spinner ---------- */
-.ds-spinner{display:inline-block;flex:none;box-sizing:border-box;border-radius:var(--radius-pill);border:2px solid color-mix(in srgb,currentColor 25%,transparent);border-top-color:currentColor;animation:ds-spin 0.8s linear infinite}
+.ds-spinner{display:inline-block;flex:none;box-sizing:border-box;border-radius:var(--radius-pill);border:2px solid color-mix(in srgb,currentColor 25%,transparent);border-top-color:currentColor;animation:ds-spin var(--duration-spin) linear infinite}
 
 /* ---------- progress ---------- */
 /* Rail sur --surface-alt : un cran de séparation depuis la porteuse, dans les deux
    thèmes. Pas --accent — une teinte de marque sous une barre --primary se confondrait
    avec elle ; pas --border non plus, ce n'est pas un filet. */
-.ds-progress{position:relative;display:block;width:100%;height:0.5rem;border-radius:var(--radius-badge);background:var(--surface-alt);overflow:hidden}
-.ds-progress__bar{position:absolute;inset-block:0;left:0;border-radius:inherit;background:var(--primary);transition:width 200ms var(--ease-standard)}
-.ds-progress--indeterminate .ds-progress__bar{width:40%;animation:ds-progress-slide 1.4s var(--ease-standard) infinite}
+.ds-progress{position:relative;display:block;width:100%;height:0.5rem;border-radius:var(--radius-xs);background:var(--surface-alt);overflow:hidden}
+.ds-progress__bar{position:absolute;inset-block:0;left:0;border-radius:inherit;background:var(--primary);transition:width var(--duration-base) var(--ease-standard)}
+.ds-progress--indeterminate .ds-progress__bar{width:40%;animation:ds-progress-slide var(--duration-shimmer) var(--ease-standard) infinite}
 @keyframes ds-progress-slide{0%{left:-40%}100%{left:100%}}
 
 /* ---------- table ---------- */
@@ -261,7 +258,7 @@
 
 /* ---------- pagination ---------- */
 .ds-pagination{display:inline-flex;align-items:center;gap:var(--space-1);padding:var(--space-1);background:var(--secondary);border:1px solid var(--border);border-radius:0.875rem;min-height:var(--control-md);box-sizing:border-box}
-.ds-page{appearance:none;border:0;background:transparent;min-width:2.5rem;min-height:2.5rem;padding:0 var(--space-2);display:inline-flex;align-items:center;justify-content:center;border-radius:var(--radius-sm);font-family:var(--font-body);font-size:var(--text-control);font-weight:var(--weight-semibold);color:var(--text-muted);cursor:pointer;transition:background-color 150ms var(--ease-standard),color 150ms var(--ease-standard)}
+.ds-page{appearance:none;border:0;background:transparent;min-width:2.5rem;min-height:2.5rem;padding:0 var(--space-2);display:inline-flex;align-items:center;justify-content:center;border-radius:var(--radius-sm);font-family:var(--font-body);font-size:var(--text-control);font-weight:var(--weight-semibold);color:var(--text-muted);cursor:pointer;transition:background-color var(--duration-fast) var(--ease-standard),color var(--duration-fast) var(--ease-standard)}
 .ds-page:hover:not(:disabled):not(.ds-page--ellipsis){color:var(--foreground);background:var(--surface-alt)}
 .ds-page[aria-current="page"]{background:var(--card);color:var(--foreground);box-shadow:var(--shadow-sm)}
 .ds-page:disabled{opacity:.5;cursor:not-allowed}
@@ -271,17 +268,17 @@
 /* ---------- appshell / sidebar ---------- */
 .ds-appshell{display:grid;grid-template-columns:auto 1fr;align-items:stretch;min-height:100%}
 .ds-appshell__main{min-width:0}
-.ds-sidebar{display:flex;flex-direction:column;gap:var(--space-2);width:16rem;background:var(--secondary);border-right:1px solid var(--border);padding:var(--space-4);box-sizing:border-box;transition:width 200ms var(--ease-standard)}
+.ds-sidebar{display:flex;flex-direction:column;gap:var(--space-2);width:16rem;background:var(--secondary);border-right:1px solid var(--border);padding:var(--space-4);box-sizing:border-box;transition:width var(--duration-base) var(--ease-standard)}
 .ds-sidebar.is-collapsed{width:4.5rem;padding-inline:var(--space-3)}
 .ds-sidebar__head{display:flex;align-items:center;justify-content:space-between;gap:var(--space-2);min-height:3rem;margin-bottom:var(--space-2)}
 .ds-sidebar.is-collapsed .ds-sidebar__head{flex-direction:column;justify-content:center;gap:var(--space-2)}
-.ds-sidebar__toggle{appearance:none;border:0;background:transparent;color:var(--text-muted);cursor:pointer;display:inline-flex;padding:var(--space-2);border-radius:var(--radius-sm);transition:background-color 150ms var(--ease-standard),color 150ms var(--ease-standard)}
+.ds-sidebar__toggle{appearance:none;border:0;background:transparent;color:var(--text-muted);cursor:pointer;display:inline-flex;padding:var(--space-2);border-radius:var(--radius-sm);transition:background-color var(--duration-fast) var(--ease-standard),color var(--duration-fast) var(--ease-standard)}
 .ds-sidebar__toggle:hover{background:var(--surface-alt);color:var(--foreground)}
 .ds-sidebar__toggle:focus-visible{outline:2px solid var(--ring);outline-offset:2px}
 .ds-sidebar__nav{display:flex;flex-direction:column;gap:var(--space-1);flex:1;overflow-y:auto;min-height:0}
 .ds-sidebar__title{font-family:var(--font-body);font-size:0.6875rem;font-weight:var(--weight-bold);letter-spacing:0.08em;text-transform:uppercase;color:var(--text-muted);padding:var(--space-3) var(--space-3) var(--space-1)}
 .ds-sidebar.is-collapsed .ds-sidebar__title{display:none}
-.ds-sidenav{display:flex;align-items:center;gap:var(--space-3);min-height:2.5rem;padding:0 var(--space-3);border-radius:var(--radius-sm);border:0;background:transparent;color:var(--text-secondary);font-family:var(--font-body);font-size:var(--text-control);font-weight:var(--weight-medium);text-align:left;text-decoration:none;cursor:pointer;white-space:nowrap;transition:background-color 150ms var(--ease-standard),color 150ms var(--ease-standard)}
+.ds-sidenav{display:flex;align-items:center;gap:var(--space-3);min-height:2.5rem;padding:0 var(--space-3);border-radius:var(--radius-sm);border:0;background:transparent;color:var(--text-secondary);font-family:var(--font-body);font-size:var(--text-control);font-weight:var(--weight-medium);text-align:left;text-decoration:none;cursor:pointer;white-space:nowrap;transition:background-color var(--duration-fast) var(--ease-standard),color var(--duration-fast) var(--ease-standard)}
 .ds-sidenav:hover{background:var(--surface-alt);color:var(--foreground)}
 .ds-sidenav.is-active{background:var(--surface-alt);color:var(--primary-readable)}
 .ds-sidenav:focus-visible{outline:2px solid var(--ring);outline-offset:2px}
@@ -293,7 +290,7 @@
 @media (min-width:64.0625rem){.ds-appshell__scrim{display:none}}
 @media (max-width:64rem){
 .ds-appshell:not(.ds-appshell--static){grid-template-columns:1fr}
-.ds-appshell:not(.ds-appshell--static) .ds-sidebar:not(.ds-sidebar--static){position:fixed;inset-block:0;left:0;z-index:60;transform:translateX(-100%);transition:transform 300ms var(--ease-standard)}
+.ds-appshell:not(.ds-appshell--static) .ds-sidebar:not(.ds-sidebar--static){position:fixed;inset-block:0;left:0;z-index:60;transform:translateX(-100%);transition:transform var(--duration-slow) var(--ease-standard)}
 .ds-appshell:not(.ds-appshell--static) .ds-sidebar.is-open{transform:none;box-shadow:var(--shadow-lg)}
 }
 
@@ -302,12 +299,12 @@
 .ds-cal--bare{padding:0;background:none;border:0;box-shadow:none}
 .ds-cal__head{display:flex;align-items:center;gap:var(--space-1)}
 .ds-cal__label{flex:1;text-align:center;font-family:var(--font-body);font-size:var(--text-control);font-weight:var(--weight-semibold);text-transform:capitalize}
-.ds-cal__nav{appearance:none;border:0;background:transparent;color:var(--text-muted);width:2rem;height:2rem;display:inline-flex;align-items:center;justify-content:center;border-radius:var(--radius-sm);cursor:pointer;transition:background-color 150ms var(--ease-standard),color 150ms var(--ease-standard)}
+.ds-cal__nav{appearance:none;border:0;background:transparent;color:var(--text-muted);width:2rem;height:2rem;display:inline-flex;align-items:center;justify-content:center;border-radius:var(--radius-sm);cursor:pointer;transition:background-color var(--duration-fast) var(--ease-standard),color var(--duration-fast) var(--ease-standard)}
 .ds-cal__nav:hover{background:var(--surface-alt);color:var(--foreground)}
 .ds-cal__nav:focus-visible{outline:2px solid var(--ring);outline-offset:2px}
 .ds-cal__grid{display:grid;grid-template-columns:repeat(7,2.25rem);gap:0.125rem;justify-items:center}
 .ds-cal__wd{width:2.25rem;text-align:center;font-family:var(--font-body);font-size:0.6875rem;font-weight:var(--weight-semibold);text-transform:uppercase;letter-spacing:0.04em;color:var(--text-muted);padding-block:var(--space-1)}
-.ds-cal__day{appearance:none;border:0;background:transparent;width:2.25rem;height:2.25rem;display:inline-flex;align-items:center;justify-content:center;border-radius:var(--radius-sm);font-family:var(--font-body);font-size:0.875rem;color:var(--foreground);cursor:pointer;transition:background-color 150ms var(--ease-standard),color 150ms var(--ease-standard)}
+.ds-cal__day{appearance:none;border:0;background:transparent;width:2.25rem;height:2.25rem;display:inline-flex;align-items:center;justify-content:center;border-radius:var(--radius-sm);font-family:var(--font-body);font-size:0.875rem;color:var(--foreground);cursor:pointer;transition:background-color var(--duration-fast) var(--ease-standard),color var(--duration-fast) var(--ease-standard)}
 .ds-cal__day:hover:not(:disabled):not(.is-selected){background:var(--surface-alt)}
 .ds-cal__day.is-today{color:var(--primary-readable);font-weight:var(--weight-bold)}
 .ds-cal__day.is-selected{background:var(--primary);color:var(--primary-foreground);font-weight:var(--weight-semibold)}
