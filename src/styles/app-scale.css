@@ -1,0 +1,14 @@
+/* Échelle d'app — OPT-IN, outils internes desktop uniquement.
+   N'est PAS importé par core.css : le site public, les e-mails et les slides gardent le
+   rem natif. Une app l'active en important ce fichier après le socle et sa marque.
+   Paliers en % — ils MULTIPLIENT la préférence de taille du navigateur au lieu de
+   l'écraser (l'interdit « jamais de font-size px sur html » reste respecté).
+   Logique : largeur effective (physique ÷ facteur) ≈ 1440–1600, pour montrer à peu
+   près ce que montre la maquette 1440 sur tout écran. VALEURS DU CODE APP (08/2026).
+   Palier haut dézoomé de 10 % (144 → 130) : constat terrain sur 30 pouces. */
+html{font-size:103%}                             /* < 1600 — plancher, mise en page effective ~1398 */
+@media (min-width:1600px){html{font-size:112%}}  /* 1600–1919 — ~1500 */
+@media (min-width:1920px){html{font-size:126%}}  /* 1920–2399 — ~1524 */
+@media (min-width:2400px){html{font-size:130%}}  /* ≥ 2400 — ~1969, prix assumé du dézoom */
+/* Garde-fou desktop : 1100 × 1.03, en px VOLONTAIREMENT pour ne pas bouger avec le facteur. */
+body{min-width:1133px}

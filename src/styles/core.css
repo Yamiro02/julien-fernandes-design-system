@@ -1,0 +1,54 @@
+/* ═══════════════════════════════════════════════════════════════════════════════
+   SOCLE — le TEMPLATE.   LA COUCHE INVARIANTE.
+
+   Structure, comportements, échelles, rayons, ombres neutres, rail de contrôles,
+   motion, états des 37 composants. ZÉRO valeur de marque : pas une couleur, pas une
+   police, pas un dégradé, pas une lueur. Ce fichier DÉCLARE LE CONTRAT — la liste des
+   jetons qu'un fichier de marque doit fournir — il ne le remplit pas.
+
+       @import "@acme/ds/core.css";        <- CE fichier, l'entrée du socle
+       @import "./brand-<vous>.css";                  <- la vôtre, copiée du gabarit
+
+   POURQUOI DEUX FICHIERS, ET PAS UN OVERRIDE EN CASCADE. Importer le système complet
+   puis redéclarer par-dessus laisserait un jeton oublié retomber EN SILENCE sur la
+   valeur d'origine : on livrerait la couleur de quelqu'un d'autre sans le savoir. Avec
+   deux fichiers,
+   un jeton manquant fait que la variable n'existe pas — et ça casse à l'écran. C'est
+   la même logique que `--text-*: initial` dans theme.css, qui supprime l'échelle typo
+   native de Tailwind : une régression doit CASSER au lieu de DÉRIVER.
+
+   Un projet qui n'importe que ce fichier rend un système sans couleurs. C'est voulu.
+
+   TOUTES les mesures sont en rem (base 16px = 1rem). Ne jamais fixer un font-size en px
+   sur html/:root sur le web — le rem doit honorer la préférence de taille du navigateur.
+   Les canevas à dimensions fixes (miniatures, shorts, slides, motion, social) sont la
+   SEULE exception : chacun fixe sa propre racine, voir tokens/scales.css.
+   ═══════════════════════════════════════════════════════════════════════════════ */
+
+/* Ordre des couches. Déclaré ici ET en tête de `theme.css` : les deux fichiers sont
+   chargés séparément — celui-ci le plus souvent par un import JS, celui-là toujours par
+   un @import CSS — et l'ordre est fixé par la PREMIÈRE déclaration rencontrée. La double
+   déclaration est idempotente et rend le montage insensible à l'ordre de chargement.
+   Les imports sont en forme chaîne, pas en `url()` : Tailwind v4 résout `@import "x.css"`
+   mais laisse `@import url("x.css")` intact, ce qui casserait ce fichier dès qu'une app
+   l'atteint depuis une entrée CSS traitée par le plugin Tailwind. */
+@layer theme, base, components, utilities;
+
+/* Les jetons restent HORS COUCHE. Ce sont des propriétés personnalisées seulement — elles
+   n'entrent en conflit avec rien, et être hors couche leur fait gagner sur les repères
+   `:root` que Tailwind émet dans `layer(theme)` pour les mêmes noms. */
+@import './tokens/typography.css';
+@import './tokens/scales.css';
+/* Les jetons DÉRIVÉS — des formules, pas des valeurs. Après scales/typography, avant les
+   couches : ils lisent des jetons de MARQUE, qui sont chargés ensuite ; la résolution d'un
+   `var()` se fait à l'emploi, pas à la déclaration, donc l'ordre des fichiers est sans effet. */
+@import './tokens/derives.css';
+
+/* Le reset va dans `base`, les états de composants dans `components` — leur ordre relatif
+   est inchangé (base reste avant patterns), et TOUS DEUX passent SOUS `utilities`. C'est
+   ce qui permet à un utilitaire Tailwind passé par `className` de l'emporter sur une règle
+   `.ds-*`, exactement comme sous Tailwind v3 où les utilitaires étaient émis hors couche,
+   après ce fichier, et gagnaient à l'ordre de source.
+   Les deux ou aucun : ne couvrir que patterns.css laisserait base.css gagner sur lui. */
+@import './tokens/base.css' layer(base);
+@import './patterns.css' layer(components);

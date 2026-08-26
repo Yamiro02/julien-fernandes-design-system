@@ -1,0 +1,95 @@
+# CI — ce qui doit être vrai à chaque poussée.
+#
+# Quatre jobs, et ils ne se remplacent pas :
+#   · `qualité`   compile, construit, et fait tourner les trois gardes du dépôt ;
+#   · `version`   et `contrat` : deux vérifications de LIVRAISON, bloquantes, qui existent
+#                 parce qu'une procédure écrite a échoué. Elles sont dans deux jobs séparés
+#                 pour qu'un échec de l'une n'empêche pas l'autre de s'exprimer ;
+#   · `hygiène`   non bloquant : il signale, il n'arrête pas.
+#
+# Node est ÉPINGLÉ. `engines` dit >=18, mais un test de contraste qui dépend d'une version
+# de moteur serait un test qu'on ne peut pas rejouer.
+
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+env:
+  NODE_VERSION: '22.11.0'
+
+jobs:
+  qualite:
+    name: Qualité — types, gardes, build, vitrine
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: npm
+      - run: npm ci
+      - run: npm ci --prefix demo
+
+      # `lint` enchaîne typecheck + les trois gardes : collision d'utilitaires, substitution
+      # figée, contraste de la marque livrée.
+      - name: lint (typecheck · utilitaires · substitution · contraste)
+        run: npm run lint
+
+      - name: build du paquet
+        run: npm run build
+
+      # Le montage de la vitrine sur la marque livrée, `brand-example.css` — la palette
+      # froide, serif, sans un orange : c'est le dispositif qui prouve que le socle ne porte
+      # aucune valeur de marque. Si un pixel chaud apparaît, une valeur est retournée dans
+      # le socle.
+      - name: vitrine — marque par défaut
+        run: npm run demo:build
+
+  version:
+    name: Version — cohérence package · README · tag, BLOQUANT
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          # Les tags sont nécessaires à ce job : sans eux, `git tag --list` est vide
+          # et le contrôle de version ne peut pas voir si le tag existe.
+          fetch-depth: 0
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: npm
+
+      # Il n'y a pas de registre : chaque app épingle une version par un tag. Les trois
+      # endroits qui portent le numéro doivent concorder. La procédure écrite a échoué
+      # trois fois de suite — 0.3.0, 0.4.0, 0.4.1. Ce job existe pour ça.
+      - name: version ≡ README ≡ tag
+        run: node check-version.mjs
+
+  contrat:
+    name: Contrat — complétude de la marque, BLOQUANT
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: npm
+
+      # Le gabarit est la liste de ce qu'un fichier de marque DOIT fournir. S'il diverge de
+      # la marque par défaut, un client remplit consciencieusement un contrat incomplet et
+      # livre un système où une variable n'existe pas.
+      - name: contrat de marque complet
+        run: node check-contract.mjs
+
+  hygiene:
+    name: Hygiène — littéraux (non bloquant)
+    runs-on: ubuntu-latest
+    continue-on-error: true
+    steps:
+      - uses: actions/checkout@v4
+      - name: aucun littéral hors des fichiers de marque et de jetons
+        run: ./check-literals.sh

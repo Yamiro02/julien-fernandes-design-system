@@ -1,0 +1,52 @@
+import type { HTMLAttributes, ReactNode } from 'react';
+import { cva } from 'class-variance-authority';
+
+/**
+ * The system's icon tile — one component for every tinted square-or-round icon holder.
+ * Replaces the two internal tiles (Modal's 2.625rem tile, EmptyState's --grad-soft tile).
+ * Sizes are named BY CONTEXT, never by measure, so a call site never hard-codes a rem.
+ */
+export interface PastilleProps extends HTMLAttributes<HTMLSpanElement> {
+  /** carte 2.25 · dialogue 2.625 · panneau 3.25 · héros 4 · écran 5rem — radius steps with the size. */
+  size?: 'carte' | 'dialogue' | 'panneau' | 'heros' | 'ecran';
+  /** square = softened square (radius follows size) · round = --radius-pill. */
+  shape?: 'square' | 'round';
+  /** brand (--grad-soft + --primary) · the 6 semantic pairs · inverse (--foreground on --background). */
+  tone?: 'brand' | 'coral' | 'amber' | 'success' | 'warning' | 'danger' | 'neutral' | 'inverse';
+  /** 1px currentColor @22% contour — EmptyState's hairline, generalised to every tone. */
+  outlined?: boolean;
+  children?: ReactNode;
+}
+
+const pastille = cva('ds-pastille', {
+  variants: {
+    size: {
+      carte: 'ds-pastille--carte',
+      dialogue: 'ds-pastille--dialogue',
+      panneau: 'ds-pastille--panneau',
+      heros: 'ds-pastille--heros',
+      ecran: 'ds-pastille--ecran',
+    },
+    shape: { square: '', round: 'ds-pastille--rond' },
+    tone: {
+      brand: 'ds-pastille--brand',
+      coral: 'ds-pastille--coral',
+      amber: 'ds-pastille--amber',
+      success: 'ds-pastille--success',
+      warning: 'ds-pastille--warning',
+      danger: 'ds-pastille--danger',
+      neutral: 'ds-pastille--neutral',
+      inverse: 'ds-pastille--inverse',
+    },
+    outlined: { true: 'ds-pastille--outlined', false: '' },
+  },
+  defaultVariants: { size: 'dialogue', shape: 'square', tone: 'brand', outlined: false },
+});
+
+export function Pastille({
+  size = 'dialogue', shape = 'square', tone = 'brand', outlined = false,
+  className = '', children, ...rest
+}: PastilleProps): JSX.Element {
+  const cls = [pastille({ size, shape, tone, outlined }), className].filter(Boolean).join(' ');
+  return <span className={cls} {...rest}>{children}</span>;
+}

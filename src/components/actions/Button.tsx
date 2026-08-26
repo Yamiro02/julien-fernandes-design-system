@@ -1,0 +1,65 @@
+import type { ButtonHTMLAttributes, ElementType, ReactNode } from 'react';
+import { cva } from 'class-variance-authority';
+import { Spinner } from '../feedback/Spinner';
+
+/**
+ * The system's primary action. Primary carries the brand glow and is the only
+ * orange accent allowed in a view; secondary / ghost / danger carry none.
+ * Radius is always --radius-md — NEVER a pill.
+ */
+export interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
+  /** primary = brand CTA (glow) · secondary = white/ink outline · ghost = bare · danger = destructive. */
+  variant?: 'primary' | 'secondary' | 'ghost' | 'danger';
+  /** Shared control rail: every size has min-height 3rem (2.75rem under 64rem); sm tightens padding + type; lg (3.25rem) is the hero CTA. */
+  size?: 'sm' | 'md' | 'lg';
+  /** Leading icon node — use <Icon />. */
+  icon?: ReactNode;
+  /** Trailing icon node. */
+  iconRight?: ReactNode;
+  /** Swaps the leading icon for a spinner and disables the button. */
+  loading?: boolean;
+  disabled?: boolean;
+  fullWidth?: boolean;
+  /** Render as another tag, e.g. 'a' for a link-button. */
+  as?: keyof JSX.IntrinsicElements;
+  /** Link target — only meaningful with as="a". */
+  href?: string;
+  children?: ReactNode;
+}
+
+const button = cva('ds-btn', {
+  variants: {
+    variant: {
+      primary: 'ds-btn--primary',
+      secondary: 'ds-btn--secondary',
+      ghost: 'ds-btn--ghost',
+      danger: 'ds-btn--danger',
+    },
+    size: { sm: 'ds-btn--sm', md: 'ds-btn--md', lg: 'ds-btn--lg' },
+    fullWidth: { true: 'ds-btn--block', false: '' },
+    loading: { true: 'is-loading', false: '' },
+  },
+  defaultVariants: { variant: 'primary', size: 'md', fullWidth: false, loading: false },
+});
+
+export function Button({
+  variant = 'primary', size = 'md', icon, iconRight, loading = false,
+  disabled = false, fullWidth = false, as, className = '', children, ...rest
+}: ButtonProps): JSX.Element {
+  const Tag = (as ?? 'button') as ElementType;
+  const cls = [button({ variant, size, fullWidth, loading }), className].filter(Boolean).join(' ');
+  const iconSize = size === 'sm' ? '1rem' : '1.25rem';
+  return (
+    <Tag
+      className={cls}
+      disabled={Tag === 'button' ? disabled || loading : undefined}
+      aria-busy={loading || undefined}
+      aria-disabled={disabled || undefined}
+      {...rest}
+    >
+      {loading ? <Spinner size={iconSize} /> : icon}
+      <span>{children}</span>
+      {!loading && iconRight}
+    </Tag>
+  );
+}
