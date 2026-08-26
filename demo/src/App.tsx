@@ -50,10 +50,10 @@ export function App() {
               <Logo variant="wordmark" height="1.375rem" />
               <span className="caption">Design system · recette visuelle</span>
             </div>
-            <Tabs items={THEMES} value={theme} onChange={setTheme} />
+            <Tabs onCard items={THEMES} value={theme} onChange={setTheme} />
           </div>
           <div className="-mx-space-1 overflow-x-auto px-space-1 pb-space-1">
-            <Tabs items={PAGES.map(p => ({ value: p.value, label: p.label }))} value={page} onChange={setPage} />
+            <Tabs onCard items={PAGES.map(p => ({ value: p.value, label: p.label }))} value={page} onChange={setPage} />
           </div>
         </div>
       </header>

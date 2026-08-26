@@ -3,7 +3,7 @@
 Design system **Julien Fernandes** — la source de vérité design de tous les outils de la marque :
 site, vidéos, slides, e-mails, dashboard, création de contenu.
 
-Tokens CSS · preset Tailwind · 31 primitives React + TypeScript.
+Tokens CSS · preset Tailwind · 40 primitives React + TypeScript.
 Crème par défaut, ink en rupture, Anton 400 CAPS sur les titres, dégradé de marque rationné à
 l'accent. Tout est en `rem`.
 
@@ -19,7 +19,7 @@ l'accent. Tout est en `rem`.
 Pas de registry : chaque app épingle une version par un tag git.
 
 ```bash
-npm i github:Yamiro02/julien-fernandes-design-system#v0.1.0
+npm i github:Yamiro02/julien-fernandes-design-system#v0.2.0
 ```
 
 `react`, `react-dom` et `tailwindcss` sont des peer dependencies — l'app les fournit.
@@ -105,10 +105,10 @@ Une section ink au milieu d'une page crème adopte le scope, elle ne peint pas u
 |---|---|
 | Couleurs | `bg-background` `text-foreground` `bg-card` `text-card-foreground` `bg-popover` `bg-primary` `bg-secondary` `bg-muted` `text-muted-foreground` `bg-accent` `bg-destructive` `border-border` `ring-ring` `bg-ink` `bg-ink-soft` `bg-ink-deep` `bg-cream` `bg-cream-alt` `text-text-secondary` `text-text-muted` `text-text-inverted` `bg-brand-from/via/to` `bg-pill-*-bg` `text-pill-*-fg` |
 | Dégradés | `bg-brand-gradient` `bg-brand-gradient-diagonal` `bg-grad-soft` `bg-halo` `bg-thumbnail-fit` |
-| Rayons | `rounded-badge` `rounded-sm` `rounded-md` `rounded-lg` `rounded-xl` `rounded-2xl` `rounded-pill` |
+| Rayons | `rounded-badge` `rounded-sm` `rounded-md` `rounded-lg` `rounded-xl` `rounded-2xl` `rounded-pill` — le pill est réservé aux **badges et compteurs** : jamais un bouton, un input ni une barre d'onglets |
 | Ombres | `shadow-sm` `shadow-md` `shadow-lg` `shadow-glow` `shadow-glow-lg` |
 | Typo | `font-display` `font-body` `font-mono` · `text-display-xl` `text-display` `text-heading-xl` `text-heading` `text-subheading` `text-heading-sm` `text-body-lg` `text-body` `text-control` `text-caption` `text-eyebrow` `text-chip` |
-| Espacement | `gap-space-1` … `gap-space-8` · `h-control-sm/md/lg` · `w-icon-control-sm/md/lg` · `p-card-pad` `p-card-pad-lg` |
+| Espacement | `gap-space-1` … `gap-space-8` · `h-control-sm/md/lg` · `w-icon-control-sm/md/lg` · `p-card-pad` `p-card-pad-lg` — **rail unique** : tous les contrôles s'alignent sur `--control-md`, qui descend à 2.75rem sous 64rem |
 | Largeurs | `max-w-shell` `max-w-wide` `max-w-read` `max-w-narrow` `max-w-page` |
 | Motion | `ease-standard` |
 
@@ -129,15 +129,14 @@ de Tailwind, sur laquelle reposent les composants shadcn de ton app.
 
 | Famille | Composants |
 |---|---|
-| `icons` | `Icon` — 39 glyphes Lucide, tailles `1rem` / `1.25rem` / `1.5rem` |
+| `icons` | `Icon` — 48 glyphes Lucide, tailles `1rem` / `1.25rem` / `1.5rem` |
 | `actions` | `Button` · `IconButton` — 4 variantes, 3 tailles, jamais un pill |
-| `forms` | `Input` · `Textarea` · `Select` · `Checkbox` · `Radio` · `Switch` · `FormField` |
-| `data-display` | `Card` · `Badge` · `Tooltip` |
-| `feedback` | `Toast` · `Banner` · `EmptyState` · `Skeleton` · `SkeletonCard` |
+| `forms` | `Input` · `Textarea` · `Select` · `Checkbox` · `Radio` · `Switch` · `FormField` · `Calendar` · `DatePicker` |
+| `data-display` | `Card` · `Badge` · `Tooltip` · `Separator` · `Table` (+ `THead` `TBody` `Tr` `Th` `Td`) |
+| `feedback` | `Toast` · `Banner` · `EmptyState` · `Skeleton` · `SkeletonCard` · `Spinner` · `Progress` |
 | `overlays` | `Modal` · `Dropdown` |
-| `navigation` | `Navbar` · `Footer` · `Tabs` |
+| `navigation` | `Navbar` · `Footer` · `Tabs` · `Pagination` · `AppShell` · `Sidebar` |
 | `brand` | `Logo` · `Halo` · `GridBackground` · `Avatar` |
-| `content` | `CodeBlock` · `StepCard` · `BeforeAfter` · `QuoteBlock` |
 
 Tous sont exportés en nommé depuis la racine, avec leurs types :
 
@@ -147,6 +146,9 @@ import { Button, type ButtonProps } from '@julienfernandes/ds';
 
 Les règles d'usage composant par composant sont dans [`docs/PROMPTS.md`](docs/PROMPTS.md).
 
+> **Hors périmètre** — la famille `content` (`CodeBlock`, `StepCard`, `BeforeAfter`, `QuoteBlock`)
+> est sortie du socle en 0.2.0, comme dans le design system maître.
+>
 > **Hors périmètre** — `MetricPill` a été sorti du socle : c'est un composant métier, il vit dans
 > l'app qui en a besoin. Les classes `.jf-metric*` restent dans `patterns.css` (copié verbatim), une
 > app peut donc reconstruire sa propre pill de métrique sans réinventer une valeur. `docs/readme.md`

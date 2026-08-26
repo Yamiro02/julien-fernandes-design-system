@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Checkbox, FormField, Input, Radio, Select, Switch, Textarea } from '@julienfernandes/ds';
+import { Calendar, Checkbox, DatePicker, FormField, Input, Radio, Select, Switch, Textarea } from '@julienfernandes/ds';
 import { Block, Grid, Row, Section, Stack } from '../ui';
 
 const SERIES = [
@@ -12,10 +12,11 @@ export function FormsPage() {
   const [checked, setChecked] = useState(true);
   const [niveau, setNiveau] = useState('debutant');
   const [sombre, setSombre] = useState(true);
+  const [date, setDate] = useState<Date | undefined>(new Date(2026, 8, 24));
 
   return (
     <div className="flex flex-col gap-space-7">
-      <Section title="Input" note="Rail 3rem, bordure 1.5px, anneau de focus 3px en --ring. Jamais un pill.">
+      <Section title="Input" note="Rail de contrôle partagé, bordure 1.5px. Le focus se lit sur la bordure seule, qui passe en --ring — jamais d'anneau en plus. Jamais un pill.">
         <Block label="Tailles">
           <Stack>
             <Input size="sm" placeholder="Petite — 2.375rem" />
@@ -31,21 +32,22 @@ export function FormsPage() {
             <Input disabled defaultValue="Indisponible" />
           </Stack>
         </Block>
-        <Block label="Surfaces" hint="card = le champ est dans une card (fond --background) · page = sur le fond de page (fond --card).">
+        <Block label="Surfaces" hint="page (défaut) = le champ est posé à même le layout, fond --secondary — comme la navbar, les onglets et la recherche · card = dans une card, fond --background.">
           <Stack>
-            <Input surface="card" placeholder="surface=card (défaut)" />
-            <Input surface="page" placeholder="surface=page" />
+            <Input surface="page" placeholder="surface=page (défaut)" />
+            <Input surface="card" placeholder="surface=card" />
           </Stack>
         </Block>
       </Section>
 
-      <Section title="Textarea" note="Hauteur automatique — jamais de min-height. Redimensionnement vertical uniquement.">
+      <Section title="Textarea" note="Hauteur automatique — jamais de min-height. Redimensionnement vertical uniquement. Même règle de surface que l'Input.">
         <Block label="Repos, focus, erreur, désactivé">
           <Stack>
             <Textarea rows={3} placeholder="Décris ton idée d'app en deux phrases." />
             <Textarea rows={2} className="is-focus" defaultValue="Focus" />
             <Textarea rows={2} invalid defaultValue="Trop court" />
             <Textarea rows={2} disabled defaultValue="Indisponible" />
+            <Textarea rows={2} surface="card" defaultValue="surface=card" />
           </Stack>
         </Block>
       </Section>
@@ -57,7 +59,7 @@ export function FormsPage() {
             <Select options={SERIES} className="is-focus" defaultValue="tuto" />
             <Select options={SERIES} invalid defaultValue="build" />
             <Select options={SERIES} disabled defaultValue="build" />
-            <Select options={SERIES} surface="page" defaultValue="coulisses" />
+            <Select options={SERIES} surface="card" defaultValue="coulisses" />
           </Stack>
         </Block>
       </Section>
@@ -91,6 +93,35 @@ export function FormsPage() {
               <Switch label="Indisponible" disabled />
               <Switch label="Activé et indisponible" disabled defaultChecked />
             </Stack>
+          </Block>
+        </Grid>
+      </Section>
+
+      <Section title="DatePicker" note="Déclencheur façon Input (même règle de surface) + Calendar en popover. Clic extérieur ou Échap pour fermer. Date unique, pas de plage.">
+        <Block label="Vide, rempli, surfaces, états">
+          <Stack>
+            <DatePicker value={date} onChange={setDate} />
+            <DatePicker />
+            <DatePicker surface="card" value={date} onChange={setDate} />
+            <DatePicker invalid value={date} onChange={setDate} />
+            <DatePicker disabled />
+          </Stack>
+        </Block>
+      </Section>
+
+      <Section title="Calendar" note="Vue mois, lundi d'abord, locale fr-FR. Date natif et Intl uniquement — aucune dépendance.">
+        <Grid cols={2}>
+          <Block label="Par défaut">
+            <Calendar value={date} onChange={setDate} />
+          </Block>
+          <Block label="Bornes et dates désactivées" hint="min, max et disabledDates.">
+            <Calendar
+              value={date}
+              onChange={setDate}
+              min={new Date(2026, 7, 1)}
+              max={new Date(2026, 9, 31)}
+              disabledDates={[new Date(2026, 8, 12), new Date(2026, 8, 13)]}
+            />
           </Block>
         </Grid>
       </Section>

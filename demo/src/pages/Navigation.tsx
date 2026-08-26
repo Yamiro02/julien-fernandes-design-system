@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Button, Footer, Icon, IconButton, Navbar, Tabs } from '@julienfernandes/ds';
+import { AppShell, Avatar, Button, Footer, Icon, IconButton, Navbar, Pagination, Sidebar, Tabs } from '@julienfernandes/ds';
 import { Block, Row, Section } from '../ui';
 
 const LINKS = [{ label: 'Vidéos', active: true }, { label: 'Séries' }, { label: 'À propos' }];
@@ -12,16 +12,18 @@ const SERIES = [
 
 export function NavigationPage() {
   const [tab, setTab] = useState('build');
+  const [page, setPage] = useState(4);
+  const [longPage, setLongPage] = useState(12);
 
   return (
     <div className="flex flex-col gap-space-7">
-      <Section title="Navbar" note="Transparente au repos ; au scroll elle prend une teinte --card, un blur(10px) et une bordure filaire. Seul endroit du système qui utilise backdrop-filter.">
+      <Section title="Navbar" note="Posée sur --secondary avec une bordure basse en permanence — c'est un contrôle détaché du layout, jamais transparent. Au scroll elle se teinte, prend un blur(10px) et une ombre. Seul endroit du système qui utilise backdrop-filter.">
         <Block label="Au repos">
           <div className="overflow-x-auto rounded-xl border border-border">
             <Navbar scrolled={false} links={LINKS} cta={<Button size="sm">La newsletter</Button>} />
           </div>
         </Block>
-        <Block label="État scrollé">
+        <Block label="État scrollé" hint="Teinte color-mix sur --secondary + blur + ombre.">
           <div className="overflow-x-auto rounded-xl border border-border bg-card">
             <Navbar scrolled links={LINKS} cta={<Button size="sm">La newsletter</Button>} />
           </div>
@@ -42,6 +44,14 @@ export function NavigationPage() {
           <Row><Tabs items={SERIES} value={tab} onChange={setTab} /></Row>
           <p className="caption">Onglet actif : {SERIES.find(s => s.value === tab)?.label}</p>
         </Block>
+        <Block label="onCard" hint="La barre contraste toujours avec sa surface porteuse : --secondary sur la page, --background sur une card.">
+          <Row label="sur la page (défaut)"><Tabs items={SERIES} value="build" onChange={() => undefined} /></Row>
+          <Row label="sur une card — onCard">
+            <span className="inline-flex rounded-lg border border-border bg-card p-space-4">
+              <Tabs onCard items={SERIES} value="build" onChange={() => undefined} />
+            </span>
+          </Row>
+        </Block>
         <Block label="États">
           <Row label="sélection sur chaque item">
             <Tabs items={SERIES} value="all" onChange={() => undefined} />
@@ -53,6 +63,85 @@ export function NavigationPage() {
               <button type="button" className="jf-tab">Tuto</button>
             </div>
           </Row>
+        </Block>
+      </Section>
+
+      <Section title="Pagination" note="Contrôlée. Barre --secondary, même traitement que les onglets ; la page courante reprend l'onglet actif. Au-delà de 7 pages, une ellipsis en icône — jamais le caractère.">
+        <Block label="Peu de pages">
+          <Row><Pagination page={page} pageCount={5} onPageChange={setPage} /></Row>
+          <p className="caption">Page {page} sur 5.</p>
+        </Block>
+        <Block label="Beaucoup de pages" hint="Ellipsis des deux côtés selon la position.">
+          <Row><Pagination page={longPage} pageCount={40} onPageChange={setLongPage} /></Row>
+          <Row label="première page"><Pagination page={1} pageCount={40} onPageChange={() => undefined} /></Row>
+          <Row label="dernière page"><Pagination page={40} pageCount={40} onPageChange={() => undefined} /></Row>
+        </Block>
+        <Block label="Page unique" hint="Les deux flèches sont désactivées.">
+          <Row><Pagination page={1} pageCount={1} onPageChange={() => undefined} /></Row>
+        </Block>
+      </Section>
+
+      <Section title="AppShell et Sidebar" note="Le squelette des outils internes : grille [barre latérale | contenu]. La barre est sur --secondary, repliable en icônes seules, et l'état est persisté en localStorage.">
+        <Block label="Complet" hint="responsive={false} et staticLayout épinglent la mise en page à deux colonnes pour la vitrine.">
+          <div className="overflow-hidden rounded-xl border border-border">
+            <AppShell
+              responsive={false}
+              sidebar={
+                <Sidebar
+                  staticLayout
+                  storageKey="jf-demo-sidebar"
+                  sections={[
+                    { title: 'Pilotage', items: [
+                      { label: 'Tableau de bord', icon: <Icon name="layout-dashboard" size="1.25rem" />, active: true },
+                      { label: 'Vidéos', icon: <Icon name="video" size="1.25rem" /> },
+                      { label: 'Séries', icon: <Icon name="folder" size="1.25rem" /> },
+                    ] },
+                    { title: 'Perso', items: [
+                      { label: 'Sport', icon: <Icon name="dumbbell" size="1.25rem" /> },
+                      { label: 'Réglages', icon: <Icon name="settings" size="1.25rem" /> },
+                    ] },
+                  ]}
+                  footer={
+                    <span className="flex items-center gap-space-3">
+                      <Avatar size="2rem" halo={false} />
+                      <span className="flex flex-col">
+                        <span className="text-caption font-semibold">Julien Fernandes</span>
+                        <span className="caption">Busan · Corée du Sud</span>
+                      </span>
+                    </span>
+                  }
+                />
+              }
+            >
+              <div className="flex flex-col gap-space-4 p-space-5">
+                <h3>Tableau de bord</h3>
+                <p className="caption">Le contenu de l'outil vit ici. Replie la barre avec le bouton en tête pour voir le mode icônes seules — l'état est retenu.</p>
+                <Row><Button size="sm" icon={<Icon name="plus" size="1rem" />}>Nouveau build</Button></Row>
+              </div>
+            </AppShell>
+          </div>
+        </Block>
+        <Block label="Sidebar repliée" hint="defaultCollapsed force l'état initial sans toucher au localStorage.">
+          <div className="overflow-hidden rounded-xl border border-border">
+            <AppShell
+              responsive={false}
+              sidebar={
+                <Sidebar
+                  staticLayout
+                  defaultCollapsed
+                  collapsible={false}
+                  storageKey="jf-demo-sidebar-collapsed"
+                  sections={[{ items: [
+                    { label: 'Tableau de bord', icon: <Icon name="layout-dashboard" size="1.25rem" />, active: true },
+                    { label: 'Vidéos', icon: <Icon name="video" size="1.25rem" /> },
+                    { label: 'Réglages', icon: <Icon name="settings" size="1.25rem" /> },
+                  ] }]}
+                />
+              }
+            >
+              <div className="p-space-5"><p className="caption">Mode icônes seules : le libellé est masqué, il passe en title.</p></div>
+            </AppShell>
+          </div>
         </Block>
       </Section>
 

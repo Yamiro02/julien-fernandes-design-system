@@ -1,8 +1,11 @@
-# Checklist de conformité — portage v0.1.0
+# Checklist de conformité — v0.2.0
 
 > Recette du portage du design system Julien Fernandes vers `@julienfernandes/ds`.
 > Règle appliquée : **PORT, pas réinterprétation.** Toute valeur vient des sources du kit.
 > Aucune valeur n'a été inventée. Les écarts sont listés en fin de document, sans exception.
+
+**Kit source : `Portage Design System 2` (v2, 26/08/2026).** La v0.1.0 avait été portée depuis le
+kit v1 ; ce document reflète l'état après la mise à jour v2.
 
 Sources de vérité utilisées :
 `tokens/*.css` · `patterns.css` · `components/**/*.jsx` (rendu) · `components/**/*.d.ts` (contrat de props) ·
@@ -15,17 +18,18 @@ Sources de vérité utilisées :
 | Élément | État | Vérification |
 |---|---|---|
 | `src/styles/tokens/fonts.css` | ✓ verbatim | `diff` identique à la source |
-| `src/styles/tokens/colors.css` | ✓ verbatim | `diff` identique |
+| `src/styles/tokens/colors.css` | ✓ verbatim v2 | seul le commentaire d'entête change : le blanc pur `--secondary` est réservé aux contrôles posés à même le layout |
 | `src/styles/tokens/typography.css` | ✓ verbatim | `diff` identique |
-| `src/styles/tokens/scales.css` | ✓ verbatim | `diff` identique |
+| `src/styles/tokens/scales.css` | ✓ verbatim v2 | rayons contrôles resserrés (`--radius-sm` 0.625 · `--radius-md` 0.75), rail **unique** (`--control-sm` et les trois `--icon-control-*` aliasent `--control-md`), media query mobile `@media (max-width:64rem)` → `--control-md:2.75rem` |
 | `src/styles/tokens/base.css` | ✓ verbatim | `diff` identique |
-| `src/styles/patterns.css` | ✓ verbatim | `diff` identique |
+| `src/styles/patterns.css` | ✓ verbatim v2 | focus champ = bordure seule (anneau 3px supprimé) · `.jf-input` sur `--secondary`, modificateur `--on-card` · tabs hors pill · navbar toujours `--secondary` · dropdown en `--radius-lg` · bloc `content` supprimé · 7 nouveaux blocs |
 | `src/styles/index.css` | ✓ port de `styles.css` | `@import` uniquement, même ordre, mêmes commentaires |
 | `assets/fonts/` (Anton-400, JetBrainsMono-400/500) | ✓ copiés | + duplicata dans `src/styles/assets/fonts/` — voir **écart 2** |
 | `assets/logo/` (10 PNG) | ✓ copiés | non modifiés |
 | `docs/readme.md`, `docs/PROMPTS.md` | ✓ copiés | non modifiés |
-| `src/tailwind-preset.ts` | ✓ | **0 littéral** — grep hex / rgb / px / rem / ms : aucun résultat hors commentaires |
-| `package.json` exports | ✓ clés de la spec | `.` · `./styles.css` · `./preset` · `./assets/*` — voir **écart 1** |
+| `src/styles/app-scale.css` | ✓ verbatim v2 | module opt-in, **non importé** par `index.css` — export `./app-scale.css` |
+| `src/tailwind-preset.ts` | ✓ inchangé (commentaires) | **0 littéral** — grep hex / rgb / px / rem / ms : aucun résultat hors commentaires |
+| `package.json` exports | ✓ clés de la spec | `.` · `./styles.css` · `./app-scale.css` · `./preset` · `./assets/*` — voir **écart 1** |
 | `darkMode: ['class']` | ✓ | scope `.dark`, jamais un media query |
 | `npm run build` | ✓ | tsup ESM + CJS + `.d.ts`, `tsc --noEmit` sans erreur |
 
@@ -231,41 +235,26 @@ Sources de vérité utilisées :
 
 ---
 
-## 9. Contenu
+## 9. Contenu — SUPPRIMÉ
 
-### `CodeBlock`
-- `language` · `filename` · `code` · `onCopy` · `copied` ✓ · barre `--muted` + bordure `--border` ✓
-- Corps `--font-mono` / `--text-caption` / `--text-secondary`, `overflow-x:auto`, `white-space:pre` ✓
-- Bouton copier = `IconButton size="sm"` ; l'état copié bascule sur `check` strokeWidth 3 ✓
-
-### `StepCard`
-- `step` (zéro-padding auto : `1 → 01`) · `title` · corps ✓
-- Numéro = **seul dégradé de la card** (`--brand-gradient` en `background-clip:text`), titre en `h4` ink ✓
-- Rendu dans une `Card variant="feature" size="lg"` ✓
-
-### `BeforeAfter`
-- `beforeLabel` / `afterLabel` (défauts `AVANT` / `APRÈS`) · `before` / `after` ✓
-- Dégradé **uniquement sur la couture** (0.125rem), panneau après en `--grad-soft` ✓
-- Chips en `.chip`, `--text-muted` et `--pill-coral-fg` ✓
-
-### `QuoteBlock`
-- `quote` · `author` · `role` séparés par le point médian ✓
-- Corps en `--text-body-lg` / `--leading-body` — **pas Anton** ✓ · icône `quote` en `--primary` ✓
-
----
+La famille `content/` (`CodeBlock`, `StepCard`, `BeforeAfter`, `QuoteBlock`) est sortie du socle en
+v0.2.0, conformément au kit maître v2 qui ne la contient plus. Retirés : les quatre composants,
+leurs exports, la page de démo et sa route. Le bloc `content` de `patterns.css` (`.jf-code*`,
+`.jf-quote`) a disparu avec la copie verbatim du fichier v2. Vérifié avant suppression : aucun
+composant restant ne les importait.
 
 ## 10. Démo (`/demo`)
 
 | Contrôle | État |
 |---|---|
-| Une page par famille (10) | ✓ Fondations · Icônes · Actions · Formulaires · Data display · Feedback · Overlays · Navigation · Marque · Contenu |
+| Une page par famille (9) | ✓ Fondations · Icônes · Actions · Formulaires · Data display · Feedback · Overlays · Navigation · Marque (Contenu supprimé avec la famille) |
 | Toutes variantes / tailles / états visibles | ✓ |
 | Toggle global clair / sombre, scope `.dark` | ✓ + un troisième mode **côte à côte** qui rend la page dans les deux thèmes simultanément |
 | Rendu des fondations | ✓ couleurs, typo, espacement, rayons, rail, ombres, largeurs, motion |
 | Aucun style custom hors tokens | ✓ uniquement des composants du DS, des utilitaires `base.css` et des utilitaires du preset (qui ne résolvent que vers des `var(--…)`) ; aucune valeur arbitraire Tailwind (`[…]`) |
 | Non publiée dans le paquet | ✓ `demo/` absent de `files` |
 | `npm run build` (démo) | ✓ `tsc --noEmit` + `vite build` sans erreur |
-| Console sans erreur, clair et sombre | ✓ vérifié au navigateur sur les 10 pages |
+| Console sans erreur, clair et sombre | ✓ en v0.1.0, vérifié au navigateur sur les 10 pages. En v0.2.0 la pane du navigateur est devenue inutilisable en fin de session : la vérification s'est faite par `vite build` (résolution statique de tous les imports), `tsc --noEmit` sur le paquet et la démo, et inspection programmatique du DOM rendu (AppShell, Sidebar, Pagination, tokens calculés). **Une passe visuelle des nouvelles pages reste à faire.** |
 
 ---
 
@@ -275,15 +264,15 @@ Sources de vérité utilisées :
 |---|---|
 | Hex hors `tokens/*.css` et `patterns.css` | **0** dans `src/components`, `src/lib`, `src/index.ts`, `src/tailwind-preset.ts`, `demo/src`. Deux mentions subsistent dans le commentaire de traçabilité d'`Avatar.tsx` (elles nomment les tokens équivalents, elles ne posent aucune couleur). |
 | `rgb()` / `rgba()` / `hsl()` hors tokens | **0** |
-| `px` hors exceptions | **4 lignes dans 3 fichiers, toutes dans la liste d'exceptions** : `Avatar.tsx:48` et `BeforeAfter.tsx:24` → bordure filaire `1px` ; `GridBackground.tsx:29-30` → lignes de grille `1px`. Le reste des occurrences est soit un commentaire, soit du texte explicatif affiché par la démo (`note="… bordure 1.5px …"`), soit l'utilitaire Tailwind `px-*` (padding horizontal, pas une unité). |
+| `px` hors exceptions | **3 lignes dans 2 fichiers, toutes dans la liste d'exceptions** : `Avatar.tsx:48` → bordure filaire `1px` ; `GridBackground.tsx:29-30` → lignes de grille `1px`. (`BeforeAfter` est parti avec la famille `content`.) Le reste des occurrences est soit un commentaire, soit du texte explicatif affiché par la démo (`note="… bordure 1.5px …"`), soit l'utilitaire Tailwind `px-*` (padding horizontal, pas une unité). |
 | `blue` / `bleu` | **0** |
 | Rose `#D11A4E` | **0** dans le code ; 2 mentions dans `docs/readme.md` qui l'interdisent |
 | Emoji / unicode décoratif | **0** (seul le point médian `·` est utilisé) |
-| Pill sur bouton ou input | **0** — `.jf-btn`, `.jf-icon-btn` et `.jf-input` sont tous en `--radius-md` |
+| Pill sur bouton, input **ou barre d'onglets** | **0** — `.jf-btn`, `.jf-icon-btn` et `.jf-input` en `--radius-md` ; `.jf-tabs` en `0.875rem` et `.jf-tab` en `--radius-sm`. `--radius-pill` ne sert plus qu'aux badges, compteurs, radio et switch |
 | Anton hors titres | **0** — `--font-display` n'apparaît que dans `StepCard` (numéro, palier `--text-heading-xl`) et `Avatar` (monogramme, voir écart 14) |
 | `--ink-deep` dans l'UI | **0** — présent uniquement dans les spécimens de la démo, explicitement étiquetés « miniatures et motion » |
 | Grille fine dans l'UI | **0** — uniquement dans `GridBackground` |
-| Exports `src/index.ts` ↔ `.d.ts` sources | **31 / 32** — seul `MetricPill` manque, retiré volontairement (écart 18). Aucun autre manquant, aucun en trop (+ l'utilitaire `cn`) |
+| Exports `src/index.ts` ↔ `.d.ts` sources v2 | **36 / 37** — seul `MetricPill` manque, retiré volontairement (écart 18). Aucun autre manquant, aucun en trop (+ les sous-composants `THead` `TBody` `Tr` `Th` `Td` et l'utilitaire `cn`) |
 | Preset : littéral de couleur ou de taille | **0** — uniquement des `var(--…)` |
 
 ---
@@ -426,6 +415,36 @@ est pas un : c'est une décision de périmètre. Elle tient. **Action côté pro
 `npm i github:julienfernandes/design-system#vX.Y.Z`. Le dépôt qui existe est
 `Yamiro02/julien-fernandes-design-system` (privé). Le nom du paquet reste `@julienfernandes/ds` :
 seule l'URL d'installation change, et le README porte la bonne.
+
+### Mise à jour v2 (0.2.0)
+
+**20. Focus des champs : l'anneau 3px a disparu.**
+`patterns.css` v2 pose `.jf-input:focus{border-color:var(--ring)}` — une seule bordure, plus de
+`box-shadow: 0 0 0 3px`. Idem en erreur : bordure `--destructive` seule. **Cela contredit le
+`readme.md` v1** qui imposait l'anneau (« sur les inputs un anneau `box-shadow: 0 0 0 3px … 22% »).
+Le `readme.md` v2 a été copié en même temps, la règle y est donc à jour. Signalé parce que c'est un
+renversement d'une règle explicite, pas un détail. Les boutons et les contrôles de choix gardent
+leur anneau `color-mix(--ring 35%)`.
+
+**21. `Icon.d.ts` du kit v2 n'a pas été mis à jour.**
+Son union `name` liste encore les 39 noms de la v1, alors que `Icon.jsx` en embarque 48. Le port
+suit le `.jsx` et le §6 de la demande — les 48 noms sont typés. **Action côté projet maître** :
+mettre le `.d.ts` à jour, sinon le prochain diff repartira d'un contrat faux.
+
+**22. Rail unique : `size` devient partiellement décoratif.**
+`--control-sm` aliase `--control-md`, et les trois `--icon-control-*` aussi. Sur `Button`, `size`
+ne change plus que le padding et la taille de type ; sur `IconButton`, les trois tailles rendent
+exactement le même carré. Les props sont conservées telles quelles (compat d'API), comme le
+demandent les `.d.ts` v2. Seul `--control-lg` (3.25rem) reste distinct — CTA hero uniquement.
+
+**23. `Table` : l'état vide n'est pas dans le composant.**
+Conformément au `.d.ts`, `EmptyState` se rend **à la place** de la table. La démo le montre ainsi.
+
+**24. `Sidebar` : `localStorage` est lu au premier rendu.**
+Le composant lit `localStorage` dans l'initialiseur de `useState`, entouré d'un `try/catch` comme
+la source. En rendu serveur (SSR), cet initialiseur ne s'exécute pas côté serveur mais produirait
+une divergence d'hydratation si l'état persisté diffère du défaut. Aucune app consommatrice n'est
+en SSR aujourd'hui ; signalé pour mémoire.
 
 ### Rien à signaler
 

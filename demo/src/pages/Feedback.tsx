@@ -1,6 +1,6 @@
 import { useState } from 'react';
-import { Banner, Button, EmptyState, Icon, Skeleton, SkeletonCard, Toast } from '@julienfernandes/ds';
-import { Block, Grid, Section, Stack } from '../ui';
+import { Banner, Button, EmptyState, Icon, Progress, Skeleton, SkeletonCard, Spinner, Toast } from '@julienfernandes/ds';
+import { Block, Grid, Row, Section, Stack } from '../ui';
 
 export function FeedbackPage() {
   const [closed, setClosed] = useState(false);
@@ -57,6 +57,47 @@ export function FeedbackPage() {
             />
           </Block>
         </Grid>
+      </Section>
+
+      <Section title="Spinner" note="Anneau en currentColor. C'est lui que Button affiche quand loading est vrai.">
+        <Block label="Tailles">
+          <Row>
+            <Spinner size="sm" />
+            <Spinner size="md" />
+            <Spinner size="lg" />
+            <Spinner size="2.5rem" />
+          </Row>
+          <Row label="couleur — suit currentColor">
+            <span style={{ color: 'var(--primary)' }}><Spinner size="lg" /></span>
+            <span style={{ color: 'var(--text-muted)' }}><Spinner size="lg" /></span>
+            <span style={{ color: 'var(--destructive)' }}><Spinner size="lg" /></span>
+          </Row>
+        </Block>
+        <Block label="Dans un bouton" hint="loading remplace l'icône de tête et désactive le bouton.">
+          <Row>
+            <Button loading>Génération…</Button>
+            <Button variant="secondary" loading>Génération…</Button>
+            <Button variant="ghost" size="sm" loading>Chargement</Button>
+            <Button variant="danger" size="lg" loading>Suppression…</Button>
+          </Row>
+        </Block>
+      </Section>
+
+      <Section title="Progress" note="Rail teinté --accent, valeur en --primary. Indéterminé = barre qui glisse.">
+        <Block label="Valeurs">
+          <Stack>
+            <Progress value={0} label="Aucune progression" />
+            <Progress value={35} label="Build en cours" />
+            <Progress value={72} label="Build en cours" />
+            <Progress value={100} label="Build terminé" />
+          </Stack>
+        </Block>
+        <Block label="Indéterminé" hint="Quand la durée est inconnue.">
+          <Progress indeterminate label="Analyse du projet" />
+        </Block>
+        <Block label="Échelle personnalisée" hint="value et max.">
+          <Progress value={3} max={5} label="Étape 3 sur 5" />
+        </Block>
       </Section>
 
       <Section title="Skeleton" note="Placeholder de chargement sur --muted, shimmer de 1.4s.">
