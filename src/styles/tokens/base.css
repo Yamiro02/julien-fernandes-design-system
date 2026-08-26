@@ -9,8 +9,12 @@ h2{font-size:var(--text-heading);letter-spacing:var(--tracking-heading);line-hei
 h3{font-size:var(--text-subheading);letter-spacing:var(--tracking-subheading);line-height:var(--leading-heading)}
 h4{font-size:var(--text-heading-sm);letter-spacing:var(--tracking-heading-sm);line-height:var(--leading-snug)}
 p{margin:0;text-wrap:pretty}
-a{color:var(--primary);text-decoration:none;transition:color 150ms var(--ease-standard)}
-a:hover{color:var(--brand-to)}
+/* Les liens prennent le jumeau lisible, pas --primary : 3,12 sur --background, c'était la
+   couleur de tout le texte cliquable du système. Le survol se DÉRIVE en tirant vers
+   --foreground — donc toujours plus contrasté que le repos, dans les deux thèmes, sans
+   second jeton à faire remplir au client. */
+a{color:var(--primary-readable);text-decoration:none;transition:color 150ms var(--ease-standard)}
+a:hover{color:color-mix(in srgb,var(--primary-readable) 80%,var(--foreground))}
 a:focus-visible,button:focus-visible,input:focus-visible,textarea:focus-visible,select:focus-visible,[tabindex]:focus-visible{outline:2px solid var(--ring);outline-offset:2px}
 code,pre,kbd,samp{font-family:var(--font-mono)}
 img{max-width:100%;display:block}

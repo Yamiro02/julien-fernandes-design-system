@@ -33,7 +33,7 @@
   "scripts": {
     "build": "tsup",
     "typecheck": "tsc --noEmit",
-    "lint": "npm run typecheck && node check-utility-collisions.mjs",
+    "lint": "npm run typecheck && node check-utility-collisions.mjs && node check-contrast.mjs",
     "demo": "npm --prefix demo run dev",
     "demo:build": "npm --prefix demo run build",
     "demo:install": "npm --prefix demo install",
