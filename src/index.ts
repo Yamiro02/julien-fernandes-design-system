@@ -1,11 +1,11 @@
 /**
  * @julienfernandes/ds — Design System Julien Fernandes.
  *
- * Les styles sont un import séparé :
+ * Les styles sont un import séparé, en JS :
  *   import '@julienfernandes/ds/styles.css';
  *
- * Le preset Tailwind :
- *   import preset from '@julienfernandes/ds/preset';
+ * La couche Tailwind v4 s'importe depuis le CSS de l'app, jamais en JS :
+ *   @import '@julienfernandes/ds/theme.css';
  */
 
 /* icons */
@@ -97,5 +97,5 @@ export { Avatar } from './components/brand/Avatar';
 export type { AvatarProps } from './components/brand/Avatar';
 
 /* utilitaire de composition de classes */
-export { cn, PALIERS_TYPO } from './lib/cn';
+export { cn, makeCn, PALIERS_TYPO } from './lib/cn';
 export type { ClassValue } from './lib/cn';

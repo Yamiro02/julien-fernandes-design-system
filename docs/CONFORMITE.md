@@ -1,5 +1,12 @@
 # Checklist de conformité — v0.2.4
 
+> ⚠️ **Document daté de la v0.2.4. En 0.3.0, le preset Tailwind v3 a disparu.**
+> `src/tailwind-preset.ts` et l'export `./preset` sont supprimés ; le paquet est **Tailwind v4
+> seul**, et la couche utilitaire vit dans `src/styles/theme.css` (`@theme inline` + `@utility`,
+> exporté sous `./theme.css`). Le §0 « Socle » et la couverture des tokens ci-dessous sont à jour ;
+> **les sections par composant, elles, restent vraies telles quelles** — elles ne parlent pas du
+> preset. Les mentions de « preset » dans les écarts en fin de document n'ont pas été reprises.
+
 > Recette du portage du design system Julien Fernandes vers `@julienfernandes/ds`.
 > Règle appliquée : **PORT, pas réinterprétation.** Toute valeur vient des sources du kit.
 > Aucune valeur n'a été inventée. Les écarts sont listés en fin de document, sans exception.
@@ -23,34 +30,38 @@ Sources de vérité utilisées :
 | `src/styles/tokens/scales.css` | ✓ verbatim v2 | rayons contrôles resserrés (`--radius-sm` 0.625 · `--radius-md` 0.75), rail **unique** (`--control-sm` et les trois `--icon-control-*` aliasent `--control-md`), media query mobile `@media (max-width:64rem)` → `--control-md:2.75rem` |
 | `src/styles/tokens/base.css` | ✓ verbatim V4 | `.grid` / `.grid-lg` renommés `.jf-grid` / `.jf-grid-lg` — la collision avec Tailwind est morte (écart 7) |
 | `src/styles/patterns.css` | ✓ verbatim V4 | le maître a écrit les 4 règles anticipées **à l'octet près** — l'avance de phase est résorbée (écart 25) | + `.jf-table--framed` (contour 1px `--border`, `--radius-lg`, coins internes `calc(… - 1px)`, fond `--card`, en-tête `--background`) et `.jf-table--columns` (séparateurs verticaux 1px). Reste v2 pour le reste : | focus champ = bordure seule (anneau 3px supprimé) · `.jf-input` sur `--secondary`, modificateur `--on-card` · tabs hors pill · navbar toujours `--secondary` · dropdown en `--radius-lg` · bloc `content` supprimé · 7 nouveaux blocs |
-| `src/styles/index.css` | ✓ port de `styles.css` | `@import` uniquement, même ordre, mêmes commentaires |
+| `src/styles/index.css` | ✓ port de `styles.css` | `@import` uniquement, même ordre, mêmes commentaires. **0.3.0** : déclare l'ordre des couches et pose `layer(base)` sur `tokens/base.css`, `layer(components)` sur `patterns.css` — les tokens restent hors couche. C'est ce qui laisse un utilitaire Tailwind surcharger un `.jf-*`, comme en v3 |
 | `assets/fonts/` (Anton-400, JetBrainsMono-400/500) | ✓ copiés | + duplicata dans `src/styles/assets/fonts/` — voir **écart 2** |
 | `assets/logo/` (10 PNG) | ✓ copiés | non modifiés |
 | `docs/readme.md` | ✓ verbatim V3 | non modifié. Le maître y documente désormais lui-même le retrait de `MetricPill` |
 | `docs/PROMPTS.md` | ✓ verbatim V3 | non modifié. **L'entorse au verbatim est résorbée** : le kit V3 a supprimé la section `## MetricPill`, la copie est de nouveau intégrale — voir **écart 18** |
 | `src/styles/app-scale.css` | ✓ verbatim v2 | module opt-in, **non importé** par `index.css` — export `./app-scale.css` |
-| `src/tailwind-preset.ts` | ✓ **`fontSize` en remplacement** | v0.2.2 : le bloc `fontSize` quitte `theme.extend` pour `theme`. L'échelle native (`text-xs`…`text-9xl`) n'est plus générable — une régression casse au lieu de retomber sur `text-sm`. Tout le reste est en `extend`. | **0 littéral** — grep hex / rgb / px / rem / ms : aucun résultat hors commentaires |
-| `package.json` exports | ✓ clés de la spec | `.` · `./styles.css` · `./app-scale.css` · `./preset` · `./assets/*` — voir **écart 1** |
-| `darkMode: ['class']` | ✓ | scope `.dark`, jamais un media query |
+| `src/styles/theme.css` | ✓ **couche Tailwind v4** | 0.3.0, remplace `src/tailwind-preset.ts` (supprimé). `@theme inline` obligatoire — nos jetons portent déjà les noms des namespaces v4, un `@theme` nu produirait une auto-référence circulaire dans `:root` et casserait le thème sombre sans lever d'erreur. `--text-*: initial` maintient l'échelle native (`text-xs`…`text-9xl`) supprimée. `preflight.css` n'est pas importé ; `background-image` / `background-size` passent par `@utility`, faute de namespace v4. | **0 littéral** — grep hex / rgb / px / rem / ms : aucun résultat hors commentaires |
+| `package.json` exports | ✓ clés de la spec | `.` · `./styles.css` · `./theme.css` · `./app-scale.css` · `./assets/*` — voir **écart 1**. `./preset` retiré en 0.3.0 |
+| `@custom-variant dark (&:is(.dark *))` | ✓ | scope `.dark`, jamais un media query. Portage du `darkMode: ['class']` de la v3 |
 | `npm run build` | ✓ | tsup ESM + CJS + `.d.ts`, `tsc --noEmit` sans erreur |
 
-### Preset — couverture des tokens
+### `theme.css` — couverture des tokens
 
-| Clé Tailwind | Tokens branchés |
-|---|---|
-| `colors` | `--background --foreground --card(-foreground) --popover(-foreground) --primary(-foreground) --secondary(-foreground) --muted(-foreground) --accent(-foreground) --destructive(-foreground) --border --input --ring --ink --ink-soft --ink-deep --cream --cream-alt --text-secondary --text-muted --text-inverted --brand-from --brand-via --brand-to --pill-*-bg/fg --overlay-play-bg --grid-line` |
-| `backgroundImage` | `--brand-gradient --brand-gradient-diagonal --grad-soft --gradient-halo --gradient-thumbnail --gradient-thumbnail-fit` |
-| `backgroundSize` | `--grid-cell --grid-cell-lg` |
-| `borderRadius` | `--radius --radius-badge --radius-sm --radius-md --radius-lg --radius-xl --radius-2xl --radius-pill` |
-| `boxShadow` | `--shadow-sm --shadow-md --shadow-lg --shadow-soft --shadow-soft-lg --shadow-glow --shadow-glow-lg` |
-| `fontFamily` | `--font-display --font-body --font-mono` |
-| `fontSize` | les 12 paliers de `typography.css`, chacun apparié à son `--leading-*` et son `--tracking-*` comme dans `base.css` |
-| `fontWeight` | `--weight-regular/medium/semibold/bold` |
-| `letterSpacing` | les 9 `--tracking-*` |
-| `lineHeight` | les 7 `--leading-*` |
-| `spacing` | `--space-1…8`, `--control-sm/md/lg`, `--icon-control-sm/md/lg`, `--card-pad`, `--card-pad-lg` |
-| `maxWidth` | `--container-shell/wide/read/narrow`, `--page-max` |
-| `transitionTimingFunction` | `--ease-standard` |
+Les 124 jetons référencés par le preset v3 sont tous portés. Colonne de droite : le namespace v4
+qui les reçoit.
+
+| Clé du preset v3 | Namespace v4 | Tokens branchés |
+|---|---|---|
+| `colors` | `--color-*` | `--background --foreground --card(-foreground) --popover(-foreground) --primary(-foreground) --secondary(-foreground) --muted(-foreground) --accent(-foreground) --destructive(-foreground) --border --input --ring --ink --ink-soft --ink-deep --cream --cream-alt --text-secondary --text-muted --text-inverted --brand-from --brand-via --brand-to --pill-*-bg/fg --overlay-play-bg --grid-line` |
+| `backgroundImage` | **`@utility bg-*`** — pas de namespace v4 | `--brand-gradient --brand-gradient-diagonal --grad-soft --gradient-halo --gradient-thumbnail --gradient-thumbnail-fit` |
+| `backgroundSize` | **`@utility bg-*`** — pas de namespace v4 | `--grid-cell --grid-cell-lg` |
+| `borderRadius` | `--radius-*` | `--radius-badge --radius-sm --radius-md --radius-lg --radius-xl --radius-2xl --radius-pill`. **`--radius` (le `DEFAULT` v3) n'est pas portable** : en v4 `rounded` nu est un utilitaire statique de `0.25rem` qu'un `@utility` ne remplace pas, il fusionne avec. `--radius` vaut `var(--radius-lg)` : `rounded-lg` le couvre |
+| `boxShadow` | `--shadow-*` | `--shadow-sm --shadow-md --shadow-lg --shadow-soft --shadow-soft-lg --shadow-glow --shadow-glow-lg` |
+| `fontFamily` | `--font-*` | `--font-display --font-body --font-mono` |
+| `fontSize` | `--text-*` (+ `--…--line-height`, `--…--letter-spacing`) | les 12 paliers de `typography.css`, chacun apparié à son `--leading-*` et son `--tracking-*` comme dans `base.css` |
+| `fontWeight` | `--font-weight-*` | `--weight-regular/medium/semibold/bold` |
+| `letterSpacing` | `--tracking-*` | les 9 `--tracking-*` |
+| `lineHeight` | `--leading-*` | les 7 `--leading-*` |
+| `spacing` | `--spacing-*` | `--space-1…8`, `--control-sm/md/lg`, `--icon-control-sm/md/lg`, `--card-pad`, `--card-pad-lg` |
+| `maxWidth` | `--container-*` | `--container-shell/wide/read/narrow`, `--page-max` |
+| `transitionTimingFunction` | `--ease-*` | `--ease-standard` |
+| `darkMode` | `@custom-variant` | scope `.dark` |
 
 ---
 

@@ -1,0 +1,293 @@
+/* Julien Fernandes — couche Tailwind v4 du design system.
+   Pendant de `styles.css` : celui-ci porte les JETONS (tokens/*.css) et le reset,
+   celui-là les UTILITAIRES Tailwind générés depuis ces jetons.
+
+   RÈGLE : ce fichier ne contient QUE des `var(--…)`. Aucune valeur littérale
+   (couleur, taille, rayon, ombre, durée, tracking) n’est écrite ici — elles vivent
+   toutes, et uniquement, dans `src/styles/tokens/*.css`. Un jeton manquant se
+   déclare là-bas, jamais ici.
+
+   Ce fichier s’importe DEPUIS LE CSS de l’app (celui que traite @tailwindcss/vite),
+   jamais par un import JS :
+     @import "@julienfernandes/ds/theme.css";
+   Il porte lui-même les `@import "tailwindcss/…"` : l’app ne doit PAS écrire
+   `@import "tailwindcss";` de son côté, elle chargerait Tailwind deux fois.
+
+   Le thème sombre est le scope `.dark`, jamais un media query. */
+
+/* Ordre des couches. Déclaré ici ET en tête de `styles/index.css` : les deux
+   fichiers arrivent par des chemins différents et c’est la PREMIÈRE déclaration
+   rencontrée qui fixe l’ordre. La double déclaration est idempotente et rend le
+   montage insensible à l’ordre de chargement. */
+@layer theme, base, components, utilities;
+
+/* Import SÉLECTIF : `preflight.css` est volontairement omis. Le design system
+   embarque son propre reset (`tokens/base.css` : h1→h4 en Anton capitales, liens,
+   focus) que le preflight neutraliserait. */
+@import "tailwindcss/theme.css" layer(theme);
+@import "tailwindcss/utilities.css" layer(utilities);
+
+/* Le `darkMode` en mode classe du preset v3. */
+@custom-variant dark (&:is(.dark *));
+
+/* @theme INLINE, jamais @theme nu. Deux raisons.
+   (a) Nos valeurs sont des `var(--…)` déclarées dans tokens/*.css et le thème
+       sombre est le scope `.dark`. Un `@theme` nu redéclarerait la variable dans
+       `:root` et figerait l’indirection : une section `.dark` au milieu d’une page
+       claire hériterait de la valeur claire. Sans aucune erreur au build.
+   (b) Nos jetons portent DÉJÀ les noms des namespaces v4 — `--text-heading`,
+       `--radius-lg`, `--shadow-glow`, `--font-display`, `--tracking-eyebrow`,
+       `--leading-body`, `--container-shell`, `--ease-standard`. Avec `@theme` nu,
+       `--text-heading: var(--text-heading)` est une auto-référence circulaire dans
+       `:root` : le palier ne résout plus rien et les titres retombent sur la taille
+       héritée.
+   `@theme inline` n’émet pas la variable, il inline la valeur dans l’utilitaire —
+   `text-heading` sort `font-size: var(--text-heading)`, résolu par élément. */
+@theme inline {
+  /* ---------- Couleurs : surfaces & neutres chauds (convention shadcn) ---------- */
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-destructive-foreground: var(--destructive-foreground);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+
+  /* ---------- Couleurs : neutres de marque ---------- */
+  --color-ink: var(--ink);
+  --color-ink-soft: var(--ink-soft);
+  /* RÉSERVÉ miniatures YouTube + motion. Jamais un fond d’interface. */
+  --color-ink-deep: var(--ink-deep);
+  --color-cream: var(--cream);
+  --color-cream-alt: var(--cream-alt);
+  --color-text-secondary: var(--text-secondary);
+  --color-text-muted: var(--text-muted);
+  --color-text-inverted: var(--text-inverted);
+
+  /* ---------- Couleurs : marque — accent uniquement ---------- */
+  --color-brand-from: var(--brand-from);
+  --color-brand-via: var(--brand-via);
+  --color-brand-to: var(--brand-to);
+
+  /* ---------- Couleurs : pills sémantiques — toujours couleur + icône + texte ---------- */
+  --color-pill-coral-bg: var(--pill-coral-bg);
+  --color-pill-coral-fg: var(--pill-coral-fg);
+  --color-pill-amber-bg: var(--pill-amber-bg);
+  --color-pill-amber-fg: var(--pill-amber-fg);
+  --color-pill-danger-bg: var(--pill-danger-bg);
+  --color-pill-danger-fg: var(--pill-danger-fg);
+  --color-pill-warning-bg: var(--pill-warning-bg);
+  --color-pill-warning-fg: var(--pill-warning-fg);
+  --color-pill-success-bg: var(--pill-success-bg);
+  --color-pill-success-fg: var(--pill-success-fg);
+  --color-pill-neutral-bg: var(--pill-neutral-bg);
+  --color-pill-neutral-fg: var(--pill-neutral-fg);
+  --color-overlay-play: var(--overlay-play-bg);
+
+  /* Grille fine — miniatures et motion uniquement. */
+  --color-grid-line: var(--grid-line);
+
+  /* ---------- Échelle typo ----------
+     `--text-*: initial` SUPPRIME l’échelle native de Tailwind. En v3 le preset
+     REMPLAÇAIT `theme.fontSize` ; en v4 `@theme` étend par défaut, il faut donc
+     réinitialiser AVANT de déclarer nos paliers, sinon `text-sm` / `text-base` /
+     `text-lg` redeviennent générables. C’est volontaire : seuls les paliers
+     sémantiques du DS existent, une régression casse visiblement au lieu de
+     dériver en silence.
+     Chaque palier porte sa taille, et son interligne et son interlettrage quand le
+     preset les déclarait — les paliers `body`, `control`, `caption` et `chip` en
+     omettent une partie, à l’identique de la v3. */
+  --text-*: initial;
+  --text-display-xl: var(--text-display-xl);
+  --text-display-xl--line-height: var(--leading-display);
+  --text-display-xl--letter-spacing: var(--tracking-display);
+  --text-display: var(--text-display);
+  --text-display--line-height: var(--leading-display);
+  --text-display--letter-spacing: var(--tracking-display);
+  --text-heading-xl: var(--text-heading-xl);
+  --text-heading-xl--line-height: var(--leading-display);
+  --text-heading-xl--letter-spacing: var(--tracking-heading-xl);
+  --text-heading: var(--text-heading);
+  --text-heading--line-height: var(--leading-heading);
+  --text-heading--letter-spacing: var(--tracking-heading);
+  --text-subheading: var(--text-subheading);
+  --text-subheading--line-height: var(--leading-heading);
+  --text-subheading--letter-spacing: var(--tracking-subheading);
+  --text-heading-sm: var(--text-heading-sm);
+  --text-heading-sm--line-height: var(--leading-snug);
+  --text-heading-sm--letter-spacing: var(--tracking-heading-sm);
+  --text-body-lg: var(--text-body-lg);
+  --text-body-lg--line-height: var(--leading-body);
+  --text-body-lg--letter-spacing: var(--tracking-body-lg);
+  --text-body: var(--text-body);
+  --text-body--line-height: var(--leading-body);
+  /* Tous les contrôles : boutons, champs, chips, onglets. */
+  --text-control: var(--text-control);
+  --text-caption: var(--text-caption);
+  --text-caption--line-height: var(--leading-normal);
+  --text-eyebrow: var(--text-eyebrow);
+  --text-eyebrow--line-height: var(--leading-snug);
+  --text-eyebrow--letter-spacing: var(--tracking-eyebrow);
+  --text-chip: var(--text-chip);
+  --text-chip--letter-spacing: var(--tracking-chip);
+
+  /* ---------- Familles ---------- */
+  /* Anton 400 CAPS — titres uniquement, jamais sous 1.125rem. */
+  --font-display: var(--font-display);
+  --font-body: var(--font-body);
+  --font-mono: var(--font-mono);
+
+  /* ---------- Graisses ---------- */
+  --font-weight-regular: var(--weight-regular);
+  --font-weight-medium: var(--weight-medium);
+  --font-weight-semibold: var(--weight-semibold);
+  --font-weight-bold: var(--weight-bold);
+
+  /* ---------- Interlettrage ---------- */
+  --tracking-display: var(--tracking-display);
+  --tracking-heading-xl: var(--tracking-heading-xl);
+  --tracking-heading: var(--tracking-heading);
+  --tracking-subheading: var(--tracking-subheading);
+  --tracking-heading-sm: var(--tracking-heading-sm);
+  --tracking-body-lg: var(--tracking-body-lg);
+  --tracking-eyebrow: var(--tracking-eyebrow);
+  --tracking-chip: var(--tracking-chip);
+  --tracking-dense: var(--tracking-dense);
+
+  /* ---------- Interlignes ---------- */
+  --leading-tight: var(--leading-tight);
+  --leading-snug: var(--leading-snug);
+  --leading-normal: var(--leading-normal);
+  --leading-display: var(--leading-display);
+  --leading-heading: var(--leading-heading);
+  --leading-body: var(--leading-body);
+  --leading-prose: var(--leading-prose);
+
+  /* ---------- Rayons ----------
+     Le `DEFAULT` du preset v3 n’a PAS d’équivalent v4 : `rounded` nu y est un
+     utilitaire statique (`border-radius: 0.25rem`), non branché sur un namespace,
+     et un `@utility rounded` fusionnerait avec lui au lieu de le remplacer — le
+     natif gagnerait. `--radius` valant `var(--radius-lg)`, `rounded-lg` le couvre
+     à l’identique : c’est la classe à écrire. */
+  --radius-badge: var(--radius-badge);
+  --radius-sm: var(--radius-sm);
+  --radius-md: var(--radius-md);
+  --radius-lg: var(--radius-lg);
+  --radius-xl: var(--radius-xl);
+  --radius-2xl: var(--radius-2xl);
+  /* Badges et compteurs UNIQUEMENT — jamais un bouton, jamais un input, jamais
+     une barre d’onglets (les tabs ont leur propre rayon). */
+  --radius-pill: var(--radius-pill);
+
+  /* ---------- Ombres ---------- */
+  --shadow-sm: var(--shadow-sm);
+  --shadow-md: var(--shadow-md);
+  --shadow-lg: var(--shadow-lg);
+  --shadow-soft: var(--shadow-soft);
+  --shadow-soft-lg: var(--shadow-soft-lg);
+  /* Réservé au CTA primaire et aux éléments de marque. */
+  --shadow-glow: var(--shadow-glow);
+  --shadow-glow-lg: var(--shadow-glow-lg);
+
+  /* ---------- Espacement ----------
+     Échelle NOMMÉE : elle n’écrase pas l’échelle numérique de Tailwind
+     (`p-4`, `gap-2`… restent disponibles). `gap-space-5` = `var(--space-5)`,
+     `h-control-md` = `var(--control-md)`. */
+  --spacing-space-1: var(--space-1);
+  --spacing-space-2: var(--space-2);
+  --spacing-space-3: var(--space-3);
+  --spacing-space-4: var(--space-4);
+  --spacing-space-5: var(--space-5);
+  --spacing-space-6: var(--space-6);
+  --spacing-space-7: var(--space-7);
+  --spacing-space-8: var(--space-8);
+  /* Rail de hauteur des contrôles — rail UNIQUE : Button, Input, Select et la barre
+     d’onglets s’alignent tous sur --control-md, qui descend à 2.75rem sous 64rem
+     (cible tactile). Les alias sm/lg existent pour la compat d’API. */
+  --spacing-control-sm: var(--control-sm);
+  --spacing-control-md: var(--control-md);
+  --spacing-control-lg: var(--control-lg);
+  /* IconButton — même rail : les trois tailles rendent le même carré. */
+  --spacing-icon-control-sm: var(--icon-control-sm);
+  --spacing-icon-control-md: var(--icon-control-md);
+  --spacing-icon-control-lg: var(--icon-control-lg);
+  --spacing-card-pad: var(--card-pad);
+  --spacing-card-pad-lg: var(--card-pad-lg);
+
+  /* ---------- Largeurs de contenu par rôle — jamais une largeur inventée. ---------- */
+  --container-shell: var(--container-shell);
+  --container-wide: var(--container-wide);
+  --container-read: var(--container-read);
+  --container-narrow: var(--container-narrow);
+  --container-page: var(--page-max);
+
+  /* ---------- Motion ---------- */
+  --ease-standard: var(--ease-standard);
+}
+
+/* Dégradés et trames de fond. `background-image` et `background-size` n’ont PAS de
+   namespace en v4 : ils passent donc par `@utility`, ce qui les rend variantables
+   (`hover:`, `dark:`, `data-[state=active]:`) contrairement à une classe posée dans
+   `@layer utilities`.
+   `background-image` et non le raccourci `background` : le raccourci réinitialiserait
+   au passage la couleur, la position et la taille de fond de l’élément. */
+@utility bg-brand-gradient {
+  background-image: var(--brand-gradient);
+}
+@utility bg-brand-gradient-diagonal {
+  background-image: var(--brand-gradient-diagonal);
+}
+@utility bg-grad-soft {
+  background-image: var(--grad-soft);
+}
+@utility bg-halo {
+  background-image: var(--gradient-halo);
+}
+/* RÉSERVÉ miniatures + motion. `bg-thumbnail` reprend le littéral verbatim du brief
+   (non rendu) ; `bg-thumbnail-fit` est le jumeau dimensionné. */
+@utility bg-thumbnail {
+  background-image: var(--gradient-thumbnail);
+}
+@utility bg-thumbnail-fit {
+  background-image: var(--gradient-thumbnail-fit);
+}
+
+/* Maille de la grille fine — miniatures et motion uniquement. */
+@utility bg-grid {
+  background-size: var(--grid-cell) var(--grid-cell);
+}
+@utility bg-grid-lg {
+  background-size: var(--grid-cell-lg) var(--grid-cell-lg);
+}
+
+/* Le preflight étant omis, deux de ses défauts manquent aux utilitaires `border-*`.
+   La LARGEUR de bordure des éléments à bordure native (input, button, fieldset, hr)
+   n’est plus remise à zéro, et la COULEUR par défaut de `border` vaut `currentColor`
+   au lieu du jeton — soit une bordure encre ou corail là où on attend `--border`.
+   On restaure ces deux morceaux, et eux seuls. Aucune valeur de design ici : la
+   couleur vient du token.
+   NB — contrairement à la v3, le `border-style: solid` n’est plus nécessaire :
+   en v4 chaque utilitaire `border-*` pose son propre style via `--tw-border-style`
+   (déclaré en `@property`, valeur initiale `solid`). On le garde tout de même, il
+   couvre les éléments qui reçoivent une largeur par une autre voie. */
+@layer base {
+  *,
+  ::before,
+  ::after {
+    border-width: 0;
+    border-style: solid;
+    border-color: var(--border);
+  }
+}

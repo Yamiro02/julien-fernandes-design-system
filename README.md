@@ -3,7 +3,7 @@
 Design system **Julien Fernandes** — la source de vérité design de tous les outils de la marque :
 site, vidéos, slides, e-mails, dashboard, création de contenu.
 
-Tokens CSS · preset Tailwind · 40 primitives React + TypeScript.
+Tokens CSS · couche Tailwind v4 · 40 primitives React + TypeScript.
 Crème par défaut, ink en rupture, Anton 400 CAPS sur les titres, dégradé de marque rationné à
 l'accent. Tout est en `rem`.
 
@@ -19,64 +19,91 @@ l'accent. Tout est en `rem`.
 Pas de registry : chaque app épingle une version par un tag git.
 
 ```bash
-npm i github:Yamiro02/julien-fernandes-design-system#v0.2.4
+npm i github:Yamiro02/julien-fernandes-design-system#v0.3.0
 ```
 
-`react`, `react-dom` et `tailwindcss` sont des peer dependencies — l'app les fournit.
+Cinq **peer dependencies**, à la charge de l'app :
+
+| Peer | Plage | Note |
+|---|---|---|
+| `react` · `react-dom` | `>=18` | |
+| `tailwindcss` | `>=4` | **v4 uniquement.** Le preset v3 a disparu en 0.3.0 |
+| `lucide-react` | `>=0.400` | |
+| `tailwind-merge` | `^3` | **3.x obligatoire** |
+
+> **`tailwindcss` est marqué `optional` — voici ce que ça veut dire.** Le paquet a deux régimes.
+> Si tu n'utilises que `styles.css` et les classes `.jf-*` — un e-mail, un deck de slides, une page
+> sans utilitaires — Tailwind n'est pas nécessaire, et le flag évite à npm de le réclamer.
+> **Dès que tu importes `theme.css`, Tailwind >= 4 devient obligatoire** : ce fichier porte les
+> `@import "tailwindcss/…"`. Le flag ne rend pas Tailwind facultatif dans ce cas — il dit
+> seulement que npm ne bloquera pas l'installation. C'est le build CSS qui échouera.
+
+`lucide-react` et `tailwind-merge` étaient des dépendances directes jusqu'en 0.2.4 : une app qui
+avait déjà les siennes en embarquait **deux copies** dans son bundle. `tailwind-merge` est épinglé
+en 3.x parce que la 2.x ne connaît pas les groupes de classes de Tailwind v4 : elle résoudrait les
+conflits faux, sans rien signaler — et `cn()` est précisément l'endroit où ça coûte une couleur
+supprimée du DOM.
 
 ---
 
 ## Mise en route
 
-### 1. Les styles
+Le design system se branche en **deux fichiers**, et ils ne s'importent pas de la même façon.
 
-Un seul fichier à importer. Il embarque les tokens, le reset et les états des composants.
+### 1. Les fondations — import **JS** (recommandé)
+
+Tokens, reset, états des composants. Un seul fichier, chargé par l'application.
 
 ```ts
 // src/main.tsx
 import '@julienfernandes/ds/styles.css';
 ```
 
-### 2. Le preset Tailwind
+Un `@import '@julienfernandes/ds/styles.css';` **depuis ton CSS marche aussi** et produit le même
+résultat — couches, tokens et polices compris. L'import JS reste la voie recommandée : c'est celle
+que fait tourner la vitrine, donc celle qui est vérifiée à chaque version.
 
-```js
-// tailwind.config.js
-import preset from '@julienfernandes/ds/preset';
+### 2. La couche Tailwind — import **CSS**
 
-export default {
-  presets: [preset],
-  content: ['./index.html', './src/**/*.{ts,tsx}'],
-  corePlugins: {
-    // Le DS embarque son propre reset (titres Anton, liens, focus).
-    // Le preflight de Tailwind les neutraliserait.
-    preflight: false,
-  },
-};
+`theme.css` branche les tokens sur Tailwind v4. Il doit être atteint par un `@import` **depuis le
+fichier CSS de ton app** — celui que traite `@tailwindcss/vite`. Jamais par un import JS : Tailwind
+ne le verrait pas.
+
+```css
+/* src/index.css — l'entrée CSS de l'app */
+@import '@julienfernandes/ds/theme.css';
 ```
 
-> **Si tu coupes le preflight, restaure le défaut de bordure.** Les utilitaires `border-*` de
-> Tailwind ne posent qu'une **largeur** : ils s'appuient sur un `border-style: solid` global que
-> seul le preflight fournit. Sans lui, `class="border"` écrit `border-width: 1px` sur un
-> `border-style: none` — soit rien du tout, silencieusement. À ajouter à ton CSS d'entrée :
->
-> ```css
-> @tailwind base;
->
-> @layer base {
->   *, ::before, ::after {
->     border-width: 0;
->     border-style: solid;
->     border-color: var(--border);
->   }
-> }
->
-> @tailwind components;
-> @tailwind utilities;
-> ```
+```ts
+// vite.config.ts
+import tailwindcss from '@tailwindcss/vite';
 
-Le preset ne contient **que** des `var(--…)` : il branche les tokens sur Tailwind, il n'invente
-aucune valeur. `darkMode` est en `['class']` — le thème sombre est le scope `.dark`, jamais un
-media query.
+export default defineConfig({ plugins: [react(), tailwindcss()] });
+```
+
+Plus de `tailwind.config.js`, plus de `postcss.config.js`, plus d'`autoprefixer` : tout vit dans le
+CSS.
+
+> **Supprime ton `@import "tailwindcss";`.** `theme.css` porte lui-même les imports de Tailwind —
+> `theme.css` et `utilities.css`, chacun dans sa couche, **sans `preflight.css`**. Si ton app garde
+> sa propre ligne `@import "tailwindcss";`, Tailwind est chargé **deux fois** et le preflight
+> revient neutraliser les titres Anton du design system.
+
+#### Ce que `theme.css` règle pour toi
+
+- **Le preflight est coupé**, et le morceau qui manquait est restauré. Sans preflight, les
+  utilitaires `border-*` perdent la remise à zéro des bordures natives (`input`, `button`,
+  `fieldset`, `hr`) et leur couleur par défaut retombe sur `currentColor` au lieu du token —
+  une bordure encre ou corail là où on attend `--border`. C'était à ta charge en v3, le paquet
+  s'en occupe maintenant.
+- **Les couches** : `@layer theme, base, components, utilities`. Le reset du DS est en `base`, les
+  états `.jf-*` en `components`. C'est ce qui permet à un utilitaire Tailwind passé en `className`
+  de **surcharger** un composant — `<Card className="p-space-7">` applique bien `--space-7` —
+  exactement comme en v3.
+- **Le thème sombre** est le scope `.dark`, jamais un media query (`@custom-variant dark`).
+
+`theme.css` ne contient **que** des `var(--…)` : il branche les tokens sur Tailwind, il n'invente
+aucune valeur.
 
 ### 3. Les composants
 
@@ -119,13 +146,13 @@ Une section ink au milieu d'une page crème adopte le scope, elle ne peint pas u
 
 ---
 
-## Ce que le preset expose
+## Ce que `theme.css` expose
 
 | Famille | Utilitaires |
 |---|---|
 | Couleurs | `bg-background` `text-foreground` `bg-card` `text-card-foreground` `bg-popover` `bg-primary` `bg-secondary` `bg-muted` `text-muted-foreground` `bg-accent` `bg-destructive` `border-border` `ring-ring` `bg-ink` `bg-ink-soft` `bg-ink-deep` `bg-cream` `bg-cream-alt` `text-text-secondary` `text-text-muted` `text-text-inverted` `bg-brand-from/via/to` `bg-pill-*-bg` `text-pill-*-fg` |
-| Dégradés | `bg-brand-gradient` `bg-brand-gradient-diagonal` `bg-grad-soft` `bg-halo` `bg-thumbnail-fit` |
-| Rayons | `rounded-badge` `rounded-sm` `rounded-md` `rounded-lg` `rounded-xl` `rounded-2xl` `rounded-pill` — le pill est réservé aux **badges et compteurs** : jamais un bouton, un input ni une barre d'onglets |
+| Dégradés & trames | `bg-brand-gradient` `bg-brand-gradient-diagonal` `bg-grad-soft` `bg-halo` `bg-thumbnail-fit` · `bg-grid` `bg-grid-lg` — pas de namespace v4 pour `background-image` / `background-size` : ce sont des `@utility`, donc variantables (`hover:`, `dark:`) |
+| Rayons | `rounded-badge` `rounded-sm` `rounded-md` `rounded-lg` `rounded-xl` `rounded-2xl` `rounded-pill` — le pill est réservé aux **badges et compteurs** : jamais un bouton, un input ni une barre d'onglets. **`rounded` nu n'est pas au barème**, voir plus bas |
 | Ombres | `shadow-sm` `shadow-md` `shadow-lg` `shadow-glow` `shadow-glow-lg` |
 | Typo | `font-display` `font-body` `font-mono` · `text-display-xl` `text-display` `text-heading-xl` `text-heading` `text-subheading` `text-heading-sm` `text-body-lg` `text-body` `text-control` `text-caption` `text-eyebrow` `text-chip` |
 | Espacement | `gap-space-1` … `gap-space-8` · `h-control-sm/md/lg` · `w-icon-control-sm/md/lg` · `p-card-pad` `p-card-pad-lg` — **rail unique** : tous les contrôles s'alignent sur `--control-md`, qui descend à 2.75rem sous 64rem |
@@ -139,13 +166,29 @@ de Tailwind, sur laquelle reposent les composants shadcn de ton app.
 > sont plus générables : seuls les paliers sémantiques du DS existent. Une régression casse
 > visiblement au lieu de dériver en silence.
 >
-> Si ton app construit son propre `cn` avec `tailwind-merge`, réutilise la liste exportée, sinon
-> `text-control` sera classé comme une couleur et supprimé du DOM :
+> Si ton app ajoute ses propres paliers, ne reconstruis pas la configuration `tailwind-merge` à
+> côté : appelle `makeCn`. Les paliers du DS y sont déjà, tu ne donnes que les tiens — sans le
+> préfixe `text-`. Sans ça, `text-control` repasse **couleur** et disparaît du DOM au premier
+> conflit avec `text-foreground`.
 > ```ts
-> import { PALIERS_TYPO } from '@julienfernandes/ds';
-> const twMerge = extendTailwindMerge({
->   extend: { classGroups: { 'font-size': [{ text: [...PALIERS_TYPO] }] } },
-> });
+> import { makeCn } from '@julienfernandes/ds';
+> export const cn = makeCn(['tab', 'hero']);   // + text-tab, text-hero
+> ```
+> `cn` reste le raccourci quand il n'y a aucun palier à ajouter, et `PALIERS_TYPO` reste exporté
+> pour les cas où tu veux la liste brute.
+
+> **`rounded` nu n'existe plus au barème.** En v3, `rounded` valait `var(--radius)`, soit 20 px.
+> En v4 c'est un utilitaire **statique** de Tailwind, câblé sur `0.25rem`, qu'aucun token ne peut
+> reprendre : un `@utility rounded` fusionnerait avec lui au lieu de le remplacer, et le natif
+> gagnerait. Écris **`rounded-lg`**, qui vaut exactement l'ancien `rounded`. Un `rounded` oublié ne
+> lève aucune erreur : il passe silencieusement de 20 px à 4 px.
+
+> **Le paquet n'est pas scanné par Tailwind.** v4 ne lit pas `node_modules`. Sans effet
+> aujourd'hui : les 36 composants s'habillent en classes `.jf-*` et n'écrivent aucun utilitaire
+> Tailwind. C'est une précaution pour l'avenir — le jour où un composant du DS écrira une classe
+> Tailwind, l'app devra pointer le paquet :
+> ```css
+> @source "../node_modules/@julienfernandes/ds/src";
 > ```
 
 `tokens/base.css` fournit aussi des classes prêtes à l'emploi : `.display` `.display-xl` `.eyebrow`
@@ -206,7 +249,13 @@ il rend le mark en CSS, avec le point en dégradé.
 npm install          # dépendances du paquet
 npm run build        # tsup → dist/ (ESM + CJS + .d.ts)
 npm run typecheck    # tsc --noEmit
+npm run lint         # typecheck + contrôle anti-collision
 ```
+
+`npm run lint` enchaîne le typecheck et [`check-utility-collisions.mjs`](check-utility-collisions.mjs),
+qui refuse tout `@utility` de `theme.css` portant le nom d'une classe qu'un jeton de thème génère
+déjà : en Tailwind v4 les deux déclarations **fusionnent** dans la même règle et la dernière gagne,
+sans erreur ni avertissement.
 
 ### La vitrine de recette
 
@@ -242,5 +291,7 @@ Pas de valeur inventée. Pas de bleu. Pas de blanc ni de noir purs (le blanc pur
 bouton secondaire en thème clair). Pas d'emoji — seul le point médian `·`. Pas de rose `#D11A4E`.
 Jamais un pill sur un bouton ou un input. Anton 400 CAPS, titres uniquement, jamais sous
 `1.125rem`, jamais faux-gras. Grille fine et `--ink-deep` : miniatures et motion uniquement.
+Jamais `rounded` nu — toujours `rounded-lg` : en Tailwind v4, `rounded` est un littéral de 4 px
+hors barème, et il dérive sans rien signaler.
 
 Le détail est dans [`docs/readme.md`](docs/readme.md).

@@ -4,9 +4,29 @@
    on html/:root on the web — rem must honour the browser text-size preference.
    Fixed-size canvases (thumbnails, shorts, slides, motion, social) are the ONE
    exception: each such page pins its own root — see tokens/scales.css. */
-@import url('./tokens/fonts.css');
-@import url('./tokens/colors.css');
-@import url('./tokens/typography.css');
-@import url('./tokens/scales.css');
-@import url('./tokens/base.css');
-@import url('./patterns.css');
+
+/* Cascade layers. Declared here AND at the top of `theme.css`: the two files are
+   loaded separately — this one usually via a JS import, that one always via a CSS
+   @import — and layer order is fixed by the FIRST declaration encountered. The
+   double declaration is idempotent and makes the wiring order-insensitive.
+   Imports use the string form, not `url()`: Tailwind v4 resolves `@import "x.css"`
+   but leaves `@import url("x.css")` untouched, which breaks this file the moment an
+   app reaches it from a CSS entry the Tailwind plugin processes. */
+@layer theme, base, components, utilities;
+
+/* Tokens stay UNLAYERED. They are custom properties only — they conflict with
+   nothing, and being unlayered keeps them winning over the `:root` fallbacks
+   Tailwind emits into `layer(theme)` for same-named keys. */
+@import './tokens/fonts.css';
+@import './tokens/colors.css';
+@import './tokens/typography.css';
+@import './tokens/scales.css';
+
+/* The reset goes to `base`, component states to `components` — their relative
+   order is unchanged (base still comes before patterns), and BOTH now sit below
+   `utilities`. That is what lets a Tailwind utility passed through `className`
+   override a `.jf-*` rule, exactly as it did under Tailwind v3 where utilities
+   were emitted unlayered, after this file, and won on source order.
+   Both or neither: layering only patterns.css would let base.css win over it. */
+@import './tokens/base.css' layer(base);
+@import './patterns.css' layer(components);

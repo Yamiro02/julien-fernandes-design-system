@@ -1,27 +1,19 @@
-/* Seul fichier CSS de la démo.
-   1. Les fondations du design system (tokens + patterns), telles que publiées.
-   2. Les utilitaires Tailwind générés depuis le preset — donc uniquement des var(--…).
-   Aucune règle de design n'est écrite ici : c'est la règle de la vitrine. */
-@import '@julienfernandes/ds/styles.css';
+/* Entrée CSS de la démo — celle que traite @tailwindcss/vite.
 
-@tailwind base;
+   Le montage est celui d’une app consommatrice, à l’identique :
+     · les FONDATIONS (`styles.css` : tokens, reset, états de composants) sont
+       importées en JS, depuis main.tsx ;
+     · la COUCHE TAILWIND (`theme.css`) est importée ICI, en CSS — c’est la seule
+       voie par laquelle Tailwind la voit.
 
-/* Le preflight de Tailwind est désactivé : le DS embarque son propre reset, et
-   preflight neutraliserait les titres Anton de tokens/base.css.
-   Mais preflight portait AUSSI le défaut de bordure dont dépendent tous les
-   utilitaires `border-*` : ils ne posent qu'une largeur, en s'appuyant sur un
-   `border-style: solid` global. Sans lui, `border` = 1px sur un style `none`,
-   donc rien à l'écran. On restaure ce seul morceau — aucune valeur de design,
-   la couleur vient du token. */
-@layer base {
-  *,
-  ::before,
-  ::after {
-    border-width: 0;
-    border-style: solid;
-    border-color: var(--border);
-  }
-}
+   theme.css porte lui-même les @import de Tailwind : il ne faut surtout PAS
+   ajouter un @import "tailwindcss" ici, Tailwind serait chargé deux fois.
+   Aucune règle de design n’est écrite dans ce fichier : c’est la règle de la vitrine. */
+@import '@julienfernandes/ds/theme.css';
 
-@tailwind components;
-@tailwind utilities;
+/* Tailwind v4 ne détecte les sources qu’à partir de la racine de la démo. Celles du
+   design system vivent un cran au-dessus : on les déclare, comme le faisait la liste
+   `content` de la v3. Sans effet aujourd’hui — les composants rendent des classes
+   .jf-* et pas des utilitaires — mais la vitrine reste exacte le jour où l’un d’eux
+   en écrira un. */
+@source '../../src';
