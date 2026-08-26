@@ -43,6 +43,8 @@ export { Card } from './components/data-display/Card';
 export type { CardProps } from './components/data-display/Card';
 export { Badge } from './components/data-display/Badge';
 export type { BadgeProps } from './components/data-display/Badge';
+export { Pastille } from './components/data-display/Pastille';
+export type { PastilleProps } from './components/data-display/Pastille';
 export { Tooltip } from './components/data-display/Tooltip';
 export type { TooltipProps } from './components/data-display/Tooltip';
 export { Separator } from './components/data-display/Separator';
@@ -68,7 +70,9 @@ export type { ProgressProps } from './components/feedback/Progress';
 
 /* overlays */
 export { Modal } from './components/overlays/Modal';
-export type { ModalProps } from './components/overlays/Modal';
+export type { ModalProps, ModalResult } from './components/overlays/Modal';
+export { ActionSheet } from './components/overlays/ActionSheet';
+export type { ActionSheetProps, ActionSheetItem } from './components/overlays/ActionSheet';
 export { Dropdown } from './components/overlays/Dropdown';
 export type { DropdownProps, DropdownItem } from './components/overlays/Dropdown';
 

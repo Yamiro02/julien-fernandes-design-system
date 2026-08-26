@@ -187,7 +187,10 @@ Les portraits sont des **découpes** (silhouette détourée), placées bas, halo
 (card au repos) · **md** `0 10px 28px …/.09` (flottant / hover) · **lg** `0 20px 48px …/.12`
 (modales, dropdowns). En `.dark`, l'élévation s'approfondit — `rgba(0,0,0,.34/.46/.58)` : c'est la
 seule occurrence de noir pur du système hors `--ink-deep`, et c'est une ombre, jamais une surface.
-Plus le **glow** `--shadow-glow` / `-lg`, réservé au CTA primaire et aux éléments de marque.
+Plus le **glow** `--shadow-glow` / `-lg`, réservé au CTA primaire et aux éléments de marque,
+et **`--shadow-knob`** `0 1px 2px rgba(31,30,28,.28)` — le seul relief 1px du système, pour le knob
+du `Switch` (ink-tinté, jamais noir pur). Le knob est en **`--cream-alt`**, pas en blanc pur : la
+seule exception blanc reste le bouton secondaire en thème clair.
 
 **Élévation.** fond (1) → card (2, `--shadow-sm`, `--shadow-md` au hover) →
 popover / modale / dropdown (3, `--shadow-lg`) → skeleton muted (4).
@@ -271,14 +274,28 @@ hover / active / focus / disabled / loading ; icône optionnelle), `IconButton`.
 **`components/forms/`** — `Input`, `Textarea`, `Select`, `Checkbox`, `Radio`, `Switch`, `FormField`,
 `DatePicker`, `Calendar`.
 
-**`components/data-display/`** — `Card` (default · interactive · feature), `Badge`,
-`Tooltip`, `Table`, `Separator`. (`MetricPill` est sorti du socle — composant métier,
+**`components/data-display/`** — `Card` (default · interactive · feature, + en-tête à slots
+eyebrow / icon / title / subtitle / action), `Pastille` (la tuile d'icône : 5 tailles nommées
+par contexte — carte · dialogue · panneau · héros · écran —, 2 formes, 8 tons ; elle remplace
+les tuiles internes de `Modal` et `EmptyState`), `Badge` (2 rembourrages : md `--badge-h`,
+dense `--badge-h-dense`), `Tooltip`, `Table`, `Separator`. (`MetricPill` est sorti du socle — composant métier,
 il vit dans l'app qui en a besoin ; les classes `.jf-metric*` restent dans `patterns.css`.)
 
 **`components/feedback/`** — `Toast`, `Banner`, `EmptyState`, `Skeleton`, `SkeletonCard`,
 `Spinner`, `Progress`.
 
-**`components/overlays/`** — `Modal`, `Dropdown`.
+**`components/overlays/`** — `Modal` (3 phases dans la même modale : confirm → loading → result ;
+en `loading` rien ne ferme — ni Échap, ni clic dehors, ni croix. Sous 64 rem la même modale devient
+une feuille basse : ancrage bas, pleine largeur, coins hauts au rayon 2xl, poignée, entrée par le bas),
+`ActionSheet` (le menu ⋯ sur mobile, « Annuler » intégré, lignes au rail tactile `--control-md`),
+`Dropdown`.
+
+**Doctrine ⋯ .** `Dropdown` est **desktop only**. Sous 64 rem, un menu ⋯ s'ouvre **toujours** en
+`ActionSheet`, jamais en `Dropdown` : ce ne sont pas deux composants concurrents, c'est le même
+geste sur deux tailles d'écran.
+
+**Icône bannie.** `sparkles` est retiré du set et ne doit jamais y revenir : l'étoile-éclair est un
+marqueur « fait par une IA ». Les actions destructives utilisent `trash-2`.
 
 **`components/navigation/`** — `Navbar` (sticky, fond `--secondary`, blur au scroll), `Footer`,
 `Tabs`, `Pagination`, `AppShell`, `Sidebar`.

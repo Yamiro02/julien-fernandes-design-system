@@ -3,7 +3,7 @@
 Design system **Julien Fernandes** — la source de vérité design de tous les outils de la marque :
 site, vidéos, slides, e-mails, dashboard, création de contenu.
 
-Tokens CSS · couche Tailwind v4 · 40 primitives React + TypeScript.
+Tokens CSS · couche Tailwind v4 · 43 primitives React + TypeScript.
 Crème par défaut, ink en rupture, Anton 400 CAPS sur les titres, dégradé de marque rationné à
 l'accent. Tout est en `rem`.
 
@@ -19,7 +19,7 @@ l'accent. Tout est en `rem`.
 Pas de registry : chaque app épingle une version par un tag git.
 
 ```bash
-npm i github:Yamiro02/julien-fernandes-design-system#v0.3.0
+npm i github:Yamiro02/julien-fernandes-design-system#v0.4.0
 ```
 
 Cinq **peer dependencies**, à la charge de l'app :
@@ -207,9 +207,9 @@ donc utilisable normalement dans une app qui charge ce design system.
 | `icons` | `Icon` — 48 glyphes Lucide, tailles `1rem` / `1.25rem` / `1.5rem` |
 | `actions` | `Button` · `IconButton` — 4 variantes, 3 tailles, jamais un pill |
 | `forms` | `Input` · `Textarea` · `Select` · `Checkbox` · `Radio` · `Switch` · `FormField` · `Calendar` · `DatePicker` |
-| `data-display` | `Card` · `Badge` · `Tooltip` · `Separator` · `Table` (+ `THead` `TBody` `Tr` `Th` `Td`) — `framed` · `columns` · `striped` · `hoverable`, composables |
+| `data-display` | `Card` (+ en-tête à slots) · `Pastille` · `Badge` (2 rembourrages) · `Tooltip` · `Separator` · `Table` (+ `THead` `TBody` `Tr` `Th` `Td`) — `framed` · `columns` · `striped` · `hoverable`, composables |
 | `feedback` | `Toast` · `Banner` · `EmptyState` · `Skeleton` · `SkeletonCard` · `Spinner` · `Progress` |
-| `overlays` | `Modal` · `Dropdown` |
+| `overlays` | `Modal` (3 phases + feuille basse sous 64 rem) · `ActionSheet` · `Dropdown` |
 | `navigation` | `Navbar` · `Footer` · `Tabs` · `Pagination` · `AppShell` · `Sidebar` |
 | `brand` | `Logo` · `Halo` · `GridBackground` · `Avatar` |
 
@@ -220,6 +220,12 @@ import { Button, type ButtonProps } from '@julienfernandes/ds';
 ```
 
 Les règles d'usage composant par composant sont dans [`docs/PROMPTS.md`](docs/PROMPTS.md).
+
+> **Doctrine ⋯ .** `Dropdown` est **desktop only**. Sous 64 rem, un menu ⋯ s'ouvre **toujours** en
+> `ActionSheet`, jamais en `Dropdown` : ce ne sont pas deux composants concurrents, c'est le même
+> geste sur deux tailles d'écran. La règle est tenue par le CSS — au-dessus de 64 rem,
+> `.jf-scrim--sheet` est en `display:none`, une ActionSheet modale y est impossible. Le composant
+> le signale en console en développement.
 
 > **Hors périmètre** — la famille `content` (`CodeBlock`, `StepCard`, `BeforeAfter`, `QuoteBlock`)
 > est sortie du socle en 0.2.0, comme dans le design system maître.
@@ -292,6 +298,7 @@ bouton secondaire en thème clair). Pas d'emoji — seul le point médian `·`. 
 Jamais un pill sur un bouton ou un input. Anton 400 CAPS, titres uniquement, jamais sous
 `1.125rem`, jamais faux-gras. Grille fine et `--ink-deep` : miniatures et motion uniquement.
 Jamais `rounded` nu — toujours `rounded-lg` : en Tailwind v4, `rounded` est un littéral de 4 px
-hors barème, et il dérive sans rien signaler.
+hors barème, et il dérive sans rien signaler. Pas de `sparkles` : l'étoile-éclair est bannie du set
+depuis la 0.4.0, elle signe « fait par une IA ». Les actions destructives prennent `trash-2`.
 
 Le détail est dans [`docs/readme.md`](docs/readme.md).

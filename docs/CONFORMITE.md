@@ -20,6 +20,113 @@ Sources de vérité utilisées :
 
 ---
 
+## Procédure — à chaque version
+
+**La ligne d'installation du `README.md` se met à jour EN MÊME TEMPS que le tag.**
+
+`npm i github:Yamiro02/julien-fernandes-design-system#vX.Y.Z` : sur la voie git, le tag EST le
+mécanisme d'installation. Une ligne restée sur la version précédente ne lève aucune erreur — elle
+installe silencieusement l'ancienne, et l'app croit avoir la nouvelle. Le cas s'est produit en
+0.3.0 puis en 0.4.0 : ce n'est pas une étourderie, c'est une étape manquante dans la séquence.
+
+L'ordre, sans exception :
+
+1. `package.json` → `version`
+2. `README.md` → la ligne `npm i …#vX.Y.Z`
+3. le commit unique du lot
+4. `git tag -a vX.Y.Z -m "…"` — annoté, comme tous les tags depuis la v0.1.0 : un tag léger ne
+   part pas avec `--follow-tags`
+5. `git push --follow-tags`
+
+Le lot 4 intégrera cette séquence à la procédure de publication. Jusque-là, elle vit ici.
+
+---
+
+## Session v0.4.0 — portage du maître V5
+
+> Source : `Portage v5/`. **Copies exactes** (`diff` vide) : `tokens/scales.css`, `tokens/colors.css`,
+> `docs/readme.md`, `docs/PROMPTS.md`. `patterns.css` diverge de 5 lignes, volontairement — écart A.
+
+### Jetons — 13 ajoutés, tous dans `tokens/scales.css`, aucun dans `theme.css`
+
+| Groupe | Jetons |
+|---|---|
+| Badge | `--badge-h` 1.8125rem · `--badge-h-dense` 1.5rem |
+| Pastille | `--pastille-carte` 2.25 · `-dialogue` 2.625 · `-panneau` 3.25 · `-heros` 4 · `-ecran` 5rem |
+| Feuille basse | `--grip-w` 2.25rem |
+| Switch | `--switch-w` 2.75 · `--switch-h` 1.625 · `--switch-knob` 1.25 · `--switch-inset` 0.1875rem |
+| Relief | `--shadow-knob` — clair `0 1px 2px rgba(31,30,28,.28)` · `.dark` `0 1px 3px rgba(0,0,0,.45)` |
+
+Aucun n'entre dans `src/styles/theme.css` : aucune app n'en a besoin comme utilitaire Tailwind, et
+`--switch-w` dans le namespace `--spacing-*` générerait `w-` / `h-` / `p-` / `gap-`… pour rien.
+`git diff` sur `theme.css` est vide ; le contrôle anti-collision reste vert.
+
+### Classes — `patterns.css`
+
+**Ajoutées** : `.jf-card__header(-main|--airy)` `.jf-card__title(--lg)` `.jf-card__subtitle`
+`.jf-card__action` · `.jf-badge--dense` · `.jf-pastille` + 5 tailles + `--rond` + 8 tons +
+`--outlined` · `.jf-modal__close:disabled` `.jf-modal__desc` `.jf-modal__foot` `.jf-modal__result`
+`.jf-modal-slot` `.jf-grip` · `.jf-actionsheet` + `__head` `__title` `__subtitle` `__item(--danger)`
+`__note` `__sep` `__cancel` · `.jf-scrim--sheet` · `.jf-actionsheet--panneau` · la feuille basse
+`@media (max-width:64rem)` + `@keyframes jf-sheet-in` · la règle desktop
+`@media (min-width:64.0625rem){.jf-scrim--sheet{display:none}}`.
+
+**Modifiées** : `.jf-badge` (+`min-height` +`box-sizing`) · `.jf-modal__close:hover` →
+`:hover:not(:disabled)` · `.jf-switch__track` et `__knob` (mesures en jetons) · la course du knob.
+
+**Supprimées** : `.jf-modal__icon` · `.jf-empty__icon` — écart A.
+
+### Composants
+
+Nouveaux : `Pastille`, `ActionSheet`, et le hook interne `useModalSurface` (non exporté depuis
+`src/index.ts`, comme dans le maître). Modifiés : `Badge` (+`pad`), `Card` (+7 slots d'en-tête),
+`Modal` (+`phase` +`result`, tuile en `Pastille`, `.jf-grip`, styles inline officialisés),
+`EmptyState` (tuile en `Pastille`), `Icon` (`sparkles` retirée, `trash-2` ajoutée — 48 glyphes,
+inchangé). **38 fichiers, 43 exports nommés** (le §4 du prompt annonçait 39 : chiffre recompté).
+
+### Écarts assumés
+
+**A. Les deux alias dépréciés sont supprimés, le maître les garde.** `.jf-modal__icon` et
+`.jf-empty__icon` sont commentés `DEPRECATED v0.3` côté maître, pour les sites d'appel des apps.
+Ce dépôt n'a **aucune app consommatrice** : rien à protéger. Divergence **permanente** et
+légitime des deux côtés — elle ne se remonte pas.
+
+**B. `Modal iconVariant="neutral"`.** Passait par `--accent` / `--foreground` ; lit désormais la
+paire `--pill-neutral-*`, comme `Badge`, `Banner` et `Toast`. Décision du 26/08 : la paire
+sémantique est l'unique source, pas de troisième source de vérité. `danger` et `brand` rendent à
+l'identique.
+
+**C. L'ombre du knob de `Switch` change de rendu — et pas « imperceptiblement ».** Le prompt de
+portage annonce « rendu inchangé … imperceptible ». **Mesuré, c'est faux en sombre.** Pixel
+composité sous le knob :
+
+| | clair | sombre |
+|---|---|---|
+| remplissage `#fff` → `--cream-alt` | −5 / −8 / −13 RGB (−3,9 % de luminance) | idem, `--cream-alt` n'est pas redéfini en `.dark` |
+| ombre, rail décoché | −9 / −10 / −9 | **−14 / −15 / −13** |
+| ombre, rail coché | −10 / +1 / +4 | **−58 / −23 / −12** |
+
+En clair l'écart est sous le seuil du perceptible. En sombre il est franc : le flou passe de 2 à
+3 px et l'alpha de .20 à .45. Ce n'est pas une dérive — c'est le geste de `--shadow-sm/md/lg`, qui
+se creusent déjà en `.dark`. Écart **assumé et documenté**, second du lot après B.
+La course du knob, elle, est **inchangée à 18 px** : `translateX(1.125rem)` littéral est devenu
+`calc(--switch-w − --switch-knob − --switch-inset × 2)`, vérifié au rendu.
+
+### Divergences en attente de remontée au maître
+
+Elles n'existent que dans ce dépôt : un sync qui recopierait le maître les écraserait. Un message
+de remontée consolidé accompagne cette livraison.
+
+| # | Divergence | Fichier |
+|---|---|---|
+| D | **Verrou de défilement** dans `useModalSurface` — absent du maître, dont le `Modal.jsx` ne touche ni `overflow` ni `scroll` | `useModalSurface.ts` |
+| E | **Avertissement de développement** quand une `ActionSheet` modale est montée au-dessus de 64 rem | `ActionSheet.tsx` |
+| F | **`initialFocus: 'container' \| 'first'`** — le maître force le premier focusable, ce qui pose le focus sur la croix « Fermer » avant que le titre d'une confirmation destructive soit lu | `useModalSurface.ts` |
+| G | **Rangement de `tokens/scales.css`** — le maître insère `--switch-*` entre `--shadow-soft-lg` et `--shadow-glow`. Porté verbatim ici ; le rangement corrigé arrivera par le sync suivant | `tokens/scales.css` |
+| H | **`components/PROMPTS.md` du maître n'a pas les sections `Pastille` et `ActionSheet`**, que le §6 du prompt demande. `docs/PROMPTS.md` reste une copie exacte plutôt que de diverger | `docs/PROMPTS.md` |
+
+---
+
 ## 0. Socle
 
 | Élément | État | Vérification |

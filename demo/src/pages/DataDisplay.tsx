@@ -1,7 +1,9 @@
-import { Badge, Card, EmptyState, Icon, IconButton, Separator, Table, TBody, Td, Th, THead, Tooltip, Tr } from '@julienfernandes/ds';
+import { Badge, Button, Card, EmptyState, Icon, IconButton, Input, Pastille, Separator, Table, TBody, Td, Th, THead, Tooltip, Tr } from '@julienfernandes/ds';
 import { Block, Grid, Row, Section, Stack } from '../ui';
 
 const TONES = ['coral', 'amber', 'danger', 'warning', 'success', 'neutral', 'accent', 'outline'] as const;
+const TAILLES = ['carte', 'dialogue', 'panneau', 'heros', 'ecran'] as const;
+const TONS_PASTILLE = ['brand', 'coral', 'amber', 'success', 'warning', 'danger', 'neutral', 'inverse'] as const;
 
 export function DataDisplayPage() {
   return (
@@ -45,6 +47,63 @@ export function DataDisplayPage() {
             </Card>
           </Grid>
         </Block>
+
+        <Block label="En-tête à slots" hint="eyebrow · icon · title · subtitle · action, tous optionnels. Aucun slot passé = AUCUN noeud d'en-tête émis : le DOM d'une card sans en-tête est celui d'avant la v0.4.">
+          <Grid cols={2}>
+            <Card
+              eyebrow="Build"
+              icon={<Pastille size="carte" tone="brand"><Icon name="rocket" size="1rem" /></Pastille>}
+              title="Premier outil interne"
+              subtitle="Créé il y a deux jours"
+              action={<IconButton size="sm" label="Actions"><Icon name="ellipsis" size="1.125rem" /></IconButton>}
+            >
+              <p className="caption">Le corps suit l'en-tête, séparé par --space-4.</p>
+            </Card>
+            <Card
+              size="lg"
+              titleSize="lg"
+              headerGap="airy"
+              eyebrow="Série"
+              title="Trois vidéos, un outil"
+              subtitle="Du zéro au premier déploiement"
+            >
+              <Stack>
+                <p className="caption">titleSize=&quot;lg&quot; passe le titre en --text-subheading.</p>
+                <p className="caption">headerGap=&quot;airy&quot; ouvre la gouttière à --space-6, pour une carte à blocs.</p>
+              </Stack>
+            </Card>
+          </Grid>
+        </Block>
+      </Section>
+
+      <Section title="Pastille" note="La tuile d'icône du système — une seule pour toutes les tuiles teintées. Les tailles sont nommées PAR CONTEXTE, jamais par mesure : un site d'appel n'écrit jamais un rem.">
+        <Block label="Tailles" hint="carte 2.25 · dialogue 2.625 · panneau 3.25 · héros 4 · écran 5rem. Le rayon suit la taille : sm · md · lg · xl · 2xl.">
+          <Row>
+            {TAILLES.map(t => (
+              <div key={t} className="flex flex-col items-center gap-space-2">
+                <Pastille size={t}><Icon name="rocket" size="1.25rem" /></Pastille>
+                <span className="mono text-caption text-text-muted">{t}</span>
+              </div>
+            ))}
+          </Row>
+          <Row label="shape=&quot;round&quot; — le rayon passe à --radius-pill">
+            {TAILLES.map(t => <Pastille key={t} size={t} shape="round"><Icon name="user" size="1.25rem" /></Pastille>)}
+          </Row>
+        </Block>
+
+        <Block label="Tons" hint="brand (--grad-soft) + les 6 paires sémantiques + inverse. Les mêmes paires que Badge, Banner et Toast — une seule source.">
+          <Row>
+            {TONS_PASTILLE.map(t => (
+              <div key={t} className="flex flex-col items-center gap-space-2">
+                <Pastille tone={t}><Icon name="circle-check" size="1.25rem" /></Pastille>
+                <span className="mono text-caption text-text-muted">{t}</span>
+              </div>
+            ))}
+          </Row>
+          <Row label="outlined — le filet 1px currentColor à 22 %, celui d'EmptyState, généralisé">
+            {TONS_PASTILLE.map(t => <Pastille key={t} tone={t} outlined><Icon name="zap" size="1.25rem" /></Pastille>)}
+          </Row>
+        </Block>
       </Section>
 
       <Section title="Badge" note="Le rayon pill est légal ici. Les tons sémantiques portent toujours une icône + du texte.">
@@ -55,12 +114,25 @@ export function DataDisplayPage() {
             <Badge tone="warning" icon={<Icon name="triangle-alert" size="0.875rem" strokeWidth={2.5} />}>À vérifier</Badge>
             <Badge tone="coral" icon={<Icon name="zap" size="0.875rem" strokeWidth={2.5} />}>Nouveau</Badge>
             <Badge tone="amber" icon={<Icon name="clock" size="0.875rem" strokeWidth={2.5} />}>Bientôt</Badge>
-            <Badge tone="accent" icon={<Icon name="sparkles" size="0.875rem" strokeWidth={2.5} />}>Mis en avant</Badge>
+            <Badge tone="accent" icon={<Icon name="rocket" size="0.875rem" strokeWidth={2.5} />}>Mis en avant</Badge>
             <Badge tone="neutral">Brouillon</Badge>
             <Badge tone="outline">Archivé</Badge>
           </Row>
           <Row label="sans icône">
             {TONES.map(t => <Badge key={t} tone={t}>{t}</Badge>)}
+          </Row>
+        </Block>
+
+        <Block label="Rembourrages" hint="md = --badge-h (29 px), la hauteur historique, figée pour non-régression · dense = --badge-h-dense (24 px), celle qui s'aligne sur une pilule d'état de la même rangée. Icône 0.875rem en md, 0.75rem en dense.">
+          <Row label="md — posé à côté d'un Button sm et d'un Input sm">
+            <Badge tone="success" icon={<Icon name="circle-check" size="0.875rem" strokeWidth={2.5} />}>En ligne</Badge>
+            <Button size="sm" variant="secondary">Action</Button>
+            <Input size="sm" defaultValue="Champ sm" style={{ width: '9rem' }} />
+          </Row>
+          <Row label="dense — même rangée, alignement retrouvé">
+            <Badge pad="dense" tone="success" icon={<Icon name="circle-check" size="0.75rem" strokeWidth={2.5} />}>En ligne</Badge>
+            <Badge pad="dense" tone="coral" icon={<Icon name="zap" size="0.75rem" strokeWidth={2.5} />}>Nouveau</Badge>
+            <Badge pad="dense" tone="neutral">Brouillon</Badge>
           </Row>
         </Block>
       </Section>

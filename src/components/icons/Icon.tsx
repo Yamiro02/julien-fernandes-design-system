@@ -4,13 +4,14 @@ import {
   ChevronLeft, ChevronRight, ChevronsLeft, ChevronsRight, CircleAlert, CircleCheck,
   CircleX, Clock, Code, Copy, Dumbbell, Ellipsis, ExternalLink, Eye, FileText, Folder,
   Github, Info, Instagram, LayoutDashboard, LoaderCircle, Mail, Menu, MessageSquare,
-  PanelLeft, Play, Plus, Quote, Rocket, Search, Settings, SlidersHorizontal, Sparkles,
-  Terminal, TrendingUp, TriangleAlert, User, Video, X, Youtube, Zap,
+  PanelLeft, Play, Plus, Quote, Rocket, Search, Settings, SlidersHorizontal,
+  Terminal, Trash2, TrendingUp, TriangleAlert, User, Video, X, Youtube, Zap,
   type LucideIcon,
 } from 'lucide-react';
 
 /**
  * Lucide icon renderer — the ONLY icon system in this design system.
+ * BANNED: `sparkles` — the AI-slop star. Never reintroduce it, in the set or in an app.
  * Sizes are CSS lengths in rem (1rem / 1.25rem / 1.5rem); the 24x24 viewBox stays unitless.
  * stroke-width 2 by default, 2.5 inside pills and toasts, 3 for the check.
  */
@@ -19,7 +20,7 @@ export type IconName =
   | 'arrow-right' | 'arrow-up-right' | 'arrow-down' | 'play' | 'eye' | 'clock'
   | 'calendar' | 'copy' | 'search' | 'menu' | 'mail' | 'triangle-alert' | 'info'
   | 'circle-check' | 'circle-alert' | 'circle-x' | 'terminal' | 'code' | 'zap'
-  | 'sparkles' | 'plus' | 'external-link' | 'loader-circle' | 'youtube'
+  | 'plus' | 'trash-2' | 'external-link' | 'loader-circle' | 'youtube'
   | 'instagram' | 'github' | 'folder' | 'trending-up' | 'user' | 'book-open'
   | 'message-square' | 'quote' | 'rocket' | 'file-text'
   | 'chevrons-left' | 'chevrons-right' | 'ellipsis' | 'panel-left'
@@ -62,7 +63,7 @@ const ICONS: Record<IconName, LucideIcon> = {
   'terminal': Terminal,
   'code': Code,
   'zap': Zap,
-  'sparkles': Sparkles,
+  'trash-2': Trash2,
   'plus': Plus,
   'external-link': ExternalLink,
   'loader-circle': LoaderCircle,

@@ -74,14 +74,24 @@
 .jf-choice__dot{width:0.625rem;height:0.625rem;border-radius:var(--radius-pill);background:var(--primary)}
 .jf-switch{display:inline-flex;align-items:center;gap:0.5625rem;cursor:pointer;font-size:0.875rem;position:relative}
 .jf-switch input{position:absolute;opacity:0;width:0;height:0}
-.jf-switch__track{position:relative;flex:none;width:2.75rem;height:1.625rem;border-radius:var(--radius-pill);background:var(--border);transition:background 200ms var(--ease-standard),box-shadow 200ms var(--ease-standard)}
-.jf-switch__knob{position:absolute;top:0.1875rem;left:0.1875rem;width:1.25rem;height:1.25rem;border-radius:var(--radius-pill);background:#fff;box-shadow:0 1px 2px rgba(0,0,0,.2);transition:transform 200ms var(--ease-standard)}
+/* Mesures en jetons (--switch-*) : la course du knob en DÉCOULE (calc), elle n'est plus un
+   littéral inventé. Fond du knob = --cream-alt (jamais #fff), relief = --shadow-knob. */
+.jf-switch__track{position:relative;flex:none;width:var(--switch-w);height:var(--switch-h);border-radius:var(--radius-pill);background:var(--border);transition:background 200ms var(--ease-standard),box-shadow 200ms var(--ease-standard)}
+.jf-switch__knob{position:absolute;top:var(--switch-inset);left:var(--switch-inset);width:var(--switch-knob);height:var(--switch-knob);border-radius:var(--radius-pill);background:var(--cream-alt);box-shadow:var(--shadow-knob);transition:transform 200ms var(--ease-standard)}
 .jf-switch input:checked+.jf-switch__track,.jf-switch.is-checked .jf-switch__track{background:var(--primary)}
-.jf-switch input:checked+.jf-switch__track .jf-switch__knob,.jf-switch.is-checked .jf-switch__knob{transform:translateX(1.125rem)}
+.jf-switch input:checked+.jf-switch__track .jf-switch__knob,.jf-switch.is-checked .jf-switch__knob{transform:translateX(calc(var(--switch-w) - var(--switch-knob) - var(--switch-inset) * 2))}
 .jf-switch input:focus-visible+.jf-switch__track,.jf-switch.is-focus .jf-switch__track{box-shadow:0 0 0 3px color-mix(in srgb,var(--ring) 35%,transparent)}
 .jf-switch.is-disabled{opacity:.5;cursor:not-allowed}
 
 /* ---------- data-display — values copied from Yunary Card/Badge/Tooltip.jsx ---------- */
+/* Card — header slots. Passing no slot renders exactly as before. */
+.jf-card__header{display:flex;align-items:flex-start;gap:var(--space-3);margin-bottom:var(--space-4)}
+.jf-card__header--airy{margin-bottom:var(--space-6)}
+.jf-card__header-main{display:flex;flex-direction:column;gap:0.1875rem;flex:1;min-width:0}
+.jf-card__title{margin:0;font-family:var(--font-display);font-weight:var(--weight-regular);text-transform:uppercase;font-size:var(--text-heading-sm);letter-spacing:var(--tracking-heading-sm);line-height:var(--leading-snug)}
+.jf-card__title--lg{font-size:var(--text-subheading);letter-spacing:var(--tracking-subheading);line-height:var(--leading-heading)}
+.jf-card__subtitle{font-size:0.875rem;color:var(--text-muted);line-height:var(--leading-snug)}
+.jf-card__action{flex:none;margin-left:auto}
 .jf-card{background:var(--card);color:var(--card-foreground);border:1px solid var(--border);border-radius:var(--radius-lg);padding:var(--card-pad);box-shadow:var(--shadow-sm);box-sizing:border-box}
 .jf-card--lg{border-radius:var(--radius-xl);padding:var(--card-pad-lg)}
 .jf-card--flush{padding:0;overflow:hidden}
@@ -90,7 +100,8 @@
 .jf-card--interactive:active,.jf-card--interactive.is-active{transform:translateY(0);box-shadow:var(--shadow-sm)}
 .jf-card--interactive:focus-visible,.jf-card--interactive.is-focus{box-shadow:0 0 0 3px color-mix(in srgb,var(--ring) 35%,transparent)}
 .jf-card--feature{background:var(--grad-soft);border-color:color-mix(in srgb,var(--brand-from) 28%,transparent)}
-.jf-badge{display:inline-flex;align-items:center;gap:0.375rem;padding:0.25rem 0.6875rem;border-radius:var(--radius-pill);font-family:var(--font-body);font-size:0.78125rem;font-weight:var(--weight-semibold);line-height:1.3;white-space:nowrap}
+.jf-badge{display:inline-flex;align-items:center;gap:0.375rem;min-height:var(--badge-h);padding:0.25rem 0.6875rem;box-sizing:border-box;border-radius:var(--radius-pill);font-family:var(--font-body);font-size:0.78125rem;font-weight:var(--weight-semibold);line-height:1.3;white-space:nowrap}
+.jf-badge--dense{min-height:var(--badge-h-dense);padding-block:0.0625rem}
 .jf-badge--coral{background:var(--pill-coral-bg);color:var(--pill-coral-fg)}
 .jf-badge--amber{background:var(--pill-amber-bg);color:var(--pill-amber-fg)}
 .jf-badge--danger{background:var(--pill-danger-bg);color:var(--pill-danger-fg)}
@@ -110,6 +121,24 @@
 .jf-tooltip--bottom .jf-tooltip__bubble{bottom:auto;top:calc(100% + 0.5625rem)}
 .jf-tooltip--bottom .jf-tooltip__bubble::after{bottom:auto;top:-0.25rem}
 
+/* ---------- data-display: Pastille — the icon tile. Sizes named by context. ---------- */
+.jf-pastille{flex:none;display:inline-flex;align-items:center;justify-content:center;box-sizing:border-box}
+.jf-pastille--carte{width:var(--pastille-carte);height:var(--pastille-carte);border-radius:var(--radius-sm)}
+.jf-pastille--dialogue{width:var(--pastille-dialogue);height:var(--pastille-dialogue);border-radius:var(--radius-md)}
+.jf-pastille--panneau{width:var(--pastille-panneau);height:var(--pastille-panneau);border-radius:var(--radius-lg)}
+.jf-pastille--heros{width:var(--pastille-heros);height:var(--pastille-heros);border-radius:var(--radius-xl)}
+.jf-pastille--ecran{width:var(--pastille-ecran);height:var(--pastille-ecran);border-radius:var(--radius-2xl)}
+.jf-pastille--rond{border-radius:var(--radius-pill)}
+.jf-pastille--brand{background:var(--grad-soft);color:var(--primary)}
+.jf-pastille--coral{background:var(--pill-coral-bg);color:var(--pill-coral-fg)}
+.jf-pastille--amber{background:var(--pill-amber-bg);color:var(--pill-amber-fg)}
+.jf-pastille--success{background:var(--pill-success-bg);color:var(--pill-success-fg)}
+.jf-pastille--warning{background:var(--pill-warning-bg);color:var(--pill-warning-fg)}
+.jf-pastille--danger{background:var(--pill-danger-bg);color:var(--pill-danger-fg)}
+.jf-pastille--neutral{background:var(--pill-neutral-bg);color:var(--pill-neutral-fg)}
+.jf-pastille--inverse{background:var(--foreground);color:var(--background)}
+.jf-pastille--outlined{border:1px solid color-mix(in srgb,currentColor 22%,transparent)}
+
 /* ---------- feedback — values copied from Yunary Toast/Banner/EmptyState/Skeleton.jsx ---------- */
 .jf-toast{display:flex;align-items:flex-start;gap:0.6875rem;padding:0.8125rem 0.9375rem;border:1px solid var(--border);border-radius:var(--radius-lg);background:var(--card);color:var(--card-foreground);box-shadow:var(--shadow-lg);min-width:17.5rem;max-width:26rem;box-sizing:border-box}
 .jf-toast__icon{flex:none;display:inline-flex;align-items:center;justify-content:center;width:1.5rem;height:1.5rem;border-radius:var(--radius-sm)}
@@ -123,20 +152,57 @@
 .jf-banner--warning{background:var(--pill-warning-bg);border-color:color-mix(in srgb,var(--brand-via) 35%,transparent);color:var(--pill-warning-fg)}
 .jf-banner--success{background:var(--pill-success-bg);border-color:color-mix(in srgb,#639922 35%,transparent);color:var(--pill-success-fg)}
 .jf-empty{display:flex;flex-direction:column;align-items:center;text-align:center;gap:0.75rem;padding:var(--space-6);border:1px dashed var(--border);border-radius:var(--radius-lg);background:var(--card)}
-.jf-empty__icon{display:inline-flex;align-items:center;justify-content:center;width:3.25rem;height:3.25rem;border-radius:var(--radius-lg);background:var(--grad-soft);border:1px solid color-mix(in srgb,var(--primary) 22%,transparent);color:var(--primary)}
 .jf-skel{display:block;background:linear-gradient(90deg,var(--muted) 0%,var(--accent) 50%,var(--muted) 100%);background-size:560px 100%;border-radius:var(--radius-sm);animation:shimmer 1.4s infinite linear}
 
 /* ---------- overlays — values copied from Yunary Modal/Dropdown.jsx ---------- */
 .jf-scrim{position:absolute;inset:0;background:color-mix(in srgb,var(--ink) 45%,transparent);backdrop-filter:blur(2px);-webkit-backdrop-filter:blur(2px);display:flex;align-items:center;justify-content:center;padding:var(--space-5)}
 .jf-modal{width:23.75rem;max-width:100%;background:var(--popover);color:var(--popover-foreground);border:1px solid var(--border);border-radius:var(--radius-2xl);box-shadow:var(--shadow-lg);padding:var(--space-5);display:flex;flex-direction:column;gap:0.875rem;box-sizing:border-box}
-.jf-modal__icon{flex:none;display:inline-flex;align-items:center;justify-content:center;width:2.625rem;height:2.625rem;border-radius:var(--radius-md)}
 .jf-modal__close{width:2rem;height:2rem;border-radius:var(--radius-sm);border:none;background:transparent;color:var(--muted-foreground);cursor:pointer;display:inline-flex;align-items:center;justify-content:center;margin-left:auto}
-.jf-modal__close:hover{background:var(--accent);color:var(--foreground)}
+.jf-modal__close:hover:not(:disabled){background:var(--accent);color:var(--foreground)}
+.jf-modal__close:disabled{opacity:.4;cursor:not-allowed;background:transparent;color:var(--muted-foreground)}
+/* Modal phases — __desc and __foot officialise Modal.jsx's inline styles, values identical. */
+.jf-modal__desc{font-size:0.875rem;color:var(--muted-foreground);line-height:1.5;display:flex;flex-direction:column;gap:var(--space-3)}
+.jf-modal__foot{display:flex;gap:0.625rem;justify-content:flex-end;margin-top:0.25rem}
+.jf-modal__result{display:flex;flex-direction:column;align-items:center;text-align:center;gap:var(--space-2);padding-block:var(--space-2)}
+.jf-modal-slot{display:contents}
+/* Bottom-sheet grip — hidden until the modal is a sheet (under 64rem). */
+.jf-grip{display:none;flex:none;width:var(--grip-w);height:var(--space-1);margin-inline:auto;border-radius:var(--radius-pill);background:var(--border)}
+
+/* ActionSheet — the « ⋯ » menu on mobile. DOCTRINE: Dropdown is desktop only; under 64rem
+   a « ⋯ » menu ALWAYS opens as an ActionSheet. Same gesture, two screen sizes. */
+.jf-actionsheet{width:100%;background:var(--popover);color:var(--popover-foreground);border:1px solid var(--border);border-bottom:0;border-radius:var(--radius-2xl) var(--radius-2xl) 0 0;box-shadow:var(--shadow-lg);padding:var(--space-2) var(--space-2) max(var(--space-3),env(safe-area-inset-bottom));display:flex;flex-direction:column;gap:0.125rem;box-sizing:border-box}
+.jf-actionsheet .jf-grip{display:block;margin-block:var(--space-1) var(--space-2)}
+.jf-actionsheet__head{display:flex;flex-direction:column;gap:0.125rem;padding:var(--space-1) var(--space-3) var(--space-2)}
+.jf-actionsheet__title{font-size:0.875rem;font-weight:var(--weight-semibold)}
+.jf-actionsheet__subtitle{font-size:var(--text-caption);color:var(--text-muted)}
+.jf-actionsheet__item{display:flex;align-items:center;gap:0.625rem;min-height:var(--control-md);padding:0 var(--space-3);border:0;background:transparent;color:var(--foreground);font-family:var(--font-body);font-size:var(--text-control);font-weight:var(--weight-medium);text-align:left;border-radius:var(--radius-sm);cursor:pointer;transition:background 150ms var(--ease-standard)}
+.jf-actionsheet__item:hover,.jf-actionsheet__item.is-hover,.jf-actionsheet__item:focus-visible{background:var(--accent);outline:none}
+.jf-actionsheet__item--danger{color:var(--destructive)}
+.jf-actionsheet__note{font-size:var(--text-caption);color:var(--text-muted);line-height:var(--leading-normal);padding:var(--space-1) var(--space-3) var(--space-2)}
+.jf-actionsheet__sep{margin:var(--space-2) var(--space-3);width:auto}
+.jf-actionsheet__cancel{justify-content:center;font-weight:var(--weight-semibold);color:var(--text-secondary)}
+.jf-scrim--sheet{align-items:flex-end;padding:0}
+/* RÈGLE, pas effet de bord : au-dessus de 64 rem une ActionSheet ne s'ouvre JAMAIS en surface
+   modale — la doctrine ⋯ est tenue par le CSS, sans JS de point de rupture. */
+@media (min-width:64.0625rem){.jf-scrim--sheet{display:none}}
+/* Au-dessus de 64 rem elle n'existe QU'EN spécimen : un panneau, pas une feuille — 4 coins au
+   rayon 2xl, bordure complète, pas de poignée, largeur nommée --container-narrow/1.5. */
+.jf-actionsheet--panneau{width:20rem;max-width:100%;border:1px solid var(--border);border-radius:var(--radius-2xl);padding-bottom:var(--space-2)}
+.jf-actionsheet--panneau .jf-grip{display:none}
 .jf-dropdown{width:14.375rem;padding:0.375rem;background:var(--popover);color:var(--popover-foreground);border:1px solid var(--border);border-radius:var(--radius-lg);box-shadow:var(--shadow-lg);display:flex;flex-direction:column;gap:0.125rem;box-sizing:border-box}
 .jf-dropdown__item{display:flex;align-items:center;gap:0.625rem;width:100%;padding:0.5625rem 0.6875rem;border:0;background:transparent;color:var(--foreground);font-family:var(--font-body);font-size:0.875rem;text-align:left;border-radius:var(--radius-sm);cursor:pointer;transition:background 150ms var(--ease-standard)}
 .jf-dropdown__item:hover,.jf-dropdown__item.is-hover,.jf-dropdown__item:focus-visible{background:var(--accent);outline:none}
 .jf-dropdown__item--danger{color:var(--destructive)}
 .jf-dropdown__sep{height:1px;margin:0.25rem 0.375rem;background:var(--border);border:0}
+
+/* Modal as a bottom sheet under 64rem — the system's ONE breakpoint. Above it: nothing changes.
+   Inline panels (specimen cards, no scrim) are untouched: the rules require .jf-scrim. */
+@media (max-width:64rem){
+.jf-scrim{align-items:flex-end;padding:0}
+.jf-scrim .jf-modal{width:100%;max-width:none;border-radius:var(--radius-2xl) var(--radius-2xl) 0 0;border-inline:0;border-bottom:0;padding-bottom:max(var(--space-5),env(safe-area-inset-bottom));animation:jf-sheet-in 300ms var(--ease-standard)}
+.jf-scrim .jf-modal .jf-grip{display:block;margin-bottom:var(--space-2)}
+}
+@keyframes jf-sheet-in{from{transform:translateY(100%)}to{transform:none}}
 
 /* ---------- navigation ---------- */
 .jf-navbar{position:sticky;top:0;z-index:30;width:100%;background:var(--secondary);border-bottom:1px solid var(--border);transition:background-color 200ms var(--ease-standard),border-color 200ms var(--ease-standard),box-shadow 200ms var(--ease-standard)}
