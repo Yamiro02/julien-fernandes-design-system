@@ -14,6 +14,20 @@
   --accent:#f6ede2; --accent-foreground:#1f1e1c;
   --border:#e5e1da; --input:#e5e1da;
 
+  /* UN CRAN DE SÉPARATION depuis la surface courante, quelle qu'elle soit. Quatre emplois
+     sur 15 sites : le survol (13 règles), le rail de .jf-progress, le point haut du shimmer
+     de .jf-skel. Ce n'est PAS une teinte — c'est un PAS DE SURFACE : plus sombre que sa
+     porteuse en clair, plus clair qu'elle en sombre.
+     Nommé sur la surface et non sur le survol parce qu'il appartient au CONTRAT DE MARQUE :
+     un client qui lit « survol » y met une couleur de survol franche, et ses barres de
+     progression et ses squelettes la prennent aussi. Un quart du métier ne nomme pas le tout.
+     Le rôle a vécu sur --accent jusqu'en v0.4, et c'est ce partage qui a cassé le sombre :
+     --accent y avait été neutralisé au niveau de --card pour tenir le survol, si bien que
+     --card, --popover, --secondary, --muted et --accent valaient tous #2b2a28 — écart 1,000,
+     survol strictement invisible partout sauf sur le fond de page.
+     Valeurs calées sur l'écart CLAIR carte -> survol : 1,084 en clair, 1,088 en sombre. */
+  --surface-alt:#f6ede2;
+
   --ink:#1f1e1c; --ink-soft:#2b2a28; --cream:#f6f2ec; --cream-alt:#faf7f2;
   --text-secondary:#3d3c3a; --text-muted:#6b6966; --text-inverted:#f2efea;
 
@@ -58,7 +72,14 @@
   --popover:#2b2a28; --popover-foreground:#f2efea;
   --secondary:#2b2a28; --secondary-foreground:#f2efea;
   --muted:#2b2a28; --muted-foreground:#b0aea9;
-  --accent:#2b2a28; --accent-foreground:#f2efea;
+  /* --accent redevient une TEINTE DE MARQUE, comme en clair. Il ne valait #2b2a28 —
+     exactement --card — que parce qu'il faisait aussi office de survol ; libéré de ce
+     rôle, il reprend le wash chaud du clair, transposé sur fond sombre : même surcroît
+     de chroma qu'en clair (+13 contre +12) et même écart avec la carte (1,090 contre
+     1,084). Répare du même coup .jf-badge--accent et .jf-banner--info, invisibles sur
+     une carte en sombre. */
+  --accent:#392e29; --accent-foreground:#f2efea;
+  --surface-alt:#31302e;
   --border:#3a3936; --input:#3a3936; --ring:#f5a524;
   --primary:#e85d2f; --primary-foreground:#ffffff;
   --destructive:#e84c3d; --destructive-foreground:#ffffff;
