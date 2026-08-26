@@ -173,6 +173,13 @@
 .jf-table tbody tr:last-child td{border-bottom:0}
 .jf-table--striped tbody tr:nth-child(even) td{background:color-mix(in srgb,var(--muted) 55%,transparent)}
 .jf-table--hoverable tbody tr:hover td{background:var(--accent)}
+.jf-table--framed{border-collapse:separate;border-spacing:0;border:1px solid var(--border);border-radius:var(--radius-lg);background:var(--card)}
+.jf-table--framed thead th{background:var(--background)}
+.jf-table--framed thead th:first-child{border-top-left-radius:calc(var(--radius-lg) - 1px)}
+.jf-table--framed thead th:last-child{border-top-right-radius:calc(var(--radius-lg) - 1px)}
+.jf-table--framed tbody tr:last-child td:first-child{border-bottom-left-radius:calc(var(--radius-lg) - 1px)}
+.jf-table--framed tbody tr:last-child td:last-child{border-bottom-right-radius:calc(var(--radius-lg) - 1px)}
+.jf-table--columns th:not(:last-child),.jf-table--columns td:not(:last-child){border-right:1px solid var(--border)}
 
 /* ---------- pagination ---------- */
 .jf-pagination{display:inline-flex;align-items:center;gap:var(--space-1);padding:var(--space-1);background:var(--secondary);border:1px solid var(--border);border-radius:0.875rem;min-height:var(--control-md);box-sizing:border-box}

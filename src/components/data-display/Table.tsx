@@ -6,20 +6,32 @@ import { cn } from '../../lib/cn';
 /**
  * Composable data table: Table > THead/TBody > Tr > Th/Td. Tokens only — typo caption
  * for headers, 1px --border rows. Empty state: render EmptyState INSTEAD of the table.
+ * `framed` gives the table its own contour — no Card wrapper needed. All four flags compose.
  */
 export interface TableProps extends TableHTMLAttributes<HTMLTableElement> {
   /** Even rows get a muted wash. */
   striped?: boolean;
   /** Rows tint to --accent on hover. */
   hoverable?: boolean;
+  /** Self-contained frame: 1px --border contour, radius-lg, --card fill, header on --background. */
+  framed?: boolean;
+  /** Vertical 1px --border dividers between columns. */
+  columns?: boolean;
 }
 
 export function Table({
-  striped = false, hoverable = false, className = '', children, ...rest
+  striped = false, hoverable = false, framed = false, columns = false, className = '', children, ...rest
 }: TableProps): JSX.Element {
   return (
     <table
-      className={cn('jf-table', striped && 'jf-table--striped', hoverable && 'jf-table--hoverable', className)}
+      className={cn(
+        'jf-table',
+        striped && 'jf-table--striped',
+        hoverable && 'jf-table--hoverable',
+        framed && 'jf-table--framed',
+        columns && 'jf-table--columns',
+        className,
+      )}
       {...rest}
     >
       {children}

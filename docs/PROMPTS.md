@@ -143,13 +143,13 @@ Thin rule between blocks. With `label`, the caption sits centred on the line.
 
 ## Table
 
-Composable data table for tool UIs.
+Composable data table for tool UIs. `framed` gives it its own contour (1px `--border`, radius-lg, fill `--card`, header on `--background`) — no Card wrapper needed; `columns` adds vertical dividers; `striped` / `hoverable` compose freely.
 
 ```jsx
-<Card flush><Table striped hoverable>
+<Table framed columns hoverable>
   <THead><Tr><Th>Build</Th><Th>Statut</Th></Tr></THead>
   <TBody><Tr><Td>App de lecture</Td><Td><Badge tone="success">En ligne</Badge></Td></Tr></TBody>
-</Table></Card>
+</Table>
 ```
 
 Empty list: render `EmptyState` INSTEAD of an empty table — the table never carries its own empty state.

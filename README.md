@@ -19,7 +19,7 @@ l'accent. Tout est en `rem`.
 Pas de registry : chaque app épingle une version par un tag git.
 
 ```bash
-npm i github:Yamiro02/julien-fernandes-design-system#v0.2.0
+npm i github:Yamiro02/julien-fernandes-design-system#v0.2.1
 ```
 
 `react`, `react-dom` et `tailwindcss` sont des peer dependencies — l'app les fournit.
@@ -132,7 +132,7 @@ de Tailwind, sur laquelle reposent les composants shadcn de ton app.
 | `icons` | `Icon` — 48 glyphes Lucide, tailles `1rem` / `1.25rem` / `1.5rem` |
 | `actions` | `Button` · `IconButton` — 4 variantes, 3 tailles, jamais un pill |
 | `forms` | `Input` · `Textarea` · `Select` · `Checkbox` · `Radio` · `Switch` · `FormField` · `Calendar` · `DatePicker` |
-| `data-display` | `Card` · `Badge` · `Tooltip` · `Separator` · `Table` (+ `THead` `TBody` `Tr` `Th` `Td`) |
+| `data-display` | `Card` · `Badge` · `Tooltip` · `Separator` · `Table` (+ `THead` `TBody` `Tr` `Th` `Td`) — `framed` · `columns` · `striped` · `hoverable`, composables |
 | `feedback` | `Toast` · `Banner` · `EmptyState` · `Skeleton` · `SkeletonCard` · `Spinner` · `Progress` |
 | `overlays` | `Modal` · `Dropdown` |
 | `navigation` | `Navbar` · `Footer` · `Tabs` · `Pagination` · `AppShell` · `Sidebar` |
@@ -151,8 +151,8 @@ Les règles d'usage composant par composant sont dans [`docs/PROMPTS.md`](docs/P
 >
 > **Hors périmètre** — `MetricPill` a été sorti du socle : c'est un composant métier, il vit dans
 > l'app qui en a besoin. Les classes `.jf-metric*` restent dans `patterns.css` (copié verbatim), une
-> app peut donc reconstruire sa propre pill de métrique sans réinventer une valeur.
-> `docs/readme.md` le mentionne encore : c'est une copie verbatim de la source design.
+> app peut donc reconstruire sa propre pill de métrique sans réinventer une valeur. Le design system
+> maître l'a retiré de son côté : repo et maître sont alignés.
 
 ---
 

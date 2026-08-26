@@ -107,6 +107,37 @@ export function DataDisplayPage() {
             </TBody>
           </Table>
         </Block>
+        <Block label="framed" hint="Contour autonome : bordure 1px --border, rayon lg, fond --card, en-tête sur --background. Plus besoin de l'envelopper dans une Card flush.">
+          <Table framed>
+            <THead><Tr><Th>Série</Th><Th>Vidéos</Th><Th>Dernière</Th></Tr></THead>
+            <TBody>
+              <Tr><Td>Build</Td><Td>14</Td><Td>il y a 3 j</Td></Tr>
+              <Tr><Td>Tuto</Td><Td>9</Td><Td>il y a 9 j</Td></Tr>
+              <Tr><Td>Coulisses</Td><Td>4</Td><Td>il y a 24 j</Td></Tr>
+            </TBody>
+          </Table>
+        </Block>
+        <Block label="framed columns" hint="Les séparateurs verticaux rendent la structure des colonnes lisible.">
+          <Table framed columns>
+            <THead><Tr><Th>Série</Th><Th>Vidéos</Th><Th>Dernière</Th></Tr></THead>
+            <TBody>
+              <Tr><Td>Build</Td><Td>14</Td><Td>il y a 3 j</Td></Tr>
+              <Tr><Td>Tuto</Td><Td>9</Td><Td>il y a 9 j</Td></Tr>
+              <Tr><Td>Coulisses</Td><Td>4</Td><Td>il y a 24 j</Td></Tr>
+            </TBody>
+          </Table>
+        </Block>
+        <Block label="framed columns striped hoverable" hint="Les quatre options se composent librement.">
+          <Table framed columns striped hoverable>
+            <THead><Tr><Th>Vidéo</Th><Th>Série</Th><Th>Publiée</Th><Th>Statut</Th></Tr></THead>
+            <TBody>
+              <Tr><Td>Construire une app en un week-end</Td><Td>Build</Td><Td>il y a 3 j</Td><Td><Badge tone="success" icon={<Icon name="circle-check" size="0.875rem" strokeWidth={2.5} />}>En ligne</Badge></Td></Tr>
+              <Tr><Td>Cadrer une idée en une phrase</Td><Td>Tuto</Td><Td>il y a 9 j</Td><Td><Badge tone="success" icon={<Icon name="circle-check" size="0.875rem" strokeWidth={2.5} />}>En ligne</Badge></Td></Tr>
+              <Tr><Td>Le prompt que j'utilise tous les jours</Td><Td>Build</Td><Td>il y a 16 j</Td><Td><Badge tone="neutral">Brouillon</Badge></Td></Tr>
+              <Tr><Td>Ce que Claude Code ne sait pas faire</Td><Td>Coulisses</Td><Td>il y a 24 j</Td><Td><Badge tone="warning" icon={<Icon name="triangle-alert" size="0.875rem" strokeWidth={2.5} />}>À revoir</Badge></Td></Tr>
+            </TBody>
+          </Table>
+        </Block>
         <Block label="État vide" hint="La table disparaît, l'EmptyState prend sa place.">
           <EmptyState
             icon={<Icon name="folder" size="1.5rem" />}

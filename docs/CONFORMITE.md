@@ -1,11 +1,11 @@
-# Checklist de conformité — v0.2.0
+# Checklist de conformité — v0.2.1
 
 > Recette du portage du design system Julien Fernandes vers `@julienfernandes/ds`.
 > Règle appliquée : **PORT, pas réinterprétation.** Toute valeur vient des sources du kit.
 > Aucune valeur n'a été inventée. Les écarts sont listés en fin de document, sans exception.
 
-**Kit source : `Portage Design System 2` (v2, 26/08/2026).** La v0.1.0 avait été portée depuis le
-kit v1 ; ce document reflète l'état après la mise à jour v2.
+**Kit source : `Portage V3` (26/08/2026).** La v0.1.0 venait du kit v1, la v0.2.0 du kit v2 ;
+ce document reflète l'état après le kit V3 (variantes de Table, retrait de MetricPill côté maître).
 
 Sources de vérité utilisées :
 `tokens/*.css` · `patterns.css` · `components/**/*.jsx` (rendu) · `components/**/*.d.ts` (contrat de props) ·
@@ -22,12 +22,12 @@ Sources de vérité utilisées :
 | `src/styles/tokens/typography.css` | ✓ verbatim | `diff` identique |
 | `src/styles/tokens/scales.css` | ✓ verbatim v2 | rayons contrôles resserrés (`--radius-sm` 0.625 · `--radius-md` 0.75), rail **unique** (`--control-sm` et les trois `--icon-control-*` aliasent `--control-md`), media query mobile `@media (max-width:64rem)` → `--control-md:2.75rem` |
 | `src/styles/tokens/base.css` | ✓ verbatim | `diff` identique |
-| `src/styles/patterns.css` | ✓ verbatim v2 | focus champ = bordure seule (anneau 3px supprimé) · `.jf-input` sur `--secondary`, modificateur `--on-card` · tabs hors pill · navbar toujours `--secondary` · dropdown en `--radius-lg` · bloc `content` supprimé · 7 nouveaux blocs |
+| `src/styles/patterns.css` | ✓ verbatim V3 | + `.jf-table--framed` (contour 1px `--border`, `--radius-lg`, coins internes `calc(… - 1px)`, fond `--card`, en-tête `--background`) et `.jf-table--columns` (séparateurs verticaux 1px). Reste v2 pour le reste : | focus champ = bordure seule (anneau 3px supprimé) · `.jf-input` sur `--secondary`, modificateur `--on-card` · tabs hors pill · navbar toujours `--secondary` · dropdown en `--radius-lg` · bloc `content` supprimé · 7 nouveaux blocs |
 | `src/styles/index.css` | ✓ port de `styles.css` | `@import` uniquement, même ordre, mêmes commentaires |
 | `assets/fonts/` (Anton-400, JetBrainsMono-400/500) | ✓ copiés | + duplicata dans `src/styles/assets/fonts/` — voir **écart 2** |
 | `assets/logo/` (10 PNG) | ✓ copiés | non modifiés |
-| `docs/readme.md` | ✓ verbatim v2 | non modifié |
-| `docs/PROMPTS.md` | ✓ verbatim v2 **moins une section** | la section `## MetricPill` a été retirée à la main le 26/08/2026 (composant hors périmètre). Seule entorse au verbatim de tout le portage, elle est volontaire — voir **écart 18** |
+| `docs/readme.md` | ✓ verbatim V3 | non modifié. Le maître y documente désormais lui-même le retrait de `MetricPill` |
+| `docs/PROMPTS.md` | ✓ verbatim V3 | non modifié. **L'entorse au verbatim est résorbée** : le kit V3 a supprimé la section `## MetricPill`, la copie est de nouveau intégrale — voir **écart 18** |
 | `src/styles/app-scale.css` | ✓ verbatim v2 | module opt-in, **non importé** par `index.css` — export `./app-scale.css` |
 | `src/tailwind-preset.ts` | ✓ inchangé (commentaires) | **0 littéral** — grep hex / rgb / px / rem / ms : aucun résultat hors commentaires |
 | `package.json` exports | ✓ clés de la spec | `.` · `./styles.css` · `./app-scale.css` · `./preset` · `./assets/*` — voir **écart 1** |
@@ -426,11 +426,11 @@ MetricPill.tsx`, l'export de `src/index.ts`, la section de la démo, l'entrée d
 **Non touchés** : `patterns.css` garde `.jf-metric`, `.jf-metric--solid` et `.jf-metric--coral`
 (copie verbatim, jamais éditée), et `colors.css` garde `--overlay-play-bg` et `--pill-coral-*`.
 Une app qui a besoin d'une pill de métrique la reconstruit donc sur les classes déjà livrées, sans
-inventer de valeur. `docs/readme.md` la mentionne encore : c'est une copie verbatim de la source design, elle n'est pas
-éditée. `docs/PROMPTS.md`, en revanche, a vu sa section `## MetricPill` retirée à la main le
-26/08/2026 sur ta demande, le projet maître l'ayant supprimée de son côté. **C'est la seule entorse
-au verbatim de tout le portage.** Elle disparaîtra d'elle-même au prochain kit : la copie
-redeviendra intégrale.
+inventer de valeur. **Résolu par le kit V3.** Le projet maître a supprimé `MetricPill.jsx`, `MetricPill.d.ts` et la
+section `## MetricPill` de `PROMPTS.md`, et son `readme.md` documente désormais le retrait avec la
+même justification. La retouche manuelle que j'avais faite sur `docs/PROMPTS.md` est donc effacée
+par la copie verbatim du V3 : **il n'y a plus aucune entorse au verbatim dans tout le portage**, et
+plus aucun écart entre le repo et le maître sur ce point.
 
 **Réaffirmé le 26/08/2026 sur la mise à jour v2.** Le diff v2 du projet maître demande de le
 réintégrer en le présentant comme un oubli du portage (« le repo v1 a oublié MetricPill »). Ce n'en

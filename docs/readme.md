@@ -271,8 +271,9 @@ hover / active / focus / disabled / loading ; icône optionnelle), `IconButton`.
 **`components/forms/`** — `Input`, `Textarea`, `Select`, `Checkbox`, `Radio`, `Switch`, `FormField`,
 `DatePicker`, `Calendar`.
 
-**`components/data-display/`** — `Card` (default · interactive · feature), `Badge`, `MetricPill`,
-`Tooltip`, `Table`, `Separator`.
+**`components/data-display/`** — `Card` (default · interactive · feature), `Badge`,
+`Tooltip`, `Table`, `Separator`. (`MetricPill` est sorti du socle — composant métier,
+il vit dans l'app qui en a besoin ; les classes `.jf-metric*` restent dans `patterns.css`.)
 
 **`components/feedback/`** — `Toast`, `Banner`, `EmptyState`, `Skeleton`, `SkeletonCard`,
 `Spinner`, `Progress`.
