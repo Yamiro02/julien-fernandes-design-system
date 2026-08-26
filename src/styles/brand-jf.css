@@ -99,10 +99,6 @@
   --ink:#1f1e1c; --ink-soft:#2b2a28; --cream:#f6f2ec; --cream-alt:#faf7f2;
   --text-secondary:#3d3c3a; --text-muted:#6b6966; --text-inverted:#f2efea;
 
-  /* Deep black — ADDED token. RESERVED for YouTube thumbnails and motion cards.
-     Never an interface, slide or landing background. Same scope as the grid. */
-  --ink-deep:#0d0c0b;
-
   /* Brand — accent only */
   --primary:#e85d2f; --primary-foreground:#ffffff;
   --ring:#e85d2f;
@@ -133,17 +129,8 @@
   --brand-gradient-diagonal:linear-gradient(135deg,var(--brand-from),var(--brand-via),var(--brand-to)); /* @kind color */
   --grad-soft:linear-gradient(135deg,rgba(245,165,36,.08),rgba(232,76,61,.06)); /* @kind color */
 
-  /* Halos — warm radial, bottom-anchored, never full-screen. */
+  /* Halos — radial chaud, ancré en bas, jamais plein écran. */
   --gradient-halo:radial-gradient(60% 45% at 50% 100%, rgba(240,128,41,.30) 0%, rgba(232,76,61,.12) 45%, transparent 75%); /* @kind color */
-  /* Thumbnail/motion halo — hotter. RESERVED for thumbnails and motion cards.
-     Literal reproduced verbatim from the brief. */
-  --gradient-thumbnail:radial-gradient(closest-side at 50% 110%, rgba(240,128,41,.55) 0%, rgba(232,76,61,.28) 45%, transparent 72%); /* @kind color */
-  /* FLAGGED FOR REVIEW — the literal above cannot render: with `closest-side` and a
-     centre at 110%, the gradient's radius is 10% of the box height while its centre
-     sits 10% of the box height BELOW the box, so the painted disc never reaches the
-     visible area — it comes out empty in every container. Same colour stops, explicit
-     sizing, which is what --gradient-halo already does. Templates use this one. */
-  --gradient-thumbnail-fit:radial-gradient(70% 55% at 50% 100%, rgba(240,128,41,.55) 0%, rgba(232,76,61,.28) 45%, transparent 72%); /* @kind color */
 
   /* Semantic pills — always colour + icon + text. Backgrounds are theme-agnostic. */
   --pill-coral-bg:color-mix(in srgb,var(--primary) 12%,transparent); --pill-coral-fg:#b23a1c;
@@ -185,15 +172,26 @@
   --gradient-halo-top:radial-gradient(60% 45% at 50% 0%, rgba(240,128,41,.30) 0%, rgba(232,76,61,.12) 45%, transparent 75%); /* @kind color */
   --gradient-halo-center:radial-gradient(55% 55% at 50% 50%, rgba(240,128,41,.30) 0%, rgba(232,76,61,.12) 45%, transparent 75%); /* @kind color */
 
-  /* ---------- MÉTIER — miniatures YouTube et cartes motion ----------
-     RIEN DE TOUT CECI N'EST DE L'INTERFACE. Ces jetons partent en extension isolée
-     `brand-content.css` au SOUS-LOT 4 ; ils transitent ici pour que le socle soit vide de
-     couleur dès maintenant. --ink-deep et les deux --gradient-thumbnail sont déjà plus haut.
-     La maille et le filet restent en px exprès : la grille ne doit pas suivre le rem. */
+  /* ---------- MÉTIER — OPTIONNEL : miniatures YouTube et cartes motion ----------
+     RIEN DE TOUT CECI N'EST DE L'INTERFACE. Ces sept jetons ne servent QUE si le projet
+     importe `brand-content.css`, l'extension qui porte `.jf-grid`, `.accent-hot` et les
+     utilitaires `bg-thumbnail*` / `bg-grid*`. Une app d'interface ne les déclare pas et
+     n'importe pas l'extension.
+     Les VALEURS restent ici, avec le reste de la marque, parce que c'est là que vivent
+     toutes les valeurs de ce paquet ; l'extension, elle, n'en porte aucune. */
+  --ink-deep:#0d0c0b;   /* le plus profond du système — surfaces d'export uniquement */
+  /* Halo de miniature, plus chaud. Littéral repris VERBATIM du brief historique.
+     SIGNALÉ : il ne peut pas rendre — avec `closest-side` et un centre à 110 %, le rayon
+     vaut 10 % de la hauteur de la boîte tandis que le centre est 10 % SOUS elle : le
+     disque peint n'atteint jamais la zone visible, il sort vide dans tout conteneur.
+     Retiré au sous-lot 6 avec son utilitaire. Utilisez le jumeau ci-dessous. */
+  --gradient-thumbnail:radial-gradient(closest-side at 50% 110%, rgba(240,128,41,.55) 0%, rgba(232,76,61,.28) 45%, transparent 72%); /* @kind color */
+  --gradient-thumbnail-fit:radial-gradient(70% 55% at 50% 100%, rgba(240,128,41,.55) 0%, rgba(232,76,61,.28) 45%, transparent 72%); /* @kind color */
+  /* La maille et le filet restent en px EXPRÈS : la grille ne doit pas suivre le rem. */
   --grid-cell:28px;
   --grid-cell-lg:80px;
   --grid-line:rgba(246,242,236,.055); /* crème à 5,5 % */
-  --shadow-accent-hot:0 0 34px rgba(240,128,41,.65); /* .accent-hot — miniatures / motion */
+  --shadow-accent-hot:0 0 34px rgba(240,128,41,.65); /* la lueur de .accent-hot */
 }
 .dark{
   --background:#1f1e1c; --foreground:#f2efea;

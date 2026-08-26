@@ -6,7 +6,7 @@ const NAMES: IconName[] = [
   'arrow-up-right', 'arrow-down', 'play', 'eye', 'clock', 'calendar', 'copy',
   'search', 'menu', 'mail', 'triangle-alert', 'info', 'circle-check',
   'circle-alert', 'circle-x', 'terminal', 'code', 'zap', 'plus', 'trash-2',
-  'external-link', 'loader-circle', 'youtube', 'instagram', 'github', 'folder',
+  'external-link', 'loader-circle', 'github', 'folder',
   'trending-up', 'user', 'book-open', 'message-square', 'quote', 'rocket', 'file-text',
   'chevrons-left', 'chevrons-right', 'ellipsis', 'panel-left', 'sliders-horizontal',
   'layout-dashboard', 'video', 'dumbbell', 'settings',

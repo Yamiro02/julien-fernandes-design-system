@@ -65,11 +65,11 @@
   --color-input: var(--input);
   --color-ring: var(--ring);
 
-  /* ---------- Couleurs : neutres de marque ---------- */
+  /* ---------- Couleurs : neutres de marque ----------
+     --color-ink-deep n’est pas ici : il appartient à l’extension métier et vit dans
+     `brand-content.css`, avec les utilitaires qui l’emploient. */
   --color-ink: var(--ink);
   --color-ink-soft: var(--ink-soft);
-  /* RÉSERVÉ miniatures YouTube + motion. Jamais un fond d’interface. */
-  --color-ink-deep: var(--ink-deep);
   --color-cream: var(--cream);
   --color-cream-alt: var(--cream-alt);
   --color-text-secondary: var(--text-secondary);
@@ -95,9 +95,6 @@
   --color-pill-neutral-bg: var(--pill-neutral-bg);
   --color-pill-neutral-fg: var(--pill-neutral-fg);
   --color-overlay-play: var(--overlay-play-bg);
-
-  /* Grille fine — miniatures et motion uniquement. */
-  --color-grid-line: var(--grid-line);
 
   /* ---------- Échelle typo ----------
      `--text-*: initial` SUPPRIME l’échelle native de Tailwind. En v3 le preset
@@ -255,22 +252,8 @@
 @utility bg-halo {
   background-image: var(--gradient-halo);
 }
-/* RÉSERVÉ miniatures + motion. `bg-thumbnail` reprend le littéral verbatim du brief
-   (non rendu) ; `bg-thumbnail-fit` est le jumeau dimensionné. */
-@utility bg-thumbnail {
-  background-image: var(--gradient-thumbnail);
-}
-@utility bg-thumbnail-fit {
-  background-image: var(--gradient-thumbnail-fit);
-}
-
-/* Maille de la grille fine — miniatures et motion uniquement. */
-@utility bg-grid {
-  background-size: var(--grid-cell) var(--grid-cell);
-}
-@utility bg-grid-lg {
-  background-size: var(--grid-cell-lg) var(--grid-cell-lg);
-}
+/* Les quatre utilitaires métier — `bg-thumbnail*` et `bg-grid*` — ne sont PAS ici :
+   ils sont partis avec l’extension optionnelle `brand-content.css`. */
 
 /* Le preflight étant omis, deux de ses défauts manquent aux utilitaires `border-*`.
    La LARGEUR de bordure des éléments à bordure native (input, button, fieldset, hr)

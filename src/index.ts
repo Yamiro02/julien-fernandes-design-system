@@ -95,8 +95,9 @@ export { Logo } from './components/brand/Logo';
 export type { LogoProps } from './components/brand/Logo';
 export { Halo } from './components/brand/Halo';
 export type { HaloProps } from './components/brand/Halo';
-export { GridBackground } from './components/brand/GridBackground';
-export type { GridBackgroundProps } from './components/brand/GridBackground';
+/* GridBackground, HaloHot et ContentIcon ne sont PAS exportés ici : ce sont des outils de
+   MINIATURE et de MOTION, pas d'interface. Ils vivent sur le sous-chemin optionnel
+   `@julienfernandes/ds/brand-content`, avec `brand-content.css` en face. */
 export { Avatar } from './components/brand/Avatar';
 export type { AvatarProps } from './components/brand/Avatar';
 

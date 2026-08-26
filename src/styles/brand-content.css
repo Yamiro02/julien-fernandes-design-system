@@ -1,0 +1,72 @@
+/* ═══════════════════════════════════════════════════════════════════════════════
+   EXTENSION MÉTIER — miniatures YouTube, cartes motion, visuels d'export.
+   OPTIONNELLE. Une app d'interface ne l'importe pas.
+
+   Rien de ce que porte ce fichier n'est de l'INTERFACE : la grille fine, les halos
+   chauds de miniature, le noir profond et la lueur de mot-clé servent à fabriquer des
+   VISUELS — une vignette YouTube, une carte de motion design — pas des écrans.
+
+       @import "@julienfernandes/ds/theme.css";
+       @import "@julienfernandes/ds/brand-content.css";   <- seulement si vous en avez besoin
+
+   Il s'importe depuis le CSS de l'app, à côté de `theme.css` et pas depuis le JS :
+   il déclare des `@utility` et un `@theme inline`, que seul le plugin Tailwind sait lire.
+
+   COMME `core.css`, IL NE PORTE AUCUNE VALEUR. Il déclare la STRUCTURE — les règles, les
+   utilitaires, les correspondances de thème — et le CONTRAT des sept jetons que le fichier
+   de marque doit fournir en face. C'est la même règle qu'ailleurs dans ce paquet : un
+   fichier de structure ne contient pas de couleur, et un jeton manquant fait que la
+   variable n'existe pas au lieu de retomber en silence sur celle de quelqu'un d'autre.
+
+   LE CONTRAT — sept jetons, dans votre fichier de marque, en `:root` :
+     --ink-deep                le noir le plus profond du système. Surfaces d'export
+                               uniquement, jamais un fond d'interface.
+     --gradient-thumbnail      halo de miniature, verbatim du brief historique.
+     --gradient-thumbnail-fit  son jumeau dimensionné (celui qui rend — cf. §2.2).
+     --grid-cell               maille fine. En px EXPRÈS : la grille ne suit pas le rem.
+     --grid-cell-lg            maille large, idem.
+     --grid-line               couleur du filet, très basse opacité (~5,5 %).
+     --shadow-accent-hot       la lueur de `.accent-hot`, en drop-shadow.
+   `brand-jf.css` les fournit pour Julien ; `brand.template.css` les liste, commentés,
+   dans son bloc optionnel.
+
+   Le pendant JavaScript est sur le sous-chemin `@julienfernandes/ds/brand-content` :
+   `GridBackground`, `HaloHot` et `ContentIcon`.
+   ═══════════════════════════════════════════════════════════════════════════════ */
+
+/* Les correspondances Tailwind des deux jetons métier exposés en utilitaires.
+   `@theme inline` et non `@theme` nu, pour la même raison qu'en tête de theme.css. */
+@theme inline {
+  --color-ink-deep: var(--ink-deep);
+  --color-grid-line: var(--grid-line);
+}
+
+/* Dégradés et trames de fond. `background-image` et `background-size` n'ont PAS de
+   namespace en v4 : ils passent par `@utility`, ce qui les rend variantables.
+   `background-image` et non le raccourci `background` : le raccourci réinitialiserait
+   au passage la couleur, la position et la taille de fond de l'élément. */
+@utility bg-thumbnail {
+  background-image: var(--gradient-thumbnail);
+}
+@utility bg-thumbnail-fit {
+  background-image: var(--gradient-thumbnail-fit);
+}
+@utility bg-grid {
+  background-size: var(--grid-cell) var(--grid-cell);
+}
+@utility bg-grid-lg {
+  background-size: var(--grid-cell-lg) var(--grid-cell-lg);
+}
+
+/* Les trois règles quittent `tokens/base.css` mais gardent leur couche : `base` reste
+   sous `components` et sous `utilities`, l'ordre de cascade est inchangé. */
+@layer base {
+  /* Grille fine — MINIATURES ET MOTION UNIQUEMENT. Jamais le site, l'UI ou les slides.
+     Nommée .jf-grid (et non .grid) pour ne pas entrer en collision avec la classe
+     display:grid de Tailwind. */
+  .jf-grid{position:absolute;inset:0;pointer-events:none;background-image:linear-gradient(var(--grid-line) 1px,transparent 1px),linear-gradient(90deg,var(--grid-line) 1px,transparent 1px);background-size:var(--grid-cell) var(--grid-cell)}
+  .jf-grid-lg{background-size:var(--grid-cell-lg) var(--grid-cell-lg)}
+
+  /* Le mot-clé en dégradé, avec sa lueur — miniatures et motion uniquement. */
+  .accent-hot{-webkit-text-fill-color:transparent;filter:drop-shadow(var(--shadow-accent-hot))}
+}

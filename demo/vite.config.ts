@@ -21,6 +21,8 @@ export default defineConfig({
       '@julienfernandes/ds/styles.css': fileURLToPath(new URL('../src/styles/index.css', import.meta.url)),
       '@julienfernandes/ds/core.css': fileURLToPath(new URL('../src/styles/core.css', import.meta.url)),
       '@julienfernandes/ds/brand-jf.css': fileURLToPath(new URL('../src/styles/brand-jf.css', import.meta.url)),
+      '@julienfernandes/ds/brand-content.css': fileURLToPath(new URL('../src/styles/brand-content.css', import.meta.url)),
+      '@julienfernandes/ds/brand-content': fileURLToPath(new URL('../src/brand-content.tsx', import.meta.url)),
       '@julienfernandes/ds/theme.css': fileURLToPath(new URL('../src/styles/theme.css', import.meta.url)),
       '@julienfernandes/ds': fileURLToPath(new URL('../src/index.ts', import.meta.url)),
     },

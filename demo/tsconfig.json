@@ -16,7 +16,8 @@
     "noEmit": true,
     "types": ["node", "react", "react-dom", "vite/client"],
     "paths": {
-      "@julienfernandes/ds": ["../src/index.ts"]
+      "@julienfernandes/ds": ["../src/index.ts"],
+      "@julienfernandes/ds/brand-content": ["../src/brand-content.tsx"]
     }
   },
   "include": ["src", "vite.config.ts"]

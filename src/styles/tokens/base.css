@@ -1,6 +1,6 @@
 /* SOCLE — reset + utilitaires de marque. Les RÈGLES sont ici, les VALEURS dans le
    fichier de marque : pas un littéral de couleur, de police ou de lueur dans ce fichier.
-   Utilitaires : .display .heading .eyebrow .chip .accent .mono .halo .jf-grid .page */
+   Utilitaires : .display .heading .eyebrow .chip .accent .mono .halo .page */
 *,*::before,*::after{box-sizing:border-box}
 html{-webkit-text-size-adjust:100%}
 body{margin:0;background:var(--background);color:var(--foreground);font-family:var(--font-body);font-size:var(--text-body);font-weight:var(--weight-regular);line-height:var(--leading-body);-webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility}
@@ -32,17 +32,15 @@ img{max-width:100%;display:block}
 
 /* The signature: ONE gradient word per title. Never two. */
 .accent{background:var(--brand-gradient);-webkit-background-clip:text;background-clip:text;color:transparent;width:fit-content}
-.accent-hot{-webkit-text-fill-color:transparent;filter:drop-shadow(var(--shadow-accent-hot))} /* thumbnails / motion only */
 
 /* Warm radial halo — bottom-anchored, never full-screen */
 .halo{position:absolute;inset:0;pointer-events:none;background:var(--gradient-halo)}
 .halo-top{background:var(--gradient-halo-top)}
 .halo-center{background:var(--gradient-halo-center)}
 
-/* Fine grid — THUMBNAILS AND MOTION ONLY. Never the site, the UI or the slides.
-   Named .jf-grid (not .grid) to avoid colliding with Tailwind's display:grid class. */
-.jf-grid{position:absolute;inset:0;pointer-events:none;background-image:linear-gradient(var(--grid-line) 1px,transparent 1px),linear-gradient(90deg,var(--grid-line) 1px,transparent 1px);background-size:var(--grid-cell) var(--grid-cell)}
-.jf-grid-lg{background-size:var(--grid-cell-lg) var(--grid-cell-lg)}
+/* .accent-hot, .jf-grid et .jf-grid-lg ne sont PAS ici : ce sont des motifs de MINIATURE
+   et de MOTION, pas d'interface. Ils sont partis avec l'extension optionnelle
+   `brand-content.css`. */
 
 .page{width:100%;max-width:var(--page-max);margin-inline:auto;padding-inline:var(--space-5)}
 

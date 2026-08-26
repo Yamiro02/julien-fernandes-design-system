@@ -223,44 +223,133 @@ c'est que la doc le dise, pour qu'aucun client ne pose la question deux fois.
 
 ---
 
-## 5. Le plan — sept sous-lots ordonnés
+## 5. Le plan — révisé au 26/08 après les sous-lots 1 à 3
 
-Build et vitrine vérifiés à chaque étape, en clair **et** en sombre.
+> **Révision.** Un dossier `design-system-template` a été retrouvé : un template fabriqué avant la
+> migration Tailwind v4, qui résout déjà plusieurs points de ce chantier — et mieux. Les sous-lots
+> restants intègrent ses apports. Voir §8.
 
-**1 · Le sombre.** Jeton `--surface-alt`, les 12 règles qui le consomment, `.jf-badge--accent` et
-`.jf-progress` réparés. *C'est le seul défaut qui casse le produit aujourd'hui.*
-→ **Sortie :** en sombre, chaque survol est visible ; écart de luminance mesuré et proche de 1,08.
+**Faits (sous-lots 1 à 3, livrés) :** le survol a son jeton, `--surface-alt`. La marque a cessé
+d'être une couleur de contenu. La couche marque est séparée : `core.css` + `brand-jf.css`, avec
+`brand.template.css` comme contrat, et une marque hostile rend une vitrine cohérente sans un seul
+survivant sur 7 082 éléments. Trois gardes tournent sur `lint` : collision de namespace, contraste,
+substitution figée.
 
-**2 · Le contraste.** Décider et écrire : les liens, le CTA, `pill-neutral`. Créer
-`docs/accessibilite.md` avec **les ratios mesurés**, les paires validées, et les écarts assumés
-avec leur raison.
-→ **Sortie :** aucune paire n'échoue sans être nommée et justifiée dans le document.
+**Reste :** quatre sous-lots. Le 5 est le cœur — c'est lui qui fait du dépôt un template et non
+plus le design system de Julien avec un mécanisme de substitution.
 
-**3 · La couche marque.** La scission `core.css` / `brand-jf.css`, le `brand.template.css` commenté,
-`Logo` paramétré (mot-marque en prop, la pastille remplaçable), les fontes passées côté marque.
-*C'est la raison d'être du chantier.*
-→ **Sortie :** un `brand-test.css` bidon aux couleurs et fontes totalement différentes rend une
-vitrine cohérente, sans qu'une seule valeur de Julien ne transparaisse. C'est LE test du template.
+### Sous-lot 4 — Le pan métier sort du paquet
 
-**4 · Sortie du pan métier.** `brand-content.css` + export dédié, `GridBackground` en sous-chemin.
-→ **Sortie :** une app qui n'importe pas `brand-content.css` compile et rend sans manque.
+Beaucoup plus petit qu'annoncé : le sous-lot 3 a déjà fait transiter `--ink-deep`,
+`--gradient-thumbnail*`, `--grid-*` et `--shadow-accent-hot` par `brand-jf.css`, donc le socle en
+est déjà vide. Il reste à les extraire de la marque vers une extension optionnelle.
 
-**5 · Ménage.** `.jf-metric*` supprimé · `bg-thumbnail` cassé retiré · alias non publiés dans
-`theme.css` · `GridBackground` sur `.jf-grid` · `--radius-badge` → `--radius-xs` · `IconButton`
-avec de vraies tailles.
-→ **Sortie :** `grep` vert sur chaque élément retiré.
+`src/styles/brand-content.css` + export `./brand-content.css`. Y déplacer aussi `.jf-grid`,
+`.jf-grid-lg`, `.accent-hot`, les `@utility` `bg-thumbnail*` et `bg-grid*`, le composant
+`GridBackground` en sous-chemin optionnel, le mode `hot` de `Halo`, et les icônes de plateformes
+de `Icon`.
 
-**6 · Littéraux et durées.** 5 jetons créés — `--success`, `--shadow-glow-sm`, `--shadow-logo-dot`,
-`--gradient-halo-top`, `--gradient-halo-center` — puis les 44 durées en `--duration-fast/base/slow`.
-→ **Sortie :** aucun littéral de couleur, d'ombre ou de durée hors des fichiers de jetons.
+→ **Sortie :** une app qui n'importe pas `brand-content.css` compile et rend sans manque ; la
+vitrine de Julien, qui l'importe, est inchangée au pixel.
 
-**7 · Docs et CI.** `CHANGELOG.md` (0.1.0 → 0.5.0) · `GOVERNANCE.md` (l'arbre de décision de
-promotion) · **`FORK.md` — comment fabriquer le DS d'un client à partir du template, dans l'ordre**
-· `CONFORMITE.md` archivé, remplacé par le CHANGELOG et une checklist courte · workflow CI
-(`typecheck` + `lint` + `build` + `demo:build`) · un job qui **échoue** si la version de
-`package.json` et la ligne d'installation du README divergent.
-→ **Sortie :** la CI passe au vert, et un lecteur qui n'a jamais vu le dépôt sait fabriquer un DS
-client en suivant `FORK.md`.
+### Sous-lot 5 — Le dépôt DEVIENT le template
+
+C'est la bascule. Aujourd'hui le dépôt est *le design system de Julien, doté d'un mécanisme de
+substitution*. Il doit devenir *le template, dont le design system de Julien est l'instance de
+référence, livrée avec*.
+
+Le dossier `design-system-template` (§8) porte déjà quatre de ces gestes, éprouvés. On les
+transpose, on ne les réinvente pas.
+
+#### Deux usages, et ils ne demandent pas la même chose
+
+C'est la distinction qui commande tout le reste, et elle reprend celle déjà actée dans le skill
+`developpement-app` — *app interne : socle externe partagé · projet client : le client possède
+tout son code*.
+
+| | **Apps internes de Julien** | **Projet client** |
+|---|---|---|
+| Comment on l'obtient | on **installe le paquet publié** | on **copie le dossier** |
+| Nom | `@julienfernandes/ds` — inchangé | `rebrand.mjs` l'écrase en `@client/ds` |
+| Marque | importe `brand-jf.css`, livré dans le paquet | remplit `brand.template.css` |
+| Dérive | impossible : un seul socle, aucune copie | sans objet : le DS du client est indépendant par conception |
+
+**Le nom du paquet publié reste donc `@julienfernandes/ds`.** `@acme` n'est pas un nom de produit,
+c'est le placeholder du chemin « copie » — celui que `rebrand.mjs` réécrit. Publier les apps de
+production contre un paquet nommé « acme » n'aurait aucun sens.
+
+#### Les cinq gestes
+
+1. **Le préfixe `.jf-` devient `.ds-`.** 580 occurrences, 43 fichiers. Mécanique. Un template
+   client ne trimballe pas les initiales de quelqu'un d'autre — et le template retrouvé avait déjà
+   tranché ainsi.
+2. **`src/brand.ts`**, porté du template : le seul endroit où l'identité textuelle est écrite, avec
+   des **valeurs de placeholder** (`Acme` / `AC`). Les props de marque posées au sous-lot 3
+   (`brand`, `homeLabel`, `wordmark`) restent — c'est la bonne API React — mais leurs valeurs par
+   défaut viennent de ce fichier. Personne ne livre « ACME » par accident ; « Julien Fernandes »
+   dans la nav d'un client, si.
+3. **La palette par défaut devient la palette de placeholder** du template, grise et fade, avec son
+   en-tête et ses six règles de structure. `styles.css` livre désormais `core.css` +
+   `brand-acme.css`. `brand-jf.css` **reste livré dans le paquet** — il devient l'instance de
+   référence, plus le défaut. Et `docs/BRAND-JULIEN-FERNANDES.md` consigne ses réglages pour qu'ils
+   se rejouent en une heure.
+4. **`scripts/rebrand.mjs`**, porté et adapté à v4 : plus de preset, chemins à jour, `theme.css`
+   couvert. Garder son idempotence et sa lecture du nom courant depuis `package.json`.
+   ⚠️ **Il doit en plus repointer `styles.css`** vers le fichier de marque qu'il vient de créer.
+   Sans ce geste, quelqu'un qui copie le dossier, rebrande et oublie de changer l'import livrerait
+   la palette de Julien — exactement le silence qu'on élimine partout ailleurs.
+5. **La prose de la vitrine se généralise.** Laissée en voix de Julien au sous-lot 3, les pages
+   Marque et Fondations ne décrivent plus « capitales Anton » ni « DM Sans 400 ».
+
+#### Ce que ça change pour les apps de Julien
+
+Elles importeront **`core.css` + `brand-jf.css`** au lieu de recevoir sa marque en douce via
+`styles.css`. Une ligne dans chaque app, et c'est le bon prix : explicite plutôt que silencieux.
+
+→ **Sortie :** dans une copie du dossier, `npm run rebrand -- "@test/ds" "Test Client"` puis
+`npm run demo` affiche une vitrine cohérente à la marque de test, **sans qu'aucun geste manuel ne
+soit nécessaire** — l'import a suivi. Et `grep -ri "julien\|fernandes\|jf-"` sur `src/` sort
+**vide**, hors `brand-jf.css` et `docs/BRAND-JULIEN-FERNANDES.md`, qui sont l'instance de référence.
+
+### Sous-lot 6 — Ménage, littéraux, durées
+
+Un seul passage, sans s'arrêter entre les trois. **Critère d'admission : si on ne peut pas dire en
+une phrase, en clair, ce qui casse pour un utilisateur sans ce correctif, on ne le fait pas** — on
+le note dans une liste « à revoir un jour » et on passe.
+
+Ménage : `.jf-metric*` supprimé · `bg-thumbnail` cassé retiré · les trois alias non publiés dans
+`theme.css` (`--shadow-soft`, `--shadow-soft-lg`, `--page-max`), ce qui solde du même coup leur
+exception dans le garde de substitution · `GridBackground` sur la classe de grille au lieu de son
+inline · `--radius-badge` → `--radius-xs` · `IconButton` avec de vraies tailles 38/42/48 · les deux
+commentaires de `theme.css` qui nomment encore Anton.
+
+Littéraux : `--shadow-glow-sm`, `--shadow-logo-dot`, `--gradient-halo-top`,
+`--gradient-halo-center`. Puis les 44 durées en `--duration-fast/base/slow`.
+
+→ **Sortie :** `grep` vert sur chaque élément retiré, et aucun littéral de couleur, d'ombre ou de
+durée hors des fichiers de jetons.
+
+### Sous-lot 7 — La mise en route, les docs, la CI
+
+**`GETTING-STARTED.md`**, porté du template et mis à jour pour v4 : la checklist d'une heure, de
+« dossier copié » à « vitrine à mes couleurs », avec un point de vérification à chaque étape. C'est
+le mode d'emploi du produit — il remplace le `FORK.md` prévu initialement.
+
+**`docs/DESIGN.md`**, porté du template : la charte à remplir **avant** de toucher au CSS.
+
+Puis : `CHANGELOG.md` (0.1.0 → aujourd'hui) · `GOVERNANCE.md` (l'arbre de décision de promotion) ·
+`docs/accessibilite.md` déjà écrit au sous-lot 2 · `CONFORMITE.md` archivé, remplacé par le
+CHANGELOG et une checklist courte.
+
+**La CI**, et c'est elle le vrai livrable de ce sous-lot : `typecheck` + `lint` + `build` +
+`demo:build`, **plus deux jobs bloquants** :
+- la version de `package.json`, la ligne d'installation du README et l'existence du tag doivent
+  concorder — la procédure écrite a échoué trois fois de suite (0.3.0, 0.4.0, 0.4.1) ;
+- `brand.template.css` doit déclarer exactement les mêmes jetons que `brand-acme.css` — sinon le
+  contrat naît incomplet et un client livre une variable qui n'existe pas.
+
+→ **Sortie :** la CI passe au vert, et quelqu'un qui n'a jamais vu le dépôt fabrique un design
+system client en suivant `GETTING-STARTED.md`, sans jamais ouvrir un fichier du socle.
 
 ---
 
@@ -274,14 +363,46 @@ quelle dans le nouveau document.
 
 ---
 
-## 7. Le vrai livrable — `docs/FORK.md`
+## 7. Le vrai livrable — `GETTING-STARTED.md`
 
-Le produit de ce chantier n'est pas une liste de correctifs, c'est **un mode d'emploi**. Fabriquer
-le design system d'un client doit tenir en quatre gestes :
+Le produit de ce chantier n'est pas une liste de correctifs, c'est **un mode d'emploi**. Le
+template retrouvé en a déjà écrit un, éprouvé, qui va de « dossier copié » à « vitrine à mes
+couleurs » en une heure, avec un point de vérification à chaque étape. Il est porté au sous-lot 7
+et remplace le `FORK.md` prévu initialement.
 
-1. Copier `brand.template.css` en `brand-<client>.css` et renseigner les jetons du contrat (§1.2).
-2. Poser les `@font-face` du client et renseigner `--font-display/body/mono`.
-3. Passer le mot-marque et la pastille au `Logo`.
+Fabriquer le design system d'un client doit tenir en quatre gestes :
+
+1. Copier le dossier, puis `npm run rebrand -- "@client/ds" "Nom du client"` — il renomme le paquet, l'identité textuelle, et repointe `styles.css`.
+2. Remplir `src/styles/tokens/colors.css` — on ne renomme aucun jeton, on ne change que les valeurs.
+3. Poser les `@font-face` du client et renseigner `--font-display/body/mono`.
 4. Ne pas importer `brand-content.css`.
 
 Si l'un de ces quatre gestes demande d'ouvrir un fichier du socle, **le chantier a raté**.
+
+---
+
+## 8. Le template retrouvé — ce qu'on lui prend
+
+`design-system-template`, fabriqué avant la migration v4, résout déjà — et mieux — plusieurs
+points de ce chantier. Ce qu'il apporte, et qui est repris aux sous-lots 5 et 7 :
+
+| Ce qu'il a | Où ça va |
+|---|---|
+| `src/brand.ts` — l'identité textuelle en un seul endroit | sous-lot 5 |
+| `scripts/rebrand.mjs` — renommage en une commande, idempotent | sous-lot 5 |
+| Le préfixe `.ds-`, déjà générique | sous-lot 5 |
+| Une palette de **placeholder** volontairement fade — « si tu la reconnais encore à la recette, c'est que tu ne l'as pas remplacée » | sous-lot 5 |
+| `GETTING-STARTED.md` — la checklist d'une heure | sous-lot 7 |
+| `docs/DESIGN.md` — la charte à remplir avant le CSS | sous-lot 7 |
+
+**Sa leçon principale, qui vaut au-delà des fichiers :** le meilleur test d'un template n'est pas
+un fichier de test en plus, c'est **un défaut qu'on ne peut pas oublier de remplacer**. Une palette
+fade par construction rend la substitution obligatoire. C'est plus fort qu'un `brand-test.css`
+qu'on pense à lancer.
+
+Et sa règle 6, écrite en tête de son `colors.css` avant qu'on passe une heure à la mesurer :
+*« Contraste minimum 4.5:1 texte courant, 3:1 gros titres et bordures porteuses de sens. Vérifie
+`--text-muted` sur `--card`, c'est le couple qui casse. »*
+
+---
+

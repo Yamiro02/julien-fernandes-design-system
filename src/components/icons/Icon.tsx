@@ -3,15 +3,19 @@ import {
   ArrowDown, ArrowRight, ArrowUpRight, BookOpen, Calendar, Check, ChevronDown,
   ChevronLeft, ChevronRight, ChevronsLeft, ChevronsRight, CircleAlert, CircleCheck,
   CircleX, Clock, Code, Copy, Dumbbell, Ellipsis, ExternalLink, Eye, FileText, Folder,
-  Github, Info, Instagram, LayoutDashboard, LoaderCircle, Mail, Menu, MessageSquare,
+  Github, Info, LayoutDashboard, LoaderCircle, Mail, Menu, MessageSquare,
   PanelLeft, Play, Plus, Quote, Rocket, Search, Settings, SlidersHorizontal,
-  Terminal, Trash2, TrendingUp, TriangleAlert, User, Video, X, Youtube, Zap,
+  Terminal, Trash2, TrendingUp, TriangleAlert, User, Video, X, Zap,
   type LucideIcon,
 } from 'lucide-react';
 
 /**
  * Lucide icon renderer — the ONLY icon system in this design system.
  * BANNED: `sparkles` — the AI-slop star. Never reintroduce it, in the set or in an app.
+ * `youtube` et `instagram` NE SONT PLUS ICI : ce sont des icônes de PLATEFORME, pas
+ * d'interface. Elles vivent dans l'extension métier, sur le sous-chemin
+ * `@julienfernandes/ds/brand-content`, sous le composant `ContentIcon`. `github` reste :
+ * c'est une plateforme de développement, présente dans à peu près tout produit technique.
  * Sizes are CSS lengths in rem (1rem / 1.25rem / 1.5rem); the 24x24 viewBox stays unitless.
  * stroke-width 2 by default, 2.5 inside pills and toasts, 3 for the check.
  */
@@ -20,8 +24,8 @@ export type IconName =
   | 'arrow-right' | 'arrow-up-right' | 'arrow-down' | 'play' | 'eye' | 'clock'
   | 'calendar' | 'copy' | 'search' | 'menu' | 'mail' | 'triangle-alert' | 'info'
   | 'circle-check' | 'circle-alert' | 'circle-x' | 'terminal' | 'code' | 'zap'
-  | 'plus' | 'trash-2' | 'external-link' | 'loader-circle' | 'youtube'
-  | 'instagram' | 'github' | 'folder' | 'trending-up' | 'user' | 'book-open'
+  | 'plus' | 'trash-2' | 'external-link' | 'loader-circle'
+  | 'github' | 'folder' | 'trending-up' | 'user' | 'book-open'
   | 'message-square' | 'quote' | 'rocket' | 'file-text'
   | 'chevrons-left' | 'chevrons-right' | 'ellipsis' | 'panel-left'
   | 'sliders-horizontal' | 'layout-dashboard' | 'video' | 'dumbbell' | 'settings';
@@ -67,8 +71,6 @@ const ICONS: Record<IconName, LucideIcon> = {
   'plus': Plus,
   'external-link': ExternalLink,
   'loader-circle': LoaderCircle,
-  'youtube': Youtube,
-  'instagram': Instagram,
   'github': Github,
   'folder': Folder,
   'trending-up': TrendingUp,
@@ -92,10 +94,23 @@ const ICONS: Record<IconName, LucideIcon> = {
 export function Icon({
   name, size = '1.25rem', strokeWidth = 2, className = '', style, ...rest
 }: IconProps): JSX.Element | null {
-  const Glyph = ICONS[name];
-  if (!Glyph) return null;
+  const Icône = ICONS[name];
+  if (!Icône) return null;
+  return <Glyph glyph={Icône} size={size} strokeWidth={strokeWidth} className={className} style={style} {...rest} />;
+}
+
+/**
+ * Le RENDU nu, pour un tracé lucide quelconque. Interne au paquet : c'est ce qui permet à
+ * l'extension métier de rendre ses icônes de plateforme avec exactement les mêmes règles
+ * de taille et d'épaisseur, sans dupliquer huit lignes ni rouvrir le socle.
+ */
+export interface GlyphProps extends Omit<IconProps, 'name'> { glyph: LucideIcon }
+
+export function Glyph({
+  glyph: G, size = '1.25rem', strokeWidth = 2, className, style, ...rest
+}: GlyphProps): JSX.Element {
   return (
-    <Glyph
+    <G
       className={className}
       strokeWidth={strokeWidth}
       aria-hidden="true"

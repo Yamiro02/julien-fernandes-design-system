@@ -2,13 +2,16 @@ import type { HTMLAttributes } from 'react';
 import { cn } from '../../lib/cn';
 
 /**
- * Fine 1px grid at ~5.5% opacity, 28px or 80px mesh.
- * RESTRICTION: the fine grid belongs to YouTube thumbnails and motion design ONLY.
- * Never on the site, never in the UI, never on slides.
+ * Grille fine, filets 1px à ~5,5 % d'opacité, maille 28px ou 80px.
+ * RESTRICTION : elle appartient aux miniatures YouTube et au motion design UNIQUEMENT.
+ * Jamais sur le site, jamais dans l'UI, jamais sur les slides.
  *
- * Les styles restent inline, comme dans la source : l'utilitaire `.grid` de
- * tokens/base.css porte le même nom que la classe `grid` de Tailwind — voir
- * la note d'intégration du README.
+ * EXTENSION MÉTIER — s'importe depuis `@julienfernandes/ds/brand-content`, et demande
+ * `brand-content.css` en face pour les jetons --grid-*.
+ *
+ * Les styles restent inline, comme dans la source. Il y a une SECONDE source pour le même
+ * motif — la règle `.jf-grid` de brand-content.css — et c'est un doublon connu : le
+ * sous-lot 6 fait passer ce composant sur la classe.
  */
 export interface GridBackgroundProps extends HTMLAttributes<HTMLSpanElement> {
   /** sm = 28px mesh · lg = 80px mesh. Mesh and hairline stay in px on purpose. */

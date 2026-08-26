@@ -7,14 +7,21 @@ import { cn } from '../../lib/cn';
  * voir tokens/base.css). La pastille garde le dégradé de marque sur tous les fonds ;
  * seules les lettres s'inversent.
  *
- * PARAMÉTRÉ POUR LE TEMPLATE. Aucun mot de « Julien Fernandes » n'est codé en dur dans
- * une règle CSS : le mot-marque, le monogramme, la pastille et le libellé accessible
- * sont des props. Ce sont les VALEURS PAR DÉFAUT qui portent la marque de Julien, et
- * un projet client les remplace sans ouvrir un fichier du socle.
+ * PARAMÉTRÉ POUR LE TEMPLATE. Le mot-marque, le monogramme, la pastille et le libellé
+ * accessible sont des props ; aucun nom n'est codé en dur dans une règle CSS.
  *
- *     <Logo wordmark={['Acme','Corp']} />
- *     <Logo wordmark="Acme" dot={false} />
- *     <Logo wordmark="Acme" dot={<img src="/mark.svg" alt="" height={12} />} />
+ *     <Logo wordmark={['Northwind','Labs']} />
+ *     <Logo wordmark="Northwind" dot={false} />
+ *     <Logo wordmark="Northwind" dot={<img src="/mark.svg" alt="" height={12} />} />
+ *
+ * LE DÉFAUT EST UN PLACEHOLDER, PAS UNE MARQUE. Il valait ['Julien','Fernandes'] : un
+ * projet qui oubliait de renseigner le mot-marque — ou d'alimenter la fente `brand` de
+ * Navbar, Footer ou Sidebar, qui retombent sur ce composant — livrait le nom de Julien
+ * EN SILENCE, et ça pouvait survivre jusqu'en production. C'est le principe du §1.1 du
+ * chantier, un manque doit CASSER VISIBLEMENT, appliqué au contenu et non aux jetons.
+ * Rendre la prop obligatoire casserait à la compilation, prix trop élevé ; « ACME » se
+ * voit à la première seconde et ne coûte rien.
+ * Ces deux constantes migrent dans `src/brand.ts` au sous-lot 5.
  *
  * Les PNG fournis (pastille orange à plat) restent dans assets/logo/ comme exports
  * statiques. Ne jamais fausse-grasser, contourer ou interlettrer la marque.
@@ -27,10 +34,10 @@ export interface LogoProps extends HTMLAttributes<HTMLSpanElement> {
   height?: string;
   /**
    * Le mot-marque. Une chaîne, ou un mot par ligne pour la variante `stacked`.
-   * Défaut : la marque Julien Fernandes.
+   * Défaut : le PLACEHOLDER `Acme` — à remplacer, pas à laisser.
    */
   wordmark?: string | readonly string[];
-  /** Le monogramme. Défaut : les initiales du mot-marque. */
+  /** Le monogramme. Défaut : les initiales du mot-marque, ou `AC` pour le placeholder. */
   monogram?: string;
   /** La pastille. `false` la retire ; un nœud la remplace. Défaut : la pastille CSS en dégradé. */
   dot?: ReactNode | false;
@@ -38,14 +45,22 @@ export interface LogoProps extends HTMLAttributes<HTMLSpanElement> {
   label?: string;
 }
 
+/* Le placeholder livré par défaut. Deux constantes plutôt qu'une : les initiales de
+   « Acme » donneraient « A », qui ressemble trop à un vrai monogramme d'une lettre. */
+const BRAND_WORDMARK: readonly string[] = ['Acme'];
+const BRAND_MONOGRAM = 'AC';
+
 export function Logo({
   variant = 'wordmark', tone, height = '1.75rem',
-  wordmark = ['Julien', 'Fernandes'], monogram, dot, label,
+  wordmark = BRAND_WORDMARK, monogram, dot, label,
   className = '', style, ...rest
 }: LogoProps): JSX.Element {
   const words = typeof wordmark === 'string' ? [wordmark] : [...wordmark];
   const name = label ?? words.join(' ');
-  const initials = monogram ?? words.map((w) => w.slice(0, 1)).join('');
+  /* Le monogramme se DÉRIVE des initiales dès qu'un projet fournit son mot-marque ;
+     seul le placeholder a le sien, écrit. */
+  const initials = monogram
+    ?? (wordmark === BRAND_WORDMARK ? BRAND_MONOGRAM : words.map((w) => w.slice(0, 1)).join(''));
   const color = tone === 'bone' ? 'var(--cream)' : tone === 'ink' ? 'var(--ink)' : 'var(--foreground)';
   /* `dot === undefined` = la pastille par défaut ; `false` = aucune ; sinon le nœud fourni. */
   const mark = dot === false ? null

@@ -1,7 +1,9 @@
 import { defineConfig } from 'tsup';
 
 export default defineConfig({
-  entry: ['src/index.ts'],
+  /* Deux points d'entrée : le socle, et l'extension métier optionnelle. Séparés pour que
+     `import '@julienfernandes/ds'` n'embarque ni les tracés de plateforme ni la grille. */
+  entry: ['src/index.ts', 'src/brand-content.tsx'],
   format: ['esm', 'cjs'],
   dts: true,
   clean: true,

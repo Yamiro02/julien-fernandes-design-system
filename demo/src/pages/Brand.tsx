@@ -1,4 +1,6 @@
-import { Avatar, GridBackground, Halo, Logo } from '@julienfernandes/ds';
+import { Avatar, Halo, Logo } from '@julienfernandes/ds';
+/* Extension MÉTIER, sous-chemin optionnel — la vitrine la rend, une app d'interface non. */
+import { GridBackground, HaloHot } from '@julienfernandes/ds/brand-content';
 import { IDENTITY } from '../identity';
 import { Block, Grid, Row, Section } from '../ui';
 
@@ -87,12 +89,12 @@ export function BrandPage() {
           <Grid cols={2}>
             <div className="relative overflow-hidden rounded-xl p-space-7" style={{ background: 'var(--ink-deep)' }}>
               <GridBackground cell="sm" />
-              <Halo hot />
+              <HaloHot />
               <span className="relative mono text-caption" style={{ color: 'var(--cream)' }}>cell=&quot;sm&quot; · maille 28px</span>
             </div>
             <div className="relative overflow-hidden rounded-xl p-space-7" style={{ background: 'var(--ink-deep)' }}>
               <GridBackground cell="lg" />
-              <Halo hot />
+              <HaloHot />
               <span className="relative mono text-caption" style={{ color: 'var(--cream)' }}>cell=&quot;lg&quot; · maille 80px</span>
             </div>
           </Grid>

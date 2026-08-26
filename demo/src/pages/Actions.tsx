@@ -1,4 +1,5 @@
 import { Button, Icon, IconButton } from '@julienfernandes/ds';
+import { ContentIcon } from '@julienfernandes/ds/brand-content';
 import { Block, Row, Section } from '../ui';
 
 const VARIANTS = ['primary', 'secondary', 'ghost', 'danger'] as const;
@@ -42,7 +43,7 @@ export function ActionsPage() {
         <Block label="Icônes" hint="icon en tête, iconRight en fin. L'icône du chargement remplace celle de tête.">
           <Row>
             <Button variant="primary" size="lg" iconRight={<Icon name="arrow-right" />}>On build une app</Button>
-            <Button variant="secondary" icon={<Icon name="youtube" />}>Voir la chaîne</Button>
+            <Button variant="secondary" icon={<ContentIcon name="youtube" />}>Voir la chaîne</Button>
             <Button variant="ghost" size="sm" icon={<Icon name="copy" size="1rem" />}>Copier</Button>
             <Button variant="danger" icon={<Icon name="triangle-alert" />}>Supprimer</Button>
           </Row>

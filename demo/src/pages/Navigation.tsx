@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { ContentIcon } from '@julienfernandes/ds/brand-content';
 import { IDENTITY } from '../identity';
 import { AppShell, Avatar, Button, Footer, Icon, IconButton, Navbar, Pagination, Sidebar, Tabs, Logo } from '@julienfernandes/ds';
 import { Block, Row, Section } from '../ui';
@@ -162,8 +163,8 @@ export function NavigationPage() {
                 { title: 'Marque', links: [{ label: 'À propos' }, { label: 'Contact' }] },
               ]}
               social={<>
-                <IconButton label="YouTube"><Icon name="youtube" /></IconButton>
-                <IconButton label="Instagram"><Icon name="instagram" /></IconButton>
+                <IconButton label="YouTube"><ContentIcon name="youtube" /></IconButton>
+                <IconButton label="Instagram"><ContentIcon name="instagram" /></IconButton>
                 <IconButton label="GitHub"><Icon name="github" /></IconButton>
               </>}
             />
