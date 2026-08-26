@@ -11,6 +11,7 @@ import { NavigationPage } from './pages/Navigation';
 import { BrandPage } from './pages/Brand';
 
 const PAGES = [
+  { value: 'brand', label: 'Marque', render: () => <BrandPage /> },
   { value: 'foundations', label: 'Fondations', render: () => <Foundations /> },
   { value: 'icons', label: 'Icônes', render: () => <IconsPage /> },
   { value: 'actions', label: 'Actions', render: () => <ActionsPage /> },
@@ -19,7 +20,6 @@ const PAGES = [
   { value: 'feedback', label: 'Feedback', render: () => <FeedbackPage /> },
   { value: 'overlays', label: 'Overlays', render: () => <OverlaysPage /> },
   { value: 'navigation', label: 'Navigation', render: () => <NavigationPage /> },
-  { value: 'brand', label: 'Marque', render: () => <BrandPage /> },
 ];
 
 const THEMES = [
@@ -29,7 +29,7 @@ const THEMES = [
 ];
 
 export function App() {
-  const [page, setPage] = useState('foundations');
+  const [page, setPage] = useState('brand');
   const [theme, setTheme] = useState('light');
 
   useEffect(() => {
@@ -41,22 +41,34 @@ export function App() {
 
   return (
     <div className="min-h-screen bg-background text-foreground">
-      {/* Chrome de la vitrine : opaque, pour que le contenu ne transparaisse pas
-          derrière. La Navbar du DS est présentée comme spécimen, page Navigation. */}
-      <header className="sticky top-0 z-30 border-b border-border bg-card shadow-sm">
-        <div className="page flex flex-col gap-space-3 py-space-3">
-          <div className="flex flex-wrap items-center justify-between gap-space-4">
+      {/* Chrome de la vitrine, en deux barres empilées : la barre de marque (logo +
+          thème) puis, EN DESSOUS et non dedans, la barre des familles. Les deux
+          restent collées en haut. La Navbar du DS est présentée comme spécimen,
+          page Navigation. */}
+      <div className="sticky top-0 z-30">
+        <header className="border-b border-border bg-card">
+          <div className="page flex flex-wrap items-center justify-between gap-space-4 py-space-3">
             <div className="flex items-baseline gap-space-3">
               <Logo variant="wordmark" height="1.375rem" />
               <span className="caption">Design system · recette visuelle</span>
             </div>
             <Tabs onCard items={THEMES} value={theme} onChange={setTheme} />
           </div>
-          <div className="-mx-space-1 overflow-x-auto px-space-1 pb-space-1">
-            <Tabs onCard items={PAGES.map(p => ({ value: p.value, label: p.label }))} value={page} onChange={setPage} />
+        </header>
+
+        {/* Barre des familles — surface --background, donc la barre d'onglets garde
+            son fond --secondary : elle contraste toujours avec ce qui la porte. */}
+        <nav aria-label="Familles de composants" className="border-b border-border bg-background shadow-sm">
+          <div className="page py-space-3">
+            {/* Marge négative + padding : le scroll horizontal ne rogne pas
+                l'anneau de focus des onglets. Imbriqué pour ne pas casser le
+                centrage de .page. */}
+            <div className="-mx-space-1 overflow-x-auto px-space-1">
+              <Tabs items={PAGES.map(p => ({ value: p.value, label: p.label }))} value={page} onChange={setPage} />
+            </div>
           </div>
-        </div>
-      </header>
+        </nav>
+      </div>
 
       <main className="page py-space-7">
         {theme === 'split' ? (
