@@ -151,8 +151,8 @@ Les règles d'usage composant par composant sont dans [`docs/PROMPTS.md`](docs/P
 >
 > **Hors périmètre** — `MetricPill` a été sorti du socle : c'est un composant métier, il vit dans
 > l'app qui en a besoin. Les classes `.jf-metric*` restent dans `patterns.css` (copié verbatim), une
-> app peut donc reconstruire sa propre pill de métrique sans réinventer une valeur. `docs/readme.md`
-> et `docs/PROMPTS.md` le mentionnent encore : ce sont des copies verbatim de la source design.
+> app peut donc reconstruire sa propre pill de métrique sans réinventer une valeur.
+> `docs/readme.md` le mentionne encore : c'est une copie verbatim de la source design.
 
 ---
 

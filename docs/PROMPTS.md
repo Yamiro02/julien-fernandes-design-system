@@ -130,16 +130,6 @@ The brand's core surface — everything that isn't a page section sits on a Card
 Grid gaps between cards are **≥ 1.5rem**. Never a pure-white card.
 
 
-## MetricPill
-
-Metric counter — views, duration, publish date. French number formatting (`12,4 k vues`, `il y a 3 j`).
-
-```jsx
-<MetricPill icon={<Icon name="eye" size="0.875rem" strokeWidth={2.5} />} value="18,2 k" label="vues" />
-<MetricPill tone="solid" value="14:32" />
-```
-
-
 ## Separator
 
 Thin rule between blocks. With `label`, the caption sits centred on the line.
