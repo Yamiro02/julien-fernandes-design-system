@@ -78,16 +78,6 @@ export type { GridBackgroundProps } from './components/brand/GridBackground';
 export { Avatar } from './components/brand/Avatar';
 export type { AvatarProps } from './components/brand/Avatar';
 
-/* content */
-export { CodeBlock } from './components/content/CodeBlock';
-export type { CodeBlockProps } from './components/content/CodeBlock';
-export { StepCard } from './components/content/StepCard';
-export type { StepCardProps } from './components/content/StepCard';
-export { BeforeAfter } from './components/content/BeforeAfter';
-export type { BeforeAfterProps } from './components/content/BeforeAfter';
-export { QuoteBlock } from './components/content/QuoteBlock';
-export type { QuoteBlockProps } from './components/content/QuoteBlock';
-
 /* utilitaire de composition de classes */
 export { cn } from './lib/cn';
 export type { ClassValue } from './lib/cn';

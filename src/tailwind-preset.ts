@@ -127,7 +127,8 @@ const preset = {
         lg: 'var(--radius-lg)',
         xl: 'var(--radius-xl)',
         '2xl': 'var(--radius-2xl)',
-        /* Onglets, badges, compteurs — JAMAIS un bouton ni un input. */
+        /* Badges et compteurs UNIQUEMENT — jamais un bouton, jamais un input,
+           jamais une barre d'onglets (les tabs ont leur propre rayon). */
         pill: 'var(--radius-pill)',
       },
 
@@ -203,11 +204,13 @@ const preset = {
         'space-6': 'var(--space-6)',
         'space-7': 'var(--space-7)',
         'space-8': 'var(--space-8)',
-        /* Rail de hauteur des contrôles — Button md, Input et Select s'alignent à 3rem. */
+        /* Rail de hauteur des contrôles — rail UNIQUE : Button, Input, Select et la
+           barre d'onglets s'alignent tous sur --control-md, qui descend à 2.75rem
+           sous 64rem (cible tactile). Les alias sm/lg existent pour la compat d'API. */
         'control-sm': 'var(--control-sm)',
         'control-md': 'var(--control-md)',
         'control-lg': 'var(--control-lg)',
-        /* Rail carré décalé de l'IconButton. */
+        /* IconButton — même rail : les trois tailles rendent le même carré. */
         'icon-control-sm': 'var(--icon-control-sm)',
         'icon-control-md': 'var(--icon-control-md)',
         'icon-control-lg': 'var(--icon-control-lg)',
