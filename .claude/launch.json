@@ -7,6 +7,13 @@
       "runtimeArgs": ["run", "demo"],
       "port": 5273,
       "autoPort": true
+    },
+    {
+      "name": "demo-test",
+      "runtimeExecutable": "npm",
+      "runtimeArgs": ["run", "demo:test"],
+      "port": 5274,
+      "autoPort": true
     }
   ]
 }

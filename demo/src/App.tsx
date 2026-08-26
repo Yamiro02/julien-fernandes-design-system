@@ -1,4 +1,8 @@
 import { useEffect, useState } from 'react';
+import { IDENTITY } from './identity';
+
+/* Le titre de l'onglet fait partie de la vitrine : sous brand-test il doit changer aussi. */
+document.title = IDENTITY.titre;
 import { Logo, Switch, Tabs } from '@julienfernandes/ds';
 /* Le contenu VERBATIM du module opt-in, injecté à la demande par l'interrupteur
    « Échelle d'app ». La vitrine ne l'importe jamais en dur : c'est justement la
@@ -67,7 +71,7 @@ export function App() {
       <header className="sticky top-0 z-30 border-b border-border bg-card">
         <div className="page flex flex-wrap items-center justify-between gap-space-4 py-space-3">
           <div className="flex items-baseline gap-space-3">
-            <Logo variant="wordmark" height="1.375rem" />
+            <Logo variant="wordmark" wordmark={IDENTITY.wordmark} height="1.375rem" />
             <span className="caption">Design system · recette visuelle</span>
           </div>
           <div className="flex flex-wrap items-center gap-space-5">

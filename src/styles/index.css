@@ -1,32 +1,15 @@
-/* Julien Fernandes — Design System. Global entry point: consumers link this file only.
-   @import list only; every rule lives in the imported files.
-   ALL dimensional tokens are in rem (base 16px = 1rem). Never pin a px font-size
-   on html/:root on the web — rem must honour the browser text-size preference.
-   Fixed-size canvases (thumbnails, shorts, slides, motion, social) are the ONE
-   exception: each such page pins its own root — see tokens/scales.css. */
+/* Le design system de Julien Fernandes, monté : le SOCLE plus SA marque.
+   C'est l'entrée historique (`@julienfernandes/ds/styles.css`) et elle ne change pas de
+   comportement — pour les apps de Julien, importer ce fichier reste le bon geste.
 
-/* Cascade layers. Declared here AND at the top of `theme.css`: the two files are
-   loaded separately — this one usually via a JS import, that one always via a CSS
-   @import — and layer order is fixed by the FIRST declaration encountered. The
-   double declaration is idempotent and makes the wiring order-insensitive.
-   Imports use the string form, not `url()`: Tailwind v4 resolves `@import "x.css"`
-   but leaves `@import url("x.css")` untouched, which breaks this file the moment an
-   app reaches it from a CSS entry the Tailwind plugin processes. */
-@layer theme, base, components, utilities;
+   POUR FABRIQUER LE DS D'UN CLIENT, n'importez PAS ce fichier : il embarque la marque
+   Julien. Importez le socle et la marque du client, séparément :
 
-/* Tokens stay UNLAYERED. They are custom properties only — they conflict with
-   nothing, and being unlayered keeps them winning over the `:root` fallbacks
-   Tailwind emits into `layer(theme)` for same-named keys. */
-@import './tokens/fonts.css';
-@import './tokens/colors.css';
-@import './tokens/typography.css';
-@import './tokens/scales.css';
+       @import "@julienfernandes/ds/core.css";
+       @import "./brand-<client>.css";          <- copié de brand.template.css
 
-/* The reset goes to `base`, component states to `components` — their relative
-   order is unchanged (base still comes before patterns), and BOTH now sit below
-   `utilities`. That is what lets a Tailwind utility passed through `className`
-   override a `.jf-*` rule, exactly as it did under Tailwind v3 where utilities
-   were emitted unlayered, after this file, and won on source order.
-   Both or neither: layering only patterns.css would let base.css win over it. */
-@import './tokens/base.css' layer(base);
-@import './patterns.css' layer(components);
+   L'ordre compte peu — les jetons sont hors couche et la marque ne fait que remplir des
+   `:root` / `.dark` que le socle laisse vides — mais gardez la marque en second : c'est
+   la lecture qui décrit ce qui se passe. */
+@import './core.css';
+@import './brand-jf.css';

@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { IDENTITY } from '../identity';
 import { Calendar, Checkbox, DatePicker, FormField, Input, Radio, Select, Switch, Textarea } from '@julienfernandes/ds';
 import { Block, Grid, Row, Section, Stack } from '../ui';
 
@@ -140,7 +141,7 @@ export function FormsPage() {
           </Block>
           <Block label="Obligatoire">
             <FormField label="Ton prénom" htmlFor="prenom" required help="Utilisé uniquement dans l'email.">
-              <Input id="prenom" placeholder="Julien" />
+              <Input id="prenom" placeholder={IDENTITY.prenom} />
             </FormField>
           </Block>
           <Block label="Composé">

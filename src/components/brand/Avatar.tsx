@@ -23,7 +23,7 @@ const AVATAR_HALO =
   + 'color-mix(in srgb, var(--brand-to) 16%, transparent) 55%, transparent 78%)';
 
 export function Avatar({
-  src, alt = 'Julien Fernandes', size = '4rem', halo = true, className = '', style, ...rest
+  src, alt = 'Avatar', size = '4rem', halo = true, className = '', style, ...rest
 }: AvatarProps): JSX.Element {
   return (
     <span

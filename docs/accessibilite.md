@@ -2,16 +2,17 @@
 
 > **Ce document ne s'écrit pas à la main.** Les deux tableaux sortent de
 > `node check-contrast.mjs --table`, qui lit les valeurs réelles de
-> `src/styles/tokens/colors.css`. Le même contrôle tourne à chaque `npm run lint` et
-> **fait tomber le build** si une paire passe sous son seuil sans être déclarée ici.
+> `src/styles/brand-jf.css` — le fichier de MARQUE. Le même contrôle tourne à chaque
+> `npm run lint` et **fait tomber le build** si une paire passe sous son seuil sans être
+> déclarée.
 >
 > Cible : **WCAG 2.2 niveau AA**. 4,5:1 pour le texte courant (1.4.3) · 3:1 pour le gros
 > texte, les icônes porteuses de sens et les contours de contrôle (1.4.11). Les fonds
 > translucides — pilules, `--grad-soft` — sont compositéss sur leur surface porteuse
 > avant mesure : c'est la couleur que l'œil reçoit, pas celle qui est écrite.
 >
-> **Un template, pas un design system.** Le socle ne portera plus aucune couleur à partir
-> du sous-lot 3 : elles viendront du fichier de marque, que le client écrit. `TOKENS=<son
+> **Un template, pas un design system.** Depuis le sous-lot 3 le socle ne porte plus AUCUNE
+> couleur : elles viennent toutes du fichier de marque, que le client écrit. `TOKENS=<son
 > fichier> node check-contrast.mjs` mesure SA palette. C'est le sens de ce document : un
 > écart d'accessibilité doit être une décision écrite du concepteur, jamais une découverte
 > faite par l'audit du client.
@@ -102,8 +103,15 @@ Une sortie vide = la règle tient. Aujourd'hui : vide.
 
 ## 3. Les écarts assumés
 
-12 paires. Chacune est déclarée dans `ASSUMÉES` de `check-contrast.mjs` : le build tombe si
-une **treizième** apparaît.
+12 paires. Chacune est déclarée **dans le fichier de marque**, `src/styles/brand-jf.css`, par
+un bloc `@a11y-assume:` — pas dans le script. Le script porte la mécanique, la marque porte ses
+renoncements : un client qui apporte son `brand-acme.css` repart d'une liste VIDE et n'hérite
+d'aucune dérogation qu'il n'a pas prise. Le build tombe si une **treizième** apparaît.
+
+Pour mémoire, la palette de recette `demo/brand-test.css` — froide, sans un orange — n'en
+déclare que **8**, et pas les mêmes : ses bleus tiennent le blanc là où le corail ne le tenait
+pas, et elle a dû éclaircir ses remplissages de marque en thème sombre là où Julien n'en a pas
+besoin. C'est la démonstration que la liste appartient bien à la marque.
 
 | Paire | contenu | seuil | clair | sombre |
 |---|---|--:|--:|--:|

@@ -15,6 +15,16 @@ export interface NavLink { label: string; href?: string; active?: boolean }
 export interface NavbarProps {
   links?: NavLink[];
   cta?: ReactNode;
+  /**
+   * La marque, à gauche. Défaut : le `Logo` du paquet, à la bonne hauteur.
+   * Un projet passe la sienne ici — mot-marque, image, ce qu'il veut — sans ouvrir le socle.
+   */
+  brand?: ReactNode;
+  /** Cible du lien de marque. Défaut '#'. */
+  homeHref?: string;
+  /** Libellé accessible du lien de marque. GÉNÉRIQUE par défaut : aucun nom de marque n'est
+   *  codé en dur ici. Un projet peut passer « Northwind Labs — accueil ». */
+  homeLabel?: string;
   /** Forces the Logo letter tone ('ink' / 'bone'). Default: letters follow --foreground. */
   tone?: 'ink' | 'bone';
   /** Force the scrolled state (specimen cards / screenshots). */
@@ -24,7 +34,8 @@ export interface NavbarProps {
 }
 
 export function Navbar({
-  links = [], cta, tone, scrolled: forced, className = '', children,
+  links = [], cta, brand, homeHref = '#', homeLabel = 'Accueil', tone,
+  scrolled: forced, className = '', children,
 }: NavbarProps): JSX.Element {
   const [scrolled, setScrolled] = useState(false);
   useEffect(() => {
@@ -38,7 +49,9 @@ export function Navbar({
   return (
     <header className={cn('jf-navbar', isScrolled && 'is-scrolled', className)}>
       <div className="page jf-navbar__inner">
-        <a href="#" aria-label="Julien Fernandes — accueil"><Logo variant="wordmark" tone={tone} height="1.375rem" /></a>
+        <a href={homeHref} aria-label={homeLabel}>
+          {brand ?? <Logo variant="wordmark" tone={tone} height="1.375rem" />}
+        </a>
         <nav className="jf-navbar__links">
           {links.map(l => (
             <a key={l.label} href={l.href || '#'} className={cn('jf-navlink', l.active && 'is-active')}>{l.label}</a>

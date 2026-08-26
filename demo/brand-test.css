@@ -1,0 +1,160 @@
+/* ═══════════════════════════════════════════════════════════════════════════════
+   BRAND-TEST — DISPOSITIF DE RECETTE. Ce n'est la marque de personne.
+
+   Fabriqué en copiant `src/styles/brand.template.css` et en remplissant ses 59 jetons
+   obligatoires — c'est aussi ce qui prouve que le modèle est complet.
+
+   Il est HOSTILE par construction, et chaque choix vise un endroit où une valeur de
+   Julien pourrait survivre dans le socle :
+
+     · palette FROIDE — bleus, cyans, verts. Aucun orange, aucun corail, nulle part.
+       Un pixel chaud à l'écran = un littéral resté dans le socle.
+     · dégradé de marque VERT -> CYAN -> BLEU. La lueur du CTA et la pastille du logo
+       en découlent : si une lueur ambrée survit, c'est --shadow-glow* ou
+       --shadow-logo-dot qui n'a pas quitté le socle.
+     · deux familles SANS AUCUN RAPPORT avec les nôtres : une SERIF en display (là où
+       Julien a Anton, une grotesque ultra-condensée) et une grotesque géométrique
+       différente en texte. Les replis sont des polices SYSTÈME (Georgia, Trebuchet,
+       Courier) : le test reste probant sans réseau.
+     · thème sombre BLEU NUIT, pas encre chaude.
+
+   L'USAGE :   npm --prefix demo run dev:test        (ou VITE_BRAND=test)
+   LA MESURE : TOKENS=demo/brand-test.css node check-contrast.mjs
+   ═══════════════════════════════════════════════════════════════════════════════ */
+
+/* ---------- 1 · POLICES ---------- */
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Space+Grotesk:wght@400;500;600;700&display=swap');
+
+/* ---------- 2 · ÉCARTS D'ACCESSIBILITÉ ASSUMÉS ----------
+   La liste repart de ZÉRO : aucun des renoncements de Julien n'est hérité. Ceux qui
+   suivent sont ceux de CETTE palette, mesurés sur elle. */
+
+/* @a11y-assume: .jf-btn--primary — label sur --brand-from (pire arrêt)
+   Le vert clair du départ de dégradé ne tient pas le blanc. Assumé par le dispositif
+   de test, qui n'est pas un produit livré. */
+/* @a11y-assume: .jf-btn--primary — label sur --brand-via
+   Même dégradé, arrêt médian. */
+/* @a11y-assume: .eyebrow / .accent — dégradé clippé en texte
+   Le dégradé clippé en texte pique au même endroit que chez Julien : c'est une
+   propriété de la TECHNIQUE, pas de la palette. Résultat intéressant du test. */
+/* @a11y-assume: .jf-input — bordure --input vs page
+   Contours doux, choix repris du template. */
+/* @a11y-assume: .jf-input — bordure --input vs remplissage
+   Contours doux, choix repris du template. */
+/* @a11y-assume: .jf-input — remplissage vs page
+   Contours doux, choix repris du template. */
+/* @a11y-assume: .jf-card — bordure --border vs page
+   Contours doux, choix repris du template. */
+/* @a11y-assume: .jf-sep — filet --border sur --card
+   Contours doux, choix repris du template. */
+
+/* ---------- 3 · JETONS ---------- */
+:root{
+  /* Surfaces & neutres — gris-bleu froid */
+  --background:#eef2f6; --foreground:#0f1d2a;
+  --card:#f8fafc; --card-foreground:#0f1d2a;
+  --popover:#f8fafc; --popover-foreground:#0f1d2a;
+  --secondary:#ffffff; --secondary-foreground:#0f1d2a;
+  --muted:#f8fafc; --muted-foreground:#4d6070;
+  --accent:#dcebf2; --accent-foreground:#0f1d2a;
+  --border:#d2dde6; --input:#d2dde6;
+
+  /* Pas de surface — un cran SOUS la porteuse en clair. Écart carte -> alt visé ~1,08. */
+  --surface-alt:#e7edf3;
+
+  /* Neutres nommés */
+  --ink:#0f1d2a; --ink-soft:#1c2f40; --cream:#eef2f6; --cream-alt:#f8fafc;
+  --text-secondary:#2b3f50; --text-muted:#4d6070; --text-inverted:#f1f6fa;
+
+  /* Marque — remplissages. Vert -> cyan -> bleu. Zéro orange. */
+  --primary:#0e7490; --primary-foreground:#ffffff;
+  --destructive:#a52a4a; --destructive-foreground:#ffffff;
+  --ring:#0e7490;
+  --brand-from:#34a06a; --brand-via:#0e8fa8; --brand-to:#2255a4;
+  --brand-gradient:linear-gradient(90deg,var(--brand-from),var(--brand-via),var(--brand-to)); /* @kind color */
+  --brand-gradient-diagonal:linear-gradient(135deg,var(--brand-from),var(--brand-via),var(--brand-to)); /* @kind color */
+  --grad-soft:linear-gradient(135deg,rgba(52,160,106,.10),rgba(34,85,164,.08)); /* @kind color */
+  --gradient-halo:radial-gradient(60% 45% at 50% 100%, rgba(14,143,168,.30) 0%, rgba(34,85,164,.12) 45%, transparent 75%); /* @kind color */
+  --gradient-halo-top:radial-gradient(60% 45% at 50% 0%, rgba(14,143,168,.30) 0%, rgba(34,85,164,.12) 45%, transparent 75%); /* @kind color */
+  --gradient-halo-center:radial-gradient(55% 55% at 50% 50%, rgba(14,143,168,.30) 0%, rgba(34,85,164,.12) 45%, transparent 75%); /* @kind color */
+
+  /* Les jumeaux lisibles */
+  --primary-readable:#0a5468;
+  --destructive-readable:#8a2340;
+
+  /* Sémantique — les six pilules. Les noms « coral » et « amber » sont ceux du SOCLE :
+     ce sont des emplacements, pas des couleurs imposées. Ici ils sont froids. */
+  --pill-coral-bg:color-mix(in srgb,var(--primary) 12%,transparent);   --pill-coral-fg:#0a5468;
+  --pill-amber-bg:color-mix(in srgb,var(--brand-from) 16%,transparent); --pill-amber-fg:#1c5f3c;
+  --pill-danger-bg:rgba(165,42,74,0.14);  --pill-danger-fg:#8a2340;
+  --pill-warning-bg:rgba(122,90,20,0.16); --pill-warning-fg:#6b4e0f;
+  --pill-success-bg:color-mix(in srgb,var(--success) 16%,transparent); --pill-success-fg:#1c5f3c;
+  --pill-neutral-bg:color-mix(in srgb,var(--muted-foreground) 12%,transparent); --pill-neutral-fg:#41525f;
+  --success:#2f8f5b;
+  --overlay-play-bg:color-mix(in srgb,var(--ink) 42%,transparent);
+
+  /* Familles — une SERIF en display, une grotesque géométrique en texte.
+     Replis SYSTÈME : le test reste probant hors réseau. */
+  --font-display:'Playfair Display',Georgia,'Times New Roman',serif; /* @kind font */
+  --font-body:'Space Grotesk','Trebuchet MS',Verdana,sans-serif;     /* @kind font */
+  --font-mono:'IBM Plex Mono','Courier New',monospace;               /* @kind font */
+
+  /* Relief de marque — la lueur suit le dégradé : cyan et bleu, jamais ambre. */
+  --shadow-glow:0 6px 18px rgba(14,143,168,.30), 0 2px 6px rgba(34,85,164,.22);
+  --shadow-glow-lg:0 10px 28px rgba(14,143,168,.42), 0 4px 12px rgba(34,85,164,.30);
+  --shadow-glow-sm:0 2px 8px rgba(14,143,168,.25);
+  --shadow-logo-dot:0 0 12px rgba(14,143,168,.5);
+
+  /* MÉTIER — déclaré ici uniquement parce que la vitrine rend la page Marque, qui
+     montre miniatures et grille. Une app d'interface ne les déclare pas. */
+  --ink-deep:#05090d;
+  --gradient-thumbnail:radial-gradient(closest-side at 50% 110%, rgba(14,143,168,.55) 0%, rgba(34,85,164,.28) 45%, transparent 72%); /* @kind color */
+  --gradient-thumbnail-fit:radial-gradient(70% 55% at 50% 100%, rgba(14,143,168,.55) 0%, rgba(34,85,164,.28) 45%, transparent 72%); /* @kind color */
+  --grid-cell:28px;
+  --grid-cell-lg:80px;
+  --grid-line:rgba(238,242,246,.055);
+  --shadow-accent-hot:0 0 34px rgba(14,143,168,.65);
+}
+.dark{
+  --background:#0d1620; --foreground:#e6eef5;
+  --card:#18232e; --card-foreground:#e6eef5;
+  --popover:#18232e; --popover-foreground:#e6eef5;
+  --secondary:#18232e; --secondary-foreground:#e6eef5;
+  --muted:#18232e; --muted-foreground:#93a7b6;
+  --accent:#12313f; --accent-foreground:#e6eef5;
+  --border:#2b3a48; --input:#2b3a48; --ring:#3fbcd4;
+  --surface-alt:#1e2a35;
+  --text-secondary:#c4d2dd; --text-muted:#93a7b6; --text-inverted:#0d1620;
+  /* Le sombre ÉCLAIRCIT ses remplissages de marque et bascule le label sur l'encre.
+     Julien garde le même corail et le même blanc dans les deux thèmes ; cette marque-ci
+     ne le peut pas — son cyan #0e7490 ne tenait que 2,73 sur --surface-alt, la barre de
+     progression y disparaissait. Le contrat le permet : --primary et --primary-foreground
+     sont deux jetons distincts, redéclarables par thème. C'est exactement le genre de
+     divergence qu'un template doit accepter sans qu'on ouvre le socle. */
+  --primary:#1596b8; --primary-foreground:#06202a;
+  --destructive:#c33f60; --destructive-foreground:#ffffff;
+  --primary-readable:#5cc4dc;
+  --destructive-readable:#ef91a8;
+  /* Le label du CTA étant passé à l'encre en sombre, c'est TOUT LE DÉGRADÉ qui doit
+     s'éclaircir : le CTA porte le dégradé, pas --primary. Leçon du dispositif de test —
+     basculer --primary-foreground oblige à retoucher les trois arrêts. Et comme les deux
+     dégradés dérivent désormais de ces arrêts, check-dark-substitution.mjs EXIGE qu'on
+     les redéclare ici : c'est lui qui a signalé l'oubli. */
+  --brand-from:#5fc994; --brand-via:#4fcbe2; --brand-to:#7fadef;
+  --brand-gradient:linear-gradient(90deg,var(--brand-from),var(--brand-via),var(--brand-to)); /* @kind color */
+  --brand-gradient-diagonal:linear-gradient(135deg,var(--brand-from),var(--brand-via),var(--brand-to)); /* @kind color */
+  --shadow-glow:0 6px 18px rgba(79,203,226,.26), 0 2px 6px rgba(127,173,239,.20);
+  --shadow-glow-lg:0 10px 28px rgba(79,203,226,.36), 0 4px 12px rgba(127,173,239,.26);
+  --shadow-glow-sm:0 2px 8px rgba(79,203,226,.22);
+  --shadow-logo-dot:0 0 12px rgba(79,203,226,.45);
+  --grad-soft:linear-gradient(135deg,rgba(52,160,106,.16),rgba(34,85,164,.12)); /* @kind color */
+  --pill-coral-bg:color-mix(in srgb,var(--primary) 12%,transparent);   --pill-coral-fg:#5cc4dc;
+  /* Signalé par check-dark-substitution.mjs : ce fond dérive de --brand-from, qui vient
+     de changer en .dark juste au-dessus. Sans cette ligne, la pilule garderait le vert
+     CLAIR dans une section sombre imbriquée. */
+  --pill-amber-bg:color-mix(in srgb,var(--brand-from) 16%,transparent); --pill-amber-fg:#79d3a0;
+  --pill-danger-fg:#ef91a8;
+  --pill-warning-fg:#dcc06a;
+  --pill-success-fg:#79d3a0;
+  --pill-neutral-bg:color-mix(in srgb,var(--muted-foreground) 12%,transparent); --pill-neutral-fg:#ccd8e2;
+}

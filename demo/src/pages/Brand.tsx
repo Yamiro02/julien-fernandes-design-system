@@ -1,4 +1,5 @@
 import { Avatar, GridBackground, Halo, Logo } from '@julienfernandes/ds';
+import { IDENTITY } from '../identity';
 import { Block, Grid, Row, Section } from '../ui';
 
 export function BrandPage() {
@@ -6,25 +7,25 @@ export function BrandPage() {
     <div className="flex flex-col gap-space-7">
       <Section title="Logo" note="Le mark est rendu en CSS : capitales Anton + point carré arrondi en dégradé, avec glow. Le point garde le dégradé sur tous les fonds ; seules les lettres s'inversent.">
         <Block label="Variantes">
-          <Row label="wordmark"><Logo variant="wordmark" height="1.75rem" /></Row>
-          <Row label="stacked"><Logo variant="stacked" height="1.75rem" /></Row>
-          <Row label="monogram"><Logo variant="monogram" height="2.5rem" /></Row>
+          <Row label="wordmark"><Logo variant="wordmark" wordmark={IDENTITY.wordmark} height="1.75rem" /></Row>
+          <Row label="stacked"><Logo variant="stacked" wordmark={IDENTITY.wordmark} height="1.75rem" /></Row>
+          <Row label="monogram"><Logo variant="monogram" wordmark={IDENTITY.wordmark} height="2.5rem" /></Row>
         </Block>
         <Block label="Tailles" hint="height pilote la hauteur du mark ; la taille de police en découle.">
           <Row>
-            <Logo variant="wordmark" height="1rem" />
-            <Logo variant="wordmark" height="1.375rem" />
-            <Logo variant="wordmark" height="1.75rem" />
-            <Logo variant="wordmark" height="2.5rem" />
+            <Logo variant="wordmark" wordmark={IDENTITY.wordmark} height="1rem" />
+            <Logo variant="wordmark" wordmark={IDENTITY.wordmark} height="1.375rem" />
+            <Logo variant="wordmark" wordmark={IDENTITY.wordmark} height="1.75rem" />
+            <Logo variant="wordmark" wordmark={IDENTITY.wordmark} height="2.5rem" />
           </Row>
         </Block>
         <Block label="Tons" hint="ink sur crème, bone sur ink. Sans tone, les lettres suivent --foreground.">
           <Grid cols={2}>
             <div className="flex items-center justify-center rounded-xl border border-border p-space-6" style={{ background: 'var(--cream)' }}>
-              <Logo variant="wordmark" tone="ink" height="1.75rem" />
+              <Logo variant="wordmark" wordmark={IDENTITY.wordmark} tone="ink" height="1.75rem" />
             </div>
             <div className="flex items-center justify-center rounded-xl border border-border p-space-6" style={{ background: 'var(--ink)' }}>
-              <Logo variant="wordmark" tone="bone" height="1.75rem" />
+              <Logo variant="wordmark" wordmark={IDENTITY.wordmark} tone="bone" height="1.75rem" />
             </div>
           </Grid>
         </Block>

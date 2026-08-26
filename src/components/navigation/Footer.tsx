@@ -8,15 +8,22 @@ export interface FooterColumn { title: string; links: { label: string; href?: st
 export interface FooterProps {
   columns?: FooterColumn[];
   social?: ReactNode;
+  /** La marque. Défaut : le `Logo` du paquet. Un projet passe la sienne. */
+  brand?: ReactNode;
   /** Forces the Logo letter tone ('ink' / 'bone'). Default: letters follow --foreground. */
   tone?: 'ink' | 'bone';
-  /** Location / signature line. Uses the middle dot separator. */
+  /**
+   * Ligne de lieu / signature, sous la marque. Le point médian sert de séparateur.
+   * AUCUNE valeur par défaut : elle valait « Busan · Corée du Sud », c'est-à-dire la ville
+   * de Julien codée en dur dans un composant du socle — un client ne pouvait pas la retirer
+   * sans passer une chaîne vide. Omise, la ligne n'est pas rendue.
+   */
   note?: string;
   className?: string;
 }
 
 export function Footer({
-  columns = [], social, tone, note = 'Busan · Corée du Sud', className = '',
+  columns = [], social, brand, tone, note, className = '',
 }: FooterProps): JSX.Element {
   return (
     <footer className={cn('jf-footer', className)}>
@@ -25,8 +32,8 @@ export function Footer({
         gap: 'var(--space-7)', justifyContent: 'space-between',
       }}>
         <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--space-3)', maxWidth: '20rem' }}>
-          <Logo variant="wordmark" tone={tone} height="1.25rem" />
-          <p style={{ fontSize: 'var(--text-caption)', color: 'var(--text-muted)' }}>{note}</p>
+          {brand ?? <Logo variant="wordmark" tone={tone} height="1.25rem" />}
+          {note ? <p style={{ fontSize: 'var(--text-caption)', color: 'var(--text-muted)' }}>{note}</p> : null}
         </div>
         <div style={{ display: 'flex', flexWrap: 'wrap', gap: 'var(--space-7)' }}>
           {columns.map(col => (

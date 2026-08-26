@@ -1,5 +1,6 @@
 import { useState } from 'react';
-import { AppShell, Avatar, Button, Footer, Icon, IconButton, Navbar, Pagination, Sidebar, Tabs } from '@julienfernandes/ds';
+import { IDENTITY } from '../identity';
+import { AppShell, Avatar, Button, Footer, Icon, IconButton, Navbar, Pagination, Sidebar, Tabs, Logo } from '@julienfernandes/ds';
 import { Block, Row, Section } from '../ui';
 
 const LINKS = [{ label: 'Vidéos', active: true }, { label: 'Séries' }, { label: 'À propos' }];
@@ -20,20 +21,20 @@ export function NavigationPage() {
       <Section title="Navbar" note="Posée sur --secondary avec une bordure basse en permanence — c'est un contrôle détaché du layout, jamais transparent. Au scroll elle se teinte, prend un blur(10px) et une ombre. Seul endroit du système qui utilise backdrop-filter.">
         <Block label="Au repos">
           <div className="overflow-x-auto rounded-xl border border-border">
-            <Navbar scrolled={false} links={LINKS} cta={<Button size="sm">La newsletter</Button>} />
+            <Navbar homeLabel={`${IDENTITY.personne} — accueil`} brand={<Logo variant="wordmark" wordmark={IDENTITY.wordmark} height="1.375rem" />} scrolled={false} links={LINKS} cta={<Button size="sm">La newsletter</Button>} />
           </div>
         </Block>
         <Block label="État scrollé" hint="Teinte color-mix sur --secondary + blur + ombre.">
           <div className="overflow-x-auto rounded-xl border border-border bg-card">
-            <Navbar scrolled links={LINKS} cta={<Button size="sm">La newsletter</Button>} />
+            <Navbar homeLabel={`${IDENTITY.personne} — accueil`} brand={<Logo variant="wordmark" wordmark={IDENTITY.wordmark} height="1.375rem" />} scrolled links={LINKS} cta={<Button size="sm">La newsletter</Button>} />
           </div>
         </Block>
         <Block label="Tons du logo" hint="Sans tone, les lettres suivent --foreground : sur une section ink elles s'éclaircissent toutes seules. tone ne sert qu'à forcer.">
           <div className="dark overflow-x-auto rounded-xl border border-border bg-background">
-            <Navbar scrolled links={LINKS} cta={<Button size="sm">La newsletter</Button>} />
+            <Navbar homeLabel={`${IDENTITY.personne} — accueil`} brand={<Logo variant="wordmark" wordmark={IDENTITY.wordmark} height="1.375rem" />} scrolled links={LINKS} cta={<Button size="sm">La newsletter</Button>} />
           </div>
           <div className="dark overflow-x-auto rounded-xl border border-border bg-background">
-            <Navbar scrolled tone="ink" links={LINKS} cta={<Button size="sm">La newsletter</Button>} />
+            <Navbar homeLabel={`${IDENTITY.personne} — accueil`} brand={<Logo variant="wordmark" wordmark={IDENTITY.wordmark} tone="ink" height="1.375rem" />} scrolled tone="ink" links={LINKS} cta={<Button size="sm">La newsletter</Button>} />
           </div>
           <p className="caption">Le premier suit la surface ; le second force tone=&quot;ink&quot; sur fond ink, pour montrer ce que fait la prop.</p>
         </Block>
@@ -88,6 +89,8 @@ export function NavigationPage() {
               responsive={false}
               sidebar={
                 <Sidebar
+                  brand={<Logo variant="wordmark" wordmark={IDENTITY.wordmark} height="1.25rem" />}
+                  brandCollapsed={<Logo variant="monogram" wordmark={IDENTITY.wordmark} height="1.5rem" />}
                   staticLayout
                   storageKey="jf-demo-sidebar"
                   sections={[
@@ -105,8 +108,8 @@ export function NavigationPage() {
                     <span className="flex items-center gap-space-3">
                       <Avatar size="2rem" halo={false} />
                       <span className="flex flex-col">
-                        <span className="text-caption font-semibold">Julien Fernandes</span>
-                        <span className="caption">Busan · Corée du Sud</span>
+                        <span className="text-caption font-semibold">{IDENTITY.personne}</span>
+                        <span className="caption">{IDENTITY.lieu}</span>
                       </span>
                     </span>
                   }
@@ -127,6 +130,8 @@ export function NavigationPage() {
               responsive={false}
               sidebar={
                 <Sidebar
+                  brand={<Logo variant="wordmark" wordmark={IDENTITY.wordmark} height="1.25rem" />}
+                  brandCollapsed={<Logo variant="monogram" wordmark={IDENTITY.wordmark} height="1.5rem" />}
                   staticLayout
                   defaultCollapsed
                   collapsible={false}
@@ -145,10 +150,12 @@ export function NavigationPage() {
         </Block>
       </Section>
 
-      <Section title="Footer" note="La ligne de localisation utilise le point médian : Busan · Corée du Sud.">
+      <Section title="Footer" note={`La ligne de localisation utilise le point médian : ${IDENTITY.lieu}. Elle n'a plus de valeur par défaut : le socle en portait une, codée en dur, et un projet ne pouvait pas la retirer.`}>
         <Block label="Complet" hint="Comme la Navbar, le logo suit --foreground sans tone.">
           <div className="overflow-x-auto rounded-xl border border-border">
             <Footer
+              brand={<Logo variant="wordmark" wordmark={IDENTITY.wordmark} height="1.25rem" />}
+              note={IDENTITY.lieu}
               columns={[
                 { title: 'Séries', links: [{ label: 'Build' }, { label: 'Tuto' }, { label: 'Coulisses' }] },
                 { title: 'Ressources', links: [{ label: 'La newsletter' }, { label: 'Les prompts' }] },

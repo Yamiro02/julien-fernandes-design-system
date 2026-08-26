@@ -1,5 +1,6 @@
-/* Julien Fernandes — reset + brand utilities.
-   Utilities: .display .heading .eyebrow .chip .accent .mono .halo .jf-grid .page */
+/* SOCLE — reset + utilitaires de marque. Les RÈGLES sont ici, les VALEURS dans le
+   fichier de marque : pas un littéral de couleur, de police ou de lueur dans ce fichier.
+   Utilitaires : .display .heading .eyebrow .chip .accent .mono .halo .jf-grid .page */
 *,*::before,*::after{box-sizing:border-box}
 html{-webkit-text-size-adjust:100%}
 body{margin:0;background:var(--background);color:var(--foreground);font-family:var(--font-body);font-size:var(--text-body);font-weight:var(--weight-regular);line-height:var(--leading-body);-webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility}
@@ -20,7 +21,7 @@ code,pre,kbd,samp{font-family:var(--font-mono)}
 img{max-width:100%;display:block}
 ::selection{background:color-mix(in srgb,var(--primary) 24%,transparent)}
 
-/* Display / heading utilities — Anton 400 CAPS only */
+/* Utilitaires display / titre — --font-display, en CAPITALES uniquement */
 .display{font-family:var(--font-display);font-weight:var(--weight-regular);text-transform:uppercase;font-size:var(--text-display);letter-spacing:var(--tracking-display);line-height:var(--leading-display)}
 .display-xl{font-family:var(--font-display);font-weight:var(--weight-regular);text-transform:uppercase;font-size:var(--text-display-xl);letter-spacing:var(--tracking-display);line-height:var(--leading-display)}
 .eyebrow{font-family:var(--font-body);font-size:var(--text-eyebrow);font-weight:var(--weight-semibold);text-transform:uppercase;letter-spacing:var(--tracking-eyebrow);line-height:var(--leading-snug);background:var(--brand-gradient);-webkit-background-clip:text;background-clip:text;color:transparent;width:fit-content}
@@ -31,12 +32,12 @@ img{max-width:100%;display:block}
 
 /* The signature: ONE gradient word per title. Never two. */
 .accent{background:var(--brand-gradient);-webkit-background-clip:text;background-clip:text;color:transparent;width:fit-content}
-.accent-hot{-webkit-text-fill-color:transparent;filter:drop-shadow(0 0 34px rgba(240,128,41,.65))} /* thumbnails / motion only */
+.accent-hot{-webkit-text-fill-color:transparent;filter:drop-shadow(var(--shadow-accent-hot))} /* thumbnails / motion only */
 
 /* Warm radial halo — bottom-anchored, never full-screen */
 .halo{position:absolute;inset:0;pointer-events:none;background:var(--gradient-halo)}
-.halo-top{background:radial-gradient(60% 45% at 50% 0%, rgba(240,128,41,.30) 0%, rgba(232,76,61,.12) 45%, transparent 75%)}
-.halo-center{background:radial-gradient(55% 55% at 50% 50%, rgba(240,128,41,.30) 0%, rgba(232,76,61,.12) 45%, transparent 75%)}
+.halo-top{background:var(--gradient-halo-top)}
+.halo-center{background:var(--gradient-halo-center)}
 
 /* Fine grid — THUMBNAILS AND MOTION ONLY. Never the site, the UI or the slides.
    Named .jf-grid (not .grid) to avoid colliding with Tailwind's display:grid class. */
@@ -45,7 +46,9 @@ img{max-width:100%;display:block}
 
 .page{width:100%;max-width:var(--page-max);margin-inline:auto;padding-inline:var(--space-5)}
 
-/* Logo — mark rendered in CSS: Anton caps + GRADIENT rounded-square dot (glow 0 0 12px).
-   Dot side ~0.21em, radius 25%, left margin ~10% of side. Letters invert with the surface. */
+/* Logo — la marque rendue en CSS : capitales de --font-display + pastille carrée à coins
+   arrondis en --brand-gradient-diagonal, lueur --shadow-logo-dot. Côté ~0.21em, rayon 25 %,
+   marge gauche ~10 % du côté. Les lettres s'inversent avec la surface.
+   Le MOT-MARQUE n'est pas ici : c'est une prop de <Logo>, pas une règle CSS. */
 .jf-logo{display:inline-flex;align-items:flex-end;font-family:var(--font-display);font-weight:400;text-transform:uppercase;line-height:0.92;letter-spacing:0;white-space:nowrap;color:var(--foreground)}
-.jf-logo__dot{display:inline-block;flex:none;width:0.21em;height:0.21em;border-radius:25%;margin-left:0.07em;margin-bottom:0.03em;background:var(--brand-gradient-diagonal);box-shadow:0 0 12px rgba(240,128,41,.5)}
+.jf-logo__dot{display:inline-block;flex:none;width:0.21em;height:0.21em;border-radius:25%;margin-left:0.07em;margin-bottom:0.03em;background:var(--brand-gradient-diagonal);box-shadow:var(--shadow-logo-dot)}

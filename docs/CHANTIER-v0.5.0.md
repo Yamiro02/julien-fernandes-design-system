@@ -58,6 +58,14 @@ qui supprime l'échelle typo native : une régression doit casser au lieu de dé
   `--text-inverted`
 - **Marque** : `--primary(-foreground)` `--destructive(-foreground)` `--brand-from/via/to`
   `--brand-gradient` `--brand-gradient-diagonal` `--grad-soft` `--gradient-halo`
+  `--gradient-halo-top` `--gradient-halo-center`
+- **Jumeaux lisibles** : `--primary-readable` `--destructive-readable` — **ajoutés au sous-lot 2.**
+  `--primary` et `--destructive` sont des couleurs de REMPLISSAGE ; posées comme couleur de
+  CONTENU sur une surface claire elles ne tiennent pas 4,5:1 (mesuré 3,12 et 3,40). Ces deux
+  jetons-ci sont la même marque, rendue lisible. Le contrat exige **≥ 4,5:1 sur `--background`,
+  `--card`, `--popover`, `--secondary`, `--accent` et `--surface-alt`, dans les deux thèmes** ;
+  `check-contrast.mjs` le vérifie. Sans eux, un client hérite d'un système dont tous les liens
+  échouent AA.
 - **Sémantique** : les 6 paires `--pill-*-bg` / `--pill-*-fg`, `--success`, `--overlay-play-bg`
 - **Pas de surface** : `--surface-alt` (nouveau, cf. §4.1)
 - **Typographie** : `--font-display` `--font-body` `--font-mono` **et les `@font-face`
@@ -66,6 +74,16 @@ qui supprime l'échelle typo native : une régression doit casser au lieu de dé
 
 Tout le reste — espacements, rayons, paliers typo, rail de contrôles, durées, ombres neutres —
 appartient au socle et **n'est pas substituable**.
+
+> **Précisé au sous-lot 3.** Des ombres neutres, seule la GÉOMÉTRIE est au socle. Écrites
+> `rgba(31,30,28,…)`, elles emportaient l'encre de Julien : c'étaient les quatre dernières
+> valeurs de Julien que le balayage de `brand-test.css` trouvait encore à l'écran. Elles
+> valent désormais `color-mix(in srgb, var(--ink) N%, transparent)` — le taux reste au socle,
+> la teinte suit le `--ink` que la marque fournit déjà. Rendu identique. En `.dark` elles
+> restent en noir pur, qui n'est la valeur de personne.
+>
+> **Total du contrat : 59 jetons obligatoires en `:root`, dont 34 à redéclarer en `.dark`,
+> plus 7 jetons métier optionnels.** Matérialisé dans `src/styles/brand.template.css`.
 
 ### 1.3 · Le pan métier sort en extension isolée, pas en suppression sèche
 

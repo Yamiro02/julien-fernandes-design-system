@@ -1,0 +1,163 @@
+/* ═══════════════════════════════════════════════════════════════════════════════
+   LE CONTRAT DE MARQUE — modèle à copier.
+
+   Copiez ce fichier en `brand-<client>.css`, renseignez chaque valeur, et importez-le
+   à la place de `brand-jf.css` :
+
+       @import "@julienfernandes/ds/core.css";
+       @import "./brand-acme.css";
+
+   N'IMPORTEZ PAS `styles.css` : il embarque la marque Julien.
+
+   CE QUI SE PASSE SI VOUS EN OUBLIEZ UN. Rien ne retombe sur une valeur par défaut :
+   la variable n'existe pas, la propriété qui l'emploie est invalide, et ça se VOIT.
+   C'est le comportement voulu. Une régression doit casser, pas dériver.
+
+   CE QUE VOUS N'AVEZ PAS À FOURNIR : espacements, rayons, paliers typographiques,
+   rail de contrôles, durées, ombres neutres, largeurs de contenu. Ce sont les mesures
+   du socle, elles ne sont pas substituables — c'est ce qui fait que deux design systems
+   nés de ce template se ressemblent en STRUCTURE tout en n'ayant rien en commun.
+
+   COMBIEN : 59 jetons OBLIGATOIRES en `:root`, dont 34 à redéclarer en `.dark`.
+   Plus 7 jetons MÉTIER, optionnels, en bas du bloc — commentés : ils ne servent qu'aux
+   miniatures et cartes motion, une app d'interface ne les déclare pas.
+
+   VÉRIFIEZ VOTRE PALETTE AVANT DE LIVRER :
+       TOKENS=./brand-acme.css node check-contrast.mjs
+       STYLES=./  node check-dark-substitution.mjs
+   ═══════════════════════════════════════════════════════════════════════════════ */
+
+/* ---------- 1 · POLICES ----------
+   Posez ici les @font-face du client, ou l'import de son fournisseur. Ils appartiennent
+   à la marque : le socle ne connaît que les trois NOMS déclarés au §3. */
+/* @import url('...'); */
+/* @font-face{font-family:'…';font-style:normal;font-weight:400;font-display:swap;src:url('…') format('woff2')} */
+
+/* ---------- 2 · ÉCARTS D'ACCESSIBILITÉ ASSUMÉS ----------
+   `check-contrast.mjs` mesure VOTRE palette et fait tomber le build sur toute paire
+   sous le seuil qui n'est pas déclarée ici. La liste est VIDE au départ, exprès : les
+   renoncements de Julien ne sont pas les vôtres, et vous ne devez hériter d'aucun.
+
+   Lancez le contrôle, lisez ce qu'il refuse, puis pour chaque paire : corrigez le jeton,
+   ou assumez-la ici AVEC sa raison. Un écart assumé est une décision écrite.
+
+       /* @a11y-assume: <clé exacte de la paire, telle que le script la nomme>
+          <pourquoi la marque impose cet écart, et ce qui l'atténue> * /
+*/
+
+/* ---------- 3 · JETONS ---------- */
+:root{
+  /* Surfaces & neutres — les six surfaces sur lesquelles tout se pose. */
+  --background:; --foreground:;
+  --card:; --card-foreground:;
+  --popover:; --popover-foreground:;
+  --secondary:; --secondary-foreground:;
+  --muted:; --muted-foreground:;
+  --accent:; --accent-foreground:;
+  --border:; --input:;
+
+  /* UN CRAN DE SÉPARATION depuis la surface courante. 15 sites : le survol de 13 règles,
+     le rail de .jf-progress, le point haut du shimmer de .jf-skel. Ce n'est PAS une teinte
+     de marque — c'est un pas de surface : plus SOMBRE que sa porteuse en thème clair, plus
+     CLAIR qu'elle en thème sombre. Visez le même ÉCART DE LUMINANCE dans les deux thèmes ;
+     chez Julien il vaut 1,084 et 1,088. N'y mettez pas une couleur de survol franche : la
+     barre de progression et le squelette la prendraient aussi. */
+  --surface-alt:;
+
+  /* Neutres nommés — l'encre et le papier de la marque, indépendamment du thème actif. */
+  --ink:; --ink-soft:; --cream:; --cream-alt:;
+  --text-secondary:; --text-muted:; --text-inverted:;
+
+  /* Marque — remplissages. */
+  --primary:; --primary-foreground:;
+  --destructive:; --destructive-foreground:;
+  --ring:;
+  --brand-from:; --brand-via:; --brand-to:;
+  /* Faites DÉRIVER les deux dégradés de leurs trois arrêts plutôt que de répéter les
+     valeurs : linear-gradient(90deg,var(--brand-from),var(--brand-via),var(--brand-to)).
+     Écrits en littéral ils échappent à check-dark-substitution.mjs, et si vous éclaircissez
+     vos arrêts en .dark plus rien ne vous rappellera de redéclarer les dégradés aussi. */
+  --brand-gradient:;            /* @kind color */
+  --brand-gradient-diagonal:;   /* @kind color */
+  --grad-soft:;                 /* @kind color — lavis translucide, pastille de marque */
+  --gradient-halo:;             /* @kind color — halo bas, jamais plein écran */
+  --gradient-halo-top:;         /* @kind color */
+  --gradient-halo-center:;      /* @kind color */
+
+  /* LES JUMEAUX LISIBLES — le point le plus facile à rater du contrat.
+     --primary et --destructive sont des couleurs de REMPLISSAGE : un aplat, une bordure.
+     Posées comme couleur de TEXTE sur une surface claire, elles n'atteignent pas 4,5:1 —
+     chez Julien le corail mesure 3,12 sur --background, et c'était la couleur de TOUS les
+     liens. Ces deux jetons-ci sont la même marque, rendue LISIBLE : plus foncée en thème
+     clair, plus claire en thème sombre.
+     Le contrat exige >= 4,5:1 sur --background, --card, --popover, --secondary, --accent
+     et --surface-alt, dans les DEUX thèmes. check-contrast.mjs le vérifie. */
+  --primary-readable:;
+  --destructive-readable:;
+
+  /* Sémantique — les 6 pilules. Le FOND est traditionnellement translucide (color-mix
+     avec transparent) pour se poser sur n'importe quelle surface ; le TEXTE doit tenir
+     4,5:1 une fois le fond composité sur --card ET sur --background.
+     ATTENTION : si le fond d'une pilule contient var(X) et que X change en .dark, il faut
+     RÉPÉTER sa déclaration dans .dark — voir la note en tête du bloc .dark. */
+  --pill-coral-bg:;   --pill-coral-fg:;
+  --pill-amber-bg:;   --pill-amber-fg:;
+  --pill-danger-bg:;  --pill-danger-fg:;
+  --pill-warning-bg:; --pill-warning-fg:;
+  --pill-success-bg:; --pill-success-fg:;
+  --pill-neutral-bg:; --pill-neutral-fg:;
+  --success:;          /* vert sémantique — bordure du bandeau de succès */
+  --overlay-play-bg:;  /* voile du bouton lecture sur une vignette */
+
+  /* Familles — les NOMS des polices posées au §1. Gardez un repli système à la fin :
+     il tient la mise en page pendant le chargement, il ne remplace pas la police. */
+  --font-display:;  /* @kind font — titres */
+  --font-body:;     /* @kind font — texte et UI */
+  --font-mono:;     /* @kind font — code, méta technique */
+
+  /* Relief de marque — la LUEUR. À distinguer des ombres neutres du socle
+     (--shadow-sm/md/lg/knob), qui décrivent une élévation et ne se substituent pas.
+     Une marque sans lueur peut les mettre à `none` : les quatre jetons doivent EXISTER. */
+  --shadow-glow:;      /* CTA primaire au repos */
+  --shadow-glow-lg:;   /* CTA primaire survolé */
+  --shadow-glow-sm:;   /* CTA primaire enfoncé */
+  --shadow-logo-dot:;  /* la pastille du logo */
+
+  /* ---------- MÉTIER — optionnel ----------
+     Ces jetons ne servent QUE si vous importez `brand-content.css` (miniatures, cartes
+     motion, grille fine). Une app d'interface n'en a pas besoin et ne les déclare pas. */
+  /* --ink-deep:; --gradient-thumbnail:; --gradient-thumbnail-fit:;
+     --grid-cell:; --grid-cell-lg:; --grid-line:; --shadow-accent-hot:; */
+}
+
+/* Les 34 jetons dont la valeur DÉPEND DU THÈME. Les 32 autres n'en dépendent pas et ne
+   se répètent pas ici.
+
+   PIÈGE À CONNAÎTRE — la substitution figée. Un jeton dont la valeur contient var(Y) est
+   substitué sur l'élément où il est DÉCLARÉ, pas où il est employé. Si Y change en .dark
+   et que le jeton n'est déclaré qu'en :root, il fige la valeur CLAIRE et l'emporte dans
+   toute section .dark IMBRIQUÉE — invisible quand .dark est sur <html>, où :root et .dark
+   matchent le même élément. `check-dark-substitution.mjs` refuse ce cas. C'est pourquoi
+   --pill-coral-bg et --pill-neutral-bg sont répétés ci-dessous : ils contiennent var(). */
+.dark{
+  --background:; --foreground:;
+  --card:; --card-foreground:;
+  --popover:; --popover-foreground:;
+  --secondary:; --secondary-foreground:;
+  --muted:; --muted-foreground:;
+  --accent:; --accent-foreground:;
+  --border:; --input:; --ring:;
+  --surface-alt:;
+  --text-secondary:; --text-muted:; --text-inverted:;
+  --primary:; --primary-foreground:;
+  --destructive:; --destructive-foreground:;
+  --primary-readable:;
+  --destructive-readable:;
+  --grad-soft:;
+  --pill-coral-bg:;   --pill-coral-fg:;
+  --pill-amber-fg:;
+  --pill-danger-fg:;
+  --pill-warning-fg:;
+  --pill-success-fg:;
+  --pill-neutral-bg:; --pill-neutral-fg:;
+}

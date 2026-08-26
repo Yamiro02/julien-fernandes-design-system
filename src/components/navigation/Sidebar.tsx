@@ -23,6 +23,10 @@ export interface SidebarProps extends HTMLAttributes<HTMLElement> {
   sections?: SidebarSection[];
   /** Sidebar footer — typically Avatar + name. */
   footer?: ReactNode;
+  /** La marque, en tête, quand la barre est DÉPLIÉE. Défaut : le `Logo` en mot-marque. */
+  brand?: ReactNode;
+  /** La marque quand la barre est REPLIÉE. Défaut : le `Logo` en monogramme. */
+  brandCollapsed?: ReactNode;
   /** Show the collapse toggle. Default true. */
   collapsible?: boolean;
   /** Overrides the persisted initial state. */
@@ -37,7 +41,8 @@ export interface SidebarProps extends HTMLAttributes<HTMLElement> {
 }
 
 export function Sidebar({
-  sections = [], footer, collapsible = true, defaultCollapsed, storageKey = 'jf-sidebar-collapsed',
+  sections = [], footer, brand, brandCollapsed, collapsible = true, defaultCollapsed,
+  storageKey = 'jf-sidebar-collapsed',
   open = false, onClose, staticLayout = false, className = '', children, ...rest
 }: SidebarProps): JSX.Element {
   const [collapsed, setCollapsed] = useState<boolean>(() => {
@@ -57,7 +62,9 @@ export function Sidebar({
         {...rest}
       >
         <div className="jf-sidebar__head">
-          <Logo variant={collapsed ? 'monogram' : 'wordmark'} height={collapsed ? '1.5rem' : '1.25rem'} />
+          {collapsed
+            ? brandCollapsed ?? <Logo variant="monogram" height="1.5rem" />
+            : brand ?? <Logo variant="wordmark" height="1.25rem" />}
           {collapsible ? (
             <button
               type="button"

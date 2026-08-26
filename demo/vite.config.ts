@@ -11,7 +11,16 @@ export default defineConfig({
     alias: {
       /* Les clés les plus spécifiques d'abord : Vite retient la première qui
          préfixe la requête. */
+      /* LE COMMUTATEUR DE MARQUE. VITE_BRAND=test charge la palette hostile de recette
+         (demo/brand-test.css) à la place de celle de Julien, SANS qu'une ligne du socle
+         change. Si la vitrine rend cohérente dans les deux thèmes et qu'aucune valeur de
+         Julien ne transparaît, c'est que le socle n'en porte plus aucune. */
+      'virtual:brand': process.env.VITE_BRAND === 'test'
+        ? fileURLToPath(new URL('./brand-test.css', import.meta.url))
+        : fileURLToPath(new URL('../src/styles/brand-jf.css', import.meta.url)),
       '@julienfernandes/ds/styles.css': fileURLToPath(new URL('../src/styles/index.css', import.meta.url)),
+      '@julienfernandes/ds/core.css': fileURLToPath(new URL('../src/styles/core.css', import.meta.url)),
+      '@julienfernandes/ds/brand-jf.css': fileURLToPath(new URL('../src/styles/brand-jf.css', import.meta.url)),
       '@julienfernandes/ds/theme.css': fileURLToPath(new URL('../src/styles/theme.css', import.meta.url)),
       '@julienfernandes/ds': fileURLToPath(new URL('../src/index.ts', import.meta.url)),
     },

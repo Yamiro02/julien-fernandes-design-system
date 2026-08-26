@@ -14,8 +14,9 @@
  *
  * LA RÈGLE. Toute paire contenu/porteuse doit tenir son seuil — 4,5:1 pour du texte
  * courant (WCAG 2.2 AA, 1.4.3), 3:1 pour du gros texte, une icône ou un contour de
- * contrôle (1.4.11). Une paire qui échoue DOIT figurer dans ASSUMÉES ci-dessous avec
- * sa raison, et dans `docs/accessibilite.md`. Sinon le build tombe.
+ * contrôle (1.4.11). Une paire qui échoue DOIT être déclarée `@a11y-assume:` DANS LE
+ * FICHIER DE MARQUE, avec sa raison, et reprise dans `docs/accessibilite.md`. Sinon le
+ * build tombe. Le script porte la mécanique, la marque porte ses renoncements.
  *
  * Usage : node check-contrast.mjs [--table]   (TOKENS=chemin/vers/colors.css pour un
  * autre fichier de marque — c'est ainsi qu'on recette un brand-*.css.)
@@ -32,8 +33,9 @@ const over = (fg, alpha, bg) => { const f = hex(fg), b = hex(bg);
   return '#' + f.map((c, i) => Math.round(c * alpha + b[i] * (1 - alpha)).toString(16).padStart(2, '0')).join(''); };
 
 /* ---------- lecture des jetons ---------- */
-const TOKENS = process.env.TOKENS || 'src/styles/tokens/colors.css';
-const src = fs.readFileSync(TOKENS, 'utf8').replace(/\/\*[\s\S]*?\*\//g, '');
+const TOKENS = process.env.TOKENS || 'src/styles/brand-jf.css';
+const brut = fs.readFileSync(TOKENS, 'utf8');
+const src = brut.replace(/\/\*[\s\S]*?\*\//g, '');
 const block = sel => { const i = src.indexOf(sel + '{');
   if (i < 0) throw new Error(`${TOKENS} : bloc ${sel} introuvable`);
   const s = src.slice(i + sel.length + 1); let d = 1, j = 0;
@@ -122,36 +124,20 @@ function pairs(theme) {
 }
 
 /* ---------- les écarts ASSUMÉS ----------
-   Une paire ne peut échouer qu'ici, et chaque entrée est reprise mot pour mot dans
-   docs/accessibilite.md. Ajouter une ligne ici est une DÉCISION, pas un contournement :
-   elle doit dire pourquoi la marque impose l'écart et ce qu'un client doit faire s'il
-   ne peut pas l'assumer. */
-const ASSUMÉES = {
-  '.jf-btn--primary — label sur --primary à plat':
-    'Blanc sur la marque chaude. Voir docs/accessibilite.md §3.1.',
-  '.jf-btn--primary — label sur --brand-from (pire arrêt)':
-    'Blanc sur la marque chaude — pire arrêt du dégradé. Voir §3.1.',
-  '.jf-btn--primary — label sur --brand-via':
-    'Blanc sur la marque chaude. Voir §3.1.',
-  '.jf-btn--primary — label sur --brand-to':
-    'Blanc sur la marque chaude. Voir §3.1.',
-  '.jf-btn--danger — label sur --destructive':
-    'Blanc sur le rouge de danger, convention de l\'industrie. Voir §3.1.',
-  '.jf-cal__day.is-selected':
-    'Même famille que le CTA : label blanc sur aplat de marque. Voir §3.1.',
-  '.eyebrow / .accent — dégradé clippé en texte':
-    'La signature de la marque : un mot en dégradé. Voir §3.2.',
-  '.jf-input — bordure --input vs page':
-    'Neutres doux, identité du système. Voir §3.3.',
-  '.jf-input — bordure --input vs remplissage':
-    'Neutres doux, identité du système. Voir §3.3.',
-  '.jf-input — remplissage vs page':
-    'Neutres doux, identité du système. Voir §3.3.',
-  '.jf-card — bordure --border vs page':
-    'Neutres doux, identité du système. Voir §3.3.',
-  '.jf-sep — filet --border sur --card':
-    'Neutres doux, identité du système. Voir §3.3.',
-};
+   Ils ne sont PAS ici. Ils appartiennent à la MARQUE, pas au socle : les renoncements
+   de Julien ne sont pas ceux d'un client, et un client qui apporte son brand-acme.css
+   ne doit hériter d'aucune dérogation qu'il n'a pas prise — sans quoi une paire qui le
+   fait échouer à son audit passerait au vert chez lui.
+   Ce script porte la MÉCANIQUE ; le fichier de marque porte ses RENONCEMENTS, sous
+   forme de blocs de commentaire lus ici :
+
+       /* @a11y-assume: <clé exacte de la paire>
+          <la raison, sur autant de lignes qu'il faut> * /
+
+   Une liste vide est un état normal — et même l'état de départ de brand.template.css. */
+const ASSUMÉES = Object.fromEntries(
+  [...brut.matchAll(/@a11y-assume:[ \t]*(.+?)[ \t]*\r?\n([\s\S]*?)\*\//g)]
+    .map(m => [m[1].trim(), m[2].replace(/\s+/g, ' ').trim()]));
 
 /* ---------- rapport ---------- */
 const F = n => n.toFixed(2).replace('.', ',');
@@ -181,11 +167,15 @@ if (nonDéclarées.length) {
     · corriger le jeton fautif — c'est presque toujours une couleur de REMPLISSAGE
       (--primary, --destructive) posée comme couleur de CONTENU. Le socle a un jumeau
       lisible pour ça : --primary-readable, --destructive-readable ;
-    · ou ASSUMER l'écart : l'inscrire dans ASSUMÉES de ce fichier AVEC sa raison, et
-      dans docs/accessibilite.md. Un écart assumé est une décision écrite.
+    · ou ASSUMER l'écart : ajouter dans ${TOKENS}, en commentaire, le bloc
+
+          /* @a11y-assume: <la clé exacte ci-dessus>
+             <pourquoi la marque impose cet écart, et ce qui l'atténue> */
+
+      et le reprendre dans docs/accessibilite.md. Un écart assumé est une décision écrite.
 `);
   process.exit(1);
 }
 for (const p of périmées) console.warn(
-  `⚠ contraste — « ${p.regle} » passe désormais (${F(p.rl)} / ${F(p.rd)}) : retire-la d'ASSUMÉES et de docs/accessibilite.md.`);
+  `⚠ contraste — « ${p.regle} » passe désormais (${F(p.rl)} / ${F(p.rd)}) : retire son @a11y-assume de ${TOKENS} et sa section de docs/accessibilite.md.`);
 console.log(`✓ contraste — ${rows.length} paires × 2 thèmes · ${rows.length - rows.filter(p => p.ko).length} conformes · ${rows.filter(p => p.ko).length} écarts assumés et documentés`);

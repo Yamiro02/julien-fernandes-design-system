@@ -6,7 +6,9 @@
   "description": "Vitrine de recette visuelle du design system — non publiée dans le package.",
   "scripts": {
     "dev": "vite",
+    "dev:test": "VITE_BRAND=test vite",
     "build": "tsc --noEmit && vite build",
+    "build:test": "VITE_BRAND=test vite build",
     "preview": "vite preview"
   },
   "dependencies": {
