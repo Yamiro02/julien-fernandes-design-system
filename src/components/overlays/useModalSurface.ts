@@ -71,6 +71,14 @@ export function useModalSurface({
 }: ModalSurfaceOptions): RefObject<HTMLDivElement> {
   const ref = useRef<HTMLDivElement>(null);
 
+  /* `onClose` est presque toujours une lambda inline (`onClose={() => setOpen(false)}`) :
+     nouvelle identité à chaque rendu du parent. Dans les dépendances de l'effet, elle
+     forçait un cleanup/setup à CHAQUE rendu — le cleanup rendait le focus au déclencheur,
+     le setup le reprenait au panneau : une frappe dans un champ de la modale perdait le
+     focus. La ref porte la version courante sans relancer l'effet. */
+  const onCloseRef = useRef(onClose);
+  onCloseRef.current = onClose;
+
   useEffect(() => {
     if (inline || !open) return;
     const node = ref.current;
@@ -85,7 +93,7 @@ export function useModalSurface({
     verrouiller();
 
     const onKey = (e: KeyboardEvent): void => {
-      if (e.key === 'Escape') { e.preventDefault(); if (!locked) onClose?.(); return; }
+      if (e.key === 'Escape') { e.preventDefault(); if (!locked) onCloseRef.current?.(); return; }
       if (e.key !== 'Tab') return;
       const f = list();
       if (f.length === 0) { e.preventDefault(); return; }
@@ -100,7 +108,7 @@ export function useModalSurface({
       deverrouiller();
       opener?.focus?.();
     };
-  }, [inline, open, locked, onClose, initialFocus]);
+  }, [inline, open, locked, initialFocus]);
 
   return ref;
 }

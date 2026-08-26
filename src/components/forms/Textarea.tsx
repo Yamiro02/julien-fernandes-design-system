@@ -1,7 +1,9 @@
+import { forwardRef } from 'react';
 import type { TextareaHTMLAttributes } from 'react';
 import { cn } from '../../lib/cn';
 
-/** Multi-line field. Auto height (no min-height), vertical resize only. */
+/** Multi-line field. Auto height (no min-height), vertical resize only.
+ *  `forwardRef` : la ref atteint le <textarea> natif (react-hook-form, focus programmatique). */
 export interface TextareaProps extends TextareaHTMLAttributes<HTMLTextAreaElement> {
   invalid?: boolean;
   rows?: number;
@@ -9,9 +11,10 @@ export interface TextareaProps extends TextareaHTMLAttributes<HTMLTextAreaElemen
   surface?: 'page' | 'card';
 }
 
-export function Textarea({
+export const Textarea = forwardRef<HTMLTextAreaElement, TextareaProps>(function Textarea({
   invalid = false, rows = 4, surface = 'page', className = '', ...rest
-}: TextareaProps): JSX.Element {
+}: TextareaProps, ref): JSX.Element {
   const cls = cn('ds-input', 'ds-textarea', surface === 'card' && 'ds-input--on-card', invalid && 'is-error', className);
-  return <textarea className={cls} rows={rows} aria-invalid={invalid || undefined} {...rest} />;
-}
+  return <textarea ref={ref} className={cls} rows={rows} aria-invalid={invalid || undefined} {...rest} />;
+});
+Textarea.displayName = 'Textarea';

@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { ActionSheet, Button, Dropdown, Icon, Modal } from '@acme/ds';
+import { ActionSheet, Button, Dropdown, FormField, Icon, Input, Modal } from '@acme/ds';
 import { Block, Row, Section } from '../ui';
 
 const MENU = [
@@ -10,6 +10,8 @@ const MENU = [
 
 export function OverlaysPage() {
   const [open, setOpen] = useState(false);
+  const [renameOpen, setRenameOpen] = useState(false);
+  const [projectName, setProjectName] = useState('');
   const [sheet, setSheet] = useState(false);
   const [phase, setPhase] = useState<'confirm' | 'loading' | 'result'>('confirm');
   const [statut, setStatut] = useState<'success' | 'error'>('success');
@@ -98,6 +100,34 @@ export function OverlaysPage() {
         <Block label="Sans icône, avec fermeture">
           <Modal inline onClose={() => undefined} title="Ta session a expiré" description="Reconnecte-toi pour reprendre là où tu en étais."
             footer={<Button size="sm">Se reconnecter</Button>} />
+        </Block>
+
+        <Block label="Avec un champ contrôlé" hint="Le cas de recette du focus : chaque frappe re-rend le parent (état contrôlé) ET recrée la lambda onClose. Si l'effet du piège de focus se relançait à chaque rendu, le focus sauterait du champ après chaque caractère — tape plusieurs caractères d'affilée pour le vérifier. Échap ferme et rend le focus au bouton déclencheur.">
+          <Row>
+            <Button variant="secondary" onClick={() => setRenameOpen(true)}>Renommer le projet</Button>
+          </Row>
+          <Modal
+            open={renameOpen}
+            onClose={() => setRenameOpen(false)}
+            title="Renommer le projet"
+            description="Le nom apparaît dans la sidebar et sur la page d'accueil."
+            footer={
+              <>
+                <Button variant="ghost" onClick={() => setRenameOpen(false)}>Annuler</Button>
+                <Button onClick={() => setRenameOpen(false)} disabled={projectName.trim() === ''}>Renommer</Button>
+              </>
+            }
+          >
+            <FormField label="Nom du projet" htmlFor="demo-rename">
+              <Input
+                id="demo-rename"
+                value={projectName}
+                onChange={e => setProjectName(e.target.value)}
+                placeholder="mon-outil-interne"
+                surface="card"
+              />
+            </FormField>
+          </Modal>
         </Block>
       </Section>
 
