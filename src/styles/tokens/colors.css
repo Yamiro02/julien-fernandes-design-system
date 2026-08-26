@@ -2,8 +2,8 @@
    Light cream is the DEFAULT theme (:root); .dark ink is the secondary variant.
    The brand gradient and the coral are ACCENT ONLY: logo, ONE keyword per title,
    eyebrow, step number, primary CTA, halo, glow. Never a large fill. No blue anywhere.
-   Pure #FFFFFF is reserved for the secondary button in light theme — never a page
-   background, never a card. Pure black exists only in .dark shadows and --ink-deep. */
+   Pure #FFFFFF (--secondary) is reserved in light theme for controls sitting directly on the
+   layout (secondary button, navbar, tab bar, search, inputs) — never a page background, never a card. Pure black exists only in .dark shadows and --ink-deep. */
 :root{
   /* Surfaces & warm neutrals */
   --background:#f6f2ec; --foreground:#1f1e1c;

@@ -25,6 +25,10 @@ export { Textarea } from './components/forms/Textarea';
 export type { TextareaProps } from './components/forms/Textarea';
 export { Select } from './components/forms/Select';
 export type { SelectProps, SelectOption } from './components/forms/Select';
+export { Calendar } from './components/forms/Calendar';
+export type { CalendarProps } from './components/forms/Calendar';
+export { DatePicker } from './components/forms/DatePicker';
+export type { DatePickerProps } from './components/forms/DatePicker';
 export { Checkbox } from './components/forms/Checkbox';
 export type { CheckboxProps } from './components/forms/Checkbox';
 export { Radio } from './components/forms/Radio';
@@ -41,6 +45,10 @@ export { Badge } from './components/data-display/Badge';
 export type { BadgeProps } from './components/data-display/Badge';
 export { Tooltip } from './components/data-display/Tooltip';
 export type { TooltipProps } from './components/data-display/Tooltip';
+export { Separator } from './components/data-display/Separator';
+export type { SeparatorProps } from './components/data-display/Separator';
+export { Table, THead, TBody, Tr, Th, Td } from './components/data-display/Table';
+export type { TableProps } from './components/data-display/Table';
 
 /* feedback */
 export { Toast } from './components/feedback/Toast';
@@ -53,6 +61,10 @@ export { Skeleton } from './components/feedback/Skeleton';
 export type { SkeletonProps } from './components/feedback/Skeleton';
 export { SkeletonCard } from './components/feedback/SkeletonCard';
 export type { SkeletonCardProps } from './components/feedback/SkeletonCard';
+export { Spinner } from './components/feedback/Spinner';
+export type { SpinnerProps } from './components/feedback/Spinner';
+export { Progress } from './components/feedback/Progress';
+export type { ProgressProps } from './components/feedback/Progress';
 
 /* overlays */
 export { Modal } from './components/overlays/Modal';
@@ -67,6 +79,12 @@ export { Footer } from './components/navigation/Footer';
 export type { FooterProps, FooterColumn } from './components/navigation/Footer';
 export { Tabs } from './components/navigation/Tabs';
 export type { TabsProps, TabItem } from './components/navigation/Tabs';
+export { Pagination } from './components/navigation/Pagination';
+export type { PaginationProps } from './components/navigation/Pagination';
+export { AppShell } from './components/navigation/AppShell';
+export type { AppShellProps } from './components/navigation/AppShell';
+export { Sidebar } from './components/navigation/Sidebar';
+export type { SidebarProps, SidebarItem, SidebarSection } from './components/navigation/Sidebar';
 
 /* brand */
 export { Logo } from './components/brand/Logo';
@@ -77,16 +95,6 @@ export { GridBackground } from './components/brand/GridBackground';
 export type { GridBackgroundProps } from './components/brand/GridBackground';
 export { Avatar } from './components/brand/Avatar';
 export type { AvatarProps } from './components/brand/Avatar';
-
-/* content */
-export { CodeBlock } from './components/content/CodeBlock';
-export type { CodeBlockProps } from './components/content/CodeBlock';
-export { StepCard } from './components/content/StepCard';
-export type { StepCardProps } from './components/content/StepCard';
-export { BeforeAfter } from './components/content/BeforeAfter';
-export type { BeforeAfterProps } from './components/content/BeforeAfter';
-export { QuoteBlock } from './components/content/QuoteBlock';
-export type { QuoteBlockProps } from './components/content/QuoteBlock';
 
 /* utilitaire de composition de classes */
 export { cn } from './lib/cn';

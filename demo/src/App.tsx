@@ -9,7 +9,6 @@ import { FeedbackPage } from './pages/Feedback';
 import { OverlaysPage } from './pages/Overlays';
 import { NavigationPage } from './pages/Navigation';
 import { BrandPage } from './pages/Brand';
-import { ContentPage } from './pages/Content';
 
 const PAGES = [
   { value: 'foundations', label: 'Fondations', render: () => <Foundations /> },
@@ -21,7 +20,6 @@ const PAGES = [
   { value: 'overlays', label: 'Overlays', render: () => <OverlaysPage /> },
   { value: 'navigation', label: 'Navigation', render: () => <NavigationPage /> },
   { value: 'brand', label: 'Marque', render: () => <BrandPage /> },
-  { value: 'content', label: 'Contenu', render: () => <ContentPage /> },
 ];
 
 const THEMES = [
@@ -52,10 +50,10 @@ export function App() {
               <Logo variant="wordmark" height="1.375rem" />
               <span className="caption">Design system · recette visuelle</span>
             </div>
-            <Tabs items={THEMES} value={theme} onChange={setTheme} />
+            <Tabs onCard items={THEMES} value={theme} onChange={setTheme} />
           </div>
           <div className="-mx-space-1 overflow-x-auto px-space-1 pb-space-1">
-            <Tabs items={PAGES.map(p => ({ value: p.value, label: p.label }))} value={page} onChange={setPage} />
+            <Tabs onCard items={PAGES.map(p => ({ value: p.value, label: p.label }))} value={page} onChange={setPage} />
           </div>
         </div>
       </header>

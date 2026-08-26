@@ -2,23 +2,23 @@ import type { SelectHTMLAttributes } from 'react';
 import { cn } from '../../lib/cn';
 import { Icon } from '../icons/Icon';
 
-/** Native select on the 3rem control rail, with a Lucide chevron. */
+/** Native select on the shared control rail, with a Lucide chevron. */
 export interface SelectOption { value: string; label: string }
 
 export interface SelectProps extends Omit<SelectHTMLAttributes<HTMLSelectElement>, 'children'> {
   options?: SelectOption[];
   invalid?: boolean;
-  /** 'card' = inside a card (fill --background) · 'page' = on the page (fill --card). */
-  surface?: 'card' | 'page';
+  /** 'page' (default) = sits directly on the layout (fill --secondary) · 'card' = inside a card (fill --background). */
+  surface?: 'page' | 'card';
 }
 
 export function Select({
-  options = [], invalid = false, surface = 'card', className = '', ...rest
+  options = [], invalid = false, surface = 'page', className = '', ...rest
 }: SelectProps): JSX.Element {
   return (
     <span className="jf-select">
       <select
-        className={cn('jf-input', surface === 'page' && 'jf-input--on-page', invalid && 'is-error', className)}
+        className={cn('jf-input', surface === 'card' && 'jf-input--on-card', invalid && 'is-error', className)}
         aria-invalid={invalid || undefined}
         {...rest}
       >

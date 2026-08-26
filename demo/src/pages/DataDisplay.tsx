@@ -1,5 +1,5 @@
-import { Badge, Card, Icon, IconButton, Tooltip } from '@julienfernandes/ds';
-import { Block, Grid, Row, Section } from '../ui';
+import { Badge, Card, EmptyState, Icon, IconButton, Separator, Table, TBody, Td, Th, THead, Tooltip, Tr } from '@julienfernandes/ds';
+import { Block, Grid, Row, Section, Stack } from '../ui';
 
 const TONES = ['coral', 'amber', 'danger', 'warning', 'success', 'neutral', 'accent', 'outline'] as const;
 
@@ -62,6 +62,57 @@ export function DataDisplayPage() {
           <Row label="sans icône">
             {TONES.map(t => <Badge key={t} tone={t}>{t}</Badge>)}
           </Row>
+        </Block>
+      </Section>
+
+      <Section title="Separator" note="Filet fin en --border. Avec label, le texte est centré sur la ligne.">
+        <Block label="Orientations et libellé">
+          <Stack>
+            <Separator />
+            <Separator label="ou" />
+            <Separator label="Publié le 24 septembre" />
+          </Stack>
+          <Row label="vertical">
+            <span className="flex h-space-6 items-center gap-space-4">
+              <span className="caption">Build</span>
+              <Separator orientation="vertical" />
+              <span className="caption">Tuto</span>
+              <Separator orientation="vertical" />
+              <span className="caption">Coulisses</span>
+            </span>
+          </Row>
+        </Block>
+      </Section>
+
+      <Section title="Table" note="Composable : Table > THead/TBody > Tr > Th/Td. L'état vide se rend À LA PLACE de la table, jamais dedans.">
+        <Block label="Simple, rayée, survolable">
+          <Table hoverable striped>
+            <THead>
+              <Tr><Th>Vidéo</Th><Th>Série</Th><Th>Publiée</Th><Th>Statut</Th></Tr>
+            </THead>
+            <TBody>
+              <Tr><Td>Construire une app en un week-end</Td><Td>Build</Td><Td>il y a 3 j</Td><Td><Badge tone="success" icon={<Icon name="circle-check" size="0.875rem" strokeWidth={2.5} />}>En ligne</Badge></Td></Tr>
+              <Tr><Td>Cadrer une idée en une phrase</Td><Td>Tuto</Td><Td>il y a 9 j</Td><Td><Badge tone="success" icon={<Icon name="circle-check" size="0.875rem" strokeWidth={2.5} />}>En ligne</Badge></Td></Tr>
+              <Tr><Td>Le prompt que j'utilise tous les jours</Td><Td>Build</Td><Td>il y a 16 j</Td><Td><Badge tone="neutral">Brouillon</Badge></Td></Tr>
+              <Tr><Td>Ce que Claude Code ne sait pas faire</Td><Td>Coulisses</Td><Td>il y a 24 j</Td><Td><Badge tone="warning" icon={<Icon name="triangle-alert" size="0.875rem" strokeWidth={2.5} />}>À revoir</Badge></Td></Tr>
+            </TBody>
+          </Table>
+        </Block>
+        <Block label="Sans option">
+          <Table>
+            <THead><Tr><Th>Palier</Th><Th>Valeur</Th></Tr></THead>
+            <TBody>
+              <Tr><Td>Rayon des contrôles</Td><Td className="mono">--radius-md</Td></Tr>
+              <Tr><Td>Rail de hauteur</Td><Td className="mono">--control-md</Td></Tr>
+            </TBody>
+          </Table>
+        </Block>
+        <Block label="État vide" hint="La table disparaît, l'EmptyState prend sa place.">
+          <EmptyState
+            icon={<Icon name="folder" size="1.5rem" />}
+            title="Aucune vidéo"
+            description="Publie ton premier build pour voir la liste se remplir."
+          />
         </Block>
       </Section>
 

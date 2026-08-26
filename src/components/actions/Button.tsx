@@ -1,6 +1,6 @@
 import type { ButtonHTMLAttributes, ElementType, ReactNode } from 'react';
 import { cva } from 'class-variance-authority';
-import { Icon } from '../icons/Icon';
+import { Spinner } from '../feedback/Spinner';
 
 /**
  * The system's primary action. Primary carries the brand glow and is the only
@@ -55,7 +55,7 @@ export function Button({
       aria-disabled={disabled || undefined}
       {...rest}
     >
-      {loading ? <Icon name="loader-circle" size={iconSize} className="jf-spin" /> : icon}
+      {loading ? <Spinner size={iconSize} /> : icon}
       <span>{children}</span>
       {!loading && iconRight}
     </Tag>

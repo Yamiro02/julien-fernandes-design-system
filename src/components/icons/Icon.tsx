@@ -1,10 +1,11 @@
 import type { CSSProperties } from 'react';
 import {
   ArrowDown, ArrowRight, ArrowUpRight, BookOpen, Calendar, Check, ChevronDown,
-  ChevronLeft, ChevronRight, CircleAlert, CircleCheck, CircleX, Clock, Code, Copy,
-  ExternalLink, Eye, FileText, Folder, Github, Info, Instagram, LoaderCircle, Mail,
-  Menu, MessageSquare, Play, Plus, Quote, Rocket, Search, Sparkles, Terminal,
-  TrendingUp, TriangleAlert, User, X, Youtube, Zap,
+  ChevronLeft, ChevronRight, ChevronsLeft, ChevronsRight, CircleAlert, CircleCheck,
+  CircleX, Clock, Code, Copy, Dumbbell, Ellipsis, ExternalLink, Eye, FileText, Folder,
+  Github, Info, Instagram, LayoutDashboard, LoaderCircle, Mail, Menu, MessageSquare,
+  PanelLeft, Play, Plus, Quote, Rocket, Search, Settings, SlidersHorizontal, Sparkles,
+  Terminal, TrendingUp, TriangleAlert, User, Video, X, Youtube, Zap,
   type LucideIcon,
 } from 'lucide-react';
 
@@ -20,7 +21,9 @@ export type IconName =
   | 'circle-check' | 'circle-alert' | 'circle-x' | 'terminal' | 'code' | 'zap'
   | 'sparkles' | 'plus' | 'external-link' | 'loader-circle' | 'youtube'
   | 'instagram' | 'github' | 'folder' | 'trending-up' | 'user' | 'book-open'
-  | 'message-square' | 'quote' | 'rocket' | 'file-text';
+  | 'message-square' | 'quote' | 'rocket' | 'file-text'
+  | 'chevrons-left' | 'chevrons-right' | 'ellipsis' | 'panel-left'
+  | 'sliders-horizontal' | 'layout-dashboard' | 'video' | 'dumbbell' | 'settings';
 
 export interface IconProps {
   /** Lucide icon name, kebab-case (e.g. "circle-check", "arrow-right"). */
@@ -74,6 +77,15 @@ const ICONS: Record<IconName, LucideIcon> = {
   'quote': Quote,
   'rocket': Rocket,
   'file-text': FileText,
+  'chevrons-left': ChevronsLeft,
+  'chevrons-right': ChevronsRight,
+  'ellipsis': Ellipsis,
+  'panel-left': PanelLeft,
+  'sliders-horizontal': SlidersHorizontal,
+  'layout-dashboard': LayoutDashboard,
+  'video': Video,
+  'dumbbell': Dumbbell,
+  'settings': Settings,
 };
 
 export function Icon({

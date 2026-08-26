@@ -8,6 +8,8 @@ const NAMES: IconName[] = [
   'circle-alert', 'circle-x', 'terminal', 'code', 'zap', 'sparkles', 'plus',
   'external-link', 'loader-circle', 'youtube', 'instagram', 'github', 'folder',
   'trending-up', 'user', 'book-open', 'message-square', 'quote', 'rocket', 'file-text',
+  'chevrons-left', 'chevrons-right', 'ellipsis', 'panel-left', 'sliders-horizontal',
+  'layout-dashboard', 'video', 'dumbbell', 'settings',
 ];
 
 export function IconsPage() {

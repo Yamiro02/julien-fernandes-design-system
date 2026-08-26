@@ -17,24 +17,26 @@
   --space-7:3rem;     /* 48 */
   --space-8:6rem;     /* 96 */
 
-  /* Radius — soft & generous */
+  /* Radius — soft but tool-like on controls */
   --radius-badge:0.375rem; /* 6 — micro-badge / squircle on ~20px boxes where sm would clip to a circle. FROM APP CODE */
-  --radius-sm:0.75rem;   /* 12 — chips, nested elements, skeleton */
-  --radius-md:1rem;      /* 16 — buttons, inputs, selects */
-  --radius-lg:1.25rem;   /* 20 — standard card (default --radius) */
+  --radius-sm:0.625rem;  /* 10 — chips, nested elements, skeleton, tab items */
+  --radius-md:0.75rem;   /* 12 — buttons, inputs, selects, icon-buttons */
+  --radius-lg:1.25rem;   /* 20 — standard card (default --radius), dropdowns */
   --radius-xl:1.5rem;    /* 24 — large cards, panels, hero */
-  --radius-2xl:1.75rem;  /* 28 — modals, sheets, dropdowns */
-  --radius-pill:9999px;  /* tabs, search, badges, counters — NEVER a button or input */
+  --radius-2xl:1.75rem;  /* 28 — modals, sheets */
+  --radius-pill:9999px;  /* badges, counters — metadata only. NEVER a button, input or tab bar */
   --radius:var(--radius-lg);
 
-  /* Control height rail — Button md, Input and the Select trigger all align at 3rem */
-  --control-sm:2.375rem; /* 38 */
-  --control-md:3rem;     /* 48 */
-  --control-lg:3.25rem;  /* 52 */
-  /* IconButton is square on its own offset rail */
-  --icon-control-sm:2.375rem; /* 38 */
-  --icon-control-md:2.625rem; /* 42 — touch target */
-  --icon-control-lg:3rem;     /* 48 */
+  /* Control height rail — ONE minimum height for every control (button in all sizes,
+     input, select trigger, square icon-button, tab bar). 3rem desktop; drops to
+     2.75rem (44px touch target) under 64rem — see the media query below.
+     sm only tightens padding + type; lg is the hero CTA. */
+  --control-sm:var(--control-md);
+  --control-md:3rem;     /* 48 · 44 mobile */
+  --control-lg:3.25rem;  /* 52 — hero CTA only */
+  --icon-control-sm:var(--control-md);
+  --icon-control-md:var(--control-md);
+  --icon-control-lg:var(--control-md);
 
   /* Card padding */
   --card-pad:1.5rem;     /* 24 — standard card */
@@ -71,6 +73,9 @@
   --shadow-sm:0 2px 8px rgba(0,0,0,.34);
   --shadow-md:0 10px 28px rgba(0,0,0,.46);
   --shadow-lg:0 20px 48px rgba(0,0,0,.58);
+}
+@media (max-width:64rem){
+  :root{ --control-md:2.75rem; /* 44 — mobile touch target */ --control-lg:3rem; }
 }
 @media (prefers-reduced-motion:reduce){
   *,::before,::after{ transition-duration:0.01ms!important; animation-duration:0.01ms!important; animation-iteration-count:1!important; }

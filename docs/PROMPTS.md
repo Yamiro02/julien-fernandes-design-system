@@ -20,7 +20,8 @@ The brand's action control — use `primary` for the single main CTA of a view, 
 <Button loading>Génération…</Button>
 ```
 
-- Radius is always `--radius-md` (1rem). **Never a pill** — pills are for tabs, badges and counters.
+- Radius is always `--radius-md` (0.75rem). **Never a pill** — pills are for badges and counters.
+- Every button rides the shared control rail: min-height 3rem (2.75rem under 64rem). `sm` only tightens padding and type; `lg` (3.25rem) is the hero CTA.
 - Only `primary` gets `--shadow-glow`; hover deepens it to `--shadow-glow-lg` + `translateY(-1px)`, press returns `translateY(1px)`.
 - One primary button per view. Label in sentence case, French, tutoiement.
 
@@ -34,7 +35,7 @@ Icon-only button — copy actions, navigation toggles, close buttons.
 <IconButton label="Fermer" variant="secondary" size="sm"><Icon name="x" size="1rem" /></IconButton>
 ```
 
-Square, radius `--radius-md`. `md` is 2.625rem (42px) — the minimum touch target. Never a pill.
+Square, radius `--radius-md`, always the same square on the shared control rail (3rem, 2.75rem under 64rem) — aligned with Button and Input. Never a pill.
 
 
 ---
@@ -99,56 +100,6 @@ The Julien Fernandes mark — CSS-rendered: Anton caps + gradient rounded-square
 
 ---
 
-# content
-
-
-## BeforeAfter
-
-Comparison of a build before and after.
-
-```jsx
-<BeforeAfter
-  before={<p>3 semaines de dev, un devis à 6 000 €, un cahier des charges de 12 pages.</p>}
-  after={<p>Un week-end, une session Claude Code, zéro ligne écrite à la main.</p>} />
-```
-
-The gradient lives **only** on the seam — never as a panel fill.
-
-
-## CodeBlock
-
-Shows a command or a snippet.
-
-```jsx
-<CodeBlock filename="~/projects/app" code={"npm create vite@latest app\ncd app && claude"} onCopy={…} />
-```
-
-JetBrains Mono is only ever used here and in technical metadata — never for body copy.
-
-
-## QuoteBlock
-
-Quote from a viewer, a client, or the brand itself.
-
-```jsx
-<QuoteBlock quote="J'ai construit cette app en un week-end avec Claude Code. Zéro ligne de code écrite à la main — juste la bonne méthode."
-  author="Julien Fernandes" role="Busan · Corée du Sud" />
-```
-
-
-## StepCard
-
-Method / tutorial steps, usually 3 or 4 in a row.
-
-```jsx
-<StepCard step={1} title="Cadre l'idée">Une phrase, un utilisateur, un problème. Pas de features.</StepCard>
-```
-
-The step number is the only gradient in the card — the title stays ink.
-
-
----
-
 # data-display
 
 
@@ -162,7 +113,7 @@ Status / category pill.
 <Badge tone="outline">Brouillon</Badge>
 ```
 
-Pill radius is fine here (badges, counters, tabs). Never on a button or input.
+Pill radius is fine here (badges, counters). Never on a button, an input or a tab bar.
 
 
 ## Card
@@ -187,6 +138,31 @@ Metric counter — views, duration, publish date. French number formatting (`12,
 <MetricPill icon={<Icon name="eye" size="0.875rem" strokeWidth={2.5} />} value="18,2 k" label="vues" />
 <MetricPill tone="solid" value="14:32" />
 ```
+
+
+## Separator
+
+Thin rule between blocks. With `label`, the caption sits centred on the line.
+
+```jsx
+<Separator />
+<Separator label="Ou" />
+<Separator orientation="vertical" />
+```
+
+
+## Table
+
+Composable data table for tool UIs.
+
+```jsx
+<Card flush><Table striped hoverable>
+  <THead><Tr><Th>Build</Th><Th>Statut</Th></Tr></THead>
+  <TBody><Tr><Td>App de lecture</Td><Td><Badge tone="success">En ligne</Badge></Td></Tr></TBody>
+</Table></Card>
+```
+
+Empty list: render `EmptyState` INSTEAD of an empty table — the table never carries its own empty state.
 
 
 ## Tooltip
@@ -223,6 +199,16 @@ Empty list / no results. Always give the reader the next step.
 ```
 
 
+## Progress
+
+Determined bar (0–100) or indeterminate sliding bar. Accent-tinted rail, `--primary` fill, thin.
+
+```jsx
+<Progress value={64} label="Progression du build" />
+<Progress indeterminate label="Chargement" />
+```
+
+
 ## Skeleton
 
 Loading placeholder.
@@ -244,6 +230,16 @@ Placeholder for a loading card grid.
 ```
 
 
+## Spinner
+
+Loading ring in `currentColor`, sizes aligned on Icon (1 / 1.25 / 1.5rem). Inside a Button, use the `loading` prop instead — it swaps the icon for a Spinner and disables the button.
+
+```jsx
+<Spinner size="sm" />
+<Button loading>Génération…</Button>
+```
+
+
 ## Toast
 
 Transient feedback, bottom-right of the viewport.
@@ -261,6 +257,15 @@ Error copy is cash, never dramatised. Icon tile is 1.5rem, radius sm; glyphs at 
 # forms
 
 
+## Calendar
+
+Month view — Monday-first, fr locale, native `Date` + `Intl` only. Selected day = `--primary` fill; today = `--primary` bold. Single date, no range.
+
+```jsx
+<Calendar value={date} onChange={setDate} min={new Date()} />
+```
+
+
 ## Checkbox
 
 Checkbox with label.
@@ -268,6 +273,16 @@ Checkbox with label.
 ```jsx
 <Checkbox label="Je veux recevoir le prompt du build" defaultChecked />
 <Checkbox label="Option indisponible" disabled />
+```
+
+
+## DatePicker
+
+Input-styled trigger + Calendar in a popover (outside click / Escape close). Same `surface` rule as Input.
+
+```jsx
+<DatePicker value={date} onChange={setDate} placeholder="Choisir une date" />
+<DatePicker surface="card" value={date} onChange={setDate} />
 ```
 
 
@@ -288,14 +303,15 @@ Wraps any field with its label, help text and error.
 
 ## Input
 
-Text field — radius `--radius-md`, 1.5px border, 3px focus ring in `--ring`.
+Text field — radius `--radius-md`, 1.5px border. Focus = the border turns `--ring` — one border, never an extra ring.
 
 ```jsx
 <Input placeholder="ton@email.com" />
+<Input surface="card" placeholder="ton@email.com" />   {/* inside a Card */}
 <Input invalid defaultValue="pas-un-email" />
 ```
 
-Never a pill. Placeholder in `--text-muted`. Wrap in `<FormField>` for label / help / error.
+Never a pill. Placeholder in `--text-muted`. Fill is `--secondary` on the layout (default, like navbar/tabs/search); `surface="card"` swaps to `--background` inside a Card. Wrap in `<FormField>` for label / help / error.
 
 
 ## Radio
@@ -360,6 +376,17 @@ Renders a Lucide line icon — use it anywhere the design needs an icon; never e
 # navigation
 
 
+## AppShell
+
+Tool-app skeleton: grid `[Sidebar | contenu]`. Under 64rem the sidebar becomes a drawer, driven by Sidebar's `open`/`onClose`.
+
+```jsx
+<AppShell sidebar={<Sidebar sections={…} footer={<Avatar size="2rem" />} open={menuOpen} onClose={close} />}>
+  {content}
+</AppShell>
+```
+
+
 ## Footer
 
 Page footer.
@@ -374,7 +401,7 @@ The location line uses the middle dot: *Busan · Corée du Sud*.
 
 ## Navbar
 
-Site header.
+Site header — always on `--secondary`, detached from the cream layout; scroll adds blur + shadow.
 
 ```jsx
 <Navbar links={[{label:'Vidéos',active:true},{label:'Séries'},{label:'À propos'}]}
@@ -384,13 +411,37 @@ Site header.
 Blur is the only place the system uses `backdrop-filter`. No glassmorphism anywhere else.
 
 
+## Pagination
+
+Controlled: `page`, `pageCount`, `onPageChange`. Ellipsis beyond 7 pages; current page gets the active-tab treatment; the bar rides `--secondary` like Tabs.
+
+```jsx
+<Pagination page={page} pageCount={12} onPageChange={setPage} />
+```
+
+
+## Sidebar
+
+App navigation on `--secondary`: Logo head, titled sections, active item in `--accent` + `--primary`, footer for Avatar + name. Collapsible to icons-only, persisted in localStorage (`storageKey`).
+
+```jsx
+<Sidebar sections={[{ title: 'Outils', items: [
+  { label: 'Dashboard', icon: <Icon name="layout-dashboard" />, active: true },
+  { label: 'Contenu', icon: <Icon name="video" /> }
+]}]} footer={<><Avatar size="2rem" /><span>Julien</span></>} />
+```
+
+
 ## Tabs
 
 Filter a feed by series.
 
 ```jsx
 <Tabs value={tab} onChange={setTab} items={[{value:'all',label:'Tout'},{value:'build',label:'Build'},{value:'tuto',label:'Tuto'}]} />
+<Tabs onCard value={tab} onChange={setTab} items={…} />   {/* posed on a Card */}
 ```
+
+The bar always contrasts with its host surface: `--secondary` on the page, `onCard` swaps to `--background` on a Card. Rectangle (0.875rem / `--radius-sm`), min-height on the control rail — never a pill, never blended into the background.
 
 
 ---

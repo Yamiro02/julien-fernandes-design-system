@@ -4,9 +4,11 @@ import { cn } from '../../lib/cn';
 import { Logo } from '../brand/Logo';
 
 /**
- * Sticky top bar: logo left, links centre, CTA right. Transparent at rest;
- * on scroll it picks up a --card tint + backdrop-filter blur(10px) + hairline border.
- * Blur is the only place the system uses backdrop-filter. No glassmorphism anywhere else.
+ * Sticky top bar: logo left, links centre, CTA right. Sits on --secondary with a
+ * hairline bottom border AT ALL TIMES — it is a control detached from the layout,
+ * never transparent. On scroll it tints (color-mix on --secondary), adds
+ * backdrop-filter blur(10px) and a shadow. Blur is the only place the system uses
+ * backdrop-filter. No glassmorphism anywhere else.
  */
 export interface NavLink { label: string; href?: string; active?: boolean }
 

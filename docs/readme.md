@@ -78,6 +78,13 @@ Diviseurs retenus : **80** (paysage et carré), **45** (portrait 9:16). Aucun au
 ne confonds pas les deux). La même page s'exporte en 1280×720, 1920×1080 ou 640×360 sans
 toucher une seule valeur.
 
+**Sur les apps desktop (outils internes)** — module opt-in `tokens/app-scale.css`, jamais
+importé par `styles.css` : paliers d'échelle posés sur `html{font-size}` en **%** (ils
+multiplient la préférence navigateur, sans l'écraser) — `103 %` < 1600 · `112 %` à 1600 ·
+`126 %` à 1920 · `130 %` ≥ 2400 — pour garder une largeur effective ~1440–1600 sur tout
+écran. Garde-fou `body{min-width:1133px}` (1100 × 1,03), en px volontairement.
+Le site, les e-mails et les slides ne l'importent jamais.
+
 ---
 
 ## CONTENT FUNDAMENTALS
@@ -118,7 +125,8 @@ La chaleur vient de l'orange et du halo.
 **Couleur.** Tout se pose sur **crème** `#F6F2EC` (thème par défaut) ou **ink** `#1F1E1C`
 (variante `.dark`), deux neutres chauds — jamais de blanc clinique, jamais de noir pur.
 La seule couleur saturée est le dégradé de marque, et il est **rationné à l'accent**.
-Le blanc pur `#FFFFFF` est **réservé au bouton secondaire** en thème clair.
+Le blanc pur `#FFFFFF` (`--secondary`) est **réservé, en thème clair, aux contrôles posés à même
+le layout** : bouton secondaire, navbar, barre de tabs / filtres, barre de recherche, inputs.
 Le noir profond `#0D0C0B` (`--ink-deep`) est **réservé aux miniatures YouTube et au motion**.
 **Pas de bleu** dans le système.
 
@@ -130,8 +138,7 @@ halo, glow. Jamais un grand aplat, jamais deux mots en dégradé dans un même t
 
 **Typo.** **Anton 400 CAPS** sur tous les niveaux de titre H1 → H4 et sur le display — c'est le
 titre qui porte l'identité. **DM Sans** 400/500/600/700 pour le corps et l'UI.
-**JetBrains Mono** 400/500 pour le code, les prompts, les badges de stack et les métadonnées
-techniques. Le tracking d'Anton est *moins* négatif que celui d'Onest dans Yunary
+**JetBrains Mono** 400/500 pour le code et les métadonnées techniques. Le tracking d'Anton est *moins* négatif que celui d'Onest dans Yunary
 (`-0.02em` au lieu de `-0.03em`) : Anton est déjà ultra-condensé.
 Palier **`--text-control` `0.9375rem`** (15) pour tous les contrôles : boutons, champs, chips,
 onglets. Interligne d’**interface 1.5** (`--leading-body`) ; une colonne de **lecture suivie**
@@ -144,14 +151,24 @@ Généreux : gaps de grille de cards **≥ 1.5rem**, marges de section larges, s
 large — `--page-max` pointe dessus) · wide `56.25rem` (900, colonne de travail) · read `45rem`
 (720, lecture suivie) · narrow `30rem` (480, message centré, état vide).
 
-**Rayons.** badge `0.375rem` (micro-badge / squircle sur boîte ~20px) · sm `0.75rem` (chips, skeleton) · md `1rem` (boutons, inputs, selects) ·
-lg `1.25rem` (card standard, `--radius` par défaut) · xl `1.5rem` (grandes cards, panneaux, hero) ·
-2xl `1.75rem` (modales, sheets, dropdowns) · pill `9999px` (tabs, search, badges, compteurs —
-**jamais** un bouton ni un input).
+**Rayons.** badge `0.375rem` (micro-badge / squircle sur boîte ~20px) · sm `0.625rem` (chips, skeleton, onglets) · md `0.75rem` (boutons, inputs, selects, icon-buttons) ·
+lg `1.25rem` (card standard, `--radius` par défaut, dropdowns) · xl `1.5rem` (grandes cards, panneaux, hero) ·
+2xl `1.75rem` (modales, sheets) · pill `9999px` (badges et compteurs uniquement —
+**jamais** un bouton, un input ni une barre de tabs).
 
-**Rail de hauteur des contrôles.** sm `2.375rem` · md `3rem` · lg `3.25rem`. Bouton `md`, Input et
-le trigger de Select s'alignent tous à `3rem`. L'IconButton est carré sur un rail décalé :
-`2.375` · `2.625rem` (42px, cible de touche) · `3rem`. Textarea garde sa hauteur automatique.
+**Rail de hauteur des contrôles.** Une seule hauteur minimum pour tout contrôle — bouton (toutes
+tailles), input, trigger de Select, IconButton carré, barre de tabs : `3rem`, qui descend à
+`2.75rem` (44px, cible de touche) sous `64rem`. `sm` ne joue que sur le padding et la typo ;
+lg `3.25rem` (`3rem` mobile) est réservé au CTA hero. Textarea garde sa hauteur automatique.
+
+**Barre de tabs.** Le fond contraste TOUJOURS avec la surface porteuse : `--secondary` posée sur
+la page, `--background` posée sur une card (prop `onCard`). Conteneur `0.875rem`, onglets
+`--radius-sm`, hauteur du rail — jamais fondue dans le fond, jamais pill.
+
+**Surfaces des contrôles.** Même règle pour tout ce qui est posé à même le layout — navbar,
+barre de filtres, barre de recherche, inputs, selects : fond `--secondary` (blanc en clair,
+ink-soft en sombre), qui les détache du fond. Un champ posé dans une card passe en
+`--background` (`surface="card"`). Jamais le même fond que la surface porteuse.
 
 **Cards.** L'objet signature : surface `--card` teintée (`#FAF7F2` en clair, `#2B2A28` en ink),
 bordure **1px** `--border`, **rayon lg/xl**, **padding 1.5rem** (1.75rem pour une grande card
@@ -182,9 +199,10 @@ popover / modale / dropdown (3, `--shadow-lg`) → skeleton muted (4).
 **Hover.** Teinte douce : le contrôle passe sur `--accent` et/ou bordure `--primary`.
 Card cliquable : `translateY(-2px)` → `--shadow-md`. Bouton primaire : glow renforcé + `translateY(-1px)`.
 **Press.** Le lift s'inverse en `translateY(1px)`, le glow se resserre. Aucune inversion de couleur.
-**Focus.** Toujours visible : `outline: 2px solid var(--ring)` avec `outline-offset: 2–3px`, ou sur
-les inputs un anneau `box-shadow: 0 0 0 3px color-mix(in srgb, var(--ring) 22%, transparent)`.
-Anneau **orange en clair, ambre en sombre**.
+**Focus.** Toujours visible. Boutons et contrôles cliquables : `outline: 2px solid var(--ring)`
+avec `outline-offset: 2–3px`, ou l'anneau 3px. Champs (input, textarea, select, recherche) : la
+bordure passe simplement en `--ring` — **une seule bordure, jamais d'anneau en plus**.
+Orange en clair, ambre en sombre.
 
 **Animation.** Retenue. `--ease-standard: cubic-bezier(0.2, 0, 0, 1)`, durées littérales :
 **150ms** (hover) · **200ms** (standard) · **300ms** (modales) · **1.4s** (shimmer de skeleton).
@@ -250,19 +268,21 @@ par dossier, rendue **en clair ET en sombre**. Les docs d'usage sont fusionnées
 **`components/actions/`** — `Button` (primary · secondary · ghost · danger ; sm · md · lg ;
 hover / active / focus / disabled / loading ; icône optionnelle), `IconButton`.
 
-**`components/forms/`** — `Input`, `Textarea`, `Select`, `Checkbox`, `Radio`, `Switch`, `FormField`.
+**`components/forms/`** — `Input`, `Textarea`, `Select`, `Checkbox`, `Radio`, `Switch`, `FormField`,
+`DatePicker`, `Calendar`.
 
-**`components/data-display/`** — `Card` (default · interactive · feature), `Badge`, `MetricPill`, `Tooltip`.
+**`components/data-display/`** — `Card` (default · interactive · feature), `Badge`, `MetricPill`,
+`Tooltip`, `Table`, `Separator`.
 
-**`components/feedback/`** — `Toast`, `Banner`, `EmptyState`, `Skeleton`, `SkeletonCard`.
+**`components/feedback/`** — `Toast`, `Banner`, `EmptyState`, `Skeleton`, `SkeletonCard`,
+`Spinner`, `Progress`.
 
 **`components/overlays/`** — `Modal`, `Dropdown`.
 
-**`components/navigation/`** — `Navbar` (sticky, blur au scroll), `Footer`, `Tabs`.
+**`components/navigation/`** — `Navbar` (sticky, fond `--secondary`, blur au scroll), `Footer`,
+`Tabs`, `Pagination`, `AppShell`, `Sidebar`.
 
 **`components/brand/`** — `Logo`, `Halo`, `GridBackground`, `Avatar`.
-
-**`components/content/`** — `CodeBlock`, `StepCard`, `BeforeAfter`, `QuoteBlock`.
 
 **`components/icons/`** — `Icon`.
 
@@ -281,7 +301,8 @@ hover / active / focus / disabled / loading ; icône optionnelle), `IconButton`.
 (`:root` crème + `.dark` ink + `--ink-deep` + halos + pills) · `typography.css` (familles, échelle,
 tracking, leading, graisses) · `scales.css` (espacement, rayons, rail, ombres, grille, motion —
 chaque token dimensionnel porte son équivalent px en commentaire) · `base.css` (reset + utilitaires
-`.display` `.eyebrow` `.chip` `.accent` `.halo` `.grid` `.page` `.mono` `.caption`).
+`.display` `.eyebrow` `.chip` `.accent` `.halo` `.grid` `.page` `.mono` `.caption`) ·
+`app-scale.css` (**opt-in apps desktop**, hors `styles.css` — paliers d'échelle par largeur d'écran).
 
 **`assets/`** — `fonts/` (Anton-400, JetBrainsMono-400/500) · `logo/` (les PNG fournis, non modifiés).
 
@@ -340,7 +361,8 @@ Rien n'a été glissé en douce. Voici tout ce qui ne vient ni de Yunary ni du b
 Pas de bleu. Pas de dégradé en grand aplat. Pas de deux mots accentués dans un titre.
 Pas de Title Case. Pas de faux gras sur Anton (400 uniquement, jamais `-webkit-text-stroke`).
 Pas d'Anton en bas de casse, ni sous `1.125rem`, ni dans un paragraphe / bouton / label.
-Pas de glassmorphism. Pas d'ombres grises non teintées. Pas de pill sur un bouton ou un input.
+Pas de glassmorphism. Pas d'ombres grises non teintées. Pas de pill sur un bouton, un input ou
+une barre de tabs. Pas de barre de tabs fondue dans le fond de sa surface porteuse.
 Pas de grille sur le site, l'UI ou les slides. Pas de `--ink-deep` en fond d'interface.
 Pas de card blanche, pas de fond blanc. Pas d'emoji. Pas de rose `#D11A4E`.
 Pas de valeur inventée : si elle n'est ni dans Yunary ni dans le brief, elle est listée ci-dessus.

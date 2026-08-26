@@ -1,18 +1,24 @@
 import type { HTMLAttributes, ReactNode } from 'react';
 import { cn } from '../../lib/cn';
 
-/** Pill tab group on --muted. The pill shape is legal here (tabs, badges, counters). */
+/**
+ * Segmented tab group on the control rail. The bar ALWAYS contrasts with its host
+ * surface: --secondary on the page; set `onCard` when it sits on a Card (--background).
+ * Rectangle radii (0.875rem bar · --radius-sm tab) — never a pill, never blended in.
+ */
 export interface TabItem { value: string; label: ReactNode }
 
 export interface TabsProps extends Omit<HTMLAttributes<HTMLDivElement>, 'onChange'> {
   items?: TabItem[];
   value?: string;
   onChange?: (value: string) => void;
+  /** The bar sits on a Card — swaps the background to --background for contrast. */
+  onCard?: boolean;
 }
 
-export function Tabs({ items = [], value, onChange, className = '', ...rest }: TabsProps): JSX.Element {
+export function Tabs({ items = [], value, onChange, onCard = false, className = '', ...rest }: TabsProps): JSX.Element {
   return (
-    <div className={cn('jf-tabs', className)} role="tablist" {...rest}>
+    <div className={cn('jf-tabs', onCard && 'jf-tabs--on-card', className)} role="tablist" {...rest}>
       {items.map(it => (
         <button
           key={it.value}

@@ -2,7 +2,8 @@ import type { ButtonHTMLAttributes, ReactNode } from 'react';
 import { cva } from 'class-variance-authority';
 
 /**
- * Square icon-only button on its own height rail (sm 2.375rem · md 2.625rem touch target · lg 3rem).
+ * Square icon-only button on the shared control rail: every size renders the same
+ * square (3rem, 2.75rem under 64rem) — `size` is kept for API compatibility.
  * Always pass `label` — it becomes aria-label and title. Never a pill.
  */
 export interface IconButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
