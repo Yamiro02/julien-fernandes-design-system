@@ -1,0 +1,12 @@
+/* Julien Fernandes — Design System. Global entry point: consumers link this file only.
+   @import list only; every rule lives in the imported files.
+   ALL dimensional tokens are in rem (base 16px = 1rem). Never pin a px font-size
+   on html/:root on the web — rem must honour the browser text-size preference.
+   Fixed-size canvases (thumbnails, shorts, slides, motion, social) are the ONE
+   exception: each such page pins its own root — see tokens/scales.css. */
+@import url('./tokens/fonts.css');
+@import url('./tokens/colors.css');
+@import url('./tokens/typography.css');
+@import url('./tokens/scales.css');
+@import url('./tokens/base.css');
+@import url('./patterns.css');

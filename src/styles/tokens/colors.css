@@ -1,0 +1,70 @@
+/* Julien Fernandes — color tokens. Inherited wholesale from Yunary.
+   Light cream is the DEFAULT theme (:root); .dark ink is the secondary variant.
+   The brand gradient and the coral are ACCENT ONLY: logo, ONE keyword per title,
+   eyebrow, step number, primary CTA, halo, glow. Never a large fill. No blue anywhere.
+   Pure #FFFFFF is reserved for the secondary button in light theme — never a page
+   background, never a card. Pure black exists only in .dark shadows and --ink-deep. */
+:root{
+  /* Surfaces & warm neutrals */
+  --background:#f6f2ec; --foreground:#1f1e1c;
+  --card:#faf7f2; --card-foreground:#1f1e1c;
+  --popover:#faf7f2; --popover-foreground:#1f1e1c;
+  --secondary:#ffffff; --secondary-foreground:#1f1e1c;
+  --muted:#faf7f2; --muted-foreground:#6b6966;
+  --accent:#f6ede2; --accent-foreground:#1f1e1c;
+  --border:#e5e1da; --input:#e5e1da;
+
+  --ink:#1f1e1c; --ink-soft:#2b2a28; --cream:#f6f2ec; --cream-alt:#faf7f2;
+  --text-secondary:#3d3c3a; --text-muted:#6b6966; --text-inverted:#f2efea;
+
+  /* Deep black — ADDED token. RESERVED for YouTube thumbnails and motion cards.
+     Never an interface, slide or landing background. Same scope as the grid. */
+  --ink-deep:#0d0c0b;
+
+  /* Brand — accent only */
+  --primary:#e85d2f; --primary-foreground:#ffffff;
+  --ring:#e85d2f;
+  --brand-from:#f5a524; --brand-via:#f08029; --brand-to:#e84c3d;
+  --destructive:#e84c3d; --destructive-foreground:#ffffff;
+
+  --brand-gradient:linear-gradient(90deg,#f5a524,#f08029,#e84c3d); /* @kind color */
+  --brand-gradient-diagonal:linear-gradient(135deg,#f5a524,#f08029,#e84c3d); /* @kind color */
+  --grad-soft:linear-gradient(135deg,rgba(245,165,36,.08),rgba(232,76,61,.06)); /* @kind color */
+
+  /* Halos — warm radial, bottom-anchored, never full-screen. */
+  --gradient-halo:radial-gradient(60% 45% at 50% 100%, rgba(240,128,41,.30) 0%, rgba(232,76,61,.12) 45%, transparent 75%); /* @kind color */
+  /* Thumbnail/motion halo — hotter. RESERVED for thumbnails and motion cards.
+     Literal reproduced verbatim from the brief. */
+  --gradient-thumbnail:radial-gradient(closest-side at 50% 110%, rgba(240,128,41,.55) 0%, rgba(232,76,61,.28) 45%, transparent 72%); /* @kind color */
+  /* FLAGGED FOR REVIEW — the literal above cannot render: with `closest-side` and a
+     centre at 110%, the gradient's radius is 10% of the box height while its centre
+     sits 10% of the box height BELOW the box, so the painted disc never reaches the
+     visible area — it comes out empty in every container. Same colour stops, explicit
+     sizing, which is what --gradient-halo already does. Templates use this one. */
+  --gradient-thumbnail-fit:radial-gradient(70% 55% at 50% 100%, rgba(240,128,41,.55) 0%, rgba(232,76,61,.28) 45%, transparent 72%); /* @kind color */
+
+  /* Semantic pills — always colour + icon + text. Backgrounds are theme-agnostic. */
+  --pill-coral-bg:color-mix(in srgb,var(--primary) 12%,transparent); --pill-coral-fg:#b23a1c;
+  --pill-amber-bg:color-mix(in srgb,var(--brand-from) 16%,transparent); --pill-amber-fg:#8a5a0a;
+  --pill-danger-bg:rgba(226,75,74,0.15); --pill-danger-fg:#a32d2d;
+  --pill-warning-bg:rgba(240,128,41,0.18); --pill-warning-fg:#9a4f0b;
+  --pill-success-bg:rgba(99,153,34,0.16); --pill-success-fg:#3b6d11;
+  --pill-neutral-bg:color-mix(in srgb,var(--muted-foreground) 12%,transparent); --pill-neutral-fg:var(--muted-foreground);
+  --overlay-play-bg:color-mix(in srgb,var(--ink) 42%,transparent);
+}
+.dark{
+  --background:#1f1e1c; --foreground:#f2efea;
+  --card:#2b2a28; --card-foreground:#f2efea;
+  --popover:#2b2a28; --popover-foreground:#f2efea;
+  --secondary:#2b2a28; --secondary-foreground:#f2efea;
+  --muted:#2b2a28; --muted-foreground:#b0aea9;
+  --accent:#2b2a28; --accent-foreground:#f2efea;
+  --border:#3a3936; --input:#3a3936; --ring:#f5a524;
+  --primary:#e85d2f; --primary-foreground:#ffffff;
+  --destructive:#e84c3d; --destructive-foreground:#ffffff;
+  --text-secondary:#d2cfc9; --text-muted:#b0aea9; --text-inverted:#1f1e1c;
+  --grad-soft:linear-gradient(135deg,rgba(245,165,36,.14),rgba(232,76,61,.10)); /* @kind color */
+  --pill-coral-fg:#f0916b; --pill-amber-fg:#e3b25c;
+  --pill-danger-fg:#ec8f8f; --pill-warning-fg:#e0a25a; --pill-success-fg:#9ccc63;
+  --pill-neutral-fg:#d4d1cb;
+}

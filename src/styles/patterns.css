@@ -1,0 +1,157 @@
+/* Julien Fernandes — component state styling.
+   ASSUMED ADDITION (declared in readme.md): inline styles cannot express
+   :hover / :focus-visible / :active / :disabled, and every component in this system
+   must show those states. All values come from the tokens — nothing new is invented here.
+   Demo helpers .is-hover / .is-active / .is-focus force a state in specimen cards. */
+
+/* ---------- actions: Button — values copied from Yunary Button.jsx ---------- */
+.jf-btn{display:inline-flex;align-items:center;justify-content:center;gap:0.5rem;min-height:3rem;padding:0.8125rem 1.375rem;font-family:var(--font-body);font-size:var(--text-control);font-weight:var(--weight-semibold);line-height:1;border:none;border-radius:var(--radius-md);cursor:pointer;text-decoration:none;white-space:nowrap;box-sizing:border-box;outline:none;transition:transform 150ms var(--ease-standard),box-shadow 200ms var(--ease-standard),background 200ms var(--ease-standard),border-color 200ms var(--ease-standard),filter 200ms var(--ease-standard)}
+.jf-btn--sm{gap:0.4375rem;min-height:var(--control-sm);padding:0.5625rem 1rem;font-size:0.875rem}
+.jf-btn--lg{gap:0.5625rem;min-height:var(--control-lg);padding:0.9375rem 1.625rem;font-size:var(--text-body)}
+.jf-btn--block{width:100%}
+.jf-btn--primary{background:var(--brand-gradient);color:var(--primary-foreground);box-shadow:var(--shadow-glow)}
+.jf-btn--primary:hover:not(:disabled),.jf-btn--primary.is-hover{box-shadow:var(--shadow-glow-lg);transform:translateY(-1px)}
+.jf-btn--primary:active:not(:disabled),.jf-btn--primary.is-active{transform:translateY(1px);box-shadow:0 2px 8px rgba(245,165,36,.25)}
+.jf-btn--primary:focus-visible,.jf-btn--primary.is-focus{box-shadow:var(--shadow-glow),0 0 0 3px color-mix(in srgb,var(--ring) 35%,transparent)}
+.jf-btn--secondary{background:var(--secondary);color:var(--secondary-foreground);border:1.5px solid var(--border)}
+.jf-btn--secondary:hover:not(:disabled),.jf-btn--secondary.is-hover{background:var(--accent);border-color:var(--primary)}
+.jf-btn--secondary:active:not(:disabled),.jf-btn--secondary.is-active{transform:translateY(1px)}
+.jf-btn--ghost{background:transparent;color:var(--foreground)}
+.jf-btn--ghost:hover:not(:disabled),.jf-btn--ghost.is-hover{background:var(--accent)}
+.jf-btn--ghost:active:not(:disabled),.jf-btn--ghost.is-active{transform:translateY(1px)}
+.jf-btn--danger{background:var(--destructive);color:var(--destructive-foreground)}
+.jf-btn--danger:hover:not(:disabled),.jf-btn--danger.is-hover{filter:brightness(.93);transform:translateY(-1px)}
+.jf-btn--danger:active:not(:disabled),.jf-btn--danger.is-active{transform:translateY(1px)}
+.jf-btn--secondary:focus-visible,.jf-btn--ghost:focus-visible,.jf-btn--danger:focus-visible,.jf-btn--secondary.is-focus,.jf-btn--ghost.is-focus,.jf-btn--danger.is-focus{box-shadow:0 0 0 3px color-mix(in srgb,var(--ring) 35%,transparent)}
+.jf-btn:disabled,.jf-btn.is-disabled{opacity:.5;cursor:not-allowed;transform:none}
+.jf-btn.is-loading{cursor:progress}
+.jf-spin{animation:jf-spin 1s linear infinite;flex:none}
+@keyframes jf-spin{to{transform:rotate(360deg)}}
+
+/* ---------- actions: IconButton — values copied from Yunary IconButton.jsx ---------- */
+.jf-icon-btn{display:inline-flex;align-items:center;justify-content:center;width:var(--icon-control-md);height:var(--icon-control-md);padding:0;border:1.5px solid var(--border);background:var(--secondary);color:var(--foreground);border-radius:var(--radius-md);cursor:pointer;box-sizing:border-box;outline:none;transition:background 200ms var(--ease-standard),border-color 200ms var(--ease-standard),color 200ms var(--ease-standard),box-shadow 200ms var(--ease-standard)}
+.jf-icon-btn--sm{width:var(--icon-control-sm);height:var(--icon-control-sm)}
+.jf-icon-btn--lg{width:var(--icon-control-lg);height:var(--icon-control-lg)}
+.jf-icon-btn--secondary:hover:not(:disabled),.jf-icon-btn--secondary.is-hover,.jf-icon-btn--ghost:hover:not(:disabled),.jf-icon-btn--ghost.is-hover{background:var(--accent)}
+.jf-icon-btn--ghost{border:none;background:transparent}
+.jf-icon-btn--primary{border:none;background:var(--brand-gradient);color:var(--primary-foreground);box-shadow:var(--shadow-glow)}
+.jf-icon-btn--primary:hover:not(:disabled),.jf-icon-btn--primary.is-hover{box-shadow:var(--shadow-glow-lg);transform:translateY(-1px)}
+.jf-icon-btn--danger{border:none;background:var(--destructive);color:var(--destructive-foreground)}
+.jf-icon-btn--danger:hover:not(:disabled),.jf-icon-btn--danger.is-hover{filter:brightness(.93)}
+.jf-icon-btn.is-active,.jf-icon-btn--secondary[aria-pressed="true"]{border-color:var(--primary);background:var(--accent);color:var(--primary)}
+.jf-icon-btn:focus-visible,.jf-icon-btn.is-focus{box-shadow:0 0 0 3px color-mix(in srgb,var(--ring) 35%,transparent)}
+.jf-icon-btn:disabled,.jf-icon-btn.is-disabled{opacity:.5;cursor:not-allowed;transform:none}
+
+/* ---------- forms — values copied from Yunary Input.jsx ---------- */
+.jf-field{display:flex;flex-direction:column;gap:var(--space-2)}
+.jf-label{font-size:var(--text-caption);font-weight:var(--weight-semibold);color:var(--text-secondary);letter-spacing:0}
+.jf-help{font-size:var(--text-caption);color:var(--text-muted)}
+.jf-error{display:flex;align-items:center;gap:var(--space-2);font-size:var(--text-caption);font-weight:var(--weight-medium);color:var(--destructive)}
+.jf-input{width:100%;min-height:var(--control-md);padding:0.6875rem 0.875rem;box-sizing:border-box;font-family:var(--font-body);font-size:var(--text-control);color:var(--foreground);background:var(--background);border:1.5px solid var(--input);border-radius:var(--radius-md);outline:none;transition:border-color 200ms var(--ease-standard),box-shadow 200ms var(--ease-standard)}
+.jf-input--on-page{background:var(--card)}
+.jf-input::placeholder{color:var(--text-muted)}
+.jf-input:focus,.jf-input.is-focus{border-color:var(--ring);box-shadow:0 0 0 3px color-mix(in srgb,var(--ring) 22%,transparent)}
+.jf-input.is-error,.jf-input[aria-invalid="true"]{border-color:var(--destructive)}
+.jf-input.is-error:focus,.jf-input[aria-invalid="true"]:focus{box-shadow:0 0 0 3px color-mix(in srgb,var(--destructive) 22%,transparent)}
+.jf-input:disabled,.jf-input.is-disabled{cursor:not-allowed;background:var(--muted);color:var(--muted-foreground)}
+.jf-textarea{height:auto;min-height:0;resize:vertical;line-height:var(--leading-normal)}
+.jf-select{position:relative;display:block}
+.jf-select select{appearance:none;-webkit-appearance:none;padding-right:var(--space-7);cursor:pointer}
+.jf-select__chev{position:absolute;right:var(--space-4);top:50%;transform:translateY(-50%);pointer-events:none;color:var(--text-muted)}
+.jf-choice{display:inline-flex;align-items:center;gap:0.5625rem;cursor:pointer;font-size:0.875rem;color:var(--foreground);line-height:var(--leading-snug);position:relative}
+.jf-choice input{position:absolute;opacity:0;width:0;height:0}
+.jf-choice__box{flex:none;display:inline-flex;align-items:center;justify-content:center;width:1.25rem;height:1.25rem;border:1.5px solid var(--input);background:var(--background);border-radius:0.4375rem;color:var(--primary-foreground);transition:background 150ms var(--ease-standard),border-color 150ms var(--ease-standard),box-shadow 150ms var(--ease-standard)}
+.jf-choice__box--radio{border-radius:var(--radius-pill)}
+.jf-choice__box>*{opacity:0;transition:opacity 150ms var(--ease-standard)}
+.jf-choice:hover .jf-choice__box,.jf-choice.is-hover .jf-choice__box{border-color:var(--primary)}
+.jf-choice input:checked+.jf-choice__box,.jf-choice.is-checked .jf-choice__box{background:var(--primary);border-color:var(--primary)}
+.jf-choice input:checked+.jf-choice__box>*,.jf-choice.is-checked .jf-choice__box>*{opacity:1}
+.jf-choice input:checked+.jf-choice__box--radio,.jf-choice.is-checked .jf-choice__box--radio{background:var(--background)}
+.jf-choice input:focus-visible+.jf-choice__box,.jf-choice.is-focus .jf-choice__box{box-shadow:0 0 0 3px color-mix(in srgb,var(--ring) 35%,transparent)}
+.jf-choice.is-disabled{opacity:.5;cursor:not-allowed}
+.jf-choice__dot{width:0.625rem;height:0.625rem;border-radius:var(--radius-pill);background:var(--primary)}
+.jf-switch{display:inline-flex;align-items:center;gap:0.5625rem;cursor:pointer;font-size:0.875rem;position:relative}
+.jf-switch input{position:absolute;opacity:0;width:0;height:0}
+.jf-switch__track{position:relative;flex:none;width:2.75rem;height:1.625rem;border-radius:var(--radius-pill);background:var(--border);transition:background 200ms var(--ease-standard),box-shadow 200ms var(--ease-standard)}
+.jf-switch__knob{position:absolute;top:0.1875rem;left:0.1875rem;width:1.25rem;height:1.25rem;border-radius:var(--radius-pill);background:#fff;box-shadow:0 1px 2px rgba(0,0,0,.2);transition:transform 200ms var(--ease-standard)}
+.jf-switch input:checked+.jf-switch__track,.jf-switch.is-checked .jf-switch__track{background:var(--primary)}
+.jf-switch input:checked+.jf-switch__track .jf-switch__knob,.jf-switch.is-checked .jf-switch__knob{transform:translateX(1.125rem)}
+.jf-switch input:focus-visible+.jf-switch__track,.jf-switch.is-focus .jf-switch__track{box-shadow:0 0 0 3px color-mix(in srgb,var(--ring) 35%,transparent)}
+.jf-switch.is-disabled{opacity:.5;cursor:not-allowed}
+
+/* ---------- data-display — values copied from Yunary Card/Badge/Tooltip.jsx ---------- */
+.jf-card{background:var(--card);color:var(--card-foreground);border:1px solid var(--border);border-radius:var(--radius-lg);padding:var(--card-pad);box-shadow:var(--shadow-sm);box-sizing:border-box}
+.jf-card--lg{border-radius:var(--radius-xl);padding:var(--card-pad-lg)}
+.jf-card--flush{padding:0;overflow:hidden}
+.jf-card--interactive{cursor:pointer;transition:box-shadow 200ms var(--ease-standard),transform 200ms var(--ease-standard)}
+.jf-card--interactive:hover,.jf-card--interactive.is-hover{transform:translateY(-2px);box-shadow:var(--shadow-md)}
+.jf-card--interactive:active,.jf-card--interactive.is-active{transform:translateY(0);box-shadow:var(--shadow-sm)}
+.jf-card--interactive:focus-visible,.jf-card--interactive.is-focus{box-shadow:0 0 0 3px color-mix(in srgb,var(--ring) 35%,transparent)}
+.jf-card--feature{background:var(--grad-soft);border-color:color-mix(in srgb,var(--brand-from) 28%,transparent)}
+.jf-badge{display:inline-flex;align-items:center;gap:0.375rem;padding:0.25rem 0.6875rem;border-radius:var(--radius-pill);font-family:var(--font-body);font-size:0.78125rem;font-weight:var(--weight-semibold);line-height:1.3;white-space:nowrap}
+.jf-badge--coral{background:var(--pill-coral-bg);color:var(--pill-coral-fg)}
+.jf-badge--amber{background:var(--pill-amber-bg);color:var(--pill-amber-fg)}
+.jf-badge--danger{background:var(--pill-danger-bg);color:var(--pill-danger-fg)}
+.jf-badge--warning{background:var(--pill-warning-bg);color:var(--pill-warning-fg)}
+.jf-badge--success{background:var(--pill-success-bg);color:var(--pill-success-fg)}
+.jf-badge--neutral{background:var(--pill-neutral-bg);color:var(--pill-neutral-fg)}
+.jf-badge--accent{background:var(--accent);color:var(--primary)}
+.jf-badge--outline{background:transparent;color:var(--text-secondary);box-shadow:inset 0 0 0 1px var(--border)}
+.jf-metric{display:inline-flex;align-items:center;gap:0.375rem;padding:0.25rem 0.6875rem;border-radius:var(--radius-pill);background:var(--pill-neutral-bg);color:var(--pill-neutral-fg);font-size:0.78125rem;font-weight:var(--weight-medium);line-height:1.3;white-space:nowrap}
+.jf-metric--solid{background:var(--overlay-play-bg);color:var(--text-inverted)}
+.jf-metric--coral{background:var(--pill-coral-bg);color:var(--pill-coral-fg)}
+.jf-tooltip{position:relative;display:inline-flex}
+.jf-tooltip__bubble{position:absolute;bottom:calc(100% + 0.5625rem);left:50%;transform:translateX(-50%) translateY(0.25rem);padding:0.5rem 0.75rem;border-radius:var(--radius-md);background:var(--ink);color:var(--text-inverted);font-size:var(--text-caption);font-weight:var(--weight-semibold);line-height:1.3;white-space:nowrap;box-shadow:var(--shadow-lg);opacity:0;pointer-events:none;transition:opacity 150ms var(--ease-standard),transform 150ms var(--ease-standard);z-index:40}
+.jf-tooltip__bubble::after{content:"";position:absolute;left:50%;bottom:-0.25rem;width:0.5rem;height:0.5rem;background:inherit;transform:translateX(-50%) rotate(45deg)}
+.dark .jf-tooltip__bubble{background:var(--cream-alt);color:var(--ink)}
+.jf-tooltip:hover .jf-tooltip__bubble,.jf-tooltip:focus-within .jf-tooltip__bubble,.jf-tooltip.is-open .jf-tooltip__bubble{opacity:1;transform:translateX(-50%) translateY(0)}
+.jf-tooltip--bottom .jf-tooltip__bubble{bottom:auto;top:calc(100% + 0.5625rem)}
+.jf-tooltip--bottom .jf-tooltip__bubble::after{bottom:auto;top:-0.25rem}
+
+/* ---------- feedback — values copied from Yunary Toast/Banner/EmptyState/Skeleton.jsx ---------- */
+.jf-toast{display:flex;align-items:flex-start;gap:0.6875rem;padding:0.8125rem 0.9375rem;border:1px solid var(--border);border-radius:var(--radius-lg);background:var(--card);color:var(--card-foreground);box-shadow:var(--shadow-lg);min-width:17.5rem;max-width:26rem;box-sizing:border-box}
+.jf-toast__icon{flex:none;display:inline-flex;align-items:center;justify-content:center;width:1.5rem;height:1.5rem;border-radius:var(--radius-sm)}
+.jf-toast__title{font-size:0.875rem;font-weight:var(--weight-semibold);line-height:var(--leading-snug)}
+.jf-toast__desc{font-size:var(--text-caption);color:var(--muted-foreground);line-height:var(--leading-normal)}
+.jf-toast__close{flex:none;display:inline-flex;border:none;background:transparent;color:var(--muted-foreground);cursor:pointer;padding:0.125rem;border-radius:var(--radius-sm)}
+.jf-toast__close:hover{color:var(--foreground)}
+.jf-banner{display:flex;align-items:flex-start;gap:0.6875rem;padding:0.875rem 1rem;border:1px solid var(--border);border-radius:var(--radius-lg);background:var(--card)}
+.jf-banner--info{background:var(--accent);border-color:color-mix(in srgb,var(--primary) 30%,transparent);color:var(--primary)}
+.jf-banner--danger{background:var(--pill-danger-bg);border-color:color-mix(in srgb,var(--destructive) 35%,transparent);color:var(--pill-danger-fg)}
+.jf-banner--warning{background:var(--pill-warning-bg);border-color:color-mix(in srgb,var(--brand-via) 35%,transparent);color:var(--pill-warning-fg)}
+.jf-banner--success{background:var(--pill-success-bg);border-color:color-mix(in srgb,#639922 35%,transparent);color:var(--pill-success-fg)}
+.jf-empty{display:flex;flex-direction:column;align-items:center;text-align:center;gap:0.75rem;padding:var(--space-6);border:1px dashed var(--border);border-radius:var(--radius-lg);background:var(--card)}
+.jf-empty__icon{display:inline-flex;align-items:center;justify-content:center;width:3.25rem;height:3.25rem;border-radius:var(--radius-lg);background:var(--grad-soft);border:1px solid color-mix(in srgb,var(--primary) 22%,transparent);color:var(--primary)}
+.jf-skel{display:block;background:linear-gradient(90deg,var(--muted) 0%,var(--accent) 50%,var(--muted) 100%);background-size:560px 100%;border-radius:var(--radius-sm);animation:shimmer 1.4s infinite linear}
+
+/* ---------- overlays — values copied from Yunary Modal/Dropdown.jsx ---------- */
+.jf-scrim{position:absolute;inset:0;background:color-mix(in srgb,var(--ink) 45%,transparent);backdrop-filter:blur(2px);-webkit-backdrop-filter:blur(2px);display:flex;align-items:center;justify-content:center;padding:var(--space-5)}
+.jf-modal{width:23.75rem;max-width:100%;background:var(--popover);color:var(--popover-foreground);border:1px solid var(--border);border-radius:var(--radius-2xl);box-shadow:var(--shadow-lg);padding:var(--space-5);display:flex;flex-direction:column;gap:0.875rem;box-sizing:border-box}
+.jf-modal__icon{flex:none;display:inline-flex;align-items:center;justify-content:center;width:2.625rem;height:2.625rem;border-radius:var(--radius-md)}
+.jf-modal__close{width:2rem;height:2rem;border-radius:var(--radius-sm);border:none;background:transparent;color:var(--muted-foreground);cursor:pointer;display:inline-flex;align-items:center;justify-content:center;margin-left:auto}
+.jf-modal__close:hover{background:var(--accent);color:var(--foreground)}
+.jf-dropdown{width:14.375rem;padding:0.375rem;background:var(--popover);color:var(--popover-foreground);border:1px solid var(--border);border-radius:var(--radius-2xl);box-shadow:var(--shadow-lg);display:flex;flex-direction:column;gap:0.125rem;box-sizing:border-box}
+.jf-dropdown__item{display:flex;align-items:center;gap:0.625rem;width:100%;padding:0.5625rem 0.6875rem;border:0;background:transparent;color:var(--foreground);font-family:var(--font-body);font-size:0.875rem;text-align:left;border-radius:var(--radius-sm);cursor:pointer;transition:background 150ms var(--ease-standard)}
+.jf-dropdown__item:hover,.jf-dropdown__item.is-hover,.jf-dropdown__item:focus-visible{background:var(--accent);outline:none}
+.jf-dropdown__item--danger{color:var(--destructive)}
+.jf-dropdown__sep{height:1px;margin:0.25rem 0.375rem;background:var(--border);border:0}
+
+/* ---------- navigation ---------- */
+.jf-navbar{position:sticky;top:0;z-index:30;width:100%;border-bottom:1px solid transparent;transition:background-color 200ms var(--ease-standard),border-color 200ms var(--ease-standard),box-shadow 200ms var(--ease-standard)}
+.jf-navbar.is-scrolled{background:color-mix(in srgb,var(--card) 82%,transparent);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);border-bottom-color:var(--border);box-shadow:var(--shadow-sm)}
+.jf-navbar__inner{display:flex;align-items:center;justify-content:space-between;gap:var(--space-5);height:4.5rem}
+.jf-navlink{font-size:var(--text-body);font-weight:var(--weight-medium);color:var(--text-secondary);text-decoration:none;padding:var(--space-2) 0;transition:color 150ms var(--ease-standard)}
+.jf-navlink:hover,.jf-navlink.is-hover{color:var(--foreground)}
+.jf-navlink.is-active{color:var(--primary)}
+.jf-tabs{display:inline-flex;align-items:center;gap:var(--space-1);padding:var(--space-1);border-radius:var(--radius-pill);background:var(--muted);border:1px solid var(--border)}
+.jf-tab{appearance:none;border:0;background:transparent;color:var(--text-muted);font-family:var(--font-body);font-size:var(--text-control);font-weight:var(--weight-semibold);padding:var(--space-2) var(--space-4);border-radius:var(--radius-pill);cursor:pointer;transition:background-color 150ms var(--ease-standard),color 150ms var(--ease-standard)}
+.jf-tab:hover,.jf-tab.is-hover{color:var(--foreground)}
+.jf-tab[aria-selected="true"],.jf-tab.is-selected{background:var(--card);color:var(--foreground);box-shadow:var(--shadow-sm)}
+.jf-tab:focus-visible{outline:2px solid var(--ring);outline-offset:2px}
+.jf-footer{border-top:1px solid var(--border);background:var(--background);color:var(--text-secondary)}
+
+/* ---------- content ---------- */
+.jf-code{border:1px solid var(--border);border-radius:var(--radius-lg);background:var(--card);overflow:hidden}
+.jf-code__bar{display:flex;align-items:center;justify-content:space-between;gap:var(--space-3);padding:var(--space-3) var(--space-4);border-bottom:1px solid var(--border);background:var(--muted)}
+.jf-code__body{margin:0;padding:var(--space-4);font-family:var(--font-mono);font-size:var(--text-caption);line-height:var(--leading-normal);color:var(--text-secondary);overflow-x:auto;white-space:pre}
+.jf-quote{position:relative;padding:var(--card-pad-lg);border:1px solid var(--border);border-left:0;border-radius:var(--radius-xl);background:var(--card);box-shadow:var(--shadow-sm)}

@@ -1,0 +1,51 @@
+/* Julien Fernandes — typography tokens.
+   Anton = ALL heading levels (H1 -> H4) + display. 400 only, ALWAYS UPPERCASE,
+   never in a paragraph / button / label / form value, never below 1.125rem
+   (headings under that step drop back to DM Sans 700).
+   DM Sans = body & UI (400/500/600/700). JetBrains Mono = code, prompts, tech meta.
+   Scale is rem, px in comment. Never pin a px font-size on html/:root. */
+:root{
+  --font-display:'Anton','Impact','Haettenschweiler','Arial Narrow',sans-serif; /* @kind font */
+  --font-body:'DM Sans',system-ui,sans-serif;  /* @kind font */
+  --font-mono:'JetBrains Mono',ui-monospace,'SFMono-Regular',monospace; /* @kind font */
+
+  /* Type scale (rem, px in comment) */
+  --text-display-xl:4.5rem;   /* 72 — thumbnail / motion card. Range 4–8rem. ADDED */
+  --text-display:3.25rem;     /* 52 — site hero. Anton 400 CAPS */
+  --text-heading-xl:2.5rem;   /* 40 — H1. Anton 400 CAPS */
+  --text-heading:1.8125rem;   /* 29 — H2. Anton 400 CAPS */
+  --text-subheading:1.375rem; /* 22 — H3. Anton 400 CAPS */
+  --text-heading-sm:1.125rem; /* 18 — H4. Anton 400 CAPS. ADDED */
+  --text-body-lg:1.125rem;    /* 18 — DM Sans 400/500. Same size as H4, opposite tracking/leading */
+  --text-body:1rem;           /* 16 — DM Sans 400 */
+  --text-control:0.9375rem;   /* 15 — contrôles : boutons, champs, chips, onglets. FROM APP CODE */
+  --text-caption:0.8125rem;   /* 13 — DM Sans 500 */
+  --text-eyebrow:0.75rem;     /* 12 — DM Sans 600 CAPS, tracking .18em */
+  --text-chip:0.75rem;        /* 12 — DM Sans 700 CAPS, tracking .14em, leading 1 */
+
+  /* Tracking — em, follows the font size. Anton is already ultra-condensed, so its
+     tracking is LESS negative than Onest's -0.03em in Yunary. */
+  --tracking-display:-0.02em;    /* display-xl + display */
+  --tracking-heading-xl:-0.015em;
+  --tracking-heading:-0.01em;
+  --tracking-subheading:0em;
+  --tracking-heading-sm:0.01em;
+  --tracking-body-lg:-0.01em; /* body-lg only. FROM APP CODE */
+  --tracking-eyebrow:0.18em;
+  --tracking-chip:0.14em;
+  --tracking-dense:0.14em;    /* en-tête de colonne, tuile serrée. FROM APP CODE (same value as chip) */
+
+  /* Leading — unitless ratios. tight/snug/normal from Yunary;
+     display/heading/body ADDED — Anton in caps needs tighter leading than Onest. */
+  --leading-tight:1.1; --leading-snug:1.25; --leading-normal:1.5;
+  --leading-display:1.05; --leading-heading:1.12;
+  --leading-body:1.5;  /* interface body — FROM APP CODE (was 1.6) */
+  --leading-prose:1.7; /* colonne de lecture suivie (légal, article) — FROM APP CODE */
+
+  --weight-regular:400; --weight-medium:500; --weight-semibold:600; --weight-bold:700;
+}
+/* Responsive heading drop — FROM APP CODE: below Tailwind's lg (64rem) the two
+   title tiers step down one notch. Tokens only; desktop is untouched. */
+@media (width < 64rem){
+  :root{ --text-heading-xl:1.75rem; /* 28 */ --text-heading:1.625rem; /* 26 */ }
+}

@@ -1,0 +1,102 @@
+import { Avatar, GridBackground, Halo, Logo } from '@julienfernandes/ds';
+import { Block, Grid, Row, Section } from '../ui';
+
+export function BrandPage() {
+  return (
+    <div className="flex flex-col gap-space-7">
+      <Section title="Logo" note="Le mark est rendu en CSS : capitales Anton + point carré arrondi en dégradé, avec glow. Le point garde le dégradé sur tous les fonds ; seules les lettres s'inversent.">
+        <Block label="Variantes">
+          <Row label="wordmark"><Logo variant="wordmark" height="1.75rem" /></Row>
+          <Row label="stacked"><Logo variant="stacked" height="1.75rem" /></Row>
+          <Row label="monogram"><Logo variant="monogram" height="2.5rem" /></Row>
+        </Block>
+        <Block label="Tailles" hint="height pilote la hauteur du mark ; la taille de police en découle.">
+          <Row>
+            <Logo variant="wordmark" height="1rem" />
+            <Logo variant="wordmark" height="1.375rem" />
+            <Logo variant="wordmark" height="1.75rem" />
+            <Logo variant="wordmark" height="2.5rem" />
+          </Row>
+        </Block>
+        <Block label="Tons" hint="ink sur crème, bone sur ink. Sans tone, les lettres suivent --foreground.">
+          <Grid cols={2}>
+            <div className="flex items-center justify-center rounded-xl border border-border p-space-6" style={{ background: 'var(--cream)' }}>
+              <Logo variant="wordmark" tone="ink" height="1.75rem" />
+            </div>
+            <div className="flex items-center justify-center rounded-xl border border-border p-space-6" style={{ background: 'var(--ink)' }}>
+              <Logo variant="wordmark" tone="bone" height="1.75rem" />
+            </div>
+          </Grid>
+        </Block>
+      </Section>
+
+      <Section title="Halo" note="Dégradé radial chaud, ancré en bas, jamais plein écran. À poser dans une section position:relative, derrière le contenu.">
+        <Grid cols={3}>
+          <div className="relative overflow-hidden rounded-xl border border-border bg-card p-space-6">
+            <Halo placement="bottom" />
+            <div className="relative flex flex-col gap-space-2">
+              <span className="eyebrow">placement</span>
+              <h4>bottom</h4>
+            </div>
+          </div>
+          <div className="relative overflow-hidden rounded-xl border border-border bg-card p-space-6">
+            <Halo placement="top" />
+            <div className="relative flex flex-col gap-space-2">
+              <span className="eyebrow">placement</span>
+              <h4>top</h4>
+            </div>
+          </div>
+          <div className="relative overflow-hidden rounded-xl border border-border bg-card p-space-6">
+            <Halo placement="center" />
+            <div className="relative flex flex-col gap-space-2">
+              <span className="eyebrow">placement</span>
+              <h4>center</h4>
+            </div>
+          </div>
+        </Grid>
+        <Block label="intensity" hint="Multiplicateur d'opacité de 0 à 1.">
+          <Grid cols={3}>
+            {[0.35, 0.7, 1].map(i => (
+              <div key={i} className="relative overflow-hidden rounded-xl border border-border bg-card p-space-6">
+                <Halo intensity={i} />
+                <span className="relative mono text-caption text-text-muted">intensity={i}</span>
+              </div>
+            ))}
+          </Grid>
+        </Block>
+      </Section>
+
+      <Section title="Avatar" note="Les portraits sont toujours des découpes, placées bas, halo derrière les épaules. Aucun portrait n'est fourni : sans src, le composant retombe sur le monogramme muté.">
+        <Block label="Tailles et halo">
+          <Row>
+            <Avatar size="2.5rem" />
+            <Avatar size="3rem" />
+            <Avatar size="4rem" />
+            <Avatar size="6rem" />
+          </Row>
+          <Row label="halo={false}">
+            <Avatar size="3rem" halo={false} />
+            <Avatar size="4rem" halo={false} />
+          </Row>
+        </Block>
+      </Section>
+
+      <Section title="GridBackground" note="Maille 28px ou 80px, lignes 1px à 5,5 %. RÉSERVÉ aux miniatures YouTube et au motion — jamais sur le site, jamais dans l'UI, jamais sur les slides.">
+        <Block label="Sur --ink-deep" hint="Le seul contexte légitime : une surface de miniature ou de motion.">
+          <Grid cols={2}>
+            <div className="relative overflow-hidden rounded-xl p-space-7" style={{ background: 'var(--ink-deep)' }}>
+              <GridBackground cell="sm" />
+              <Halo hot />
+              <span className="relative mono text-caption" style={{ color: 'var(--cream)' }}>cell=&quot;sm&quot; · maille 28px</span>
+            </div>
+            <div className="relative overflow-hidden rounded-xl p-space-7" style={{ background: 'var(--ink-deep)' }}>
+              <GridBackground cell="lg" />
+              <Halo hot />
+              <span className="relative mono text-caption" style={{ color: 'var(--cream)' }}>cell=&quot;lg&quot; · maille 80px</span>
+            </div>
+          </Grid>
+        </Block>
+      </Section>
+    </div>
+  );
+}

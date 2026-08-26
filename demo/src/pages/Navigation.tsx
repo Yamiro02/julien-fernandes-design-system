@@ -1,0 +1,80 @@
+import { useState } from 'react';
+import { Button, Footer, Icon, IconButton, Navbar, Tabs } from '@julienfernandes/ds';
+import { Block, Row, Section } from '../ui';
+
+const LINKS = [{ label: 'Vidéos', active: true }, { label: 'Séries' }, { label: 'À propos' }];
+const SERIES = [
+  { value: 'all', label: 'Tout' },
+  { value: 'build', label: 'Build' },
+  { value: 'tuto', label: 'Tuto' },
+  { value: 'coulisses', label: 'Coulisses' },
+];
+
+export function NavigationPage() {
+  const [tab, setTab] = useState('build');
+
+  return (
+    <div className="flex flex-col gap-space-7">
+      <Section title="Navbar" note="Transparente au repos ; au scroll elle prend une teinte --card, un blur(10px) et une bordure filaire. Seul endroit du système qui utilise backdrop-filter.">
+        <Block label="Au repos">
+          <div className="overflow-x-auto rounded-xl border border-border">
+            <Navbar scrolled={false} links={LINKS} cta={<Button size="sm">La newsletter</Button>} />
+          </div>
+        </Block>
+        <Block label="État scrollé">
+          <div className="overflow-x-auto rounded-xl border border-border bg-card">
+            <Navbar scrolled links={LINKS} cta={<Button size="sm">La newsletter</Button>} />
+          </div>
+        </Block>
+        <Block label="Tons du logo" hint="tone est ink par défaut : sur une section ink il faut passer tone=&quot;bone&quot;, sinon les lettres restent sombres.">
+          <div className="dark overflow-x-auto rounded-xl border border-border bg-background">
+            <Navbar scrolled tone="bone" links={LINKS} cta={<Button size="sm">La newsletter</Button>} />
+          </div>
+          <div className="dark overflow-x-auto rounded-xl border border-border bg-background">
+            <Navbar scrolled tone="ink" links={LINKS} cta={<Button size="sm">La newsletter</Button>} />
+          </div>
+          <p className="caption">Le second exemple montre le défaut tone=&quot;ink&quot; sur fond ink — voir docs/CONFORMITE.md.</p>
+        </Block>
+      </Section>
+
+      <Section title="Tabs" note="Groupe d'onglets pill sur --muted. Le pill est légal ici — onglets, badges, compteurs.">
+        <Block label="Interactif">
+          <Row><Tabs items={SERIES} value={tab} onChange={setTab} /></Row>
+          <p className="caption">Onglet actif : {SERIES.find(s => s.value === tab)?.label}</p>
+        </Block>
+        <Block label="États">
+          <Row label="sélection sur chaque item">
+            <Tabs items={SERIES} value="all" onChange={() => undefined} />
+          </Row>
+          <Row label="survol forcé sur le deuxième item">
+            <div className="jf-tabs">
+              <button type="button" className="jf-tab" aria-selected="true">Tout</button>
+              <button type="button" className="jf-tab is-hover">Build</button>
+              <button type="button" className="jf-tab">Tuto</button>
+            </div>
+          </Row>
+        </Block>
+      </Section>
+
+      <Section title="Footer" note="La ligne de localisation utilise le point médian : Busan · Corée du Sud.">
+        <Block label="Complet" hint="Comme la Navbar, tone est ink par défaut — passe tone=&quot;bone&quot; sur une section ink.">
+          <div className="overflow-x-auto rounded-xl border border-border">
+            <Footer
+              tone="ink"
+              columns={[
+                { title: 'Séries', links: [{ label: 'Build' }, { label: 'Tuto' }, { label: 'Coulisses' }] },
+                { title: 'Ressources', links: [{ label: 'La newsletter' }, { label: 'Les prompts' }] },
+                { title: 'Marque', links: [{ label: 'À propos' }, { label: 'Contact' }] },
+              ]}
+              social={<>
+                <IconButton label="YouTube"><Icon name="youtube" /></IconButton>
+                <IconButton label="Instagram"><Icon name="instagram" /></IconButton>
+                <IconButton label="GitHub"><Icon name="github" /></IconButton>
+              </>}
+            />
+          </div>
+        </Block>
+      </Section>
+    </div>
+  );
+}
