@@ -110,15 +110,20 @@
   --pill-coral-fg:#f0916b; --pill-amber-fg:#e3b25c;
   --pill-danger-fg:#ec8f8f; --pill-warning-fg:#e0a25a; --pill-success-fg:#9ccc63;
   --pill-neutral-fg:#d4d1cb;
-  /* MÊME EXPRESSION qu'en :root, et il FAUT la répéter. Un jeton dont la valeur contient
-     var(X) est substitué sur l'élément où il est DÉCLARÉ, pas où il est employé. Déclaré
-     en :root seulement, ce fond résout var(--muted-foreground) contre le gris CLAIR et
-     hérite ce résultat figé dans toute section .dark IMBRIQUÉE — la pilule y prend un fond
-     tiré du gris clair. Le défaut ne se voit pas quand .dark est sur <html>, où :root et
-     .dark matchent le même élément : il n'apparaît que dans une section sombre au milieu
-     d'une page claire. Mesuré : 8,41 au lieu de 7,46.
-     C'est exactement le piège que l'en-tête de theme.css documente pour `@theme` nu.
-     Les cinq autres --pill-*-bg ne référencent que des jetons identiques dans les deux
-     thèmes (--primary, --brand-from) ou des littéraux : eux n'ont pas besoin de ça. */
+  /* MÊMES EXPRESSIONS qu'en :root, et il FAUT les répéter. Un jeton dont la valeur contient
+     var(X) est substitué sur l'élément où il est DÉCLARÉ, pas où il est employé. Déclarés en
+     :root seulement, ces deux fonds résolvent leur var() contre les valeurs CLAIRES et
+     héritent ce résultat figé dans toute section .dark IMBRIQUÉE. Le défaut ne se voit pas
+     quand .dark est sur <html>, où :root et .dark matchent le même élément : il n'apparaît
+     que dans une section sombre au milieu d'une page claire — la vitrine ne peut donc pas le
+     montrer. C'est le piège que l'en-tête de theme.css documente pour `@theme` nu.
+     · --pill-neutral-bg dépend de --muted-foreground, qui CHANGE : mesuré 8,41 au lieu de 7,46.
+     · --pill-coral-bg dépend de --primary, identique dans les deux thèmes CHEZ JULIEN — donc
+       sans effet aujourd'hui. Redéclaré quand même : dans un template, rien ne garantit que le
+       --primary sombre du client vaudra son --primary clair. check-dark-substitution.mjs ne
+       compare pas les valeurs, exprès.
+     Les quatre autres --pill-*-bg ne référencent que --brand-from, non redéclaré en .dark, ou
+     des littéraux. */
   --pill-neutral-bg:color-mix(in srgb,var(--muted-foreground) 12%,transparent);
+  --pill-coral-bg:color-mix(in srgb,var(--primary) 12%,transparent);
 }
