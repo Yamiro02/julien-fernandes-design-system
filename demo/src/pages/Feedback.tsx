@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Banner, Button, EmptyState, Icon, Progress, Skeleton, SkeletonCard, Spinner, Toast } from '@acme/ds';
+import { Banner, Button, EmptyState, Icon, Progress, Skeleton, SkeletonCard, Spinner, Toast } from '@julienfernandes/ds';
 import { Block, Grid, Row, Section, Stack } from '../ui';
 
 export function FeedbackPage() {

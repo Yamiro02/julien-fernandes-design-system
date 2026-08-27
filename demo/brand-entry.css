@@ -1,6 +1,5 @@
 /* LE MONTAGE DE LA VITRINE — socle + marque, exactement comme le ferait une app.
-
-   C'est LA LIGNE À CHANGER quand vous écrivez la marque du projet : remplacez
-   `brand-example.css` par votre `brand-<projet>.css`. Rien d'autre ne bouge. */
+   Dans le dépôt, ce fichier est demo/brand-entry.css et la SEULE ligne qui change au
+   portage est la seconde : brand-example.css -> brand-julien-fernandes.css. */
 @import '../src/styles/core.css';
-@import './../src/styles/brand-example.css';
+@import './../src/styles/brand-julien-fernandes.css';

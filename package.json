@@ -1,7 +1,7 @@
 {
-  "name": "@acme/ds",
+  "name": "@julienfernandes/ds",
   "version": "0.1.0",
-  "description": "Design system Acme — jetons, couche Tailwind v4 et primitives React.",
+  "description": "Design system Julien Fernandes — jetons, couche Tailwind v4 et primitives React.",
   "license": "UNLICENSED",
   "private": false,
   "type": "module",

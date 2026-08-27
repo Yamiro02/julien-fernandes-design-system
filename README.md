@@ -1,4 +1,4 @@
-# @acme/ds
+# @julienfernandes/ds
 
 **Un squelette de design system React, à remplir par projet.** Deux couches qui ne se
 mélangent pas : un **socle** générique — structure, comportements, échelles, rail de
@@ -12,8 +12,8 @@ monte une marque toute seule : celle qu'une app charge est visible dans son code
 implicite.
 
 ```ts
-import '@acme/ds/core.css';           // la structure, invariante
-import '@acme/ds/brand-example.css';  // la marque — remplacez-la par la vôtre
+import '@julienfernandes/ds/core.css';           // la structure, invariante
+import '@julienfernandes/ds/brand-example.css';  // la marque — remplacez-la par la vôtre
 ```
 
 ## Par où commencer
@@ -92,13 +92,13 @@ Socle plus marque. Deux lignes, pas une : c'est ce qui rend explicite la marque 
 
 ```ts
 // src/main.tsx — une app du projet
-import '@acme/ds/core.css';
-import '@acme/ds/brand-example.css';
+import '@julienfernandes/ds/core.css';
+import '@julienfernandes/ds/brand-example.css';
 ```
 
 ```ts
 // ou, pour un projet qui a sa propre marque
-import '@acme/ds/core.css';
+import '@julienfernandes/ds/core.css';
 import './brand-client.css';        // écrit à partir de brand.template.css
 ```
 
@@ -117,7 +117,7 @@ jetons et polices compris. L'import JS reste la voie recommandée : c'est celle 
 vitrine, donc celle qui est vérifiée à chaque version.
 
 **L'extension métier est à part et optionnelle.** `brand-content.css` et le sous-chemin
-`@acme/ds/brand-content` portent les halos de vignette et les icônes de plateformes : de
+`@julienfernandes/ds/brand-content` portent les halos de vignette et les icônes de plateformes : de
 quoi fabriquer une miniature ou une carte de motion, pas un écran. Une app d'interface ne
 les importe pas et ne perd rien.
 
@@ -129,7 +129,7 @@ ne le verrait pas.
 
 ```css
 /* src/index.css — l'entrée CSS de l'app */
-@import '@acme/ds/theme.css';
+@import '@julienfernandes/ds/theme.css';
 ```
 
 ```ts
@@ -166,7 +166,7 @@ aucune valeur.
 ### 3. Les composants
 
 ```tsx
-import { Button, Card, Icon } from '@acme/ds';
+import { Button, Card, Icon } from '@julienfernandes/ds';
 
 <Card variant="feature" size="lg">
   <h2>J'ai construit cette <span className="accent">app</span> en un week-end</h2>
@@ -182,9 +182,9 @@ Les outils internes desktop importent en plus un module d'échelle, qui adapte l
 par palier de largeur d'écran pour garder une mise en page effective proche de la maquette :
 
 ```ts
-import '@acme/ds/core.css';
-import '@acme/ds/brand-example.css';
-import '@acme/ds/app-scale.css';   // outils internes desktop uniquement
+import '@julienfernandes/ds/core.css';
+import '@julienfernandes/ds/brand-example.css';
+import '@julienfernandes/ds/app-scale.css';   // outils internes desktop uniquement
 ```
 
 Les paliers sont en **%** : ils multiplient la préférence de taille de texte du navigateur au lieu
@@ -230,7 +230,7 @@ de Tailwind, sur laquelle reposent les composants shadcn de ton app.
 > préfixe `text-`. Sans ça, `text-control` repasse **couleur** et disparaît du DOM au premier
 > conflit avec `text-foreground`.
 > ```ts
-> import { makeCn } from '@acme/ds';
+> import { makeCn } from '@julienfernandes/ds';
 > export const cn = makeCn(['tab', 'hero']);   // + text-tab, text-hero
 > ```
 > `cn` reste le raccourci quand il n'y a aucun palier à ajouter, et `PALIERS_TYPO` reste exporté
@@ -271,7 +271,7 @@ de Tailwind, sur laquelle reposent les composants shadcn de ton app.
 Tous sont exportés en nommé depuis la racine, avec leurs types :
 
 ```ts
-import { Button, type ButtonProps } from '@acme/ds';
+import { Button, type ButtonProps } from '@julienfernandes/ds';
 ```
 
 Les règles d'usage composant par composant sont dans [`docs/PROMPTS.md`](docs/PROMPTS.md).

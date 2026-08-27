@@ -12,7 +12,7 @@ ajoutez un composant, ajoutez sa section — le build vous le rappellera.
 Les exemples supposent les imports depuis la racine du paquet :
 
 ```tsx
-import { Button, Card, Icon } from '@acme/ds';
+import { Button, Card, Icon } from '@julienfernandes/ds';
 ```
 
 ---
@@ -88,7 +88,7 @@ L'atmosphère radiale de la marque. À poser dans une section `position:relative
 le contenu. Ancré en bas par défaut — jamais plein écran, jamais un grand aplat dégradé.
 
 **Ne pas l'utiliser** pour une miniature ou une carte de motion : ce halo-là est `HaloHot`,
-sur le sous-chemin optionnel `@acme/ds/brand-content`.
+sur le sous-chemin optionnel `@julienfernandes/ds/brand-content`.
 
 ```tsx
 <section style={{ position: 'relative', overflow: 'hidden' }}>
@@ -530,7 +530,7 @@ main. 47 glyphes typés (`IconName`) — un nom hors du type est une erreur Type
 c'est voulu.
 
 **Ne pas** chercher `youtube` ou `instagram` ici : les icônes de PLATEFORME vivent dans
-`ContentIcon`, sur le sous-chemin optionnel `@acme/ds/brand-content`. Et jamais
+`ContentIcon`, sur le sous-chemin optionnel `@julienfernandes/ds/brand-content`. Et jamais
 `sparkles` : l'étoile-éclair est bannie du set.
 
 ```tsx

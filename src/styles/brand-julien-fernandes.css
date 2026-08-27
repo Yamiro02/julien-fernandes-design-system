@@ -1,0 +1,251 @@
+/* ═══════════════════════════════════════════════════════════════════════════════
+   MARQUE — JULIEN FERNANDES.  Destination dans le dépôt : src/styles/brand-julien-fernandes.css
+
+   PORT, PAS RÉINTERPRÉTATION. Chaque valeur ci-dessous vient du kit maître (le projet
+   Claude Design « Julien Fernandes — Design System ») : tokens/colors.css, tokens/fonts.css,
+   tokens/scales.css, tokens/base.css, patterns.css. Zéro couleur inventée.
+   Les six valeurs que le maître ne portait pas sous ce nom sont DÉRIVÉES d'une valeur qu'il
+   porte déjà, et chacune est signalée « DÉRIVÉ » avec sa source. Rien d'autre n'est nouveau.
+
+   MONTAGE — deux imports, toujours :
+       @import "@julienfernandes/ds/core.css";        <- le socle, invariant
+       @import "./brand-julien-fernandes.css";        <- ce fichier
+
+   IDENTITÉ : crème chaude en clair, encre chaude en sombre. Orange RATIONNÉ — dégradé et
+   coral en accent seulement : logo, UN mot de titre, sur-titre, numéro d'étape, CTA
+   primaire, halo, lueur. Jamais un grand aplat, jamais un fond de page. Pas de bleu.
+   Pas de blanc ni de noir purs en surface (#ffffff est réservé aux contrôles posés sur la
+   mise en page en thème clair — bouton secondaire, navbar, barre d'onglets, champs).
+
+   VÉRIFIÉ :  TOKENS=src/styles/brand-julien-fernandes.css node check-contrast.mjs
+              node check-dark-substitution.mjs
+              node check-contract.mjs
+   ═══════════════════════════════════════════════════════════════════════════════ */
+
+/* ---------- 1 · POLICES ----------
+   DM Sans (texte et UI) via Google Fonts. Anton (display) et JetBrains Mono (code) sont
+   auto-hébergées depuis src/styles/assets/fonts/. Anton ne livre QU'UNE graisse : 400.
+   Jamais de faux-gras. */
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&display=swap');
+@font-face{font-family:'Anton';font-style:normal;font-weight:400;font-display:swap;src:url('./assets/fonts/Anton-400.woff2') format('woff2')}
+@font-face{font-family:'JetBrains Mono';font-style:normal;font-weight:400;font-display:swap;src:url('./assets/fonts/JetBrainsMono-400.woff2') format('woff2')}
+@font-face{font-family:'JetBrains Mono';font-style:normal;font-weight:500;font-display:swap;src:url('./assets/fonts/JetBrainsMono-500.woff2') format('woff2')}
+
+/* ---------- 2 · ÉCARTS D'ACCESSIBILITÉ ASSUMÉS ----------
+   Mesurés sur CETTE palette. Douze paires, trois familles, et les trois sont des décisions
+   de marque antérieures au portage — aucune n'est un oubli.
+     · le CTA porte le DÉGRADÉ (ambre -> corail) : aucun arrêt chaud ne tient 4,5:1 sous un
+       label blanc, c'est la définition même d'un dégradé chaud ;
+     · l'orange en TEXTE (sur-titre, mot-clé clippé) est rationné à quelques mots en gros
+       corps — jamais un paragraphe, jamais un lien : ces paires-là passent par
+       --primary-readable, qui tient partout (5,16 à 7,11) ;
+     · les CONTOURS DOUX (crème sur crème) : le système sépare ses surfaces à l'ombre et à
+       l'écart de luminance, pas au filet.
+   Le TEXTE courant, les liens, les libellés et les six pilules tiennent tous 4,5:1 dans les
+   deux thèmes — c'est là que la lisibilité se joue. */
+
+/* @a11y-assume: .ds-btn--primary — label sur --primary à plat
+   3,48:1. --primary #e85d2f est une couleur de REMPLISSAGE. Le CTA réel porte
+   --brand-gradient, pas cet aplat ; l'aplat sert de repli et de piste de switch. Toute
+   pose de la marque en TEXTE passe par --primary-readable (#b23a1c clair, 5,36 sur la
+   page). Atténué par un corps 15px/600 et une cible de 48px minimum. */
+
+/* @a11y-assume: .ds-btn--primary — label sur --brand-from (pire arrêt)
+   2,04:1. Ambre #f5a524 est l'arrêt CLAIR du dégradé de marque : il n'occupe que le bord
+   gauche du CTA et aucun label ne s'y superpose seul. Aucun ambre lisible sous blanc
+   n'existe sans quitter la marque. Atténué : le label est centré, donc sur --brand-via /
+   --brand-to, et le CTA porte en plus une lueur qui le détache de la page. */
+
+/* @a11y-assume: .ds-btn--primary — label sur --brand-via
+   2,68:1. Même dégradé, arrêt médian #f08029. Même raison. */
+
+/* @a11y-assume: .ds-btn--primary — label sur --brand-to
+   3,80:1. Même dégradé, arrêt corail #e84c3d — le plus foncé des trois, et celui sous le
+   centre du label. C'est la mesure réelle du CTA. Décision de marque : le dégradé chaud EST
+   l'identité, on ne l'assombrit pas pour gagner 0,7. */
+
+/* @a11y-assume: .ds-btn--danger — label sur --destructive
+   3,80:1. Corail sémantique #e84c3d sous label blanc. Le rouge foncé qui tiendrait 4,5
+   sortirait de la palette chaude et se confondrait avec l'encre. Atténué : jamais seul —
+   le danger est toujours couleur + icône + mot ("Supprimer"), et le texte de danger courant
+   passe par --destructive-readable (5,47 sur carte). */
+
+/* @a11y-assume: .ds-cal__day.is-selected
+   3,48:1. Le jour sélectionné est un aplat --primary sous chiffre blanc, 14px/600. Atténué :
+   le jour sélectionné est aussi le seul rempli de la grille — la forme porte l'information
+   autant que le contraste — et le jour du jour, lui, est en --primary-readable (5,16). */
+
+/* @a11y-assume: .eyebrow / .accent — dégradé clippé en texte
+   1,83:1 en clair. Le sur-titre et le mot-clé clippés en --brand-gradient piquent sur
+   l'arrêt ambre. C'est une propriété de la TECHNIQUE, pas de la palette. Atténué par la
+   règle de rationnement de la marque : UN mot de titre par vue, en display 40px+, jamais
+   un paragraphe ni un lien — et le sur-titre est doublé du titre juste dessous, qui porte
+   la même information en encre pleine. */
+
+/* @a11y-assume: .ds-input — bordure --input vs page
+   1,17:1. Contours doux : --input #e5e1da sur crème #f6f2ec. Le champ se lit à son
+   REMPLISSAGE (#ffffff, le seul blanc pur du thème clair, réservé aux contrôles), pas à son
+   filet. Atténué : au focus la bordure passe à --ring #e85d2f (3,12) et un anneau de 3px
+   apparaît. */
+
+/* @a11y-assume: .ds-input — bordure --input vs remplissage
+   1,30:1. Même filet, vu depuis l'intérieur du champ. Même raison. */
+
+/* @a11y-assume: .ds-input — remplissage vs page
+   1,12:1. Blanc pur sur crème : l'écart est petit par construction — c'est ce qui fait la
+   douceur du thème. Atténué : le champ porte un filet ET une hauteur de 48px, et sur une
+   carte il bascule sur --background (.ds-input--on-card) pour garder l'écart. */
+
+/* @a11y-assume: .ds-card — bordure --border vs page
+   1,17:1. La carte se distingue de la page par l'écart de surface (--card #faf7f2 sur
+   --background #f6f2ec) ET par --shadow-sm. Le filet est un ourlet, pas la séparation.
+   Décision de marque : pas de cartes cernées. */
+
+/* @a11y-assume: .ds-sep — filet --border sur --card
+   1,22:1. Un séparateur n'est pas un contrôle et ne porte aucune information seule : il
+   respire entre deux blocs qui, eux, se lisent. La variante .ds-sep--label porte son texte
+   en --text-muted (5,12 sur carte). */
+
+/* ---------- 3 · JETONS OBLIGATOIRES — L'IDENTITÉ ---------- */
+:root{
+  /* Surfaces & neutres chauds — crème. Écart page -> carte volontairement petit :
+     l'ombre et le rayon font le reste. */
+  --background:#f6f2ec; --foreground:#1f1e1c;
+  --card:#faf7f2; --card-foreground:#1f1e1c;
+  --popover:#faf7f2; --popover-foreground:#1f1e1c;
+  --secondary:#ffffff; --secondary-foreground:#1f1e1c;
+  --muted:#faf7f2; --muted-foreground:#6b6966;
+  --accent:#f6ede2; --accent-foreground:#1f1e1c;
+  --border:#e5e1da; --input:#e5e1da;
+
+  /* UN CRAN DE SÉPARATION. Le maître employait --accent (#f6ede2) pour les 13 survols, le
+     rail de progression et le point haut du shimmer : c'est exactement ce jeton-ci, et sa
+     valeur est donc portée telle quelle. Écart carte -> alt : 1,084 — la cible du contrat. */
+  --surface-alt:#f6ede2;
+
+  /* Neutres nommés — l'encre et le papier. Ce sont les --ink / --ink-soft / --cream /
+     --cream-alt du maître, sous les noms du contrat. */
+  --tone-dark:#1f1e1c; --tone-dark-soft:#2b2a28; --tone-light:#f6f2ec; --tone-light-alt:#faf7f2;
+  --text-secondary:#3d3c3a; --text-muted:#6b6966; --text-inverted:#f2efea;
+
+  /* Marque — remplissages. Orange rationné : accent seulement. */
+  --primary:#e85d2f; --primary-foreground:#ffffff;
+  --destructive:#e84c3d; --destructive-foreground:#ffffff;
+  --ring:#e85d2f;
+  --brand-from:#f5a524; --brand-via:#f08029; --brand-to:#e84c3d;
+  /* --brand-gradient et --brand-gradient-diagonal ne sont pas ici : le socle les calcule
+     depuis les trois arrêts, et ses formules (90° et 135°) sont AU CARACTÈRE PRÈS celles du
+     maître. Rien à redéclarer. */
+  --grad-soft:linear-gradient(135deg,rgba(245,165,36,.08),rgba(232,76,61,.06)); /* @kind color */
+  --gradient-halo:radial-gradient(60% 45% at 50% 100%, rgba(240,128,41,.30) 0%, rgba(232,76,61,.12) 45%, transparent 75%); /* @kind color */
+  /* DÉRIVÉ — mêmes arrêts que --gradient-halo, ancrage déplacé. Le maître ne portait que le
+     halo bas ; le socle demande les trois positions. Aucune couleur nouvelle. */
+  --gradient-halo-top:radial-gradient(60% 45% at 50% 0%, rgba(240,128,41,.30) 0%, rgba(232,76,61,.12) 45%, transparent 75%); /* @kind color */
+  --gradient-halo-center:radial-gradient(55% 55% at 50% 50%, rgba(240,128,41,.30) 0%, rgba(232,76,61,.12) 45%, transparent 75%); /* @kind color */
+
+  /* LES JUMEAUX LISIBLES. Le maître n'avait pas ces deux noms, mais il avait déjà les
+     valeurs : ce sont ses --pill-coral-fg et --pill-danger-fg, c'est-à-dire la marque rendue
+     lisible. Elles tiennent 4,69 à 5,47:1 sur les six porteuses, dans les deux thèmes. */
+  --primary-readable:#b23a1c;
+  --destructive-readable:#a32d2d;
+
+  /* Sémantique — les 6 pilules. Quatre fonds sur six sont calculés par le socle, et ses
+     formules sont celles du maître, identiques. */
+  --pill-coral-fg:#b23a1c;
+  --pill-amber-fg:#8a5a0a;
+  --pill-danger-bg:rgba(226,75,74,0.15);  --pill-danger-fg:#a32d2d;
+  --pill-warning-bg:rgba(240,128,41,0.18); --pill-warning-fg:#9a4f0b;
+  --pill-success-fg:#3b6d11;
+  /* DÉRIVÉ — le maître aliassait ce texte sur --muted-foreground (#6b6966), qui mesure
+     4,23:1 sur son propre fond de pilule : sous le seuil, et pour du 12px/700. Un cran
+     d'encre en plus (5,00 / 5,20) et la pilule neutre rejoint les cinq autres, qui ont
+     toutes leur valeur lisible dédiée. C'est la seule correction de valeur du portage. */
+  --pill-neutral-fg:#605e5a;
+  /* Le vert sémantique du maître, lu dans rgba(99,153,34,…) — le fond de la pilule success
+     et la bordure du bandeau de succès. */
+  --success:#639922;
+
+  /* Familles. Anton ne connaît que 400 : voir le régime de titrage ci-dessous. */
+  --font-display:'Anton','Arial Narrow',Impact,sans-serif;             /* @kind font */
+  --font-body:'DM Sans','Helvetica Neue',Helvetica,Arial,sans-serif;   /* @kind font */
+  --font-mono:'JetBrains Mono','SFMono-Regular',Consolas,monospace;    /* @kind font */
+
+  /* LE RÉGIME DE TITRAGE. Anton est une condensée à capitales : uppercase + 400. Le
+     mot-marque est lui aussi en capitales Anton — .ds-logo lit ces jetons et c'est
+     exactement ce qu'on veut : pas de surcharge. */
+  --heading-transform:uppercase;
+  --heading-weight:var(--weight-regular);
+
+  /* Relief de marque — la LUEUR. Ambre + corail, jamais neutre. */
+  --shadow-glow:0 6px 18px rgba(245,165,36,.30), 0 2px 6px rgba(232,76,61,.22);
+  --shadow-glow-lg:0 10px 28px rgba(245,165,36,.42), 0 4px 12px rgba(232,76,61,.30);
+  /* DÉRIVÉ — le maître l'écrivait en littéral dans .jf-btn--primary:active. Promu en jeton,
+     valeur inchangée. */
+  --shadow-glow-sm:0 2px 8px rgba(245,165,36,.25);
+  /* DÉRIVÉ — littéral de .jf-logo__dot dans le maître (tokens/base.css). Valeur inchangée. */
+  --shadow-logo-dot:0 0 12px rgba(240,128,41,.5);
+
+  /* ---------- MÉTIER — miniatures YouTube et cartes motion UNIQUEMENT ----------
+     Déclarés parce que la vitrine rend la page Marque. Une app d'interface ne les déclare
+     pas et n'importe pas brand-content.css : le noir profond et la grille fine n'entrent
+     jamais dans l'UI, le site ou les slides. */
+  --tone-deep:#0d0c0b;
+  /* Le maître portait deux littéraux sous ce nom : le premier, avec `closest-side` et un
+     centre à 110%, ne peint RIEN (rayon de 10% de la hauteur, centre sous la boîte) et il
+     était signalé comme tel ; le second, --gradient-thumbnail-fit, est celui que ses
+     gabarits emploient. C'est donc celui-ci qui est porté. */
+  --gradient-thumbnail:radial-gradient(70% 55% at 50% 100%, rgba(240,128,41,.55) 0%, rgba(232,76,61,.28) 45%, transparent 72%); /* @kind color */
+  /* DÉRIVÉ — géométrie du contrat, teinte du halo chaud du maître (rgb 240,128,41). */
+  --shadow-accent-hot:0 0 34px rgba(240,128,41,.65);
+}
+
+/* Les jetons dont la valeur DÉPEND DU THÈME — encre chaude. La marque garde son orange et
+   son label blanc dans les deux thèmes : --primary, --primary-foreground, --destructive et
+   les trois arrêts du dégradé ne bougent pas, donc les deux dégradés dérivés du socle et
+   les lueurs n'ont rien à rejouer ici. Seuls l'anneau de focus (ambre, plus visible sur
+   l'encre) et les jumeaux lisibles s'éclaircissent. */
+.dark{
+  --background:#1f1e1c; --foreground:#f2efea;
+  --card:#2b2a28; --card-foreground:#f2efea;
+  --popover:#2b2a28; --popover-foreground:#f2efea;
+  --secondary:#2b2a28; --secondary-foreground:#f2efea;
+  --muted:#2b2a28; --muted-foreground:#b0aea9;
+  --accent:#2b2a28; --accent-foreground:#f2efea;
+  --border:#3a3936; --input:#3a3936; --ring:#f5a524;
+  /* Un cran PLUS CLAIR que la carte en sombre — l'inverse du thème clair, même écart :
+     1,090 contre 1,084. Le maître employait --accent (#2b2a28) pour ses survols, donc la
+     même valeur que --card : sur fond sombre, survol invisible, rail de progression plat et
+     shimmer immobile. Un seul jeton, trois défauts fermés. */
+  --surface-alt:#32302d;
+  --text-secondary:#d2cfc9; --text-muted:#b0aea9; --text-inverted:#1f1e1c;
+  --primary:#e85d2f; --primary-foreground:#ffffff;
+  --destructive:#e84c3d; --destructive-foreground:#ffffff;
+  --primary-readable:#f0916b;
+  --destructive-readable:#ec8f8f;
+  --grad-soft:linear-gradient(135deg,rgba(245,165,36,.14),rgba(232,76,61,.10)); /* @kind color */
+  --pill-coral-fg:#f0916b;
+  --pill-amber-fg:#e3b25c;
+  --pill-danger-fg:#ec8f8f;
+  --pill-warning-fg:#e0a25a;
+  --pill-success-fg:#9ccc63;
+  /* Répété ici parce que le maître le portait déjà en littéral : la pilule neutre ne peut
+     pas hériter d'une encre claire dans une section sombre imbriquée. */
+  --pill-neutral-fg:#d4d1cb;
+}
+
+/* ---------- 4 · FACULTATIF — LA FORME ----------
+   RIEN À DÉCLARER, et c'est un RÉSULTAT, pas un oubli. Les trente-trois mesures du § sont
+   déjà, dans le socle, les valeurs du kit maître : l'échelle de rayons (6 · 10 · 12 · 20 ·
+   24 · 28 · pill), le rail de contrôles (48 · 44 sous 64rem · 52 pour le CTA héros), la
+   navbar à 72, le tiroir à 256 / 72, la modale à 380, le dropdown à 230, le toast 280–416,
+   la colonne de calendrier à 36, la case à cocher à 20 (rayon 7), le point du radio à 10,
+   le rail de progression à 8, les rayons propres à la barre d'onglets et à la pagination
+   à 14. Redéclarer une ligne ici ne ferait que réécrire la même valeur.
+
+   UNE SEULE DIVERGENCE, et elle est laissée au socle EXPRÈS — voir RAPPORT-PORTAGE.md :
+   --icon-control-sm / -md / -lg valent 38 / 42 / 48 dans le socle, contre 48 / 48 / 48 dans
+   le maître (les trois y étaient aliasés sur --control-md, donc un IconButton size="sm|md|lg"
+   rendait trois carrés identiques). Le socle a corrigé ce défaut avec les valeurs du kit
+   maître d'origine, d'avant l'alignement sur le rail. Porter le 48/48/48 le réintroduirait.
+   Si Julien veut malgré tout les trois carrés égaux, la ligne à décommenter est ici :
+   /* --icon-control-sm:var(--control-md); --icon-control-md:var(--control-md); --icon-control-lg:var(--control-md); */
