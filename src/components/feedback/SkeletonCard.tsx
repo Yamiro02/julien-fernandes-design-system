@@ -1,4 +1,4 @@
-import type { HTMLAttributes } from 'react';
+import type { HTMLAttributes, JSX } from 'react';
 import { Card } from '../data-display/Card';
 import { Skeleton } from './Skeleton';
 

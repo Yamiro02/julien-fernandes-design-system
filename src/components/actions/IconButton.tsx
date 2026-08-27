@@ -1,4 +1,4 @@
-import type { ButtonHTMLAttributes, ReactNode } from 'react';
+import type { ButtonHTMLAttributes, JSX, ReactNode } from 'react';
 import { cva } from 'class-variance-authority';
 
 /**

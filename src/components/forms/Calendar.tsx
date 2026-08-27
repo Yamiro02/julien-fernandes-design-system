@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import type { HTMLAttributes } from 'react';
+import type { HTMLAttributes, JSX } from 'react';
 import { cn } from '../../lib/cn';
 import { Icon } from '../icons/Icon';
 

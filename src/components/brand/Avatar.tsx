@@ -1,4 +1,4 @@
-import type { HTMLAttributes } from 'react';
+import type { HTMLAttributes, JSX } from 'react';
 import { cn } from '../../lib/cn';
 import { BRAND_MONOGRAM, BRAND_NAME } from '../../brand';
 

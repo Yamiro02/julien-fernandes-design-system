@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import type { ReactNode } from 'react';
+import type { JSX, ReactNode } from 'react';
 import { cn } from '../../lib/cn';
 import { Logo } from '../brand/Logo';
 import { BRAND_NAME } from '../../brand';

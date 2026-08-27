@@ -1,5 +1,5 @@
 import { forwardRef } from 'react';
-import type { InputHTMLAttributes } from 'react';
+import type { InputHTMLAttributes, JSX } from 'react';
 import { cn } from '../../lib/cn';
 
 /**

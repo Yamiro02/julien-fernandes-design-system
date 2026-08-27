@@ -1,4 +1,4 @@
-import type { CSSProperties, HTMLAttributes } from 'react';
+import type { CSSProperties, HTMLAttributes, JSX } from 'react';
 import { cn } from '../../lib/cn';
 
 /**

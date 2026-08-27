@@ -1,5 +1,5 @@
 import { forwardRef, useEffect, useRef } from 'react';
-import type { InputHTMLAttributes, ReactNode, Ref } from 'react';
+import type { InputHTMLAttributes, JSX, ReactNode, Ref } from 'react';
 import { cn } from '../../lib/cn';
 import { Icon } from '../icons/Icon';
 

@@ -1,4 +1,4 @@
-import type { ButtonHTMLAttributes, ElementType, ReactNode } from 'react';
+import type { ButtonHTMLAttributes, ElementType, JSX, ReactNode } from 'react';
 import { cva } from 'class-variance-authority';
 import { Spinner } from '../feedback/Spinner';
 

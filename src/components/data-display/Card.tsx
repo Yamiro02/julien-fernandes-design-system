@@ -1,4 +1,4 @@
-import type { ElementType, HTMLAttributes, ReactNode } from 'react';
+import type { ElementType, HTMLAttributes, JSX, ReactNode } from 'react';
 import { cva } from 'class-variance-authority';
 
 /**

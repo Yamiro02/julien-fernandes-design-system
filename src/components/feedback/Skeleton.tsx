@@ -1,4 +1,4 @@
-import type { HTMLAttributes } from 'react';
+import type { HTMLAttributes, JSX } from 'react';
 import { cn } from '../../lib/cn';
 
 /** Loading placeholder on --muted with a 1.4s shimmer. Sizes are rem strings. */

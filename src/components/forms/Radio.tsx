@@ -1,5 +1,5 @@
 import { forwardRef } from 'react';
-import type { InputHTMLAttributes, ReactNode } from 'react';
+import type { InputHTMLAttributes, JSX, ReactNode } from 'react';
 import { cn } from '../../lib/cn';
 
 /** Radio in a group — the only circular control in the system.

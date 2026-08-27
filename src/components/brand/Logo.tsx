@@ -1,4 +1,4 @@
-import type { CSSProperties, HTMLAttributes, ReactNode } from 'react';
+import type { CSSProperties, HTMLAttributes, JSX, ReactNode } from 'react';
 import { cn } from '../../lib/cn';
 import { BRAND_MONOGRAM, BRAND_WORDMARK_LINES } from '../../brand';
 

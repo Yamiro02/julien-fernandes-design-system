@@ -1,4 +1,4 @@
-import type { HTMLAttributes } from 'react';
+import type { HTMLAttributes, JSX } from 'react';
 import { cn } from '../../lib/cn';
 
 /** Rotating loading ring in currentColor. Lives inside Button via its `loading` prop. */

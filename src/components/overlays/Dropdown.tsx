@@ -1,4 +1,4 @@
-import type { HTMLAttributes, ReactNode } from 'react';
+import type { HTMLAttributes, JSX, ReactNode } from 'react';
 import { cn } from '../../lib/cn';
 
 /** Menu panel, radius 2xl, --shadow-lg. Items highlight on --accent. */

@@ -1,5 +1,5 @@
 import { forwardRef } from 'react';
-import type { TextareaHTMLAttributes } from 'react';
+import type { JSX, TextareaHTMLAttributes } from 'react';
 import { cn } from '../../lib/cn';
 
 /** Multi-line field. Auto height (no min-height), vertical resize only.

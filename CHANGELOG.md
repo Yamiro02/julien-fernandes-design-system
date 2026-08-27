@@ -9,6 +9,28 @@ concordent.
 
 ---
 
+## 0.5.1 — le paquet typecheck sous React 19
+
+Correctif de typage, sans changement de rendu ni d'API.
+
+**Le défaut**
+
+Les 37 composants annotaient leur retour `JSX.Element` **sans qualifier le namespace**.
+`@types/react@18` déclare un `JSX` **global**, si bien que le typecheck passait ici — mais
+React 19 a retiré ce global (il vit désormais sous `React.JSX`). Les `.d.ts` publiés
+portaient donc une référence à un namespace qui n'existe pas chez le consommateur : toute
+app en React 19 échouait au `tsc -b` avec 40 `TS2503: Cannot find namespace 'JSX'`.
+
+Le piège était silencieux dans les deux sens : le dépôt du design system typecheckait
+(il est en React 18) et le build Vite d'une app passait quand même (esbuild ne lit pas les
+types). Seul `npm run build` cassait — donc en général sur le serveur de CI, jamais en local.
+
+**Le correctif**
+
+`JSX` est désormais **importé depuis `react`** dans chaque composant qui l'annote. Ce
+namespace est exporté par le module `react` en **18.3 comme en 19** : le paquet reste
+compatible avec les deux, et ne dépend plus d'un global.
+
 ## 0.5.0 — marque Julien Fernandes portée, surfaces corrigées, paquet installable
 
 La marque Julien Fernandes est portée sur le squelette, et le paquet devient réellement

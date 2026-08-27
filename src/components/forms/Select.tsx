@@ -1,5 +1,5 @@
 import { forwardRef } from 'react';
-import type { SelectHTMLAttributes } from 'react';
+import type { JSX, SelectHTMLAttributes } from 'react';
 import { cn } from '../../lib/cn';
 import { Icon } from '../icons/Icon';
 

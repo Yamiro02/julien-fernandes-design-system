@@ -2,6 +2,7 @@ import type {
   HTMLAttributes, TableHTMLAttributes, TdHTMLAttributes, ThHTMLAttributes,
 } from 'react';
 import { cn } from '../../lib/cn';
+import type { JSX } from 'react';
 
 /**
  * Composable data table: Table > THead/TBody > Tr > Th/Td. Tokens only — typo caption

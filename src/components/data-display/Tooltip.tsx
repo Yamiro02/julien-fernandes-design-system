@@ -1,4 +1,4 @@
-import type { ReactNode } from 'react';
+import type { JSX, ReactNode } from 'react';
 import { cn } from '../../lib/cn';
 
 /** Ink bubble on hover/focus (cream bubble in dark). Short label only, no rich content. */

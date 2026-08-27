@@ -1,4 +1,4 @@
-import type { CSSProperties } from 'react';
+import type { CSSProperties, JSX } from 'react';
 import {
   ArrowDown, ArrowRight, ArrowUpRight, BookOpen, Calendar, Check, ChevronDown,
   ChevronLeft, ChevronRight, ChevronsLeft, ChevronsRight, CircleAlert, CircleCheck,

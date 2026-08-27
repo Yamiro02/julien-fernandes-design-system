@@ -1,5 +1,5 @@
 import { forwardRef } from 'react';
-import type { InputHTMLAttributes, ReactNode } from 'react';
+import type { InputHTMLAttributes, JSX, ReactNode } from 'react';
 import { cn } from '../../lib/cn';
 
 /** Binary toggle. Track 2.75rem x 1.625rem, pill radius, knob 1.25rem.

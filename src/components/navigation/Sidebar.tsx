@@ -1,5 +1,5 @@
 import { Fragment, useState } from 'react';
-import type { ElementType, HTMLAttributes, MouseEventHandler, ReactNode } from 'react';
+import type { ElementType, HTMLAttributes, JSX, MouseEventHandler, ReactNode } from 'react';
 import { cn } from '../../lib/cn';
 import { Logo } from '../brand/Logo';
 import { Icon } from '../icons/Icon';

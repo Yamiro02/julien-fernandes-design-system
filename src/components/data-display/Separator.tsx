@@ -1,4 +1,4 @@
-import type { HTMLAttributes, ReactNode } from 'react';
+import type { HTMLAttributes, JSX, ReactNode } from 'react';
 import { cn } from '../../lib/cn';
 
 /** Thin rule from --border. With `label`, renders the text centred on the line. */

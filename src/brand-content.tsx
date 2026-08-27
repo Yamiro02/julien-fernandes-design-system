@@ -14,7 +14,7 @@
  * ══════════════════════════════════════════════════════════════════════════════
  */
 import { Instagram, Youtube, type LucideIcon } from 'lucide-react';
-import type { CSSProperties } from 'react';
+import type { CSSProperties, JSX } from 'react';
 import { Glyph, type GlyphProps } from './components/icons/Icon';
 import { Halo, type HaloProps } from './components/brand/Halo';
 

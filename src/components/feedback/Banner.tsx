@@ -1,4 +1,4 @@
-import type { HTMLAttributes, ReactNode } from 'react';
+import type { HTMLAttributes, JSX, ReactNode } from 'react';
 import { cva } from 'class-variance-authority';
 import { Icon, type IconName } from '../icons/Icon';
 
