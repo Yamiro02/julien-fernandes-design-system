@@ -115,7 +115,9 @@
      l'ombre et le rayon font le reste. */
   --background:#f6f2ec; --foreground:#1f1e1c;
   --card:#faf7f2; --card-foreground:#1f1e1c;
-  --popover:#faf7f2; --popover-foreground:#1f1e1c;
+  /* Le popover FLOTTE au-dessus de la carte : blanc pur, 1,069 sur la carte crème.
+     Il rejoint --secondary — deux rôles qui ne se composent jamais entre eux. */
+  --popover:#ffffff; --popover-foreground:#1f1e1c;
   --secondary:#ffffff; --secondary-foreground:#1f1e1c;
   --muted:#f1ece4; --muted-foreground:#6b6966;
   --accent:#f6ede2; --accent-foreground:#1f1e1c;

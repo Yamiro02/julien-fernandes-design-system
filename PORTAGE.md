@@ -109,7 +109,7 @@ noms de classes ni la structure du DOM — la vitrine et les composants les lise
 **6 · Vérifie.** Trois commandes, trente secondes :
 
 ```bash
-npm run lint          # types + collisions d'utilitaires + substitution figée + contraste
+npm run lint          # types + collisions d'utilitaires + substitution figée + contraste + échelle de surfaces
 node check-contract.mjs   # aucun jeton du contrat oublié
 npm run demo          # et on regarde
 ```
@@ -134,8 +134,13 @@ qui garantit son contraste.
 **L'accent est rationné** — logo, un mot de titre, le sur-titre, le CTA, le halo. Jamais un
 grand aplat, jamais un fond de page.
 
-**Les surfaces se distinguent par de petits écarts.** Si `--card` vaut `--background`, les
-cartes disparaissent.
+**Les surfaces se distinguent par de petits écarts — et c'est MESURÉ.** Si `--card` vaut
+`--background`, les cartes disparaissent ; si `--muted`, `--secondary`, `--popover` ou
+`--accent` valent `--card`, c'est tout ce qui se pose SUR une carte qui disparaît — rayures
+de table, champ désactivé, barre d'onglets, dropdown, plaque de badge. `check-surfaces.mjs`
+mesure ces paires dans les deux thèmes et refuse tout écart sous seuil non assumé par écrit
+(`@surface-assume`). En sombre, vise l'échelle : page → muted → card → popover →
+surface-alt → secondary.
 
 **Les classes utilitaires suivent la marque.** Les jetons sont exposés à Tailwind en
 `@theme inline` : `rounded-lg` lit `var(--radius-lg)`, donc changer le jeton change toutes

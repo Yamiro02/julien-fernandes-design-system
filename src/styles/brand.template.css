@@ -86,7 +86,22 @@
 /* ---------- 3 · JETONS OBLIGATOIRES — L'IDENTITÉ ----------
    Aucun repli. Chaque ligne doit recevoir une valeur. */
 :root{
-  /* Surfaces & neutres — les six surfaces sur lesquelles tout se pose. */
+  /* Surfaces & neutres — les six surfaces sur lesquelles tout se pose.
+
+     LA RÈGLE DE L'ÉCHELLE, et elle est ABSOLUE : ces surfaces forment une échelle
+     ordonnée, jamais deux valeurs identiques parmi les paires qui se COMPOSENT —
+     muted sur card (rayures de table, champ désactivé), secondary sur card (champ,
+     barre d'onglets, pagination posés dans une carte), popover sur card (dropdown,
+     modale au-dessus d'une carte), accent sur card (plaque de badge et de bandeau),
+     card sur background. Un écart de luminance de 1,000 est STRICTEMENT invisible ;
+     sous ~1,04 il ne survit pas à un vrai écran. check-surfaces.mjs mesure ces paires
+     dans les DEUX thèmes et refuse tout écart sous seuil non assumé par écrit
+     (@surface-assume). Piège classique du thème sombre : les ombres n'y portent plus
+     l'élévation, donc si card = popover = secondary = muted, tout ce qui se pose SUR
+     une carte disparaît — c'est arrivé, neuf sites cassés, d'où ce contrôle.
+     En sombre, visez : page → muted → card → popover → surface-alt → secondary.
+     En clair : muted → background → card → popover/secondary. --accent n'est pas une
+     surface neutre : c'est la plaque de marque, TEINTÉE, dans les deux thèmes. */
   --background:; --foreground:;
   --card:; --card-foreground:;
   --popover:; --popover-foreground:;
