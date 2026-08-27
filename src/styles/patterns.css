@@ -71,6 +71,13 @@
 .ds-error{display:flex;align-items:center;gap:var(--space-2);font-size:var(--text-caption);font-weight:var(--weight-medium);color:var(--destructive-readable)}
 .ds-input{width:100%;min-height:var(--control-md);padding:0.6875rem 0.875rem;box-sizing:border-box;font-family:var(--font-body);font-size:var(--text-control);color:var(--foreground);background:var(--secondary);border:1.5px solid var(--input);border-radius:var(--radius-md);outline:none;transition:border-color var(--duration-base) var(--ease-standard),box-shadow var(--duration-base) var(--ease-standard)}
 .ds-input--on-card{background:var(--background)}
+/* Un champ DÉDUIT sa surface porteuse au lieu de l'attendre en prop. --secondary est le
+   remplissage d'un contrôle posé sur la MISE EN PAGE ; dans une carte, une modale, une
+   feuille ou un popover, la porteuse est plus claire que la page et le champ doit passer
+   SOUS elle, sur --background. Couvre Input, Textarea, Select et le déclencheur de
+   DatePicker (tous portent .ds-input). La prop surface="card" reste comme échappatoire
+   explicite, elle n'est plus une obligation. */
+.ds-card .ds-input,.ds-modal .ds-input,.ds-actionsheet .ds-input,.ds-dropdown .ds-input,.ds-datepicker__pop .ds-input{background:var(--background)}
 .ds-input--sm{min-height:var(--control-sm)}
 .ds-input--lg{min-height:var(--control-lg)}
 .ds-input::placeholder{color:var(--text-muted)}
@@ -269,14 +276,27 @@
 .ds-navbar__cta{display:flex;align-items:center;gap:var(--space-3)}
 .ds-navlink{font-size:var(--text-body);font-weight:var(--weight-medium);color:var(--text-secondary);text-decoration:none;padding:var(--space-2) 0;transition:color var(--duration-fast) var(--ease-standard)}
 .ds-navlink:hover,.ds-navlink.is-hover{color:var(--foreground)}
-.ds-navlink.is-active{color:var(--primary-readable)}
+/* L'item actif se signale par sa GRAISSE, pas par un libellé coloré : l'orange est
+   rationné, et le lien actif cessait d'être lisible comme du texte. */
+.ds-navlink.is-active{color:var(--foreground);font-weight:var(--weight-semibold)}
 .ds-tabs{display:inline-flex;align-items:center;gap:var(--space-1);padding:var(--space-1);border-radius:var(--tabs-radius);min-height:var(--control-md);box-sizing:border-box;background:var(--secondary);border:1px solid var(--border)}
 .ds-tabs--on-card{background:var(--background)}
 .ds-tab{appearance:none;border:0;background:transparent;color:var(--text-muted);font-family:var(--font-body);font-size:var(--text-control);font-weight:var(--weight-semibold);padding:var(--space-2) var(--space-4);border-radius:var(--radius-sm);cursor:pointer;transition:background-color var(--duration-fast) var(--ease-standard),color var(--duration-fast) var(--ease-standard)}
 .ds-tab:hover,.ds-tab.is-hover{color:var(--foreground)}
 .ds-tab[aria-selected="true"],.ds-tab.is-selected{background:var(--background);color:var(--foreground);box-shadow:var(--shadow-sm)}
+/* En SOMBRE, l'ombre ne porte plus l'élévation et --secondary est le sommet de l'échelle
+   des surfaces : un onglet actif posé en --background serait plus sombre que sa barre —
+   il se lirait comme un creux, pas comme une sélection. On monte AU-DESSUS de la barre en
+   mêlant l'encre au remplissage. Les barres posées sur une carte (règles ci-dessous, plus
+   spécifiques ou postérieures) gardent leur régime : barre en creux, actif au niveau carte. */
+.dark .ds-tab[aria-selected="true"],.dark .ds-tab.is-selected{background:color-mix(in srgb,var(--foreground) 12%,var(--secondary))}
 /* Sur une carte, la barre est en --background : l'onglet actif reprend --card pour garder l'écart. */
 .ds-tabs--on-card .ds-tab[aria-selected="true"],.ds-tabs--on-card .ds-tab.is-selected{background:var(--card)}
+/* La barre d'onglets DÉDUIT la carte comme le champ (même défaut d'opt-in que surface="card") :
+   posée dans une carte, elle se creuse en --background et son onglet actif remonte au niveau
+   de la carte. La prop onCard reste comme échappatoire explicite. */
+.ds-card .ds-tabs{background:var(--background)}
+.ds-card .ds-tabs .ds-tab[aria-selected="true"],.ds-card .ds-tabs .ds-tab.is-selected{background:var(--card)}
 .ds-tab:focus-visible{outline:2px solid var(--ring);outline-offset:2px}
 .ds-footer{border-top:1px solid var(--border);background:var(--background);color:var(--text-secondary)}
 .ds-footer__inner{display:flex;flex-wrap:wrap;gap:var(--space-7);justify-content:space-between;padding-block:var(--space-7)}
@@ -345,7 +365,13 @@
 .ds-sidebar.is-collapsed .ds-sidebar__title{display:none}
 .ds-sidenav{display:flex;align-items:center;gap:var(--space-3);min-height:var(--sidenav-h);padding:0 var(--space-3);border-radius:var(--radius-sm);border:0;background:transparent;color:var(--text-secondary);font-family:var(--font-body);font-size:var(--text-control);font-weight:var(--weight-medium);text-align:left;text-decoration:none;cursor:pointer;white-space:nowrap;transition:background-color var(--duration-fast) var(--ease-standard),color var(--duration-fast) var(--ease-standard)}
 .ds-sidenav:hover{background:var(--surface-alt);color:var(--foreground)}
-.ds-sidenav.is-active{background:var(--surface-alt);color:var(--primary-readable)}
+/* L'item actif se signale par sa GRAISSE et son ICÔNE, pas par un libellé coloré.
+   L'orange est rationné : une icône de 20 px le porte, une ligne de texte entière le
+   gaspille — et un libellé en encre pleine sur la plaque tient bien mieux son contraste.
+   L'icône passe par le jumeau lisible (--primary-readable), jamais par --primary : une
+   icône qui porte l'information de sélection est du contenu. */
+.ds-sidenav.is-active{background:var(--surface-alt);color:var(--foreground);font-weight:var(--weight-semibold)}
+.ds-sidenav.is-active svg{color:var(--primary-readable)}
 .ds-sidenav:focus-visible{outline:2px solid var(--ring);outline-offset:2px}
 .ds-sidebar.is-collapsed .ds-sidenav{justify-content:center;padding:0}
 .ds-sidebar.is-collapsed .ds-sidenav__label{display:none}

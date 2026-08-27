@@ -3,7 +3,8 @@ import { cn } from '../../lib/cn';
 
 /**
  * Segmented tab group on the control rail. The bar ALWAYS contrasts with its host
- * surface: --secondary on the page; set `onCard` when it sits on a Card (--background).
+ * surface: --secondary on the page; inside a Card the bar deduces --background by itself
+ * (patterns.css) — set `onCard` only for other containers that need the recessed regime.
  * Rectangle radii (0.875rem bar · --radius-sm tab) — never a pill, never blended in.
  */
 export interface TabItem { value: string; label: ReactNode }

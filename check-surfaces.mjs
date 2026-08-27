@@ -40,7 +40,7 @@ const PAIRES = [
   ['--card',        '--background', 1.04, 0,  'la carte sur la page'],
   ['--muted',       '--card',       1.04, 0,  'rayures de table, champ désactivé'],
   ['--secondary',   '--card',       1.04, 0,  'champ, barre d\'onglets, pagination dans une carte'],
-  ['--popover',     '--card',       1.04, 0,  'dropdown / modale au-dessus d\'une carte'],
+  ['--popover',     '--card',       1.03, 0,  'dropdown / modale au-dessus d\'une carte'], // 1,03 : la surface flottante porte AUSSI une ombre et une bordure
   ['--accent',      '--card',       1.04, 12, 'plaque de badge et de bandeau sur une carte'],
   ['--surface-alt', '--card',       1.03, 0,  'survol, rail de progression, shimmer sur une carte'],
   ['--surface-alt', '--secondary',  1.03, 0,  'survol d\'un contrôle secondaire'],
