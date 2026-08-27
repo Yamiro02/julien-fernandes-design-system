@@ -42,7 +42,7 @@ Le contrat porte donc deux **jumeaux lisibles** — la même marque, rendue lisi
 | `--destructive-readable` | `#a32d2d` | `#ec8f8f` | idem |
 
 Les lignes `a{}`, `.ds-navlink.is-active`, `.ds-error`, etc. du tableau § 2 mesurent ces
-jumeaux : de **5,16 à 7,11** selon la porteuse et le thème pour le primaire, de **6,07 à
+jumeaux : de **5,16 à 7,11** selon la porteuse et le thème pour le primaire, de **5,73 à
 6,62** pour le destructif. Le survol de lien ne demande pas de troisième jeton : il se
 **dérive** en tirant le jumeau vers `--foreground`
 (`color-mix(in srgb, var(--primary-readable) 80%, var(--foreground))`), ce qui ne peut
@@ -68,21 +68,21 @@ Une sortie vide = la règle tient. Aujourd'hui : vide.
 | `texte courant sur --card` | 16 / 400 | 4,5 | 15,59 | 12,50 |
 | `--text-secondary sur --card` | 16 / 400 | 4,5 | 10,31 | 9,22 |
 | `.caption — --text-muted sur --card` | 13 / 500 | 4,5 | 5,12 | 6,47 |
-| `.ds-input::placeholder` | 15 / 400 | 4,5 | 5,47 | 6,47 |
+| `.ds-input::placeholder` | 15 / 400 | 4,5 | 5,47 | 5,53 |
 | `.ds-tooltip__bubble` | 13 / 600 | 4,5 | 14,52 | 15,59 |
 | `a{} au repos sur --background` | 16 / 400 | 4,5 | 5,36 | 7,11 |
 | `a{} au repos sur --card` | 16 / 400 | 4,5 | 5,59 | 6,12 |
 | `a:hover — dérivé vers --foreground` | 16 / 400 | 4,5 | 6,76 | 8,21 |
-| `.ds-navlink.is-active` | 16 / 500 | 4,5 | 5,97 | 6,12 |
+| `.ds-navlink.is-active` | 16 / 500 | 4,5 | 5,97 | 5,24 |
 | `.ds-sidenav.is-active` | 15 / 500 | 4,5 | 5,16 | 5,62 |
-| `.ds-badge--accent` | 12 / 700 | 4,5 | 5,16 | 6,12 |
-| `.ds-banner--info` | 15 / 400 | 4,5 | 5,16 | 6,12 |
+| `.ds-badge--accent` | 12 / 700 | 4,5 | 5,16 | 5,85 |
+| `.ds-banner--info` | 15 / 400 | 4,5 | 5,16 | 5,85 |
 | `.ds-cal__day.is-today` | 14 / 700 | 4,5 | 5,59 | 6,12 |
 | `.ds-pastille--brand — icône` | icône | 3 | 5,30 | 4,66 |
-| `.ds-icon-btn[aria-pressed] — icône` | icône | 3 | 5,16 | 6,12 |
+| `.ds-icon-btn[aria-pressed] — icône` | icône | 3 | 5,16 | 5,85 |
 | `.ds-error` | 13 / 500 | 4,5 | 6,62 | 6,07 |
-| `.ds-dropdown__item--danger` | 14 / 400 | 4,5 | 6,62 | 6,07 |
-| `.ds-actionsheet__item--danger` | 15 / 500 | 4,5 | 6,62 | 6,07 |
+| `.ds-dropdown__item--danger` | 14 / 400 | 4,5 | 6,62 | 5,73 |
+| `.ds-actionsheet__item--danger` | 15 / 500 | 4,5 | 6,62 | 5,73 |
 | `.ds-badge--coral sur --card` | 12 / 700 | 4,5 | 4,90 | 5,32 |
 | `.ds-badge--coral sur --background` | 12 / 700 | 4,5 | 4,69 | 6,15 |
 | `.ds-badge--amber sur --card` | 12 / 700 | 4,5 | 4,99 | 5,35 |
@@ -101,7 +101,7 @@ Une sortie vide = la règle tient. Aujourd'hui : vide.
 | `.ds-choice coché — aplat --primary` | contrôle | 3 | 3,12 | 4,79 |
 | `.ds-switch actif — piste --primary` | contrôle | 3 | 3,12 | 4,79 |
 | `.ds-progress__bar sur son rail` | graphique | 3 | 3,00 | 3,78 |
-| `.ds-input.is-error — bordure --destructive` | contour 1.5px | 3 | 3,80 | 3,78 |
+| `.ds-input.is-error — bordure --destructive` | contour 1.5px | 3 | 3,80 | 3,23 |
 
 ---
 
@@ -124,9 +124,9 @@ Trois familles, et les trois sont des décisions de marque antérieures au porta
 | `.ds-btn--danger — label sur --destructive` | 15 / 600 | 4,5 | 3,80 ✗ | 3,80 ✗ |
 | `.ds-cal__day.is-selected` | 14 / 600 | 4,5 | 3,48 ✗ | 3,48 ✗ |
 | `.eyebrow / .accent — dégradé clippé en texte` | 12 / 600 | 4,5 | 1,83 ✗ | 8,16 |
-| `.ds-input — bordure --input vs page` | contour 1.5px | 3 | 1,17 ✗ | 1,44 ✗ |
-| `.ds-input — bordure --input vs remplissage` | contour 1.5px | 3 | 1,30 ✗ | 1,24 ✗ |
-| `.ds-input — remplissage vs page` | aplat | 3 | 1,12 ✗ | 1,16 ✗ |
+| `.ds-input — bordure --input vs page` | contour 1.5px | 3 | 1,17 ✗ | 1,82 ✗ |
+| `.ds-input — bordure --input vs remplissage` | contour 1.5px | 3 | 1,30 ✗ | 1,34 ✗ |
+| `.ds-input — remplissage vs page` | aplat | 3 | 1,12 ✗ | 1,36 ✗ |
 | `.ds-card — bordure --border vs page` | contour 1px | 3 | 1,17 ✗ | 1,44 ✗ |
 | `.ds-sep — filet --border sur --card` | filet 1px | 3 | 1,22 ✗ | 1,24 ✗ |
 
@@ -198,7 +198,7 @@ C'est un autre design.
 remplissage est le seul blanc pur du thème clair, réservé aux contrôles ; il a une
 hauteur de rail de 48 px, un libellé associé, un placeholder à 5,47:1, et **au focus** sa
 bordure passe à `--ring` (3,12 en clair, 8,16 en sombre) avec un anneau de 3 px. L'état
-d'erreur passe aussi, à 3,80 en clair et 3,78 en sombre. Sur une carte, le champ bascule
+d'erreur passe aussi, à 3,80 en clair et 3,23 en sombre. Sur une carte, le champ bascule
 sur `--background` (`.ds-input--on-card`) pour garder l'écart. La carte se distingue de
 la page par l'écart de surface ET par `--shadow-sm` — le filet est un ourlet, pas la
 séparation. Le séparateur ne porte aucune information seule, et sa variante
