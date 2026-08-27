@@ -13,31 +13,22 @@ html{font-size:103%}                             /* < 1600 — plancher, mise en
 /* Garde-fou desktop : 1100 × 1.03, en px VOLONTAIREMENT pour ne pas bouger avec le facteur. */
 body{min-width:1133px}
 
-/* ── Les trois paliers qui grossissent dans la bande haute ────────────────────
-   POURQUOI ICI, ET PAS DANS L'APP. Une app ne redéfinit JAMAIS un jeton du socle :
-   elle en déclare de nouveaux, sous des noms qui lui appartiennent. Redéfinir
-   `--text-caption` depuis son CSS, c'est modifier le design system par la cascade
-   plutôt que par le fichier — même violation, un détour de plus.
+/* ── Aucune retouche de palier typographique ici, et c'est le POINT ────────────
+   Ce fichier ne contient QUE les quatre bandes de zoom ci-dessus. Tout étant en rem,
+   changer la racine suffit : l'interface entière suit, sans qu'aucun palier n'ait à
+   être repris. Retoucher trois paliers par bande reviendrait à dire que le facteur ne
+   fait pas son travail.
 
-   Et c'est ici, pas dans tokens/typography.css, parce que ce grossissement est la
-   CONSÉQUENCE de la bande >= 2400 que ce fichier crée. Les séparer laisserait une
-   app importer le zoom sans sa contrepartie typographique, et le résultat serait la
-   moitié incohérente : une interface agrandie dont les plus petits paliers seraient
-   restés en arrière.
+   Une version précédente le faisait — eyebrow, subheading et caption grossis d'un cran
+   au-delà de 2400 px. Le réglage venait d'un constat fait à l'œil sur un 30 pouces, avec
+   une AUTRE app et un autre design system, et il n'a jamais été revérifié. Retiré : une
+   règle de système ne se fonde pas sur une observation qu'on ne peut plus reproduire.
 
-   CE QUI NE BOUGE PAS, délibérément : body, body-lg, control, heading, heading-xl.
-   Le facteur d'échelle est déjà calé pour la lisibilité du texte long ; le défaire
-   par la bande n'aurait pas de sens. Seuls les paliers de METADONNEE grossissent —
-   surtitres, légendes, titres de section — parce qu'un facteur global les laisse
-   proportionnellement trop discrets sur un très grand écran.
+   LES SEULES media queries légitimes du socle sont celles du seuil MOBILE (64 rem), et
+   elles répondent à des contraintes que le rem ne peut pas résoudre : la largeur physique
+   d'un écran et la taille d'un doigt. Un titre de 40 px sur un téléphone de 390 px passe
+   à la ligne quatre fois, quelle que soit la racine. C'est le même seuil que celui de
+   l'ActionSheet, de la Modal en feuille du bas et des cibles tactiles à 44 px.
 
-   Interligne et interlettrage ne sont PAS redéclarés : ceux du barème sont sans
-   unité ou en em, ils suivent la taille d'eux-mêmes. Les valeurs sont arrondies à
-   des rem propres, pas multipliées par un facteur. */
-@media (min-width:2400px){
-  :root{
-    --text-eyebrow:0.8125rem;   /* 12 -> 13 */
-    --text-subheading:1.5rem;   /* 22 -> 24 */
-    --text-caption:0.875rem;    /* 13 -> 14 */
-  }
-}
+   Si un jour un palier paraît réellement trop discret sur un très grand écran, il se
+   corrige ICI — mais sur une observation reproductible, pas sur un souvenir. */

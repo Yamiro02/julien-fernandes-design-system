@@ -13,6 +13,32 @@ concordent.
 
 ---
 
+---
+
+## 0.5.5 — `app-scale.css` ne retouche plus aucun palier typographique
+
+La 0.5.4 faisait descendre dans le socle un grossissement de trois paliers de métadonnée
+au-delà de 2400 px. **Le bon endroit, mais la mauvaise règle.**
+
+Tout étant en `rem`, changer la racine suffit : l'interface entière suit. Retoucher trois
+paliers par bande revenait à dire que le facteur d'échelle ne fait pas son travail — et à
+réintroduire, palier par palier, exactement le responsive que le `rem` sert à éviter.
+
+Le réglage venait d'un constat fait **à l'œil, sur un 30 pouces, avec une autre app et un
+autre design system**, jamais revérifié depuis. Une règle de système ne se fonde pas sur une
+observation qu'on ne peut plus reproduire.
+
+**Ce qui reste, et qui est légitime : le seuil mobile à 64 rem.** Il répond à des contraintes
+que le `rem` ne peut pas résoudre — la largeur physique d'un écran et la taille d'un doigt.
+Un titre de 40 px sur un téléphone de 390 px passe à la ligne quatre fois quelle que soit la
+racine. C'est le même seuil que celui de l'`ActionSheet`, de la `Modal` en feuille du bas, du
+scrim de l'`AppShell` et des cibles tactiles à 44 px : une seule décision, cinq endroits
+cohérents.
+
+`app-scale.css` ne contient donc plus que ses quatre bandes de zoom. Si un palier paraît un
+jour réellement trop discret sur un très grand écran, il se corrigera ici — sur une
+observation reproductible.
+
 ## 0.5.4 — le grossissement typographique de la bande haute rentre dans le socle
 
 `app-scale.css` crée quatre paliers de zoom, dont une bande au-delà de 2400 px. Trois
