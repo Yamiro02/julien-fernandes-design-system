@@ -17,6 +17,49 @@ concordent.
 
 ---
 
+---
+
+## 0.7.0 — le dégradé partout où la marque se remplit, et la barre latérale qui colle
+
+### Cinq remplissages passent de l'aplat au dégradé
+
+`--primary` remplissait encore la case à cocher (cochée et indéterminée), la pastille du
+radio, la piste de l'interrupteur, et le jour sélectionné du calendrier. Tous portent
+désormais `--brand-gradient`.
+
+C'est la suite directe de la 0.6.0, et la même doctrine — celle que la marque énonce
+elle-même : « `--primary` est une couleur de REMPLISSAGE. Le CTA réel porte
+`--brand-gradient`, pas cet aplat. » Le socle l'appliquait aux boutons, puis à la barre de
+progression ; il la tient maintenant partout où un contrôle se remplit de la marque.
+L'aplat reste ce que la marque dit qu'il est : un repli et une piste.
+
+Le contour des cases cochées passe à `--brand-to`, l'arrêt le plus soutenu — un contour
+dégradé sur 1 px ne se lirait pas.
+
+### La barre latérale colle, au-dessus du seuil mobile
+
+`.ds-appshell` est une grille en `align-items:stretch` : la cellule de la barre s'étirait à
+la hauteur du **document**. Sur une page longue, le logo et la navigation sortaient donc de
+l'écran au défilement — ce qu'une coque d'outil ne doit pas faire, et ce qui forçait les
+apps à réécrire leur propre barre.
+
+Au-dessus de 64,0625 rem, `.ds-sidebar` est désormais `position:sticky; top:0;
+height:100dvh; align-self:start`. **`align-self:start` est indispensable** : le `stretch` de
+la grille annulerait le `sticky` sans lui. Le document continue de défiler normalement, ce
+qui laisse fonctionner les barres `sticky top-0` des écrans sans compensation de décalage.
+Sous le seuil, la barre redevient un tiroir, inchangée.
+
+### L'icône de l'item de nav actif porte `--brand-via`
+
+Elle était en `--primary-readable`. Elle porte l'arrêt **médian** du dégradé.
+
+⚠️ **Écart de contraste assumé et mesuré : 2,29:1 en clair, 5,34:1 en sombre.** En thème
+clair l'icône est donc pâle — c'est un choix de marque, pas un oubli, et il est écrit en
+regard de la règle. Ce qui le rend tenable : l'état actif est déjà porté par le **fond** et
+par la **graisse** du libellé, lequel reste en `--foreground`. L'icône est un renfort
+décoratif, jamais le seul porteur de l'information. Repli si l'écart déplaît :
+`--primary-readable` (5,09).
+
 ## 0.6.0 — la barre de progression porte le dégradé de marque
 
 `.ds-progress__bar` remplissait en `--primary`, un aplat. Il porte désormais

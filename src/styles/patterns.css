@@ -95,17 +95,17 @@
 .ds-choice__box--radio{border-radius:var(--radius-pill)}
 .ds-choice__box>*{opacity:0;transition:opacity var(--duration-fast) var(--ease-standard)}
 .ds-choice:hover .ds-choice__box,.ds-choice.is-hover .ds-choice__box{border-color:var(--primary)}
-.ds-choice input:checked+.ds-choice__box,.ds-choice.is-checked .ds-choice__box{background:var(--primary);border-color:var(--primary)}
+.ds-choice input:checked+.ds-choice__box,.ds-choice.is-checked .ds-choice__box{background:var(--brand-gradient);border-color:var(--brand-to)}
 .ds-choice input:checked+.ds-choice__box>*,.ds-choice.is-checked .ds-choice__box>*{opacity:1}
 .ds-choice input:checked+.ds-choice__box--radio,.ds-choice.is-checked .ds-choice__box--radio{background:var(--background)}
 /* Indéterminée — la case d'en-tête d'une sélection partielle : remplie comme cochée, mais
    un trait (minus) à la place de la coche. La propriété DOM `indeterminate` est posée par
    le composant via sa ref ; le CSS ne lit que la classe. */
-.ds-choice.is-indeterminate .ds-choice__box{background:var(--primary);border-color:var(--primary)}
+.ds-choice.is-indeterminate .ds-choice__box{background:var(--brand-gradient);border-color:var(--brand-to)}
 .ds-choice.is-indeterminate .ds-choice__box>*{opacity:1}
 .ds-choice input:focus-visible+.ds-choice__box,.ds-choice.is-focus .ds-choice__box{box-shadow:0 0 0 3px color-mix(in srgb,var(--ring) 35%,transparent)}
 .ds-choice.is-disabled{opacity:.5;cursor:not-allowed}
-.ds-choice__dot{width:var(--choice-dot);height:var(--choice-dot);border-radius:var(--radius-pill);background:var(--primary)}
+.ds-choice__dot{width:var(--choice-dot);height:var(--choice-dot);border-radius:var(--radius-pill);background:var(--brand-gradient)}
 .ds-switch{display:inline-flex;align-items:center;gap:0.5625rem;cursor:pointer;font-size:var(--text-body-sm);position:relative}
 .ds-switch input{position:absolute;opacity:0;width:0;height:0}
 /* Mesures en jetons (--switch-*) : la course du knob en DÉCOULE (calc), elle n'est plus un
@@ -116,7 +116,7 @@
    se teinte vers --primary ; cochée, la règle :checked ci-dessous (plus spécifique, ou
    plus tardive pour .is-checked) garde le plein --primary. */
 .ds-switch:hover .ds-switch__track,.ds-switch.is-hover .ds-switch__track{background:color-mix(in srgb,var(--primary) 30%,var(--border))}
-.ds-switch input:checked+.ds-switch__track,.ds-switch.is-checked .ds-switch__track{background:var(--primary)}
+.ds-switch input:checked+.ds-switch__track,.ds-switch.is-checked .ds-switch__track{background:var(--brand-gradient)}
 .ds-switch input:checked+.ds-switch__track .ds-switch__knob,.ds-switch.is-checked .ds-switch__knob{transform:translateX(calc(var(--switch-w) - var(--switch-knob) - var(--switch-inset) * 2))}
 .ds-switch input:focus-visible+.ds-switch__track,.ds-switch.is-focus .ds-switch__track{box-shadow:0 0 0 3px color-mix(in srgb,var(--ring) 35%,transparent)}
 .ds-switch.is-disabled{opacity:.5;cursor:not-allowed}
@@ -358,6 +358,16 @@
 
 /* ---------- appshell / sidebar ---------- */
 .ds-appshell{display:grid;grid-template-columns:auto 1fr;align-items:stretch;min-height:100%}
+/* AU-DESSUS DU SEUIL MOBILE, la barre COLLE et tient la hauteur de la fenêtre.
+   Sans ça, la cellule de grille s'étire à la hauteur du DOCUMENT : sur une page longue, le
+   logo et la navigation sortent de l'écran au défilement — précisément ce qu'une coque
+   d'outil ne doit pas faire. `align-self:start` est indispensable : `align-items:stretch`
+   de la grille annulerait le `sticky` sans lui.
+   Le document défile normalement, ce qui laisse fonctionner les barres `sticky top-0` des
+   écrans sans compensation de décalage. Sous le seuil, la barre redevient un tiroir. */
+@media (min-width:64.0625rem){
+  .ds-appshell .ds-sidebar{position:sticky;top:0;align-self:start;height:100dvh}
+}
 .ds-appshell__main{min-width:0}
 .ds-sidebar{display:flex;flex-direction:column;gap:var(--space-2);width:var(--sidebar-w);background:var(--secondary);border-right:1px solid var(--border);padding:var(--space-4);box-sizing:border-box;transition:width var(--duration-base) var(--ease-standard)}
 .ds-sidebar.is-collapsed{width:var(--sidebar-w-collapsed);padding-inline:var(--space-3)}
@@ -377,7 +387,14 @@
    L'icône passe par le jumeau lisible (--primary-readable), jamais par --primary : une
    icône qui porte l'information de sélection est du contenu. */
 .ds-sidenav.is-active{background:var(--surface-alt);color:var(--foreground);font-weight:var(--weight-semibold)}
-.ds-sidenav.is-active svg{color:var(--primary-readable)}
+/* L'ICÔNE de l'item actif porte --brand-via, l'arrêt MÉDIAN du dégradé.
+   ⚠️ ÉCART DE CONTRASTE ASSUMÉ, mesuré : 2,29:1 en clair sur --surface-alt, 5,34:1 en
+   sombre. En clair, l'icône est donc PÂLE — c'est un choix de marque, pas un oubli.
+   Ce qu'il faut savoir avant de le « corriger » : l'état actif est déjà porté par le FOND
+   et par la GRAISSE du libellé, et le libellé lui-même reste en --foreground. L'icône est
+   un renfort décoratif, jamais le seul porteur de l'information — c'est ce qui rend
+   l'écart tenable. Le jour où il déplaît, --primary-readable (5,09) est le repli. */
+.ds-sidenav.is-active svg{color:var(--brand-via)}
 .ds-sidenav:focus-visible{outline:2px solid var(--ring);outline-offset:2px}
 .ds-sidebar.is-collapsed .ds-sidenav{justify-content:center;padding:0}
 .ds-sidebar.is-collapsed .ds-sidenav__label{display:none}
@@ -404,7 +421,7 @@
 .ds-cal__day{appearance:none;border:0;background:transparent;width:var(--cal-day);height:var(--cal-day);display:inline-flex;align-items:center;justify-content:center;border-radius:var(--radius-sm);font-family:var(--font-body);font-size:var(--text-body-sm);color:var(--foreground);cursor:pointer;transition:background-color var(--duration-fast) var(--ease-standard),color var(--duration-fast) var(--ease-standard)}
 .ds-cal__day:hover:not(:disabled):not(.is-selected){background:var(--surface-alt)}
 .ds-cal__day.is-today{color:var(--primary-readable);font-weight:var(--weight-bold)}
-.ds-cal__day.is-selected{background:var(--primary);color:var(--primary-foreground);font-weight:var(--weight-semibold)}
+.ds-cal__day.is-selected{background:var(--brand-gradient);color:var(--primary-foreground);font-weight:var(--weight-semibold)}
 .ds-cal__day:disabled{opacity:.35;cursor:not-allowed}
 .ds-cal__day:focus-visible{outline:2px solid var(--ring);outline-offset:2px}
 .ds-datepicker{position:relative;display:inline-block;width:100%}
