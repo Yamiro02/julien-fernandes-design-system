@@ -12,3 +12,32 @@ html{font-size:103%}                             /* < 1600 — plancher, mise en
 @media (min-width:2400px){html{font-size:130%}}  /* ≥ 2400 — ~1969, prix assumé du dézoom */
 /* Garde-fou desktop : 1100 × 1.03, en px VOLONTAIREMENT pour ne pas bouger avec le facteur. */
 body{min-width:1133px}
+
+/* ── Les trois paliers qui grossissent dans la bande haute ────────────────────
+   POURQUOI ICI, ET PAS DANS L'APP. Une app ne redéfinit JAMAIS un jeton du socle :
+   elle en déclare de nouveaux, sous des noms qui lui appartiennent. Redéfinir
+   `--text-caption` depuis son CSS, c'est modifier le design system par la cascade
+   plutôt que par le fichier — même violation, un détour de plus.
+
+   Et c'est ici, pas dans tokens/typography.css, parce que ce grossissement est la
+   CONSÉQUENCE de la bande >= 2400 que ce fichier crée. Les séparer laisserait une
+   app importer le zoom sans sa contrepartie typographique, et le résultat serait la
+   moitié incohérente : une interface agrandie dont les plus petits paliers seraient
+   restés en arrière.
+
+   CE QUI NE BOUGE PAS, délibérément : body, body-lg, control, heading, heading-xl.
+   Le facteur d'échelle est déjà calé pour la lisibilité du texte long ; le défaire
+   par la bande n'aurait pas de sens. Seuls les paliers de METADONNEE grossissent —
+   surtitres, légendes, titres de section — parce qu'un facteur global les laisse
+   proportionnellement trop discrets sur un très grand écran.
+
+   Interligne et interlettrage ne sont PAS redéclarés : ceux du barème sont sans
+   unité ou en em, ils suivent la taille d'eux-mêmes. Les valeurs sont arrondies à
+   des rem propres, pas multipliées par un facteur. */
+@media (min-width:2400px){
+  :root{
+    --text-eyebrow:0.8125rem;   /* 12 -> 13 */
+    --text-subheading:1.5rem;   /* 22 -> 24 */
+    --text-caption:0.875rem;    /* 13 -> 14 */
+  }
+}

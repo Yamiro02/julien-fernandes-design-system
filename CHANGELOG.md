@@ -11,6 +11,32 @@ concordent.
 
 ---
 
+---
+
+## 0.5.4 — le grossissement typographique de la bande haute rentre dans le socle
+
+`app-scale.css` crée quatre paliers de zoom, dont une bande au-delà de 2400 px. Trois
+paliers de **métadonnée** — `eyebrow`, `subheading`, `caption` — y grossissent d'un cran :
+un facteur d'échelle global les laisse proportionnellement trop discrets sur un très grand
+écran, là où le corps de texte, lui, est déjà à la bonne taille.
+
+**Ce réglage vivait dans le CSS d'une app.** C'était une erreur de couche : redéfinir
+`--text-caption` depuis l'app, c'est modifier le design system par la cascade au lieu de le
+modifier par son fichier — même violation de la règle « le DS est en lecture seule », avec
+un détour de plus. Une app **déclare** des jetons sous des noms qui lui appartiennent ; elle
+n'en **redéfinit** jamais un qui existe déjà ici.
+
+Et c'est dans `app-scale.css`, pas dans `tokens/typography.css`, parce que le grossissement
+est la **conséquence** de la bande que ce fichier crée. Les séparer laisserait une app
+importer le zoom sans sa contrepartie : une interface agrandie dont les plus petits paliers
+seraient restés en arrière.
+
+**Ne bougent pas, délibérément** : `body`, `body-lg`, `control`, `heading`, `heading-xl`.
+Interligne et interlettrage ne sont pas redéclarés — sans unité ou en `em`, ils suivent la
+taille d'eux-mêmes.
+
+Aucun changement pour une app qui n'importe pas `app-scale.css` : il reste opt-in.
+
 ## 0.5.3 — le paquet se construit avec lucide v1
 
 `Icon` importait `Github` de lucide-react, et `brand-content` importait `Youtube` et
