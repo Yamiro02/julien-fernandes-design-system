@@ -1,6 +1,6 @@
 {
   "name": "@julienfernandes/ds",
-  "version": "0.5.1",
+  "version": "0.5.2",
   "description": "Design system Julien Fernandes — jetons, couche Tailwind v4 et primitives React.",
   "license": "UNLICENSED",
   "private": false,
@@ -64,8 +64,8 @@
     "class-variance-authority": "^0.7.1"
   },
   "devDependencies": {
-    "@types/react": "^18.3.12",
-    "@types/react-dom": "^18.3.1",
+    "@types/react": "^19.0.0",
+    "@types/react-dom": "^19.0.0",
     "lucide-react": "^0.469.0",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",

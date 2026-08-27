@@ -68,7 +68,10 @@ function deverrouiller(): void {
  */
 export function useModalSurface({
   open = true, locked = false, onClose, inline = false, initialFocus = 'container',
-}: ModalSurfaceOptions): RefObject<HTMLDivElement> {
+}: ModalSurfaceOptions): RefObject<HTMLDivElement | null> {
+  /* Le | null n'est pas décoratif : depuis @types/react 19, useRef<T>(null) rend
+     RefObject<T | null> — l'annotation sans null ne compile plus sous 19, et elle
+     reste correcte sous 18 (où RefObject<T>.current était déjà nullable). */
   const ref = useRef<HTMLDivElement>(null);
 
   /* `onClose` est presque toujours une lambda inline (`onClose={() => setOpen(false)}`) :

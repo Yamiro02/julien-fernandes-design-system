@@ -9,6 +9,19 @@ concordent.
 
 ---
 
+## 0.5.2 — useModalSurface aligné sur les types React 19
+
+`useModalSurface` annotait son retour `RefObject<HTMLDivElement>` ; depuis
+`@types/react` 19, `useRef<T>(null)` rend `RefObject<T | null>` et l'annotation ne
+compile plus sous 19. Élargie en `RefObject<HTMLDivElement | null>` — correcte sous
+18 comme sous 19. Aligne le socle sur le template maître, qui typecheck désormais
+contre les types 19 et a attrapé ce cas à la pose du garde-fou.
+Même garde-fou posé ici : devDependencies `@types/react` / `@types/react-dom` en ^19 —
+le typecheck du dépôt attrape désormais tout typage 18-only ; runtime et peers inchangés
+(`react >=18`).
+
+---
+
 ## 0.5.1 — le paquet typecheck sous React 19
 
 Correctif de typage, sans changement de rendu ni d'API.
