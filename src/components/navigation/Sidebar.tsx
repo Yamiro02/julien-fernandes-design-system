@@ -23,6 +23,20 @@ export interface SidebarProps extends HTMLAttributes<HTMLElement> {
   sections?: SidebarSection[];
   /** Sidebar footer — typically Avatar + name. */
   footer?: ReactNode;
+  /**
+   * Des entrées posées EN PIED, rendues exactement comme celles de la navigation.
+   *
+   * POURQUOI ELLES NE PASSENT PAS PAR `footer`. Ce slot-là est une rangée horizontale à
+   * filet haut, calibrée pour « avatar + nom ». Une app qui y met une déconnexion ou un
+   * accès aux réglages doit alors redessiner l'apparence d'une entrée — donc s'appuyer sur
+   * `.ds-sidenav`, une classe INTERNE, que le socle peut renommer sans prévenir. Le besoin
+   * est pourtant universel : toute coque d'outil pose en bas ce qui n'est pas une
+   * destination de contenu.
+   *
+   * Elles empruntent le MÊME rendu que `sections` — même classe, même état actif, même
+   * `linkAs`. Elles ne peuvent donc pas diverger : c'est le point.
+   */
+  footerItems?: SidebarItem[];
   /** La marque, en tête, quand la barre est DÉPLIÉE. Défaut : le `Logo` en mot-marque. */
   brand?: ReactNode;
   /** La marque quand la barre est REPLIÉE. Défaut : le `Logo` en monogramme. */
@@ -58,7 +72,7 @@ export interface SidebarProps extends HTMLAttributes<HTMLElement> {
 }
 
 export function Sidebar({
-  sections = [], footer, brand, brandCollapsed, collapsible = true, defaultCollapsed,
+  sections = [], footer, footerItems = [], brand, brandCollapsed, collapsible = true, defaultCollapsed,
   storageKey = 'ds-sidebar-collapsed',
   open = false, onClose, staticLayout = false, linkAs, className = '', children, ...rest
 }: SidebarProps): JSX.Element {
@@ -71,6 +85,29 @@ export function Sidebar({
     try { localStorage.setItem(storageKey, n ? '1' : '0'); } catch { /* stockage indisponible */ }
     return n;
   });
+  /* LE rendu d'une entrée — partagé par la navigation ET le pied. Les deux passent
+     forcément par ici : c'est ce qui rend une divergence impossible. */
+  const rendreEntree = (it: SidebarItem): JSX.Element => {
+    /* Avec `linkAs`, la destination part en `to` — la prop des routeurs clients. Sans lui,
+       on retombe sur `<a href>`, et sans destination du tout sur un `<button>`. */
+    const Tag = (it.href ? (linkAs ?? 'a') : 'button') as ElementType;
+    const destination = it.href
+      ? (linkAs ? { to: it.href } : { href: it.href })
+      : { type: 'button' as const };
+    return (
+      <Tag
+        key={it.label}
+        {...destination}
+        className={cn('ds-sidenav', it.active && 'is-active')}
+        aria-current={it.active ? 'page' : undefined}
+        title={collapsed ? it.label : undefined}
+        onClick={it.onClick}
+      >
+        {it.icon}<span className="ds-sidenav__label">{it.label}</span>
+      </Tag>
+    );
+  };
+
   return (
     <Fragment>
       {open ? <div className="ds-appshell__scrim" onClick={onClose} /> : null}
@@ -98,30 +135,13 @@ export function Sidebar({
           {sections.map((s, i) => (
             <Fragment key={i}>
               {s.title ? <span className="ds-sidebar__title">{s.title}</span> : null}
-              {(s.items || []).map(it => {
-                /* Avec `linkAs`, la destination part en `to` — la prop des routeurs
-                   clients. Sans lui, on retombe sur `<a href>`, et sans destination
-                   du tout sur un `<button>`. */
-                const Tag = (it.href ? (linkAs ?? 'a') : 'button') as ElementType;
-                const destination = it.href
-                  ? (linkAs ? { to: it.href } : { href: it.href })
-                  : { type: 'button' as const };
-                return (
-                  <Tag
-                    key={it.label}
-                    {...destination}
-                    className={cn('ds-sidenav', it.active && 'is-active')}
-                    aria-current={it.active ? 'page' : undefined}
-                    title={collapsed ? it.label : undefined}
-                    onClick={it.onClick}
-                  >
-                    {it.icon}<span className="ds-sidenav__label">{it.label}</span>
-                  </Tag>
-                );
-              })}
+              {(s.items || []).map(rendreEntree)}
             </Fragment>
           ))}
         </nav>
+        {footerItems.length ? (
+          <div className="ds-sidebar__footnav">{footerItems.map(rendreEntree)}</div>
+        ) : null}
         {footer ? <div className="ds-sidebar__foot">{footer}</div> : null}
         {children}
       </aside>

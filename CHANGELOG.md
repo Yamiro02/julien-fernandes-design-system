@@ -21,6 +21,28 @@ concordent.
 
 ---
 
+---
+
+## 0.7.2 — `Sidebar` porte des entrées en pied
+
+Nouvelle prop `footerItems`, de même forme que les entrées de `sections`.
+
+**Le manque qu'elle comble.** Le slot `footer` est une rangée horizontale à filet haut,
+calibrée pour « avatar + nom ». Une app qui veut y poser une déconnexion ou un accès aux
+réglages devait donc redessiner elle-même l'apparence d'une entrée — c'est-à-dire s'appuyer
+sur `.ds-sidenav`, une classe **interne** que le socle peut renommer sans prévenir. Le
+besoin est pourtant universel : toute coque d'outil pose en bas ce qui n'est pas une
+destination de contenu.
+
+Les entrées de pied empruntent **le même rendu** que celles de la navigation — même classe,
+même état actif, même `linkAs`. Le rendu d'une entrée a été extrait en une fonction unique
+que les deux traversent : elles ne *peuvent* plus diverger, et c'est le point.
+
+Nouveau `.ds-sidebar__footnav` : une colonne d'entrées séparée par un filet, distincte de
+`.ds-sidebar__foot` qui reste la rangée « avatar + nom ». Les deux cohabitent.
+
+Aucune app existante n'est affectée : sans `footerItems`, le rendu est identique.
+
 ## 0.7.1 — `Sidebar` accepte le lien d'un routeur client
 
 Nouvelle prop `linkAs` sur `Sidebar`. Défaut inchangé : `'a'`.
