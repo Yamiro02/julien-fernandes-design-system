@@ -19,6 +19,32 @@ concordent.
 
 ---
 
+---
+
+## 0.7.1 — `Sidebar` accepte le lien d'un routeur client
+
+Nouvelle prop `linkAs` sur `Sidebar`. Défaut inchangé : `'a'`.
+
+**Le mur qu'elle abat.** Une entrée portant un `href` était rendue en `<a href>` nu. Dans
+une app à routeur client — react-router, TanStack Router — chaque clic **rechargeait la page
+entière**. Il ne restait qu'à passer `onClick` sans `href`, ce qui rend un `<button>` : la
+navigation fonctionne, mais l'entrée cesse d'être un lien — plus de clic-milieu, plus
+d'« ouvrir dans un onglet », et un lecteur d'écran annonce un bouton là où il devrait
+annoncer un lien.
+
+Le composant était donc inutilisable dans son cas d'usage principal, et chaque app finissait
+par réécrire sa barre — ce qui vide un design system de son sens.
+
+```tsx
+<Sidebar linkAs={NavLink} sections={[{ items: [{ label: 'Accueil', href: '/' }] }]} />
+```
+
+`href` arrive au composant en **`to`**, la prop que ces routeurs attendent tous.
+`className`, `aria-current` et l'état actif restent calculés par le socle : il garde la main
+sur l'apparence et l'accessibilité, l'app ne fournit que la mécanique de navigation.
+
+Aucune app existante n'est affectée : sans `linkAs`, le rendu est identique.
+
 ## 0.7.0 — le dégradé partout où la marque se remplit, et la barre latérale qui colle
 
 ### Cinq remplissages passent de l'aplat au dégradé

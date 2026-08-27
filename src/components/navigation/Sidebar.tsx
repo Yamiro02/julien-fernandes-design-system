@@ -38,12 +38,29 @@ export interface SidebarProps extends HTMLAttributes<HTMLElement> {
   onClose?: () => void;
   /** Opt out of the fixed-drawer behaviour (demos, embedded shells). */
   staticLayout?: boolean;
+  /**
+   * Le composant qui rend une entrée PORTANT UN `href`. Défaut : `'a'`.
+   *
+   * POURQUOI IL EXISTE. Une app à routeur client — react-router, TanStack Router — ne peut
+   * pas se servir d'un `<a href>` nu : chaque clic RECHARGERAIT la page entière. Sans ce
+   * point d'accroche il ne restait qu'à passer `onClick` sans `href`, ce qui rend un
+   * `<button>` : la navigation marche, mais l'entrée cesse d'être un lien — plus de
+   * clic-milieu, plus d'« ouvrir dans un onglet », et un lecteur d'écran annonce un bouton
+   * là où il devrait annoncer un lien. Le composant devenait alors inutilisable dans son
+   * cas d'usage principal, et chaque app réécrivait sa barre.
+   *
+   * L'app passe son propre lien — `linkAs={NavLink}` — et `href` lui arrive en `to`, la
+   * prop que ces routeurs attendent tous. `className` et `aria-current` restent calculés
+   * ici : le socle garde la main sur l'apparence et l'accessibilité, l'app ne fournit que
+   * la mécanique de navigation.
+   */
+  linkAs?: ElementType;
 }
 
 export function Sidebar({
   sections = [], footer, brand, brandCollapsed, collapsible = true, defaultCollapsed,
   storageKey = 'ds-sidebar-collapsed',
-  open = false, onClose, staticLayout = false, className = '', children, ...rest
+  open = false, onClose, staticLayout = false, linkAs, className = '', children, ...rest
 }: SidebarProps): JSX.Element {
   const [collapsed, setCollapsed] = useState<boolean>(() => {
     if (defaultCollapsed !== undefined) return defaultCollapsed;
@@ -82,11 +99,17 @@ export function Sidebar({
             <Fragment key={i}>
               {s.title ? <span className="ds-sidebar__title">{s.title}</span> : null}
               {(s.items || []).map(it => {
-                const Tag = (it.href ? 'a' : 'button') as ElementType;
+                /* Avec `linkAs`, la destination part en `to` — la prop des routeurs
+                   clients. Sans lui, on retombe sur `<a href>`, et sans destination
+                   du tout sur un `<button>`. */
+                const Tag = (it.href ? (linkAs ?? 'a') : 'button') as ElementType;
+                const destination = it.href
+                  ? (linkAs ? { to: it.href } : { href: it.href })
+                  : { type: 'button' as const };
                 return (
                   <Tag
                     key={it.label}
-                    {...(it.href ? { href: it.href } : { type: 'button' })}
+                    {...destination}
                     className={cn('ds-sidenav', it.active && 'is-active')}
                     aria-current={it.active ? 'page' : undefined}
                     title={collapsed ? it.label : undefined}
