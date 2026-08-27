@@ -55,7 +55,7 @@ géométrique. Si un pixel chaud apparaît, une valeur de marque est restée dan
 Pas de registry : chaque app épingle une version par un tag git.
 
 ```bash
-npm i github:Yamiro02/julien-fernandes-design-system#v0.5.2
+npm i github:Yamiro02/julien-fernandes-design-system#v0.5.3
 ```
 
 Cinq **peer dependencies**, à la charge de l'app :

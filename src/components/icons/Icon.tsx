@@ -3,11 +3,12 @@ import {
   ArrowDown, ArrowRight, ArrowUpRight, BookOpen, Calendar, Check, ChevronDown,
   ChevronLeft, ChevronRight, ChevronsLeft, ChevronsRight, CircleAlert, CircleCheck,
   CircleX, Clock, Code, Copy, Dumbbell, Ellipsis, ExternalLink, Eye, FileText, Folder,
-  Github, Info, LayoutDashboard, LoaderCircle, Mail, Menu, MessageSquare, Minus,
+  Info, LayoutDashboard, LoaderCircle, Mail, Menu, MessageSquare, Minus,
   PanelLeft, Play, Plus, Quote, Rocket, Search, Settings, SlidersHorizontal,
   Terminal, Trash2, TrendingUp, TriangleAlert, User, Video, X, Zap,
   type LucideIcon,
 } from 'lucide-react';
+import { Github } from './brand-glyphs';
 
 /**
  * Lucide icon renderer — the ONLY icon system in this design system.

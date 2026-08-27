@@ -9,6 +9,32 @@ concordent.
 
 ---
 
+---
+
+## 0.5.3 — le paquet se construit avec lucide v1
+
+`Icon` importait `Github` de lucide-react, et `brand-content` importait `Youtube` et
+`Instagram`. **lucide-react a retiré toutes ses icônes de marque en v1** — décision
+juridique, pas régression : ces logos sont des marques déposées.
+
+Ces imports étant au niveau du **module**, le bundle du paquet cassait chez toute app en
+lucide v1, y compris une app qui ne s'en sert jamais :
+`MISSING_EXPORT "Github" is not exported by lucide-react`. Le peer `lucide-react: ">=0.400"`
+était devenu faux, et le symptôme n'apparaissait qu'au `vite build` de l'app — jamais ici,
+où le dépôt est en 0.469.
+
+**Le correctif.** Les trois tracés sont désormais écrits dans le socle
+(`src/components/icons/brand-glyphs.ts`) et reconstruits par `createLucideIcon`, l'usine que
+lucide expose toujours. **Aucune bibliothèque ajoutée** : ce sont les coordonnées, relevées
+sur lucide 0.469, la dernière version à les livrer. Le résultat reste un `LucideIcon`
+ordinaire, qui traverse le même `Glyph` — mêmes règles de taille et d'épaisseur.
+
+**L'API publique ne bouge pas** : `<Icon name="github" />` et `ContentIcon` fonctionnent à
+l'identique. Le peer redevient vrai — le socle marche avec n'importe quelle version de lucide.
+
+Contrepartie assumée : ces trois dessins sont à nous. Si une de ces marques change son logo,
+c'est ici qu'on le met à jour ; aucune mise à jour de lucide ne le fera plus.
+
 ## 0.5.2 — useModalSurface aligné sur les types React 19
 
 `useModalSurface` annotait son retour `RefObject<HTMLDivElement>` ; depuis

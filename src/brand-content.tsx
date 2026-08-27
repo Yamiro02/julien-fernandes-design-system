@@ -13,7 +13,8 @@
  * vides, et c'est le comportement voulu : un manque doit se voir.
  * ══════════════════════════════════════════════════════════════════════════════
  */
-import { Instagram, Youtube, type LucideIcon } from 'lucide-react';
+import type { LucideIcon } from 'lucide-react';
+import { Instagram, Youtube } from './components/icons/brand-glyphs';
 import type { CSSProperties, JSX } from 'react';
 import { Glyph, type GlyphProps } from './components/icons/Icon';
 import { Halo, type HaloProps } from './components/brand/Halo';
