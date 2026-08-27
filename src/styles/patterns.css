@@ -79,6 +79,22 @@
    barre d'onglets, menu déroulant, bouton secondaire. Une surface se lit à son écart avec
    ce qui la porte, jamais dans l'absolu. */
 .ds-card .ds-btn--secondary,.ds-modal .ds-btn--secondary,.ds-actionsheet .ds-btn--secondary,.ds-dropdown .ds-btn--secondary,.ds-card .ds-icon-btn--secondary,.ds-modal .ds-icon-btn--secondary{background:var(--background)}
+
+/* L'ÉCHAPPATOIRE À LA DÉDUCTION — le jumeau exact de .ds-input--on-card, et pour la même
+   raison. La règle ci-dessus prévoit UN niveau d'imbrication : un bouton posé sur une carte.
+   Une app qui pose un PANNEAU --background DANS une carte — une ligne de fichier, une tuile,
+   un encadré — casse la déduction : le bouton reçoit --background, soit exactement la couleur
+   de son panneau, et disparaît. Constaté dans une app, invisible depuis ce dépôt : la vitrine
+   ne posait aucun panneau dans une carte. Elle en pose un depuis la v0.11.0.
+   La prop `surface` tranche à la main. « page » rend --secondary, la couleur d'un bouton posé
+   à même le layout ; « card » force --background hors d'une vraie .ds-card, pour un conteneur
+   qui n'en a que l'apparence. « auto » (défaut) ne pose aucune classe et laisse la déduction
+   faire : rien ne change pour le code existant.
+   LES DEUX SÉLECTEURS VALENT 0,2,0, comme la déduction, et arrivent APRÈS elle : ils gagnent.
+   Le survol est à 0,3,0 — il continue de passer devant les deux, la réponse au pointeur est
+   intacte. Ne pas les réécrire en un seul sélecteur de classe : ils repasseraient dessous. */
+.ds-btn--secondary.ds-btn--on-page,.ds-icon-btn--secondary.ds-icon-btn--on-page{background:var(--secondary)}
+.ds-btn--secondary.ds-btn--on-card,.ds-icon-btn--secondary.ds-icon-btn--on-card{background:var(--background)}
 .ds-btn:disabled,.ds-btn.is-disabled{opacity:.5;cursor:not-allowed;transform:none}
 .ds-btn.is-loading{cursor:progress}
 .ds-spin{animation:ds-spin var(--duration-rotate) linear infinite;flex:none}

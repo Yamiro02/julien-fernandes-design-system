@@ -34,10 +34,19 @@ navigation dans du texte (un `<a>` suffit).
 <Button variant="danger" icon={<Icon name="triangle-alert" />}>Supprimer</Button>
 <Button loading>Génération…</Button>
 <Button as="a" href="/inscription">S'inscrire</Button>
+<Button variant="secondary" surface="page">Dans un panneau posé dans une Card</Button>
 ```
 
-- Props : `variant` (`primary·secondary·ghost·danger`) · `size` (`sm·md·lg`) · `icon` /
-  `iconRight` · `loading` (spinner + désactivé) · `fullWidth` · `as` / `href`.
+- Props : `variant` (`primary·secondary·ghost·danger`) · `size` (`sm·md·lg`) · `surface`
+  (`auto·page·card`) · `icon` / `iconRight` · `loading` (spinner + désactivé) · `fullWidth`
+  · `as` / `href`.
+- **`surface` est l'échappatoire à la déduction**, jumelle de celle d'`Input`. Un bouton
+  `secondary` dans une `Card` prend `--background` tout seul, pour se détacher de sa
+  porteuse. Mais si l'app pose un **panneau `--background` DANS la carte** — une ligne de
+  fichier, une tuile, un encadré — la déduction le peint de la couleur de ce panneau et il
+  disparaît : `surface="page"` lui rend `--secondary`. `surface="card"` fait l'inverse,
+  hors d'une vraie `.ds-card`. `auto` (défaut) ne change rien. Sans effet sur `ghost`,
+  `primary` et `danger`, qui ne portent pas `--secondary`.
 - Rayon toujours `--radius-md`. **Jamais un pill** — le pill est réservé aux badges.
 - Rail partagé : min-height 3rem (2.75rem sous 64rem). `lg` (3.25rem) = CTA de héros.
 - États rendus : repos, hover (lueur + translateY), pressé, focus-visible, désactivé,
@@ -57,7 +66,8 @@ qu'il fait le dit.
 ```
 
 - Props : `variant` (`primary·secondary·ghost·danger`, défaut `ghost`) · `size`
-  (`sm·md·lg`) · `label` (requis).
+  (`sm·md·lg`) · `surface` (`auto·page·card`) · `label` (requis).
+- `surface` a le même rôle et les mêmes valeurs que sur `Button` — voir sa section.
 - Carré sur son propre rail (`--icon-control-*`), rayon `--radius-md`, jamais un pill.
 - États rendus : repos, hover, pressé (`aria-pressed` = actif), focus-visible, désactivé.
 

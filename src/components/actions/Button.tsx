@@ -12,6 +12,17 @@ export interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   variant?: 'primary' | 'secondary' | 'ghost' | 'danger';
   /** Shared control rail: every size has min-height 3rem (2.75rem under 64rem); sm tightens padding + type; lg (3.25rem) is the hero CTA. */
   size?: 'sm' | 'md' | 'lg';
+  /**
+   * The surface the button sits on — the escape hatch to the surface deduction of
+   * patterns.css, and the exact twin of Input's `surface`. `auto` (default) lets the
+   * deduction do its job: a secondary button inside a Card / Modal / ActionSheet /
+   * Dropdown fills with --background so it detaches from its carrier. `page` forces
+   * --secondary — for a secondary button sitting on a --background PANEL nested inside a
+   * card, where the deduction would paint it the colour of that panel. `card` forces
+   * --background outside of a real .ds-card, e.g. in a container that only looks like one.
+   * Only `secondary` carries a fill: ghost, primary and danger ignore this prop.
+   */
+  surface?: 'auto' | 'page' | 'card';
   /** Leading icon node — use <Icon />. */
   icon?: ReactNode;
   /** Trailing icon node. */
@@ -36,18 +47,19 @@ const button = cva('ds-btn', {
       danger: 'ds-btn--danger',
     },
     size: { sm: 'ds-btn--sm', md: 'ds-btn--md', lg: 'ds-btn--lg' },
+    surface: { auto: '', page: 'ds-btn--on-page', card: 'ds-btn--on-card' },
     fullWidth: { true: 'ds-btn--block', false: '' },
     loading: { true: 'is-loading', false: '' },
   },
-  defaultVariants: { variant: 'primary', size: 'md', fullWidth: false, loading: false },
+  defaultVariants: { variant: 'primary', size: 'md', surface: 'auto', fullWidth: false, loading: false },
 });
 
 export function Button({
-  variant = 'primary', size = 'md', icon, iconRight, loading = false,
+  variant = 'primary', size = 'md', surface = 'auto', icon, iconRight, loading = false,
   disabled = false, fullWidth = false, as, className = '', children, ...rest
 }: ButtonProps): JSX.Element {
   const Tag = (as ?? 'button') as ElementType;
-  const cls = [button({ variant, size, fullWidth, loading }), className].filter(Boolean).join(' ');
+  const cls = [button({ variant, size, surface, fullWidth, loading }), className].filter(Boolean).join(' ');
   const iconSize = size === 'sm' ? '1rem' : '1.25rem';
   return (
     <Tag

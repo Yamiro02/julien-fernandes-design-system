@@ -23,6 +23,55 @@ concordent.
 
 ---
 
+## 0.11.0 — la déduction de surface a un cran de rattrapage
+
+**Aucune rupture. `surface` vaut `auto` par défaut, et `auto` ne pose aucune classe : tout
+le code existant rend exactement comme en 0.10.1.** Une app remonte de version pour avoir
+l'échappatoire, pas pour réparer quelque chose.
+
+**Le défaut, constaté dans une app et invisible depuis ce dépôt.** La v0.8.0 a posé la
+déduction de surface — `.ds-card .ds-btn--secondary { background: var(--background) }` —
+parce que `--secondary` est passé au rang de la carte et qu'un bouton secondaire posé sur
+une carte aurait sinon 1,009 d'écart avec elle. La règle est juste, et elle prévoit **un
+seul niveau d'imbrication** : le bouton posé sur la carte.
+
+Une app qui pose un **panneau `--background` DANS une carte** — une ligne de fichier, une
+tuile, un encadré — sort de ce cas : le bouton reçoit `--background`, soit exactement la
+couleur du panneau qui le porte, et il n'existe plus à l'écran. Rien ne le signalait ici :
+**la vitrine ne posait aucun panneau dans une carte**, et le contraste du bouton contre sa
+carte, lui, restait bon. Le symptôme le plus trompeur : le même composant rendu dans un
+`<div>` qui *ressemble* à une carte sans en être une s'affichait correctement, et faisait
+soupçonner l'app.
+
+**Le correctif est une prop, pas un composant** — `GOVERNANCE.md`, test 4. `Button` et
+`IconButton` prennent `surface?: 'auto' | 'page' | 'card'`, **jumelle exacte de celle
+qu'`Input` porte depuis la v0.5.0 pour le même problème** :
+
+| valeur | ce qu'elle fait | quand |
+|---|---|---|
+| `auto` *(défaut)* | aucune classe, la déduction fait son travail | partout, y compris tout le code écrit avant cette version |
+| `page` | force `--secondary` | bouton sur un panneau `--background` imbriqué dans une carte |
+| `card` | force `--background` | conteneur qui n'a que l'apparence d'une carte, sans être une `.ds-card` |
+
+Sans effet sur `ghost`, `primary` et `danger` : aucun des trois ne porte `--secondary`.
+La prop ne ment donc jamais — elle ne change rien là où il n'y a rien à changer.
+
+**Deux sélecteurs, et leur poids est le mécanisme entier.**
+
+```css
+.ds-btn--secondary.ds-btn--on-page,.ds-icon-btn--secondary.ds-icon-btn--on-page{background:var(--secondary)}
+.ds-btn--secondary.ds-btn--on-card,.ds-icon-btn--secondary.ds-icon-btn--on-card{background:var(--background)}
+```
+
+Ils valent **0,2,0** — le même poids que la déduction — et arrivent **après** elle : ils
+gagnent. Le survol reste à 0,3,0 et continue de passer devant les deux, donc la réponse au
+pointeur est intacte. Écrits en un seul sélecteur de classe, ils repasseraient sous la
+déduction et la prop ne ferait rien : c'est écrit à côté de la règle.
+
+**La vitrine pose désormais le cas.** Section `Button`, bloc « Surface » : un panneau
+`--background` dans une carte, le bouton en `auto` à côté du même en `page`. Le défaut se
+voit en ouvrant la démo, ce qui n'était pas vrai avant cette version.
+
 ## 0.10.1 — le socle se contredit sur son propre preflight
 
 **Documentation seule. Aucun changement de rendu, aucune API, aucun jeton, aucune classe —

@@ -49,6 +49,21 @@ export function ActionsPage() {
           </Row>
         </Block>
 
+        <Block label="Surface" hint="Un bouton secondaire dans une carte reçoit --background par déduction. Dans un PANNEAU --background posé DANS cette carte, la déduction le peint de la couleur de son panneau : surface=page lui rend --secondary. Chaque Block de cette vitrine EST une Card — la déduction joue déjà partout ici.">
+          <Row label="dans un panneau --background">
+            <div className="flex flex-wrap items-center gap-space-3 rounded-md border border-border bg-background p-space-3">
+              <Button variant="secondary">auto — il disparaît</Button>
+              <Button variant="secondary" surface="page">surface=page</Button>
+              <IconButton label="Fermer" variant="secondary"><Icon name="x" size="1rem" /></IconButton>
+              <IconButton label="Fermer" variant="secondary" surface="page"><Icon name="x" size="1rem" /></IconButton>
+            </div>
+          </Row>
+          <Row label="à même la carte">
+            <Button variant="secondary">auto — la déduction suffit</Button>
+            <Button variant="secondary" surface="card">surface=card, forcé à la main</Button>
+          </Row>
+        </Block>
+
         <Block label="Pleine largeur et lien">
           <Button variant="primary" fullWidth iconRight={<Icon name="arrow-right" />}>Recevoir le prompt du build</Button>
           <Button as="a" variant="secondary" href="#actions" icon={<Icon name="external-link" />}>Rendu en balise a</Button>

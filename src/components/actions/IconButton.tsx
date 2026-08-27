@@ -9,6 +9,13 @@ import { cva } from 'class-variance-authority';
 export interface IconButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   variant?: 'primary' | 'secondary' | 'ghost' | 'danger';
   size?: 'sm' | 'md' | 'lg';
+  /**
+   * The surface the button sits on — the twin of Button's `surface`, same three values,
+   * same reason. `auto` (default) leaves the deduction of patterns.css alone; `page`
+   * forces --secondary on a --background panel nested inside a card; `card` forces
+   * --background outside a real .ds-card. Only `secondary` carries a fill.
+   */
+  surface?: 'auto' | 'page' | 'card';
   /** Accessible name. Required. */
   label: string;
   children?: ReactNode;
@@ -23,14 +30,15 @@ const iconButton = cva('ds-icon-btn', {
       danger: 'ds-icon-btn--danger',
     },
     size: { sm: 'ds-icon-btn--sm', md: 'ds-icon-btn--md', lg: 'ds-icon-btn--lg' },
+    surface: { auto: '', page: 'ds-icon-btn--on-page', card: 'ds-icon-btn--on-card' },
   },
-  defaultVariants: { variant: 'ghost', size: 'md' },
+  defaultVariants: { variant: 'ghost', size: 'md', surface: 'auto' },
 });
 
 export function IconButton({
-  variant = 'ghost', size = 'md', label, className = '', children, ...rest
+  variant = 'ghost', size = 'md', surface = 'auto', label, className = '', children, ...rest
 }: IconButtonProps): JSX.Element {
-  const cls = [iconButton({ variant, size }), className].filter(Boolean).join(' ');
+  const cls = [iconButton({ variant, size, surface }), className].filter(Boolean).join(' ');
   return (
     <button type="button" className={cls} aria-label={label} title={label} {...rest}>
       {children}
