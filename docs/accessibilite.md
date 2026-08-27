@@ -1,7 +1,7 @@
 # Accessibilité — le contraste du système, mesuré
 
 > **Les chiffres de ce document sont ceux de la marque du dépôt,
-> `src/styles/brand-julien-fernandes.css`** (portage du 2026-08-27). Une palette
+> `src/styles/brand-julien-fernandes.css`** (tableaux régénérés en v0.9.0). Une palette
 > différente produirait d'autres ratios et d'autres écarts assumés : régénérez les
 > tableaux avec `node check-contrast.mjs --table` si la marque change.
 
@@ -60,7 +60,7 @@ Une sortie vide = la règle tient. Aujourd'hui : vide.
 
 ## 2. Les paires conformes
 
-38 paires sur 50, dans les deux thèmes.
+36 paires sur 50, dans les deux thèmes.
 
 | Paire | contenu | seuil | clair | sombre |
 |---|---|--:|--:|--:|
@@ -68,21 +68,20 @@ Une sortie vide = la règle tient. Aujourd'hui : vide.
 | `texte courant sur --card` | 16 / 400 | 4,5 | 15,59 | 12,50 |
 | `--text-secondary sur --card` | 16 / 400 | 4,5 | 10,31 | 9,22 |
 | `.caption — --text-muted sur --card` | 13 / 500 | 4,5 | 5,12 | 6,47 |
-| `.ds-input::placeholder` | 15 / 400 | 4,5 | 5,47 | 5,53 |
+| `.ds-input::placeholder` | 15 / 400 | 4,5 | 5,17 | 6,47 |
 | `.ds-tooltip__bubble` | 13 / 600 | 4,5 | 14,52 | 15,59 |
 | `a{} au repos sur --background` | 16 / 400 | 4,5 | 5,36 | 7,11 |
 | `a{} au repos sur --card` | 16 / 400 | 4,5 | 5,59 | 6,12 |
 | `a:hover — dérivé vers --foreground` | 16 / 400 | 4,5 | 6,76 | 8,21 |
-| `.ds-navlink.is-active` | 16 / 500 | 4,5 | 5,97 | 5,24 |
+| `.ds-navlink.is-active` | 16 / 500 | 4,5 | 5,64 | 6,12 |
 | `.ds-sidenav.is-active` | 15 / 500 | 4,5 | 5,16 | 5,62 |
 | `.ds-badge--accent` | 12 / 700 | 4,5 | 5,16 | 5,85 |
 | `.ds-banner--info` | 15 / 400 | 4,5 | 5,16 | 5,85 |
 | `.ds-cal__day.is-today` | 14 / 700 | 4,5 | 5,59 | 6,12 |
-| `.ds-pastille--brand — icône` | icône | 3 | 5,30 | 4,66 |
 | `.ds-icon-btn[aria-pressed] — icône` | icône | 3 | 5,16 | 5,85 |
 | `.ds-error` | 13 / 500 | 4,5 | 6,62 | 6,07 |
-| `.ds-dropdown__item--danger` | 14 / 400 | 4,5 | 6,62 | 5,73 |
-| `.ds-actionsheet__item--danger` | 15 / 500 | 4,5 | 6,62 | 5,73 |
+| `.ds-dropdown__item--danger` | 14 / 400 | 4,5 | 6,84 | 5,73 |
+| `.ds-actionsheet__item--danger` | 15 / 500 | 4,5 | 6,84 | 5,73 |
 | `.ds-badge--coral sur --card` | 12 / 700 | 4,5 | 4,90 | 5,32 |
 | `.ds-badge--coral sur --background` | 12 / 700 | 4,5 | 4,69 | 6,15 |
 | `.ds-badge--amber sur --card` | 12 / 700 | 4,5 | 4,99 | 5,35 |
@@ -97,26 +96,28 @@ Une sortie vide = la règle tient. Aujourd'hui : vide.
 | `.ds-badge--neutral sur --background` | 12 / 700 | 4,5 | 5,00 | 8,78 |
 | `.ds-badge--outline` | 12 / 700 | 4,5 | 10,31 | 9,22 |
 | `survol — --foreground sur --surface-alt` | 15 / 600 | 4,5 | 14,38 | 11,47 |
-| `anneau de focus --ring sur --background` | contour 2px | 3 | 3,12 | 8,16 |
 | `.ds-choice coché — aplat --primary` | contrôle | 3 | 3,12 | 4,79 |
 | `.ds-switch actif — piste --primary` | contrôle | 3 | 3,12 | 4,79 |
 | `.ds-progress__bar sur son rail` | graphique | 3 | 3,00 | 3,78 |
-| `.ds-input.is-error — bordure --destructive` | contour 1.5px | 3 | 3,80 | 3,23 |
+| `.ds-input.is-error — bordure --destructive` | contour 1.5px | 3 | 3,58 | 3,78 |
 
 ---
 
 ## 3. Les écarts assumés
 
-12 paires. Chacune est déclarée **dans le fichier de marque**,
+14 paires. Chacune est déclarée **dans le fichier de marque**,
 `src/styles/brand-julien-fernandes.css`, par un bloc `@a11y-assume:` — pas dans le script.
 Le script porte la mécanique, la marque porte ses renoncements : un client qui écrit sa
 marque repart d'une liste VIDE et n'hérite d'aucune dérogation qu'il n'a pas prise. Le
-build tombe si une **treizième** apparaît.
+build tombe si une **quinzième** apparaît.
 
-Trois familles, et les trois sont des décisions de marque antérieures au portage.
+Cinq familles, et les cinq sont des décisions de marque — aucune n'est un oubli. Deux ont
+été prises après le portage : l'anneau de focus en v0.8.0, l'icône décorative de marque en
+v0.9.0.
 
 | Paire | contenu | seuil | clair | sombre |
 |---|---|--:|--:|--:|
+| `.ds-pastille--brand — icône` | icône | 3 | 2,38 ✗ | 4,07 |
 | `.ds-btn--primary — label sur --primary à plat` | 15 / 600 | 4,5 | 3,48 ✗ | 3,48 ✗ |
 | `.ds-btn--primary — label sur --brand-from (pire arrêt)` | 15 / 600 | 4,5 | 2,04 ✗ | 2,04 ✗ |
 | `.ds-btn--primary — label sur --brand-via` | 15 / 600 | 4,5 | 2,68 ✗ | 2,68 ✗ |
@@ -124,9 +125,10 @@ Trois familles, et les trois sont des décisions de marque antérieures au porta
 | `.ds-btn--danger — label sur --destructive` | 15 / 600 | 4,5 | 3,80 ✗ | 3,80 ✗ |
 | `.ds-cal__day.is-selected` | 14 / 600 | 4,5 | 3,48 ✗ | 3,48 ✗ |
 | `.eyebrow / .accent — dégradé clippé en texte` | 12 / 600 | 4,5 | 1,83 ✗ | 8,16 |
+| `anneau de focus --ring sur --background` | contour 2px | 3 | 2,41 ✗ | 8,16 |
 | `.ds-input — bordure --input vs page` | contour 1.5px | 3 | 1,17 ✗ | 1,82 ✗ |
-| `.ds-input — bordure --input vs remplissage` | contour 1.5px | 3 | 1,30 ✗ | 1,34 ✗ |
-| `.ds-input — remplissage vs page` | aplat | 3 | 1,12 ✗ | 1,36 ✗ |
+| `.ds-input — bordure --input vs remplissage` | contour 1.5px | 3 | 1,23 ✗ | 1,57 ✗ |
+| `.ds-input — remplissage vs page` | aplat | 3 | 1,05 ✗ | 1,16 ✗ |
 | `.ds-card — bordure --border vs page` | contour 1px | 3 | 1,17 ✗ | 1,44 ✗ |
 | `.ds-sep — filet --border sur --card` | filet 1px | 3 | 1,22 ✗ | 1,24 ✗ |
 
@@ -183,9 +185,10 @@ concepteur de la marque.
 ### 3.3 · Les contours doux — `1,12` à `1,44`
 
 **L'écart.** Aucune frontière neutre du système n'atteint 3:1. Le contour d'un champ
-(`--input` `#e5e1da` sur crème `#f6f2ec`) mesure **1,17** contre la page et **1,30**
-contre son propre remplissage ; le remplissage du champ contre la page, **1,12**. Bordure
-de carte et filet de séparateur, même ordre. WCAG 1.4.11 demande 3:1 pour ce qui est
+(`--input` `#e5e1da` sur crème `#f6f2ec`) mesure **1,17** contre la page et **1,23**
+contre son propre remplissage ; le remplissage du champ contre la page, **1,05** — l'écart
+s'est encore resserré en v0.8.0, quand `--secondary` a quitté le blanc pur pour la crème.
+Bordure de carte et filet de séparateur, même ordre. WCAG 1.4.11 demande 3:1 pour ce qui est
 nécessaire à **identifier un composant**.
 
 **Pourquoi il est assumé.** Crème sur crème : le système sépare ses surfaces à l'écart de
@@ -194,12 +197,11 @@ d'identité — décision de marque, pas de cartes cernées. Les remonter à 3:1
 gris moyens francs sur chaque carte, chaque tableau, chaque séparateur et chaque champ.
 C'est un autre design.
 
-**Ce qui l'atténue.** Un champ ne se signale pas seulement par son contour : son
-remplissage est le seul blanc pur du thème clair, réservé aux contrôles ; il a une
-hauteur de rail de 48 px, un libellé associé, un placeholder à 5,47:1, et **au focus** sa
-bordure passe à `--ring` (3,12 en clair, 8,16 en sombre) avec un anneau de 3 px. L'état
-d'erreur passe aussi, à 3,80 en clair et 3,23 en sombre. Sur une carte, le champ bascule
-sur `--background` (`.ds-input--on-card`) pour garder l'écart. La carte se distingue de
+**Ce qui l'atténue.** Un champ ne se signale pas seulement par son contour : il a une
+hauteur de rail de 48 px, un libellé associé, un placeholder à 5,17:1, et **au focus** sa
+bordure passe à `--ring` avec un halo de 3 px (voir § 3.4). L'état d'erreur passe aussi, à
+3,58 en clair et 3,78 en sombre. Sur une carte — ou dans une modale, une feuille, un menu —
+le champ bascule sur `--background` par déduction de surface, pour garder l'écart. La carte se distingue de
 la page par l'écart de surface ET par `--shadow-sm` — le filet est un ourlet, pas la
 séparation. Le séparateur ne porte aucune information seule, et sa variante
 `.ds-sep--label` porte son texte en `--text-muted` (5,12 sur carte).
@@ -207,6 +209,55 @@ séparation. Le séparateur ne porte aucune information seule, et sa variante
 **Le remède.** `--border` et `--input` sont des jetons du contrat de marque : un client
 qui doit tenir 1.4.11 les remonte dans SON fichier de marque, sans ouvrir un fichier du
 socle, et vérifie d'un `node check-contrast.mjs` que les paires de contour passent 3:1.
+
+### 3.4 · L'anneau de focus — `2,41` en clair
+
+**L'écart.** `--ring` vaut `--brand-via` (`#f08029`), l'arrêt **médian** du dégradé, depuis
+la v0.8.0. Il mesure **2,41** sur la page, 2,51 sur la carte, 2,53 sur `--secondary`, 2,60
+sur le popover : sous le plancher de 3:1 des indicateurs non textuels, quelle que soit la
+porteuse. En sombre il reste `--brand-from` (`#f5a524`) et tient **8,16**.
+
+**Pourquoi il est assumé.** Décision de marque, prise en connaissance de la mesure : la
+marque est plus présente sur un arrêt du dégradé que sur l'aplat, et c'est l'anneau de
+focus qui la porte le plus souvent à l'écran.
+
+**Ce qui l'atténue, et il faut le garder.** Le focus du champ ne porte pas sur le seul bord.
+Il porte un bord de 1,5 px **en plus** d'un halo de 3 px — l'indicateur perd en contraste ce
+qu'il regagne en **surface**, et le halo est la compensation, pas un ornement. Le même halo
+sert aux boutons, aux onglets et aux entrées de nav.
+
+**Le remède.** `--brand-to` (`#e84c3d`), qui tient **3,40** en restant un arrêt du dégradé.
+Si quelqu'un retire un jour le halo du champ, c'est ce basculement qu'il faut faire dans le
+même geste.
+
+### 3.5 · L'icône décorative de marque — `2,38` en clair
+
+**L'écart.** La pastille `tone="brand"` porte son icône en `--brand-via` sur `--grad-soft`,
+un lavis chaud : **2,34 à 2,38** en clair selon l'arrêt du lavis, 4,07 à 4,85 en sombre.
+
+**Pourquoi il est assumé.** Un graphique purement **décoratif** n'a pas de seuil à tenir,
+précisément parce qu'il ne porte rien seul. Dans un état vide — le cas le plus visible, où
+la pastille fait 80 px — le titre et la description disent tout ; la pastille teinte la
+scène. L'ancienne valeur, `--primary-readable`, sortait à 5,30 et tenait donc le seuil, mais
+un brun-brique sombre sur un lavis chaud se lit comme de l'encre colorée, pas comme la
+marque. On échange un seuil qui ne s'applique pas contre une identité qui se voit.
+
+**La règle qui en sort, et elle vaut partout.** Une icône se colore selon ce qu'elle
+**porte**, pas selon l'endroit où elle est :
+
+| l'icône est… | sa couleur | exemples |
+|---|---|---|
+| décorative | `currentColor` | elle suit son texte |
+| décorative mais **de marque** | `--brand-via` | pastille d'état vide, pastille d'en-tête de carte, icône de l'item de nav actif |
+| **porteuse d'information** | `--primary-readable` | message d'erreur, jour courant, état |
+
+`--primary` n'est **jamais** une couleur d'icône : 3,00 sur `--surface-alt`, 3,03 sur un
+lavis de marque. Il reste un aplat — CTA, piste de switch, case cochée.
+
+**Les tons sémantiques ne suivent PAS.** `success`, `warning`, `danger`, `coral`, `amber`,
+`neutral` gardent leur couleur lisible et tiennent 4,5:1 : une pastille de statut porte une
+information. C'est toute la différence entre décorer et informer, et c'est la ligne qu'on
+cassera un jour en voulant « harmoniser ».
 
 ---
 

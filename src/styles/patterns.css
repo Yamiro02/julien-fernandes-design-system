@@ -190,7 +190,21 @@
 .ds-pastille--heros{width:var(--pastille-heros);height:var(--pastille-heros);border-radius:var(--radius-xl)}
 .ds-pastille--ecran{width:var(--pastille-ecran);height:var(--pastille-ecran);border-radius:var(--radius-2xl)}
 .ds-pastille--rond{border-radius:var(--radius-pill)}
-.ds-pastille--brand{background:var(--grad-soft);color:var(--primary-readable)}
+/* UNE ICÔNE SE COLORE SELON CE QU'ELLE PORTE, PAS SELON L'ENDROIT OÙ ELLE EST — v0.9.0.
+     · décorative                  -> currentColor, elle suit son texte
+     · décorative mais DE MARQUE   -> --brand-via : pastille d'état vide, pastille d'en-tête
+                                     de carte, icône de l'item de nav actif
+     · PORTEUSE D'INFORMATION      -> --primary-readable : erreur, jour courant, état
+   --primary-readable (#b23a1c) sortait ici à 5,30 : un brun-brique sombre sur un lavis
+   chaud, qui se lit comme de l'encre colorée plutôt que comme la marque — et c'est le plus
+   visible dans un état vide, où la pastille fait 80px.
+   --primary n'est JAMAIS une couleur d'icône : 3,00 sur --surface-alt, 3,03 sur un lavis de
+   marque. Il reste un aplat — CTA, piste de switch, case cochée.
+   LES TONS SÉMANTIQUES NE SUIVENT PAS. success, warning, danger, coral, amber et neutral
+   gardent leur couleur lisible : une pastille de statut porte une information. C'est toute
+   la différence entre décorer et informer, et c'est la ligne qu'on cassera un jour en
+   voulant « harmoniser ». */
+.ds-pastille--brand{background:var(--grad-soft);color:var(--brand-via)}
 .ds-pastille--coral{background:var(--pill-coral-bg);color:var(--pill-coral-fg)}
 .ds-pastille--amber{background:var(--pill-amber-bg);color:var(--pill-amber-fg)}
 .ds-pastille--success{background:var(--pill-success-bg);color:var(--pill-success-fg)}

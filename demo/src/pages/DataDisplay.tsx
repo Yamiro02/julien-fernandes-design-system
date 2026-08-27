@@ -34,7 +34,7 @@ export function DataDisplayPage() {
           </Grid>
         </Block>
 
-        <Block label="Tailles et flush" hint="md = rayon lg / padding 1.5rem · lg = rayon xl / padding 1.75rem.">
+        <Block label="Tailles et flush" hint="md = rayon lg / padding 1.75rem · lg = rayon xl / padding 2rem.">
           <Grid cols={3}>
             <Card size="md"><h4>Taille md</h4><p className="caption">--card-pad</p></Card>
             <Card size="lg"><h4>Taille lg</h4><p className="caption">--card-pad-lg</p></Card>

@@ -188,6 +188,9 @@ en div : c'est exactement ce que ce composant remplace.
 - Props : `size` (`carte` 2.25 · `dialogue` 2.625 · `panneau` 3.25 · `heros` 4 · `ecran`
   5rem — le rayon suit la taille) · `shape` (`square·round`) · `tone` (`brand` + les 6
   paires sémantiques + `inverse`) · `outlined` (contour 1px currentColor à 22 %).
+- `tone="brand"` porte son icône en `--brand-via` (v0.9.0) : elle est **décorative**, elle
+  rend la marque. Les six tons sémantiques gardent leur couleur **lisible** — une pastille
+  de statut porte une information, et la distinction est la règle du système.
 - C'est elle qui rend la tuile du `Modal` et celle de l'`EmptyState`.
 
 ## Separator

@@ -23,6 +23,58 @@ concordent.
 
 ---
 
+## 0.9.0 — l'icône d'une pastille de marque est décorative
+
+Un jeton lu, une règle changée, et la doctrine qui va avec.
+
+```css
+.ds-pastille--brand{background:var(--grad-soft);color:var(--brand-via)}  /* était --primary-readable */
+```
+
+`--primary-readable` (`#b23a1c`) y sortait à **5,30** — le seuil était tenu — mais un
+brun-brique sombre sur un lavis chaud se lit comme de l'encre colorée plutôt que comme la
+marque. C'est le plus visible dans un état vide, où la pastille fait 80 px.
+
+### La règle, et elle vaut partout
+
+Une icône se colore selon ce qu'elle **porte**, pas selon l'endroit où elle est :
+
+| l'icône est… | sa couleur | exemples |
+|---|---|---|
+| décorative | `currentColor` | elle suit son texte |
+| décorative mais **de marque** | `--brand-via` | pastille d'état vide, pastille d'en-tête de carte, icône de l'item de nav actif |
+| **porteuse d'information** | `--primary-readable` | message d'erreur, jour courant, état |
+
+`--primary` n'est **jamais** une couleur d'icône : 3,00 sur `--surface-alt`, 3,03 sur un
+lavis de marque. Il reste un aplat — CTA, piste de switch, case cochée.
+
+**Les tons sémantiques ne suivent PAS.** `success`, `warning`, `danger`, `coral`, `amber`,
+`neutral` gardent leur couleur lisible : une pastille de statut porte une information. C'est
+toute la différence entre décorer et informer, et c'est la ligne qu'on cassera un jour en
+voulant « harmoniser ».
+
+### L'écart mesuré
+
+**2,34 à 2,38** en clair selon l'arrêt du lavis, **4,07 à 4,85** en sombre. Sous 3:1 en
+clair, et c'est admis : un graphique purement décoratif n'a pas de seuil à tenir, précisément
+parce qu'il ne porte rien seul — le titre et la description disent tout.
+
+`check-contrast.mjs` scannait cette paire avec `--primary-readable` en dur. La paire mesurée
+suit maintenant ce que le CSS peint (`--brand-via`) — un garde qui mesure une couleur que
+plus personne n'affiche est pire qu'un garde absent — et l'écart est déclaré par un
+`@a11y-assume` dans le fichier de marque. Le compte passe de **13 à 14**.
+
+### `docs/accessibilite.md` rattrape la v0.8.0
+
+Le document portait encore les ratios d'avant la 0.8.0 : `--ring` à 3,12, le remplissage du
+champ à 1,12, « le seul blanc pur du thème clair ». Les deux tableaux sont **régénérés**
+depuis `node check-contrast.mjs --table`, les comptes corrigés (36 conformes, 14 assumées),
+et deux sections manquantes ajoutées — **3.4** l'anneau de focus, **3.5** l'icône décorative
+de marque. La règle de coloration des icônes entre aussi dans `docs/DESIGN.md` et la fiche
+`Pastille` de `docs/PROMPTS.md`.
+
+Aucun jeton ajouté ni retiré, aucune prop touchée, contrat inchangé : **54 / 32**.
+
 ## 0.8.0 — les surfaces sortent du blanc, les marges respirent, un neuvième garde
 
 Le rendu de **tout ce qui est posé sur la mise en page** change, dans les deux thèmes.
