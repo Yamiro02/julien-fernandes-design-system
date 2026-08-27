@@ -274,23 +274,3 @@
 }
 /* L'utilitaire métier `bg-thumbnail` n'est pas ici : il est parti avec l'extension
    optionnelle `brand-content.css`. */
-
-/* Le preflight étant omis, deux de ses défauts manquent aux utilitaires `border-*`.
-   La LARGEUR de bordure des éléments à bordure native (input, button, fieldset, hr)
-   n’est plus remise à zéro, et la COULEUR par défaut de `border` vaut `currentColor`
-   au lieu du jeton — soit une bordure de la couleur du texte courant là où on attend `--border`.
-   On restaure ces deux morceaux, et eux seuls. Aucune valeur de design ici : la
-   couleur vient du token.
-   NB — contrairement à la v3, le `border-style: solid` n’est plus nécessaire :
-   en v4 chaque utilitaire `border-*` pose son propre style via `--tw-border-style`
-   (déclaré en `@property`, valeur initiale `solid`). On le garde tout de même, il
-   couvre les éléments qui reçoivent une largeur par une autre voie. */
-@layer base {
-  *,
-  ::before,
-  ::after {
-    border-width: 0;
-    border-style: solid;
-    border-color: var(--border);
-  }
-}

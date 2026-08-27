@@ -23,6 +23,121 @@ concordent.
 
 ---
 
+## 0.10.0 — le preflight de Tailwind revient
+
+Le rendu de **tout élément HTML nu** change, dans les deux thèmes. Aucune prop, aucune
+classe retirée. **Aucun composant du système ne bouge d'un pixel** — mesuré, voir plus bas.
+
+### Ce qui était cassé, et pourquoi la raison écrite ne tenait pas
+
+`theme.css` omettait le preflight, au motif que « le socle embarque son propre reset
+(`tokens/base.css`) que le preflight neutraliserait ».
+
+Ce n'était pas une incompatibilité, c'était un problème d'**ordre**. Preflight et `base.css`
+vivent tous deux dans `layer(base)` avec des sélecteurs d'éléments : à spécificité égale,
+c'est le dernier chargé qui gagne. Chargé AVANT, le preflight normalise et l'identité du
+socle repasse par-dessus. Quelqu'un a vraisemblablement vu les titres perdre leur display en
+l'activant, a conclu « incompatible », et a retiré — la conclusion était logique, la cause
+était l'ordre.
+
+### Ce que l'omission coûtait
+
+`tokens/base.css` couvre box-sizing, `html`, `body`, `h1`→`h4`, `p`, `a`, `:focus-visible`,
+`code/pre/kbd/samp`, `img`, `::selection`. N'étaient normalisés **nulle part** :
+
+- l'**apparence** de `button`, `input`, `select`, `textarea`. Un `<button>` nu écrit par une
+  app héritait du gris `buttonface`, d'**Arial 13,33px** et d'un rembourrage de 1px 6px. Deux
+  composants métier d'une app consommatrice l'ont attrapé à deux lots d'écart sans que
+  personne le voie : le symptôme est un écran légèrement faux, jamais une erreur ;
+- `ul`, `ol`, `li` — puces et retrait de 40px ;
+- `table`, `fieldset`, `legend`, `figure`, `blockquote`, `hr`, `dl`, `dd`, `small`, `h5`, `h6`.
+
+C'est cette **classe** de défauts qui se ferme, pas un cas.
+
+### Le preflight est VERSÉ dans le dépôt, pas importé de `tailwindcss`
+
+`src/styles/tokens/preflight.css` est une copie conforme de `tailwindcss/preflight.css`
+(4.3.3), à six déclarations près. `core.css` la charge en `layer(base)` **juste avant**
+`tokens/base.css` : même fichier, même couche, l'ordre est garanti par la source et il n'y a
+rien à espérer du bundler.
+
+Écrire `@import "tailwindcss/preflight.css"` à la place a été essayé, **et refusé sur
+mesure** — deux raisons, chacune suffisante :
+
+1. **L'import distant de la marque disparaissait.** Un specifier `tailwindcss/…` dans
+   `core.css` fait réclamer tout l'arbre CSS par le compilateur Tailwind, dont la résolution
+   d'`@import` ne laisse pas passer un `@import url(https://…)`. Or c'est par là que le
+   fichier de marque charge sa police de texte. Vérifié en dev **et dans le bundle de
+   production** : la règle `fonts.googleapis.com` disparaît de la feuille émise et DM Sans
+   n'est jamais chargée. Le système rend alors dans sa police de repli — lisible, plausible,
+   et faux.
+2. **`tailwindcss` est un peer OPTIONNEL.** Une app qui monte le socle sans la couche
+   Tailwind ne peut pas résoudre un `tailwindcss/…`. Le reset du socle ne peut pas dépendre
+   d'un paquet facultatif.
+
+Les six déclarations retirées de la copie sont les `font-family`, `font-feature-settings` et
+`font-variation-settings` de `html,:host` et de `code,kbd,samp,pre` : toutes bâties sur
+`--theme(…)`, une fonction que seul le compilateur Tailwind résout. `tokens/base.css` repose
+ces deux familles depuis les jetons de marque quelques lignes plus loin, et une pile de
+polices littérale n'a pas sa place dans le socle.
+
+### Le relevé avant / après
+
+Banc d'essai de **90 éléments** — nus et composants du socle, montés sur leur balise réelle
+— × **2 thèmes** × **2 largeurs** (1811px et 900px, de part et d'autre du point de rupture),
+sur 34 propriétés calculées plus la hauteur rendue.
+
+**Zéro hauteur déplacée sur un composant du système.** Les différences résiduelles sont
+toutes des propriétés calculées sans effet géométrique, et chacune est voulue :
+
+| ce qui change | où | pourquoi c'est bon |
+|---|---|---|
+| `appearance: auto → button` | les 12 composants bâtis sur `<button>` | le correctif iOS du rayon de bordure ; aucun effet de peinture |
+| `background-color: buttonface → transparent`, `color: black → --foreground` | `.ds-btn--sm` / `--lg` **sans classe de variante** | le bug lui-même, sur un chemin latent : `<Button>` émet toujours une variante (`defaultVariants`) |
+| `font-family: Arial → --font-body`, `13,33px → 16px` | `.ds-icon-btn`, `.ds-modal__close`, `.ds-toast__close`, `.ds-sidebar__toggle`, `.ds-cal__nav` | boutons-icône à boîte fixe : hauteur inchangée, et la police cesse d'être Arial le jour où l'un d'eux porte un caractère |
+| `line-height: normal → hérité` | `.ds-page`, `.ds-cal__day`, `.ds-actionsheet__item`, `.ds-sidenav` | boîtes calées par un `min-height` ou une hauteur fixe : géométrie inchangée. Effet de bord bienvenu — les rendus `<a>` et `<button>` de `.ds-sidenav`, qui divergeaient, s'accordent |
+| `padding: 1px 6px → 0` | `.ds-cal__day`, `.ds-modal__close`, `.ds-cal__nav` | rembourrage natif retiré ; ces trois-là sont des `inline-flex` centrés à taille fixe |
+| `resize: both → vertical` | `.ds-input` seul sur un `<textarea>` | `.ds-textarea` posait déjà `vertical` |
+| `color` de `.ds-sep` | `<hr class="ds-sep">` | la règle pose `border:0` et un `background` : la propriété est inerte |
+
+### Trois composants ont vraiment bougé, et ils sont réparés
+
+Le preflight fait hériter police **et interligne** aux contrôles natifs (`font: inherit`).
+Trois règles du socle n'avaient jamais déclaré de `line-height` : elles reposaient **en
+silence** sur le `normal` du navigateur, et se sont mises à suivre `--leading-body`.
+
+- `.ds-input` : **44 → 47px sous 64rem**, là où le rail tactile vaut 44 — donc désaligné du
+  bouton posé à côté, ce que le rail unique existe précisément pour empêcher ;
+- `.ds-tab` : 36 → 39px ;
+- `.ds-dropdown__item` : 38 → 41px.
+
+Les trois déclarent maintenant `line-height: normal` : la dépendance devient **explicite** au
+lieu de dériver avec l'interligne du corps de texte. `.ds-btn` déclarait déjà la sienne
+(`line-height: 1`), `.ds-textarea` la sienne (`--leading-normal`).
+
+### Les deux rustines de `theme.css` sont retirées
+
+`theme.css` restaurait à la main deux morceaux du preflight — `border-width: 0` et
+`border-style: solid` sur `*`. Le preflight les repose (`border: 0 solid`) : elles sont
+redondantes, et une réparation qui survit à son problème finit par être « corrigée » dans le
+mauvais sens.
+
+**⚠ La troisième ligne du même bloc partait avec elles, et elle n'était PAS redondante** :
+`border-color: var(--border)`. Le preflight v4 laisse `currentColor` — c'est un changement
+assumé d'amont entre Tailwind v3 et v4. Conséquence pour une app : `className="border"`
+**sans** classe de couleur donne désormais une bordure de la couleur du texte, pas `--border`.
+Aucun composant du système n'est concerné (tous posent leur `border-color` explicitement),
+mais une app qui s'appuyait sur ce défaut doit écrire `border border-border`.
+
+### Pour les apps consommatrices
+
+Les classes défensives posées sur les `<button>` nus pour compenser ce défaut —
+`bg-transparent`, `font-body`, `py-0` et apparentées — **deviennent redondantes** et peuvent
+être retirées au prochain bump.
+
+Le correctif est également appliqué à `design-system-template`, pour qu'un design system
+client ne naisse pas avec un bug déjà corrigé ailleurs.
+
 ## 0.9.0 — l'icône d'une pastille de marque est décorative
 
 Un jeton lu, une règle changée, et la doctrine qui va avec.

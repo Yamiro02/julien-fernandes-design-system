@@ -17,7 +17,7 @@ export function FormsPage() {
 
   return (
     <div className="flex flex-col gap-space-7">
-      <Section title="Input" note="Rail de contrôle partagé, bordure 1.5px. Le focus se lit sur la bordure seule, qui passe en --ring — jamais d'anneau en plus. Jamais un pill.">
+      <Section title="Input" note="Rail de contrôle partagé, bordure 1.5px. Au focus, la bordure passe en --ring ET un halo de 3px apparaît — le halo compense en surface ce que --brand-via perd en contraste ; ce n'est pas un ornement. Un seul trait, pas deux contours : l'outline générique est neutralisé sur .ds-input. Jamais un pill.">
         <Block label="Tailles">
           <Stack>
             <Input size="sm" placeholder="Petite — 2.375rem" />
