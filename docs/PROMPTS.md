@@ -195,7 +195,8 @@ en div : c'est exactement ce que ce composant remplace.
 Filet 1px `--border` entre deux blocs. Avec `label`, la légende est centrée sur la ligne.
 
 **Ne pas l'utiliser** pour structurer une liste dense (l'espacement suffit) ni dans un
-menu (Dropdown et ActionSheet ont leur item `separator`).
+menu de bureau (`Dropdown` a son item `separator`). Une `ActionSheet` n'en porte PAS : une
+feuille du bas est aérée et parcourue au pouce, le rythme des lignes suffit.
 
 ```tsx
 <Separator />
@@ -670,7 +671,6 @@ signale en console en développement). Au-dessus de 64rem, le même geste ouvre 
   onCancel={() => setSheet(false)}
   items={[
     { label: 'Copier le lien', icon: <Icon name="copy" size="1rem" />, onSelect: () => setSheet(false) },
-    { separator: true },
     { label: 'Supprimer', icon: <Icon name="trash-2" size="1rem" />, danger: true },
   ]}
 />
@@ -679,17 +679,20 @@ signale en console en développement). Au-dessus de 64rem, le même geste ouvre 
 
 - Props : `open` · `title` / `subtitle` (en-tête optionnel) · `note` (légende de
   conséquence au-dessus d'Annuler) · `items`
-  (`{label, icon?, danger?, onSelect?, separator?, className?}[]`) · `cancelLabel` ·
+  (`{label, icon?, danger?, onSelect?, className?}[]`) · `cancelLabel` ·
   `onCancel` · `inline` (sans voile) · `panel` (spécimen desktop 20rem — implique
   `inline`).
+- **Pas de séparateur** (v0.8.0) : l'item `separator` a été retiré, la feuille n'émet plus
+  aucun `<hr>`. C'est `Dropdown` qui garde le sien.
 - États rendus : fermée, ouverte (feuille), item au repos / survolé / danger, panneau
   desktop.
 
 ## Dropdown
 
 Menu contextuel — **desktop only**. Sous 64rem, un menu « ⋯ » ouvre TOUJOURS une
-`ActionSheet` : même geste, deux tailles d'écran. Panneau sur `--popover`, items éclairés
-sur `--surface-alt`.
+`ActionSheet` : même geste, deux tailles d'écran. Panneau sur `--secondary` — la
+continuation du champ ou du bouton qui l'ouvre — et sur `--popover` dès qu'il est posé dans
+une carte ou une modale, où il doit flotter. Items éclairés sur `--surface-alt`.
 
 **Ne pas l'utiliser** comme select de formulaire (c'est `Select`).
 

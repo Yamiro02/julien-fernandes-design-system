@@ -63,9 +63,12 @@
   /* Bottom-sheet grip — ADDED v0.3. Height is --space-1. */
   --grip-w:2.25rem;      /* 36 */
 
-  /* Card padding */
-  --card-pad:1.5rem;     /* 24 — standard card */
-  --card-pad-lg:1.75rem; /* 28 — large card / panel */
+  /* Card padding — UN CRAN DE PLUS depuis la v0.8.0. La carte se lisait serrée, surtout
+     avec un en-tête à pastille ; on reste sur l'échelle de 4. `.ds-card--flush` reste à 0,
+     les tableaux à ras gardent leur densité. La MODALE lit --card-pad, elle aussi : deux
+     surfaces de contenu, un seul levier. */
+  --card-pad:1.75rem;    /* 28 — standard card, et .ds-modal */
+  --card-pad-lg:2rem;    /* 32 — large card / panel */
 
   /* ---------- DIMENSIONS DE COMPOSANTS — DES DÉFAUTS, PAS DES INVARIANTS ----------
      Vingt mesures qui étaient des littéraux dans patterns.css, et qui portent de
@@ -89,12 +92,22 @@
      patterns.css : ce sont des mesures de COMPACITÉ, pas d'identité, et un contrat où on
      peut les régler est un contrat que personne ne remplit. Voir l'en-tête de patterns.css. */
   --navbar-h:4.5rem;              /* 72 — .ds-navbar__inner */
-  --sidebar-w:16rem;              /* 256 — .ds-sidebar déployée */
+  /* LE SEUL JETON DU SOCLE QUI MÊLE rem ET vw, ET C'EST ASSUMÉ. 16rem est la bonne largeur
+     sur un portable et une bande étriquée sur un 27 pouces : le libellé d'une entrée reste à
+     la même distance du bord pendant que la zone de contenu double. La largeur d'un COULOIR
+     doit suivre la FENÊTRE, pas la préférence de taille de texte — d'où le vw au milieu.
+     Le plancher est la largeur d'origine (jamais moins), le plafond le point au-delà duquel
+     ce n'est plus qu'un couloir vide. Les paliers de app-scale.css agissent sur la racine,
+     donc sur le plancher et le plafond en rem : les deux mécanismes se composent au lieu de
+     se contredire. */
+  --sidebar-w:clamp(16rem,15vw,23rem); /* 256 -> 368 — .ds-sidebar déployée */
   --sidebar-w-collapsed:4.5rem;   /* 72 — .ds-sidebar.is-collapsed */
   --sidebar-head-h:3rem;          /* 48 — .ds-sidebar__head. Vaut le --control-md de bureau
                                      par coïncidence, PAS par alignement : il ne descend pas
                                      à 2.75rem sous 64rem, il est resté 3rem. */
-  --sidenav-h:2.5rem;             /* 40 — .ds-sidenav */
+  /* 40 laissait l'entrée de navigation — la cible la plus cliquée d'une coque d'outil —
+     SOUS le seuil tactile de 44 que le reste du système tient déjà. */
+  --sidenav-h:2.75rem;            /* 44 — .ds-sidenav */
   --modal-w:23.75rem;             /* 380 — .ds-modal. Ignoré sous 64rem : la modale y est
                                      une feuille en width:100%. */
   --modal-close:2rem;             /* 32 — .ds-modal__close, carré */

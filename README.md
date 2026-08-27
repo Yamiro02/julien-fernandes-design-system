@@ -55,7 +55,7 @@ géométrique. Si un pixel chaud apparaît, une valeur de marque est restée dan
 Pas de registry : chaque app épingle une version par un tag git.
 
 ```bash
-npm i github:Yamiro02/julien-fernandes-design-system#v0.7.2
+npm i github:Yamiro02/julien-fernandes-design-system#v0.8.0
 ```
 
 Cinq **peer dependencies**, à la charge de l'app :
@@ -309,8 +309,15 @@ npm run typecheck    # tsc --noEmit
 npm run lint         # typecheck + contrôle anti-collision
 ```
 
-`npm run lint` enchaîne le typecheck et [`check-utility-collisions.mjs`](check-utility-collisions.mjs),
-qui refuse tout `@utility` de `theme.css` portant le nom d'une classe qu'un jeton de thème génère
+`npm run lint` enchaîne le typecheck et **neuf gardes**. Le premier de la chaîne est
+[`check-token-refs.mjs`](check-token-refs.mjs) — c'est le moins cher, et un jeton manquant rend le
+diagnostic des autres trompeur : il refuse tout `var(--x)` lu par le CSS du système ou par un style
+inline de composant sans qu'un `--x:` soit déclaré. Un `var()` non résolu n'est pas ignoré, il rend
+la déclaration **invalide at computed-value time** — pour un `font-size`, ça veut dire `inherit`, et
+un `Button size="sm"` rend alors plus GROS qu'un `md`.
+
+Vient ensuite, entre autres, [`check-utility-collisions.mjs`](check-utility-collisions.mjs), qui
+refuse tout `@utility` de `theme.css` portant le nom d'une classe qu'un jeton de thème génère
 déjà : en Tailwind v4 les deux déclarations **fusionnent** dans la même règle et la dernière gagne,
 sans erreur ni avertissement.
 

@@ -19,6 +19,12 @@ const DESKTOP = '(min-width:64.0625rem)';
  * focus moved into the sheet on open, focus trapped inside it, Escape closes, focus restored to
  * the opener on close, role="dialog" + aria-modal. On mobile this sheet is the only thing on screen.
  *
+ * PAS DE FILET — v0.8.0. La feuille n'émet plus aucun <hr>, et l'item `separator` a disparu
+ * avec lui. Un menu de bureau (Dropdown) garde le sien : il est dense, survolé à la souris,
+ * et le filet y sépare l'action destructrice du reste. Une feuille du bas est haute, aérée,
+ * parcourue au pouce — le rythme des lignes suffit, et l'action destructrice se signale déjà
+ * par sa couleur.
+ *
  * ABOVE 64 rem — a rule, not a side effect: an ActionSheet NEVER opens as a modal surface
  * (`.ds-scrim--sheet` is display:none above 64 rem). It exists there only as an inline specimen
  * with `panel`: a 20rem panel, four corners at radius 2xl, full border, no grip, no scrim.
@@ -29,8 +35,6 @@ export interface ActionSheetItem {
   /** Destructive row — --destructive text. */
   danger?: boolean;
   onSelect?: () => void;
-  /** Renders a hairline instead of a row. */
-  separator?: boolean;
   /** Classes en plus sur le <button> de l'item — les aides d'état de la vitrine
    *  (`is-hover`…) passent par ici. */
   className?: string;
@@ -101,20 +105,17 @@ export function ActionSheet({
           {subtitle ? <span className="ds-actionsheet__subtitle">{subtitle}</span> : null}
         </div>
       ) : null}
-      {items.map((it, i) => it.separator
-        ? <hr key={i} className="ds-sep ds-actionsheet__sep" />
-        : (
-          <button
-            key={i}
-            type="button"
-            onClick={it.onSelect}
-            className={cn('ds-actionsheet__item', it.danger && 'ds-actionsheet__item--danger', it.className)}
-          >
-            {it.icon}<span style={{ flex: 1 }}>{it.label}</span>
-          </button>
-        ))}
+      {items.map((it, i) => (
+        <button
+          key={i}
+          type="button"
+          onClick={it.onSelect}
+          className={cn('ds-actionsheet__item', it.danger && 'ds-actionsheet__item--danger', it.className)}
+        >
+          {it.icon}<span style={{ flex: 1 }}>{it.label}</span>
+        </button>
+      ))}
       {note ? <div className="ds-actionsheet__note">{note}</div> : null}
-      <hr className="ds-sep ds-actionsheet__sep" />
       <button type="button" className="ds-actionsheet__item ds-actionsheet__cancel" onClick={onCancel}>
         {cancelLabel}
       </button>

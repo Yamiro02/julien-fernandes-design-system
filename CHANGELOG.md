@@ -23,6 +23,139 @@ concordent.
 
 ---
 
+## 0.8.0 — les surfaces sortent du blanc, les marges respirent, un neuvième garde
+
+Le rendu de **tout ce qui est posé sur la mise en page** change, dans les deux thèmes.
+Aucune prop publique de composant n'est retirée sauf une, listée en rupture ci-dessous.
+
+### Le blanc pur quitte les surfaces
+
+`--secondary` — le remplissage du bouton secondaire, de la navbar, de la barre latérale, de
+la barre d'onglets, de la pagination, des champs et des barres de recherche — passe de
+`#ffffff` à **`#fbf8f3`** en clair et de `#37352f` à **`#2b2a28`** en sombre. Sur une page
+crème, un champ de recherche en blanc pur ne se posait pas dessus : il tranchait.
+
+En sombre, `--secondary` prend la valeur **exacte** de `--card`. Une barre latérale et les
+cartes posées à sa droite sont la même hauteur de plan ; ce qui les sépare est le filet et
+la mise en page, pas un troisième ton. Effet de bord réparé au passage : à `#37352f`,
+`--secondary` était plus CLAIR que `--surface-alt`, donc un survol sur la barre latérale ou
+un item de menu **assombrissait** la surface — l'inverse de ce qu'un survol doit faire en
+thème sombre. Il l'éclaircit maintenant.
+
+L'échelle des surfaces, après ce lot :
+
+```
+clair   muted #f1ece4 < surface-alt #f6ede2 < background #f6f2ec < card #faf7f2
+        < secondary #fbf8f3 < popover #fdfbf8
+sombre  background #1f1e1c < muted #262523 < card = secondary #2b2a28
+        < popover #302e2b < surface-alt #32302d
+```
+
+### Un contrôle déduit sa porteuse
+
+C'est la contrepartie indispensable du point précédent. Un bouton secondaire posé dans une
+carte aurait eu **1,009** d'écart avec elle — invisible. Il bascule sur `--background` :
+**1,044** en clair, **1,162** en sombre. La doctrine, déjà appliquée au champ et à la barre
+d'onglets, couvre maintenant **quatre familles** : champ, barre d'onglets, menu déroulant,
+bouton secondaire. Une surface se lit à son écart avec ce qui la porte, jamais dans l'absolu.
+
+### Ce qui déroule sous un champ s'aligne sur lui
+
+`.ds-dropdown`, `.ds-datepicker__pop` et `.ds-cal` passent de `--popover` à `--secondary` :
+ils sont la continuation visuelle du contrôle qui les ouvre, et sur `--popover` ils étaient
+un cran plus clairs que leur propre champ. **Posés dans une carte ou une modale, ils
+retombent sur `--popover`** et continuent de flotter. `.ds-modal` et `.ds-actionsheet`
+restent sur `--popover` : une modale est une grande plaque qui flotte au-dessus de tout,
+pas la continuation d'un champ.
+
+### Le focus du champ : un trait, plus un halo
+
+Le champ recevait à la fois l'`outline` générique de `tokens/base.css` (2px, décalé de 2px)
+ET son bord en `--ring` : deux traits concentriques autour du même contrôle. L'outline est
+neutralisé **sur `.ds-input` seulement** ; partout ailleurs il reste le seul marqueur.
+
+`--ring` passe de `--primary` (`#e85d2f`) à **`--brand-via` (`#f08029`)**, l'arrêt médian du
+dégradé — décision de marque, prise en connaissance de la mesure : 2,41:1 sur la page, sous
+le plancher de 3:1. Le halo de 3px, le même que celui des boutons, rend en **surface** ce
+que le trait perd en contraste. **Ne pas le retirer sans remonter `--ring` à `--brand-to`.**
+En sombre `--ring` ne bouge pas (`#f5a524`, 8,16).
+
+### Les marges intérieures prennent un cran
+
+`--card-pad` 24 → **28**, `--card-pad-lg` 28 → **32**. La modale prend le **même** padding
+que la carte, et par le même jeton : deux surfaces de contenu, un seul levier.
+Toast `1rem 1.125rem`, bandeau `1.125rem 1.25rem`, champ `0.6875rem 1rem` (l'horizontal
+seul — la hauteur reste gouvernée par `--control-md`), item de menu `0.625rem 0.8125rem`,
+barre latérale `--space-5`, entrée de nav `0 --space-4`. `.ds-card--flush` reste à 0 : les
+tableaux à ras gardent leur densité.
+
+`--space-5` n'est **pas** augmenté, et c'est délibéré : il porte la gouttière du voile, le
+gap de la navbar, le plancher de safe-area et la gouttière de `.page` — quatre rôles qui ne
+sont pas des marges intérieures.
+
+### Toast et bandeau centrent leur contenu
+
+`align-items` passe de `flex-start` à `center`. En `flex-start`, la pastille et la croix de
+fermeture se collaient au haut du bloc : sur un message à deux lignes ça se lit comme un
+défaut d'alignement. Le nudge optique d'1px de `.ds-banner__icon` disparaît avec la raison
+qui le justifiait. *Contrepartie acceptée* : sur une description de trois lignes ou plus,
+l'icône se trouve au milieu du bloc plutôt qu'en regard du titre.
+
+### La barre latérale suit la fenêtre
+
+`--sidebar-w` : `16rem` fixe → **`clamp(16rem,15vw,23rem)`** (256 → 368). 16rem est la bonne
+largeur sur un portable et une bande étriquée sur un 27 pouces. C'est le **seul jeton du
+socle qui mêle `rem` et `vw`**, et c'est assumé : une largeur de couloir doit suivre la
+FENÊTRE, pas la préférence de taille de texte. Les paliers de `app-scale.css` agissent sur
+la racine, donc sur le plancher et le plafond en rem — les deux mécanismes se composent.
+
+`--sidenav-h` : 40 → **44**. L'entrée de navigation, cible la plus cliquée d'une coque
+d'outil, était sous le seuil tactile que le reste du système tient déjà. Son rayon passe de
+`--radius-sm` à `--radius-md` : à 44 de haut, la pilule active a la place de se lire comme
+une pilule.
+
+### ⚠ Rupture — plus de séparateur dans `ActionSheet`
+
+L'item `separator` de `ActionSheetItem` est **retiré**, avec la règle
+`.ds-actionsheet__sep` et le `<hr>` que le composant émettait avant « Annuler ». Une feuille
+du bas est haute, aérée, parcourue au pouce : le rythme des lignes suffit, et l'action
+destructrice se signale déjà par sa couleur. **`Dropdown` garde le sien** — il est dense,
+survolé à la souris, et le filet y sépare l'action destructrice du reste.
+
+*Migration* : retirer les entrées `{ separator: true }` des `items` d'un `ActionSheet`.
+TypeScript signale les occurrences restantes.
+
+### Neuvième garde — `check-token-refs.mjs`
+
+Tout `var(--x)` lu par le CSS du système ou par un style inline de composant doit
+correspondre à un `--x:` déclaré. Il est branché **en tête** de `npm run lint` : c'est le
+moins cher, et un jeton manquant rend le diagnostic des autres trompeur.
+
+**Le défaut qu'il ferme.** Un portage a livré un `patterns.css` qui lisait
+`var(--text-body-sm)` en treize endroits sans que le jeton soit déclaré. Un `var()` non
+résolu ne rend pas la déclaration « ignorée », il la rend **invalide at computed-value
+time** — ce qui, pour `font-size`, signifie `inherit`. `.ds-btn--sm` héritait donc le corps
+de texte du parent (16px) au lieu du `--text-control` de `.ds-btn` (15px) : le bouton
+`size="sm"` rendait plus **gros** qu'un `md`. Les huit autres gardes mesurent des valeurs ou
+une complétude de liste ; aucun ne vérifiait que ce que le CSS *lit* existe.
+
+`theme.css` est **exclu** du balayage des déclarations, et toute déclaration valant
+exactement `var(--<même-nom>)` est ignorée où qu'elle soit : le pont Tailwind y écrit
+`--text-body-sm: var(--text-body-sm)`, et un scanner naïf y verrait une déclaration —
+il passerait au vert sur le bug exact qu'il doit attraper. Pas de détection de jeton mort :
+les alias historiques sont déclarés exprès sans consommateur.
+
+`var(--x, repli)` n'est pas une erreur mais sort en ligne `⚠ fallback`. Échappatoire, raison
+obligatoire : `/* @tokenref-assume: --x — qui le fournit, et pourquoi pas nous */`.
+
+### Écarts assumés
+
+Le compte de `check-contrast` passe de **12 à 13** (`anneau de focus --ring sur
+--background`). `check-surfaces` porte désormais **deux `@surface-assume`** — `--secondary /
+--card` en clair (1,009) et en sombre (1,000) : le garde mesure chaque paire **par thème**,
+la clé d'un écart assumé nomme donc son thème. Contrat inchangé : **54 / 32**, aucun jeton
+ajouté ni retiré.
+
 ## 0.7.2 — `Sidebar` porte des entrées en pied
 
 Nouvelle prop `footerItems`, de même forme que les entrées de `sections`.

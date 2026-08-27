@@ -140,7 +140,6 @@ export function OverlaysPage() {
             open={sheet}
             onCancel={() => setSheet(false)}
             items={[...MENU.map(m => ({ ...m, onSelect: () => setSheet(false) })),
-              { separator: true },
               { label: 'Supprimer', icon: <Icon name="trash-2" size="1rem" />, danger: true, onSelect: () => setSheet(false) }]}
           />
         </Block>
@@ -151,21 +150,19 @@ export function OverlaysPage() {
             <ActionSheet inline panel items={[
               { label: 'Item au repos', icon: <Icon name="file-text" size="1rem" /> },
               { label: 'Item survolé', icon: <Icon name="file-text" size="1rem" />, className: 'is-hover' },
-              { separator: true },
               { label: 'Supprimer la vidéo', icon: <Icon name="trash-2" size="1rem" />, danger: true }]} />
             <ActionSheet inline panel
               title="Vidéo 3 — le déploiement"
               subtitle="Publiée le 24 septembre"
               note="La suppression retire aussi la miniature et les sous-titres. Elle est définitive."
               items={[...MENU,
-                { separator: true },
                 { label: 'Supprimer la vidéo', icon: <Icon name="trash-2" size="1rem" />, danger: true }]} />
           </Row>
         </Block>
       </Section>
 
       <Section title="Dropdown" note="Panneau de menu, rayon 2xl, --shadow-lg. Les items s'éclairent sur --accent. DESKTOP ONLY — sous 64 rem, c'est l'ActionSheet ci-dessus qui prend le relais.">
-        <Block label="inline — rendu dans le flux" hint="Posé à côté de l'ActionSheet ci-dessus, la parenté se voit : mêmes lignes, mêmes tons, même séparateur. Seule la surface change.">
+        <Block label="inline — rendu dans le flux" hint="Posé à côté de l'ActionSheet ci-dessus, la parenté se voit : mêmes lignes, mêmes tons. Le Dropdown garde son filet — dense, survolé à la souris — là où la feuille du bas l'a perdu.">
           <Row>
             <Dropdown inline items={[
               { label: 'Copier le lien', icon: <Icon name="copy" size="1rem" /> },

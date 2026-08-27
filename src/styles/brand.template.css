@@ -307,10 +307,13 @@
 
   /* Navigation */
   /* --navbar-h:4.5rem; */              /* socle : 72 — hauteur de la barre */
-  /* --sidebar-w:16rem; */              /* socle : 256 — tiroir déployé */
+  /* --sidebar-w:clamp(16rem,15vw,23rem); */ /* socle : 256 -> 368 — tiroir déployé. Le seul
+                                           défaut du socle qui mêle rem et vw : une largeur
+                                           de couloir suit la FENÊTRE, pas la taille de
+                                           texte. Une valeur fixe ici la fige, c'est permis. */
   /* --sidebar-w-collapsed:4.5rem; */   /* socle : 72 — tiroir replié */
   /* --sidebar-head-h:3rem; */          /* socle : 48 — en-tête du tiroir */
-  /* --sidenav-h:2.5rem; */             /* socle : 40 — un lien de tiroir */
+  /* --sidenav-h:2.75rem; */           /* socle : 44 — un lien de tiroir, au seuil tactile */
   /* --page-min:2.5rem; */              /* socle : 40 — carré minimum d'un bouton de pagination */
   /* --tabs-radius:0.875rem; */         /* socle : 14 — l'arrondi PROPRE à la barre d'onglets.
                                            Il ne suit pas --radius-* : le changer ne touche

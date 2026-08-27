@@ -22,9 +22,18 @@
        icône et son libellé : personne ne remplit ce contrat-là ;
      · ce sont des mesures de COMPACITÉ, c'est-à-dire de la structure — et la structure ne
        se substitue pas, c'est la doctrine du dépôt.
-   Trois d'entre elles valent 0.875rem (padding de .ds-input, de .ds-banner, gap de
-   .ds-modal). Ce n'est pas le palier typographique du même nombre : celui-là est devenu
-   --text-body-sm et a quitté ce fichier. Un même nombre, deux métiers. */
+   Le gap de .ds-modal vaut 0.875rem. Ce n'est pas le palier typographique du même nombre :
+   celui-là est devenu --text-body-sm et a quitté ce fichier. Un même nombre, deux métiers.
+   (Le padding de .ds-input et celui de .ds-banner valaient 0.875rem eux aussi ; ils ont pris
+   un cran en v0.8.0 — voir ci-dessous.)
+
+   POURQUOI --space-5 N'A PAS ÉTÉ AUGMENTÉ EN v0.8.0, ET C'EST DÉLIBÉRÉ. Les marges
+   INTÉRIEURES ont toutes pris un cran — modale, toast, bandeau, champ, item de menu, barre
+   latérale, barre de nav. Passer --space-5 de 1.5rem à 1.75rem aurait fait la même chose en
+   une ligne, et c'est le piège : --space-5 porte la gouttière du voile (.ds-scrim), le gap
+   de la navbar, le plancher de safe-area et la gouttière de .page — quatre rôles qui ne
+   sont PAS des marges intérieures. On aurait déplacé le rythme de tout le système pour
+   gagner une seule marge. C'est la question que se posera la prochaine personne. */
 
 /* ---------- actions: Button ---------- */
 .ds-btn{display:inline-flex;align-items:center;justify-content:center;gap:0.5rem;min-height:var(--control-md);padding:0.8125rem 1.375rem;font-family:var(--font-body);font-size:var(--text-control);font-weight:var(--weight-semibold);line-height:1;border:none;border-radius:var(--radius-md);cursor:pointer;text-decoration:none;white-space:nowrap;box-sizing:border-box;outline:none;transition:transform var(--duration-fast) var(--ease-standard),box-shadow var(--duration-base) var(--ease-standard),background var(--duration-base) var(--ease-standard),border-color var(--duration-base) var(--ease-standard),filter var(--duration-base) var(--ease-standard)}
@@ -45,6 +54,14 @@
 .ds-btn--danger:hover:not(:disabled),.ds-btn--danger.is-hover{filter:brightness(.93);transform:translateY(-1px)}
 .ds-btn--danger:active:not(:disabled),.ds-btn--danger.is-active{transform:translateY(1px)}
 .ds-btn--secondary:focus-visible,.ds-btn--ghost:focus-visible,.ds-btn--danger:focus-visible,.ds-btn--secondary.is-focus,.ds-btn--ghost.is-focus,.ds-btn--danger.is-focus{box-shadow:0 0 0 3px color-mix(in srgb,var(--ring) 35%,transparent)}
+/* UN CONTRÔLE DÉDUIT SA PORTEUSE — la contrepartie indispensable de --secondary passé au
+   rang de la carte (v0.8.0). Sans cette règle, un bouton secondaire dans une carte aurait
+   1,009 d'écart avec elle : invisible. Avec : 1,044 en clair, 1,162 en sombre.
+   Le bouton FANTÔME (transparent) et le PRIMAIRE (dégradé) ne sont pas concernés — ni l'un
+   ni l'autre ne porte --secondary. La doctrine couvre maintenant quatre familles : champ,
+   barre d'onglets, menu déroulant, bouton secondaire. Une surface se lit à son écart avec
+   ce qui la porte, jamais dans l'absolu. */
+.ds-card .ds-btn--secondary,.ds-modal .ds-btn--secondary,.ds-actionsheet .ds-btn--secondary,.ds-dropdown .ds-btn--secondary,.ds-card .ds-icon-btn--secondary,.ds-modal .ds-icon-btn--secondary{background:var(--background)}
 .ds-btn:disabled,.ds-btn.is-disabled{opacity:.5;cursor:not-allowed;transform:none}
 .ds-btn.is-loading{cursor:progress}
 .ds-spin{animation:ds-spin var(--duration-rotate) linear infinite;flex:none}
@@ -69,7 +86,7 @@
 .ds-label{font-size:var(--text-caption);font-weight:var(--weight-semibold);color:var(--text-secondary);letter-spacing:0}
 .ds-help{font-size:var(--text-caption);color:var(--text-muted)}
 .ds-error{display:flex;align-items:center;gap:var(--space-2);font-size:var(--text-caption);font-weight:var(--weight-medium);color:var(--destructive-readable)}
-.ds-input{width:100%;min-height:var(--control-md);padding:0.6875rem 0.875rem;box-sizing:border-box;font-family:var(--font-body);font-size:var(--text-control);color:var(--foreground);background:var(--secondary);border:1.5px solid var(--input);border-radius:var(--radius-md);outline:none;transition:border-color var(--duration-base) var(--ease-standard),box-shadow var(--duration-base) var(--ease-standard)}
+.ds-input{width:100%;min-height:var(--control-md);padding:0.6875rem 1rem;box-sizing:border-box;font-family:var(--font-body);font-size:var(--text-control);color:var(--foreground);background:var(--secondary);border:1.5px solid var(--input);border-radius:var(--radius-md);outline:none;transition:border-color var(--duration-base) var(--ease-standard),box-shadow var(--duration-base) var(--ease-standard)}
 .ds-input--on-card{background:var(--background)}
 /* Un champ DÉDUIT sa surface porteuse au lieu de l'attendre en prop. --secondary est le
    remplissage d'un contrôle posé sur la MISE EN PAGE ; dans une carte, une modale, une
@@ -81,7 +98,16 @@
 .ds-input--sm{min-height:var(--control-sm)}
 .ds-input--lg{min-height:var(--control-lg)}
 .ds-input::placeholder{color:var(--text-muted)}
-.ds-input:focus,.ds-input.is-focus{border-color:var(--ring)}
+/* UN SEUL TRAIT, PLUS UN HALO. Le champ recevait à la fois l'outline générique de
+   tokens/base.css (2px, décalé de 2px) ET son bord en --ring : deux traits concentriques
+   autour du même contrôle. L'outline est neutralisé SUR .ds-input SEULEMENT — partout
+   ailleurs (bouton, onglet, jour de calendrier, entrée de nav) il reste le seul marqueur.
+   LE HALO N'EST PAS UN SECOND CONTOUR, ET IL N'EST PAS DÉCORATIF. --ring vaut désormais
+   --brand-via, qui mesure 2,41 sur la page — sous le plancher de 3:1. Le halo de 3px, le
+   même que celui des boutons, rend en SURFACE ce que le trait perd en contraste.
+   Ne pas le retirer sans remonter --ring à --brand-to. */
+.ds-input:focus,.ds-input.is-focus{border-color:var(--ring);box-shadow:0 0 0 3px color-mix(in srgb,var(--ring) 35%,transparent)}
+.ds-input:focus-visible{outline:none}
 .ds-input.is-error,.ds-input[aria-invalid="true"]{border-color:var(--destructive)}
 .ds-input.is-error:focus,.ds-input[aria-invalid="true"]:focus{border-color:var(--destructive)}
 .ds-input:disabled,.ds-input.is-disabled{cursor:not-allowed;background:var(--muted);color:var(--muted-foreground)}
@@ -175,13 +201,18 @@
 .ds-pastille--outlined{border:1px solid color-mix(in srgb,currentColor 22%,transparent)}
 
 /* ---------- feedback: Toast · Banner · EmptyState · Skeleton ---------- */
-.ds-toast{display:flex;align-items:flex-start;gap:0.6875rem;padding:0.8125rem 0.9375rem;border:1px solid var(--border);border-radius:var(--radius-lg);background:var(--card);color:var(--card-foreground);box-shadow:var(--shadow-lg);min-width:var(--toast-w-min);max-width:var(--toast-w-max);box-sizing:border-box}
+/* CENTRÉS VERTICALEMENT depuis la v0.8.0. En flex-start, la pastille et la croix de
+   fermeture se collaient au haut du bloc : sur un message à deux lignes ça se lit comme un
+   défaut d'alignement, pas comme une hiérarchie. Le corps étant la seule colonne, centrer le
+   conteneur centre les trois. Contrepartie connue et acceptée : sur une description de trois
+   lignes ou plus, l'icône se trouve au milieu du bloc plutôt qu'en regard du titre. */
+.ds-toast{display:flex;align-items:center;gap:0.6875rem;padding:1rem 1.125rem;border:1px solid var(--border);border-radius:var(--radius-lg);background:var(--card);color:var(--card-foreground);box-shadow:var(--shadow-lg);min-width:var(--toast-w-min);max-width:var(--toast-w-max);box-sizing:border-box}
 .ds-toast__icon{flex:none;display:inline-flex;align-items:center;justify-content:center;width:1.5rem;height:1.5rem;border-radius:var(--radius-sm)}
 .ds-toast__title{font-size:var(--text-body-sm);font-weight:var(--weight-semibold);line-height:var(--leading-snug)}
 .ds-toast__desc{font-size:var(--text-caption);color:var(--muted-foreground);line-height:var(--leading-normal)}
 .ds-toast__close{flex:none;display:inline-flex;border:none;background:transparent;color:var(--muted-foreground);cursor:pointer;padding:0.125rem;border-radius:var(--radius-sm)}
 .ds-toast__close:hover{color:var(--foreground)}
-.ds-banner{display:flex;align-items:flex-start;gap:0.6875rem;padding:0.875rem 1rem;border:1px solid var(--border);border-radius:var(--radius-lg);background:var(--card)}
+.ds-banner{display:flex;align-items:center;gap:0.6875rem;padding:1.125rem 1.25rem;border:1px solid var(--border);border-radius:var(--radius-lg);background:var(--card)}
 .ds-banner--info{background:var(--accent);border-color:color-mix(in srgb,var(--primary) 30%,transparent);color:var(--primary-readable)}
 .ds-banner--danger{background:var(--pill-danger-bg);border-color:color-mix(in srgb,var(--destructive) 35%,transparent);color:var(--pill-danger-fg)}
 .ds-banner--warning{background:var(--pill-warning-bg);border-color:color-mix(in srgb,var(--brand-via) 35%,transparent);color:var(--pill-warning-fg)}
@@ -193,7 +224,6 @@
 .ds-toast__icon--danger{background:var(--pill-danger-bg);color:var(--pill-danger-fg)}
 .ds-toast__icon--warning{background:var(--pill-warning-bg);color:var(--pill-warning-fg)}
 .ds-toast__icon--info{background:var(--pill-neutral-bg);color:var(--muted-foreground)}
-.ds-banner__icon{margin-top:0.0625rem}
 .ds-banner__main{display:flex;flex-direction:column;gap:0.125rem;flex:1}
 .ds-banner__title{font-size:var(--text-body-sm);font-weight:var(--weight-semibold);color:inherit}
 /* En ton info le bandeau est sur --accent : le titre repasse à l'encre pleine. */
@@ -212,7 +242,7 @@
 
 /* ---------- overlays: Modal · Dropdown ---------- */
 .ds-scrim{position:fixed;inset:0;z-index:var(--z-modal);background:color-mix(in srgb,var(--tone-dark) 45%,transparent);backdrop-filter:blur(2px);-webkit-backdrop-filter:blur(2px);display:flex;align-items:center;justify-content:center;padding:var(--space-5)}
-.ds-modal{width:var(--modal-w);max-width:100%;background:var(--popover);color:var(--popover-foreground);border:1px solid var(--border);border-radius:var(--radius-2xl);box-shadow:var(--shadow-lg);padding:var(--space-5);display:flex;flex-direction:column;gap:0.875rem;box-sizing:border-box}
+.ds-modal{width:var(--modal-w);max-width:100%;background:var(--popover);color:var(--popover-foreground);border:1px solid var(--border);border-radius:var(--radius-2xl);box-shadow:var(--shadow-lg);padding:var(--card-pad);display:flex;flex-direction:column;gap:0.875rem;box-sizing:border-box}
 .ds-modal__close{width:var(--modal-close);height:var(--modal-close);border-radius:var(--radius-sm);border:none;background:transparent;color:var(--muted-foreground);cursor:pointer;display:inline-flex;align-items:center;justify-content:center;margin-left:auto}
 .ds-modal__close:hover:not(:disabled){background:var(--surface-alt);color:var(--foreground)}
 .ds-modal__close:disabled{opacity:.4;cursor:not-allowed;background:transparent;color:var(--muted-foreground)}
@@ -242,7 +272,11 @@
 .ds-actionsheet__item:hover,.ds-actionsheet__item.is-hover,.ds-actionsheet__item:focus-visible{background:var(--surface-alt);outline:none}
 .ds-actionsheet__item--danger{color:var(--destructive-readable)}
 .ds-actionsheet__note{font-size:var(--text-caption);color:var(--text-muted);line-height:var(--leading-normal);padding:var(--space-1) var(--space-3) var(--space-2)}
-.ds-actionsheet__sep{margin:var(--space-2) var(--space-3);width:auto}
+/* PAS DE FILET DANS UNE FEUILLE D'ACTION — v0.8.0. La règle .ds-actionsheet__sep a été
+   retirée, et ActionSheet n'émet plus de <hr>. Un menu de BUREAU (.ds-dropdown) garde le
+   sien : il est dense, survolé à la souris, et le filet y sépare l'action destructrice du
+   reste. Une feuille du bas est haute, aérée, parcourue au pouce — le rythme des lignes
+   suffit, et l'action destructrice se signale déjà par sa couleur. */
 .ds-actionsheet__cancel{justify-content:center;font-weight:var(--weight-semibold);color:var(--text-secondary)}
 .ds-scrim--sheet{align-items:flex-end;padding:0}
 /* RÈGLE, pas effet de bord : au-dessus de 64 rem une ActionSheet ne s'ouvre JAMAIS en surface
@@ -253,17 +287,27 @@
 .ds-actionsheet--panneau{width:var(--actionsheet-w-panneau);max-width:100%;border:1px solid var(--border);border-radius:var(--radius-2xl);padding-bottom:var(--space-2)}
 .ds-actionsheet--panneau .ds-grip{display:none}
 .ds-dropdown--floating{position:absolute;z-index:var(--z-popover)}
-.ds-dropdown{width:var(--dropdown-w);padding:0.375rem;background:var(--popover);color:var(--popover-foreground);border:1px solid var(--border);border-radius:var(--radius-lg);box-shadow:var(--shadow-lg);display:flex;flex-direction:column;gap:0.125rem;box-sizing:border-box}
-.ds-dropdown__item{display:flex;align-items:center;gap:0.625rem;width:100%;padding:0.5625rem 0.6875rem;border:0;background:transparent;color:var(--foreground);font-family:var(--font-body);font-size:var(--text-body-sm);text-align:left;border-radius:var(--radius-sm);cursor:pointer;transition:background var(--duration-fast) var(--ease-standard)}
+/* CE QUI DÉROULE SOUS UN CHAMP S'ALIGNE SUR LUI — v0.8.0. Un menu, un sélecteur de date et
+   un calendrier sont la continuation visuelle du contrôle qui les ouvre. Sur --popover ils
+   étaient un cran plus CLAIRS que leur propre champ, ce qui les décollait de lui.
+   .ds-modal et .ds-actionsheet RESTENT sur --popover : une modale est une grande plaque qui
+   flotte au-dessus de tout, pas la continuation d'un champ. */
+.ds-dropdown{width:var(--dropdown-w);padding:0.375rem;background:var(--secondary);color:var(--popover-foreground);border:1px solid var(--border);border-radius:var(--radius-lg);box-shadow:var(--shadow-lg);display:flex;flex-direction:column;gap:0.125rem;box-sizing:border-box}
+.ds-dropdown__item{display:flex;align-items:center;gap:0.625rem;width:100%;padding:0.625rem 0.8125rem;border:0;background:transparent;color:var(--foreground);font-family:var(--font-body);font-size:var(--text-body-sm);text-align:left;border-radius:var(--radius-sm);cursor:pointer;transition:background var(--duration-fast) var(--ease-standard)}
 .ds-dropdown__item:hover,.ds-dropdown__item.is-hover,.ds-dropdown__item:focus-visible{background:var(--surface-alt);outline:none}
 .ds-dropdown__item--danger{color:var(--destructive-readable)}
 .ds-dropdown__sep{height:1px;margin:0.25rem 0.375rem;background:var(--border);border:0}
+/* MAIS POSÉ DANS UNE CARTE OU UNE MODALE, UN MENU DOIT CONTINUER DE FLOTTER : il retombe
+   alors sur --popover, 1,035 au-dessus de sa porteuse. Sans cette règle on rouvre
+   l'effondrement corrigé en v0.4.2 — c'est le seul endroit du lot où une omission casse
+   quelque chose de connu. */
+.ds-card .ds-dropdown,.ds-card .ds-datepicker__pop,.ds-card .ds-cal,.ds-modal .ds-dropdown,.ds-modal .ds-datepicker__pop,.ds-modal .ds-cal{background:var(--popover)}
 
 /* Modal as a bottom sheet under 64rem — the system's ONE breakpoint. Above it: nothing changes.
    Inline panels (specimen cards, no scrim) are untouched: the rules require .ds-scrim. */
 @media (max-width:64rem){
 .ds-scrim{align-items:flex-end;padding:0}
-.ds-scrim .ds-modal{width:100%;max-width:none;border-radius:var(--radius-2xl) var(--radius-2xl) 0 0;border-inline:0;border-bottom:0;padding-bottom:max(var(--space-5),env(safe-area-inset-bottom));animation:ds-sheet-in var(--duration-slow) var(--ease-standard)}
+.ds-scrim .ds-modal{width:100%;max-width:none;border-radius:var(--radius-2xl) var(--radius-2xl) 0 0;border-inline:0;border-bottom:0;padding-bottom:max(var(--card-pad),env(safe-area-inset-bottom));animation:ds-sheet-in var(--duration-slow) var(--ease-standard)}
 .ds-scrim .ds-modal .ds-grip{display:block;margin-bottom:var(--space-2)}
 }
 @keyframes ds-sheet-in{from{transform:translateY(100%)}to{transform:none}}
@@ -369,7 +413,7 @@
   .ds-appshell .ds-sidebar{position:sticky;top:0;align-self:start;height:100dvh}
 }
 .ds-appshell__main{min-width:0}
-.ds-sidebar{display:flex;flex-direction:column;gap:var(--space-2);width:var(--sidebar-w);background:var(--secondary);border-right:1px solid var(--border);padding:var(--space-4);box-sizing:border-box;transition:width var(--duration-base) var(--ease-standard)}
+.ds-sidebar{display:flex;flex-direction:column;gap:var(--space-2);width:var(--sidebar-w);background:var(--secondary);border-right:1px solid var(--border);padding:var(--space-5);box-sizing:border-box;transition:width var(--duration-base) var(--ease-standard)}
 .ds-sidebar.is-collapsed{width:var(--sidebar-w-collapsed);padding-inline:var(--space-3)}
 .ds-sidebar__head{display:flex;align-items:center;justify-content:space-between;gap:var(--space-2);min-height:var(--sidebar-head-h);margin-bottom:var(--space-2)}
 .ds-sidebar.is-collapsed .ds-sidebar__head{flex-direction:column;justify-content:center;gap:var(--space-2)}
@@ -379,7 +423,10 @@
 .ds-sidebar__nav{display:flex;flex-direction:column;gap:var(--space-1);flex:1;overflow-y:auto;min-height:0}
 .ds-sidebar__title{font-family:var(--font-body);font-size:0.6875rem;font-weight:var(--weight-bold);letter-spacing:0.08em;text-transform:uppercase;color:var(--text-muted);padding:var(--space-3) var(--space-3) var(--space-1)}
 .ds-sidebar.is-collapsed .ds-sidebar__title{display:none}
-.ds-sidenav{display:flex;align-items:center;gap:var(--space-3);min-height:var(--sidenav-h);padding:0 var(--space-3);border-radius:var(--radius-sm);border:0;background:transparent;color:var(--text-secondary);font-family:var(--font-body);font-size:var(--text-control);font-weight:var(--weight-medium);text-align:left;text-decoration:none;cursor:pointer;white-space:nowrap;transition:background-color var(--duration-fast) var(--ease-standard),color var(--duration-fast) var(--ease-standard)}
+/* 12px de rayon au lieu de 10 : avec la hauteur à 44 (v0.8.0), la pilule active a la place
+   de se lire comme une pilule. Pas de jeton --sidenav-radius — ce serait un jeton de plus au
+   contrat pour une valeur que personne ne redéclarera. */
+.ds-sidenav{display:flex;align-items:center;gap:var(--space-3);min-height:var(--sidenav-h);padding:0 var(--space-4);border-radius:var(--radius-md);border:0;background:transparent;color:var(--text-secondary);font-family:var(--font-body);font-size:var(--text-control);font-weight:var(--weight-medium);text-align:left;text-decoration:none;cursor:pointer;white-space:nowrap;transition:background-color var(--duration-fast) var(--ease-standard),color var(--duration-fast) var(--ease-standard)}
 .ds-sidenav:hover{background:var(--surface-alt);color:var(--foreground)}
 /* L'item actif se signale par sa GRAISSE et son ICÔNE, pas par un libellé coloré.
    L'orange est rationné : une icône de 20 px le porte, une ligne de texte entière le
@@ -412,7 +459,7 @@
 }
 
 /* ---------- calendar / datepicker ---------- */
-.ds-cal{display:inline-flex;flex-direction:column;gap:var(--space-2);padding:var(--space-3);background:var(--popover);color:var(--popover-foreground);border:1px solid var(--border);border-radius:var(--radius-lg);box-shadow:var(--shadow-sm)}
+.ds-cal{display:inline-flex;flex-direction:column;gap:var(--space-2);padding:var(--space-3);background:var(--secondary);color:var(--popover-foreground);border:1px solid var(--border);border-radius:var(--radius-lg);box-shadow:var(--shadow-sm)}
 .ds-cal--bare{padding:0;background:none;border:0;box-shadow:none}
 .ds-cal__head{display:flex;align-items:center;gap:var(--space-1)}
 .ds-cal__label{flex:1;text-align:center;font-family:var(--font-body);font-size:var(--text-control);font-weight:var(--weight-semibold);text-transform:capitalize}
@@ -430,4 +477,4 @@
 .ds-datepicker{position:relative;display:inline-block;width:100%}
 .ds-datepicker__trigger{display:flex;align-items:center;justify-content:space-between;gap:var(--space-3);text-align:left;cursor:pointer}
 .ds-datepicker__ph{color:var(--text-muted)}
-.ds-datepicker__pop{position:absolute;top:calc(100% + 0.5rem);left:0;z-index:var(--z-popover);display:block;background:var(--popover);color:var(--popover-foreground);border:1px solid var(--border);border-radius:var(--radius-lg);box-shadow:var(--shadow-lg);padding:var(--space-3)}
+.ds-datepicker__pop{position:absolute;top:calc(100% + 0.5rem);left:0;z-index:var(--z-popover);display:block;background:var(--secondary);color:var(--popover-foreground);border:1px solid var(--border);border-radius:var(--radius-lg);box-shadow:var(--shadow-lg);padding:var(--space-3)}
