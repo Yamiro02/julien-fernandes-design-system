@@ -183,7 +183,9 @@ Tailwind est légitime, l'arbitrage est humain, et `tailwindcss` est un peer **o
 un garde bloquant sur un paquet facultatif casserait la CI pour la mauvaise raison. Sa valeur
 est de rendre la dérive **visible**, pas de l'interdire.
 
-`check-portage.sh` gagne les deux points que ce lot pose et passe de 15 à **17**.
+`check-portage.sh` gagne les deux points que ce lot pose et passe de 15 à **17**. Son point
+« icône de nav active » est recalé sur `--primary` — il a d'ailleurs attrapé le changement
+tout seul, ce qui est exactement son métier.
 
 `check-token-refs.mjs` gagne une échappatoire jumelle, `@tokenref-fallback:` : sans elle il
 répétait à chaque `lint` qu'un repli « pérennise le trou » sur la ligne où le repli **est** la

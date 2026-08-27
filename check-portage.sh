@@ -30,7 +30,7 @@ v "jour sélectionné du calendrier" src/styles/patterns.css ".ds-cal__day.is-se
 
 echo "── La coque ──"
 v "barre latérale collante"              src/styles/patterns.css "align-self:start"
-v "icône de nav active en --brand-via"   src/styles/patterns.css ".ds-sidenav.is-active svg{color:var(--brand-via)}"
+v "icône de nav active en --primary"     src/styles/patterns.css ".ds-sidenav.is-active svg{color:var(--primary)}"
 v "pied de navigation"                   src/styles/patterns.css ".ds-sidebar__footnav"
 v "Sidebar : prop linkAs"                src/components/navigation/Sidebar.tsx "linkAs"
 v "Sidebar : prop footerItems"           src/components/navigation/Sidebar.tsx "footerItems"
