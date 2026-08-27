@@ -321,8 +321,14 @@
 /* Rail sur --surface-alt : un cran de séparation depuis la porteuse, dans les deux
    thèmes. Pas --accent — une teinte de marque sous une barre --primary se confondrait
    avec elle ; pas --border non plus, ce n'est pas un filet. */
+/* La BARRE REMPLIE porte le dégradé de marque, jamais l'aplat. C'est la doctrine que la
+   marque énonce elle-même pour le CTA — « --primary est une couleur de REMPLISSAGE, le CTA
+   réel porte --brand-gradient, pas cet aplat » — et elle vaut ici plus qu'ailleurs : une
+   barre de progression est l'endroit où une marque raconte l'avancement. Le socle
+   l'appliquait aux boutons et l'avait oubliée ici.
+   La PISTE, elle, reste --surface-alt : c'est un creux, pas une surface de marque. */
 .ds-progress{position:relative;display:block;width:100%;height:var(--progress-h);border-radius:var(--radius-xs);background:var(--surface-alt);overflow:hidden}
-.ds-progress__bar{position:absolute;inset-block:0;left:0;border-radius:inherit;background:var(--primary);transition:width var(--duration-base) var(--ease-standard)}
+.ds-progress__bar{position:absolute;inset-block:0;left:0;border-radius:inherit;background:var(--brand-gradient);transition:width var(--duration-base) var(--ease-standard)}
 .ds-progress--indeterminate .ds-progress__bar{width:40%;animation:ds-progress-slide var(--duration-shimmer) var(--ease-standard) infinite}
 @keyframes ds-progress-slide{0%{left:-40%}100%{left:100%}}
 

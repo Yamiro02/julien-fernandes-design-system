@@ -15,6 +15,25 @@ concordent.
 
 ---
 
+---
+
+## 0.6.0 — la barre de progression porte le dégradé de marque
+
+`.ds-progress__bar` remplissait en `--primary`, un aplat. Il porte désormais
+`--brand-gradient`.
+
+**Ce n'est pas un goût, c'est la doctrine que la marque énonce déjà elle-même**, dans
+`brand-julien-fernandes.css` : « `--primary` est une couleur de REMPLISSAGE. Le CTA réel
+porte `--brand-gradient`, pas cet aplat ; l'aplat sert de repli et de piste de switch. »
+Le socle l'appliquait à `.ds-btn--primary` et `.ds-icon-btn--primary`, et l'avait oubliée
+sur la barre — l'endroit où une marque raconte le plus : l'avancement.
+
+La **piste** reste `--surface-alt`. C'est un creux, pas une surface de marque.
+
+**Changement visuel pour toute app qui affiche une `Progress`** — d'où le bump mineur et non
+un patch. Aucun changement d'API : ni prop, ni variante. `--brand-gradient` est calculé par
+le socle depuis les arrêts de la marque, il est donc toujours disponible.
+
 ## 0.5.5 — `app-scale.css` ne retouche plus aucun palier typographique
 
 La 0.5.4 faisait descendre dans le socle un grossissement de trois paliers de métadonnée
