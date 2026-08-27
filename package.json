@@ -1,6 +1,6 @@
 {
   "name": "@julienfernandes/ds",
-  "version": "0.1.0",
+  "version": "0.5.0",
   "description": "Design system Julien Fernandes — jetons, couche Tailwind v4 et primitives React.",
   "license": "UNLICENSED",
   "private": false,
@@ -24,7 +24,7 @@
       "require": "./dist/index.cjs"
     },
     "./core.css": "./src/styles/core.css",
-    "./brand-example.css": "./src/styles/brand-example.css",
+    "./brand-julien-fernandes.css": "./src/styles/brand-julien-fernandes.css",
     "./brand.template.css": "./src/styles/brand.template.css",
     "./brand-content.css": "./src/styles/brand-content.css",
     "./brand-content": {
@@ -42,7 +42,7 @@
     "typecheck": "tsc --noEmit",
     "setup": "npm install && npm install --prefix demo",
     "rebrand": "node rebrand.mjs",
-    "lint": "npm run typecheck && node check-utility-collisions.mjs && node check-dark-substitution.mjs && node check-contrast.mjs && node check-surfaces.mjs && node check-catalogue.mjs",
+    "lint": "npm run typecheck && node check-version.mjs && node check-contract.mjs && node check-utility-collisions.mjs && node check-dark-substitution.mjs && node check-contrast.mjs && node check-surfaces.mjs && node check-catalogue.mjs && bash check-literals.sh",
     "demo": "npm --prefix demo run dev",
     "demo:build": "npm --prefix demo run build",
     "demo:install": "npm --prefix demo install",

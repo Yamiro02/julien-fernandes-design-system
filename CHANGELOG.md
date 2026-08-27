@@ -9,6 +9,62 @@ concordent.
 
 ---
 
+## 0.5.0 — marque Julien Fernandes portée, surfaces corrigées, paquet installable
+
+La marque Julien Fernandes est portée sur le squelette, et le paquet devient réellement
+consommable par une app. Reprend la lignée de travail 0.2.0 → 0.4.2 (ci-dessous) que le
+passage au squelette avait effacée du journal.
+
+**⚠ Ruptures**
+
+- Préfixe de classes `.jf-*` → `.ds-*`.
+- `tokens/colors.css` disparaît : la couleur vit dans `brand-julien-fernandes.css`, monté
+  par un second `@import` à côté de `core.css`.
+- `exports` : `./brand-example.css` (mort) remplacé par `./brand-julien-fernandes.css` —
+  `@import "@julienfernandes/ds/brand-julien-fernandes.css"` fonctionne désormais.
+
+**La marque**
+
+- Portage complet : 54 jetons obligatoires, 32 redéclarés en `.dark`, 3 jetons métier,
+  12 écarts d'accessibilité assumés par écrit.
+- `--surface-alt` introduit — 15 sites : survols, rail de progression, point haut du shimmer.
+- Effondrement des surfaces sombres corrigé (6 valeurs) : l'échelle
+  `page → muted → card → popover → surface-alt → secondary` est rétablie.
+- `--popover` clair : `#fdfbf8` — flotte au-dessus de la carte (1,035), reste sous
+  `--secondary` (1,033), pas de blanc pur en surface flottante.
+
+**Le socle (règles `patterns.css`)**
+
+- Un champ (`Input`, `Textarea`, `Select`, déclencheur de `DatePicker`) DÉDUIT sa surface
+  porteuse dans une carte, une modale, une feuille, un dropdown ou un datepicker — la prop
+  `surface="card"` devient une échappatoire, plus une obligation. Même geste pour `Tabs`
+  dans une carte (`onCard` devient une échappatoire).
+- Onglet actif en thème sombre : il monte AU-DESSUS de sa barre (mélange encre/remplissage)
+  au lieu de se creuser en `--background`.
+- Item de navigation actif (`Sidebar`, `Navbar`) : la sélection se signale par la graisse
+  et l'icône (`--primary-readable`), plus par un libellé entier en orange — l'accent est
+  rationné.
+
+**L'outillage**
+
+- `check-surfaces.mjs` : l'échelle des surfaces est mesurée à chaque lint, tout écart sous
+  seuil exige un `@surface-assume` écrit.
+- `npm run lint` agrège désormais les huit gardes : version, contrat, collisions,
+  substitution, contraste, surfaces, catalogue, littéraux.
+
+---
+
+## 0.2.0 → 0.4.2 — la lignée de travail avant le squelette
+
+Cinq prompts de mise au propre (cohérence doc & outillage · deux bugs bloquants du socle et
+palier typographique manquant · mise en page sortie du JSX et échelle de z-index · états
+manquants de la vitrine · catalogue d'usage réécrit + garde `check-catalogue`), puis le
+portage de la marque et le correctif d'effondrement des surfaces (0.4.2). Les
+spécifications détaillées de ces lots (`MISE-A-JOUR-v4.x.md`) vivent hors du dépôt ;
+l'historique git en garde la trace commit par commit.
+
+---
+
 ## 0.1.0 — squelette
 
 Point de départ : 37 composants, 9 pages de vitrine, le contrat de marque, les sept scripts
