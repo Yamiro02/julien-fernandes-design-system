@@ -23,10 +23,17 @@ concordent.
 
 ---
 
-## 0.10.0 — le preflight de Tailwind revient
+## 0.10.0 — le preflight de Tailwind revient, et l'addenda v0.8.0 est appliqué
 
 Le rendu de **tout élément HTML nu** change, dans les deux thèmes. Aucune prop, aucune
-classe retirée. **Aucun composant du système ne bouge d'un pixel** — mesuré, voir plus bas.
+classe retirée, aucun jeton ajouté ni retiré. **Aucun composant du système ne bouge d'un
+pixel du fait du preflight** — mesuré, voir plus bas. La seconde moitié du lot, elle, déplace
+volontairement cinq règles de la barre latérale et deux couleurs d'icône.
+
+> **Ce lot absorbe le contenu prévu pour une « 0.9.1 ».** Cet addenda a été rédigé contre
+> `c2ab970` (la 0.9.0) alors que la 0.10.0 était déjà écrite, non publiée et non taguée. Une
+> 0.9.1 posée *après* la 0.10.0 serait un numéro qui recule ; comme rien n'a jamais été
+> publié sous ce nom, il n'y a aucun trou à combler. Le contenu est donc ici, en entier.
 
 ### Ce qui était cassé, et pourquoi la raison écrite ne tenait pas
 
@@ -135,8 +142,131 @@ Les classes défensives posées sur les `<button>` nus pour compenser ce défaut
 `bg-transparent`, `font-body`, `py-0` et apparentées — **deviennent redondantes** et peuvent
 être retirées au prochain bump.
 
-Le correctif est également appliqué à `design-system-template`, pour qu'un design system
-client ne naisse pas avec un bug déjà corrigé ailleurs.
+### La couleur de bordure par défaut est reposée par le socle
+
+C'est la suite directe du point précédent, et elle renverse la conclusion de la première
+version de ce lot. `tokens/base.css` repose le défaut, tout en haut :
+
+```css
+*,::after,::before,::backdrop,::file-selector-button{border-color:var(--border,currentColor)}
+```
+
+Deux raisons. **La doctrine** : le socle fournit les valeurs, l'app écrit les noms — un
+défaut `currentColor` dit l'inverse, il fait dépendre la bordure d'une propriété de texte que
+l'app n'a pas choisie pour ça. **Le mode de panne est silencieux** : sur une page crème à
+encre sombre, un `border` nu trace un filet quasi noir là où on attendait le gris doux de
+`--border`.
+
+La liste des cinq sélecteurs recopie celle du preflight, sinon un élément échapperait au
+défaut. Le cas rare — une bordure qui suit la couleur du texte — s'écrit `border-current`, un
+mot, et c'est bien lui qui doit coûter les mots ; vérifié : l'utilitaire l'emporte, les
+couches le placent au-dessus de `layer(base)`. Le repli `currentColor` n'est pas décoratif :
+un socle monté **sans** fichier de marque retrouve exactement le comportement d'amont.
+
+Aucun composant du système n'est concerné — vérifié règle par règle, aucune ne pose une
+largeur de bordure sans poser sa couleur.
+
+### `check-preflight-drift.mjs` — le dixième garde
+
+La copie versée est figée à Tailwind 4.3.3, et son en-tête prescrit une *procédure écrite*
+pour suivre les montées. Ce dépôt a déjà établi qu'une procédure écrite ne tient pas — c'est
+littéralement pourquoi `check-version.mjs` existe, après trois oublis de suite. Le onzième
+mois, Tailwind passe en 4.5, la copie ne bouge pas, et personne ne le sait.
+
+Le garde compare la copie à `node_modules/tailwindcss/preflight.css`, coupes et commentaires
+retirés des deux côtés : ce qui compte est qu'aucune **déclaration** n'ait bougé. La version
+attendue est lue dans l'en-tête de la copie — un numéro noté à deux endroits est un numéro
+qui divergera.
+
+**Il n'échoue jamais**, `exit 0` dans tous les cas, et c'est délibéré : une montée de
+Tailwind est légitime, l'arbitrage est humain, et `tailwindcss` est un peer **optionnel** —
+un garde bloquant sur un paquet facultatif casserait la CI pour la mauvaise raison. Sa valeur
+est de rendre la dérive **visible**, pas de l'interdire.
+
+`check-portage.sh` gagne les deux points que ce lot pose et passe de 15 à **17**.
+
+`check-token-refs.mjs` gagne une échappatoire jumelle, `@tokenref-fallback:` : sans elle il
+répétait à chaque `lint` qu'un repli « pérennise le trou » sur la ligne où le repli **est** la
+décision. Un garde qui a tort une fois par jour finit par être ignoré.
+
+---
+
+## L'addenda v0.8.0, appliqué
+
+Quatre points étaient restés dans leur état d'avant.
+
+### La pente de `--sidebar-w` était inopérante
+
+`clamp(16rem,15vw,23rem)` → **`clamp(17rem,10rem + 7vw,21rem)`** (272 → 336).
+
+En `15vw` pur, un écran de 1440 donne 216px — **sous le plancher**. La barre restait donc
+figée à 256 sur tous les écrans de bureau courants, et n'atteignait son plafond de 368
+qu'au-delà de 2450, où elle est devenue un couloir vide : le `clamp()` ne servait à rien dans
+la plage où vivent les écrans réels.
+
+La forme « base en rem + pente en vw » décolle vers 1600. Mesuré : **272** jusqu'à 1600,
+**294** à 1920, **328** à 2400, **336** au-delà de 2514. Le plancher monte, le plafond
+descend — l'écart utile se resserre là où les écrans existent.
+
+Le commentaire dit maintenant ce qui manquait : **c'est le plancher le vrai réglage**, pas le
+plafond, parce qu'il gouverne tous les écrans de bureau courants. Sans cette phrase, quelqu'un
+ajuste le plafond en croyant agir sur ce qu'il voit.
+
+### Un seul bord optique gauche dans la barre latérale
+
+Une entrée porte `padding: 0 var(--space-4)` pour que sa pilule de survol dépasse du texte.
+L'en-tête n'a pas de pilule, donc n'avait pas de retrait : **le logo commençait 16px à gauche
+des icônes qu'il surplombe.** L'en-tête, le titre de section et le pied reprennent le retrait
+de l'entrée.
+
+C'est le bord du **contenu**, pas celui de la boîte : la marge extérieure de la barre
+(`--space-5`) ne bouge pas, ces retraits s'y ajoutent. **Le retrait doit rester égal à celui
+de `.ds-sidenav`** — si l'un bouge, les autres suivent.
+
+Deux décalages fermés au passage : le **titre de section** était à `--space-3`, soit 4px à
+gauche des entrées qu'il coiffe — assez petit pour ne pas se voir, assez grand pour salir la
+colonne ; et l'**avatar du pied**, qui ne s'alignait sur rien. En replié, l'en-tête et le pied
+perdent ce retrait comme l'entrée le fait déjà, sinon le logo se décentre.
+
+Vérifié à 1280 : logo, titre de section, icône d'entrée et pied tous à **167px** — une seule
+verticale. Replié : logo et icône centrés sur le milieu de la barre.
+
+### Les deux icônes de marque passent sur `--primary`
+
+```css
+.ds-sidenav.is-active svg{color:var(--primary)}   /* était --brand-via */
+.ds-pastille--brand{background:var(--grad-soft);color:var(--primary)}
+```
+
+L'icône d'item actif passe de **2,32 à 3,00:1** en clair (3,78 en sombre), la pastille de
+**2,34 à 3,08** (3,14 en sombre). Les deux atteignent le seuil des graphiques non textuels :
+**les deux cessent d'être des écarts assumés**, et le bloc `@a11y-assume` de la pastille est
+retiré plutôt que mis à jour — un bloc qui survit à sa raison d'être fait croire à un problème
+qui n'existe plus. Le compte passe de **14 à 13**.
+
+*Contrepartie assumée* : en sombre, `--primary` est plus dense que `--brand-via` sur la
+plaque. La marque gagne en densité ce qu'elle perd en éclat. Repli si l'écart déplaît :
+`--primary-readable` (5,16 / 5,62).
+
+La règle consolidée est écrite une fois, au-dessus de `.ds-pastille--brand`, et reprise dans
+`docs/accessibilite.md` § 1.1 — une icône se colore selon **ce qu'elle porte** : décorative →
+`currentColor` ; décorative mais de marque → `--primary` ; porteuse d'information →
+`--primary-readable`. **Ces deux emplois sont les seuls** où `--primary` touche du non-texte.
+Et **les tons sémantiques ne suivent pas** : `success` / `warning` / `danger` gardent leur
+couleur lisible, parce qu'ils portent un statut.
+
+### La pastille du logo grossit
+
+`0.21em` → **`0.26em`**, marge gauche `0.07` → `0.08em`, marge basse `0.03` → `0.02em`. À
+0,21 elle se lisait comme un **point de ponctuation** plutôt que comme une marque. Tout est en
+`em` : elle suit le corps du mot-marque à toutes les tailles, de 16px dans une barre latérale à
+108px sur la tuile de marque. Le rayon reste à 25 % du côté — un carré à coins adoucis, jamais
+un cercle.
+
+---
+
+Le correctif preflight est également appliqué à `design-system-template`, pour qu'un design
+system client ne naisse pas avec un bug déjà corrigé ailleurs.
 
 ## 0.9.0 — l'icône d'une pastille de marque est décorative
 

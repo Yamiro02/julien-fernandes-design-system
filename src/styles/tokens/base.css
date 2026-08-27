@@ -1,6 +1,28 @@
 /* SOCLE — reset + utilitaires de marque. Les RÈGLES sont ici, les VALEURS dans le
    fichier de marque : pas un littéral de couleur, de police ou de lueur dans ce fichier.
    Utilitaires : .display .heading .eyebrow .chip .accent .mono .halo .page */
+
+/* LA COULEUR DE BORDURE PAR DÉFAUT — ÉCART DÉLIBÉRÉ AVEC TAILWIND v4. NE PAS « ALIGNER ».
+   Le preflight d'amont pose `border: 0 solid` : sans couleur, donc `currentColor`. C'est
+   le bon défaut pour un framework générique, qui ne connaît aucune palette. Ce n'en est
+   pas un pour un socle qui porte EXACTEMENT UN jeton de bordure.
+   Deux raisons de le renverser ici.
+   1 · LA DOCTRINE. Le socle fournit les VALEURS, l'app écrit les NOMS. Un défaut
+       `currentColor` dit l'inverse : il fait dépendre la bordure d'une propriété de texte,
+       que l'app n'a pas choisie pour ça.
+   2 · LE MODE DE PANNE EST SILENCIEUX. Sur une page crème à encre sombre, un `border` nu
+       trace un filet quasi noir là où on attendait le gris doux de --border. Rien ne
+       casse, l'écran est juste faux — la classe exacte de défauts que ce chantier ferme.
+   Le cas rare — une bordure qui doit suivre la couleur du texte — s'écrit `border-current`,
+   un mot, et c'est bien LUI qui doit coûter les mots.
+   Le repli `currentColor` n'est pas décoratif : un socle monté sans fichier de marque
+   retrouve exactement le comportement d'amont.
+   @tokenref-fallback: --border — le repli EST la décision : sans fichier de marque, le socle
+   retrouve le `currentColor` d'amont plutôt que de perdre la propriété. */
+*,::after,::before,::backdrop,::file-selector-button{border-color:var(--border,currentColor)}
+
+/* Conservée même si le preflight la rend redondante : c'est la garantie propre du socle
+   le jour où le preflight bouge. */
 *,*::before,*::after{box-sizing:border-box}
 html{-webkit-text-size-adjust:100%}
 body{margin:0;background:var(--background);color:var(--foreground);font-family:var(--font-body);font-size:var(--text-body);font-weight:var(--weight-regular);line-height:var(--leading-body);-webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility}
@@ -54,8 +76,11 @@ img{max-width:100%;display:block}
 .page{width:100%;max-width:var(--container-shell);margin-inline:auto;padding-inline:var(--space-5)}
 
 /* Logo — la marque rendue en CSS : --font-display + pastille carrée à coins arrondis en
-   --brand-gradient-diagonal, lueur --shadow-logo-dot. Côté ~0.21em, rayon 25 %, marge gauche
-   ~10 % du côté. Les lettres s'inversent avec la surface.
+   --brand-gradient-diagonal, lueur --shadow-logo-dot. Côté ~0.26em, rayon 25 %, marge gauche
+   ~30 % du côté. À 0,21em elle se lisait comme un POINT DE PONCTUATION plutôt que comme une
+   marque ; à 0,26 elle tient son rôle de signature. Tout est en `em` : elle suit le corps du
+   mot-marque à toutes les tailles, de 16px dans une barre latérale à 108px sur la tuile de
+   marque. Le rayon reste à 25 % du côté — un carré à coins adoucis, jamais un cercle. Les lettres s'inversent avec la surface.
    Le MOT-MARQUE n'est pas ici : c'est une prop de <Logo>, pas une règle CSS.
    La casse et la graisse suivent --heading-transform / --heading-weight, comme le titrage.
    Le template dont ce dépôt descend garde `uppercase` en dur ici ; on s'en écarte, sinon un
@@ -63,4 +88,4 @@ img{max-width:100%;display:block}
    titrage en capitales mais mot-marque en casse mixte — se règle par une ligne
    `.ds-logo{text-transform:none}` dans le fichier de marque. */
 .ds-logo{display:inline-flex;align-items:flex-end;font-family:var(--font-display);font-weight:var(--heading-weight);text-transform:var(--heading-transform);line-height:0.92;letter-spacing:0;white-space:nowrap;color:var(--foreground)}
-.ds-logo__dot{display:inline-block;flex:none;width:0.21em;height:0.21em;border-radius:25%;margin-left:0.07em;margin-bottom:0.03em;background:var(--brand-gradient-diagonal);box-shadow:var(--shadow-logo-dot)}
+.ds-logo__dot{display:inline-block;flex:none;width:0.26em;height:0.26em;border-radius:25%;margin-left:0.08em;margin-bottom:0.02em;background:var(--brand-gradient-diagonal);box-shadow:var(--shadow-logo-dot)}

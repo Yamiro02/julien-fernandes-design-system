@@ -31,6 +31,15 @@
  *
  *     /* @tokenref-assume: --app-header-h — fourni par l'application hôte, pas par le système *\/
  *
+ * ET SA JUMELLE, pour un REPLI délibéré — `var(--x, repli)` où le repli EST la décision,
+ * pas une béquille :
+ *
+ *     /* @tokenref-fallback: --border — le repli fait tenir un socle monté sans marque *\/
+ *
+ * Sans elle, le garde répéterait à chaque `lint` qu'un repli « pérennise le trou » sur une
+ * ligne où c'est faux. Un garde qui a tort une fois par jour finit par être ignoré, et il
+ * emporte l'autre moitié avec lui.
+ *
  * Usage : node check-token-refs.mjs
  */
 import fs from 'node:fs';
@@ -96,14 +105,18 @@ for (const f of DECLS) {
 }
 
 /* ---------- 2 · les échappatoires écrites ---------- */
-const ASSUMEES = new Map();      /* nom -> raison */
+const ASSUMEES = new Map();      /* nom -> raison — le jeton vient d'ailleurs */
+const REPLIS_OK = new Map();     /* nom -> raison — le repli est la décision */
 const SANS_RAISON = [];
 for (const f of new Set([...DECLS, ...fichiersDeReference()])) {
   const src = fs.readFileSync(f, 'utf8');
-  for (const m of src.matchAll(/@tokenref-assume:[ \t]*(--[\w-]+)[ \t]*(?:—|-)?[ \t]*([^\n*]*)/g)) {
-    const raison = m[2].trim();
-    if (!raison) { SANS_RAISON.push(`${m[1]} — ${f}`); continue; }
-    ASSUMEES.set(m[1], raison);
+  for (const [motif, cible] of [[/@tokenref-assume:[ \t]*(--[\w-]+)[ \t]*(?:—|-)?[ \t]*([^\n*]*)/g, ASSUMEES],
+                                [/@tokenref-fallback:[ \t]*(--[\w-]+)[ \t]*(?:—|-)?[ \t]*([^\n*]*)/g, REPLIS_OK]]) {
+    for (const m of src.matchAll(motif)) {
+      const raison = m[2].trim();
+      if (!raison) { SANS_RAISON.push(`${m[1]} — ${f}`); continue; }
+      cible.set(m[1], raison);
+    }
   }
 }
 
@@ -128,7 +141,7 @@ const assuméesVues = new Set();
 for (const nom of [...refs.keys()].sort()) {
   const sites = refs.get(nom);
   const avecFallback = sites.filter(s => s.fallback);
-  if (avecFallback.length) béquilles.push({ nom, sites: avecFallback, déclaré: DECLAREES.has(nom) });
+  if (avecFallback.length && !REPLIS_OK.has(nom)) béquilles.push({ nom, sites: avecFallback, déclaré: DECLAREES.has(nom) });
   if (DECLAREES.has(nom)) continue;
   if (ASSUMEES.has(nom)) { assuméesVues.add(nom); continue; }
   const durs = sites.filter(s => !s.fallback);
@@ -175,5 +188,6 @@ if (manquants.length) {
 const n = refs.size;
 console.log(`✓ token-refs — ${n} jetons lus par ${fichiersDeReference().length} fichiers, tous déclarés`
   + `${ASSUMEES.size ? ` (${assuméesVues.size} assumé(s) par écrit)` : ''}`
+  + `${REPLIS_OK.size ? ` · ${REPLIS_OK.size} repli(s) délibéré(s)` : ''}`
   + `${béquilles.length ? ` · ${béquilles.length} lu(s) avec un repli` : ''}`);
 process.exit(0);

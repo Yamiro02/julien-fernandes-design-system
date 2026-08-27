@@ -207,21 +207,30 @@
 .ds-pastille--heros{width:var(--pastille-heros);height:var(--pastille-heros);border-radius:var(--radius-xl)}
 .ds-pastille--ecran{width:var(--pastille-ecran);height:var(--pastille-ecran);border-radius:var(--radius-2xl)}
 .ds-pastille--rond{border-radius:var(--radius-pill)}
-/* UNE ICÔNE SE COLORE SELON CE QU'ELLE PORTE, PAS SELON L'ENDROIT OÙ ELLE EST — v0.9.0.
+/* UNE ICÔNE SE COLORE SELON CE QU'ELLE PORTE, PAS SELON L'ENDROIT OÙ ELLE EST.
+   La règle consolidée du système, écrite une fois, ici :
      · décorative                  -> currentColor, elle suit son texte
-     · décorative mais DE MARQUE   -> --brand-via : pastille d'état vide, pastille d'en-tête
+     · décorative mais DE MARQUE   -> --primary : pastille d'état vide, pastille d'en-tête
                                      de carte, icône de l'item de nav actif
-     · PORTEUSE D'INFORMATION      -> --primary-readable : erreur, jour courant, état
-   --primary-readable (#b23a1c) sortait ici à 5,30 : un brun-brique sombre sur un lavis
-   chaud, qui se lit comme de l'encre colorée plutôt que comme la marque — et c'est le plus
-   visible dans un état vide, où la pastille fait 80px.
-   --primary n'est JAMAIS une couleur d'icône : 3,00 sur --surface-alt, 3,03 sur un lavis de
-   marque. Il reste un aplat — CTA, piste de switch, case cochée.
+     · PORTEUSE D'INFORMATION      -> --primary-readable : erreur, jour courant, état — et
+                                     là le seuil s'applique pleinement
+   CES DEUX EMPLOIS SONT LES SEULS où --primary touche du NON-TEXTE. Partout ailleurs il
+   reste un aplat : CTA, piste de switch, case cochée.
+   L'histoire, parce qu'elle explique les deux virages : --primary-readable (#b23a1c)
+   sortait ici à 5,30 — un brun-brique sombre sur un lavis chaud, qui se lit comme de
+   l'encre colorée plutôt que comme la marque, surtout dans un état vide où la pastille fait
+   80px. --brand-via a corrigé l'éclat mais mesurait 2,34, sous le seuil des graphiques non
+   textuels. --primary tient les deux bouts : 3,08 en clair, 3,14 en sombre sur la plaque —
+   et 3,00 / 3,78 pour l'icône de nav active. Aucune des deux paires n'est plus un écart
+   assumé.
+   CONTREPARTIE ASSUMÉE : en sombre --primary est plus DENSE que --brand-via sur la plaque.
+   La marque gagne en densité ce qu'elle perd en éclat. Repli si l'écart déplaît :
+   --primary-readable, qui tient 5,16 / 5,62.
    LES TONS SÉMANTIQUES NE SUIVENT PAS. success, warning, danger, coral, amber et neutral
    gardent leur couleur lisible : une pastille de statut porte une information. C'est toute
    la différence entre décorer et informer, et c'est la ligne qu'on cassera un jour en
    voulant « harmoniser ». */
-.ds-pastille--brand{background:var(--grad-soft);color:var(--brand-via)}
+.ds-pastille--brand{background:var(--grad-soft);color:var(--primary)}
 .ds-pastille--coral{background:var(--pill-coral-bg);color:var(--pill-coral-fg)}
 .ds-pastille--amber{background:var(--pill-amber-bg);color:var(--pill-amber-fg)}
 .ds-pastille--success{background:var(--pill-success-bg);color:var(--pill-success-fg)}
@@ -446,13 +455,26 @@
 .ds-appshell__main{min-width:0}
 .ds-sidebar{display:flex;flex-direction:column;gap:var(--space-2);width:var(--sidebar-w);background:var(--secondary);border-right:1px solid var(--border);padding:var(--space-5);box-sizing:border-box;transition:width var(--duration-base) var(--ease-standard)}
 .ds-sidebar.is-collapsed{width:var(--sidebar-w-collapsed);padding-inline:var(--space-3)}
-.ds-sidebar__head{display:flex;align-items:center;justify-content:space-between;gap:var(--space-2);min-height:var(--sidebar-head-h);margin-bottom:var(--space-2)}
-.ds-sidebar.is-collapsed .ds-sidebar__head{flex-direction:column;justify-content:center;gap:var(--space-2)}
+/* UN SEUL BORD OPTIQUE GAUCHE — tout ce qui vit dans la barre s'aligne dessus.
+   Une ENTRÉE porte `padding:0 var(--space-4)` pour que sa pilule de survol dépasse du
+   texte. Les blocs SANS pilule — l'en-tête, le titre de section, le pied — n'avaient donc
+   aucun retrait, et le logo commençait 16px à gauche des icônes qu'il surplombe. Ils
+   reprennent le même retrait, et c'est le bord du CONTENU, pas celui de la boîte : la marge
+   extérieure de la barre (--space-5) ne bouge pas, ces retraits s'y ajoutent.
+   LE RETRAIT DOIT RESTER ÉGAL À CELUI DE .ds-sidenav. Si l'un bouge, les autres suivent —
+   c'est le genre de lien qu'on casse six mois plus tard sans le voir.
+   Deux décalages fermés dans le même geste : le TITRE DE SECTION était à --space-3, soit
+   4px à gauche des entrées qu'il coiffe — assez petit pour ne pas se voir, assez grand pour
+   salir la colonne ; et l'AVATAR DU PIED, qui ne s'alignait sur rien.
+   En REPLIÉ, l'en-tête et le pied perdent ce retrait comme l'entrée le fait déjà, sinon le
+   logo se décentre. */
+.ds-sidebar__head{display:flex;align-items:center;justify-content:space-between;gap:var(--space-2);min-height:var(--sidebar-head-h);margin-bottom:var(--space-2);padding-inline:var(--space-4)}
+.ds-sidebar.is-collapsed .ds-sidebar__head{flex-direction:column;justify-content:center;gap:var(--space-2);padding-inline:0}
 .ds-sidebar__toggle{appearance:none;border:0;background:transparent;color:var(--text-muted);cursor:pointer;display:inline-flex;padding:var(--space-2);border-radius:var(--radius-sm);transition:background-color var(--duration-fast) var(--ease-standard),color var(--duration-fast) var(--ease-standard)}
 .ds-sidebar__toggle:hover{background:var(--surface-alt);color:var(--foreground)}
 .ds-sidebar__toggle:focus-visible{outline:2px solid var(--ring);outline-offset:2px}
 .ds-sidebar__nav{display:flex;flex-direction:column;gap:var(--space-1);flex:1;overflow-y:auto;min-height:0}
-.ds-sidebar__title{font-family:var(--font-body);font-size:0.6875rem;font-weight:var(--weight-bold);letter-spacing:0.08em;text-transform:uppercase;color:var(--text-muted);padding:var(--space-3) var(--space-3) var(--space-1)}
+.ds-sidebar__title{font-family:var(--font-body);font-size:0.6875rem;font-weight:var(--weight-bold);letter-spacing:0.08em;text-transform:uppercase;color:var(--text-muted);padding:var(--space-3) var(--space-4) var(--space-1)}
 .ds-sidebar.is-collapsed .ds-sidebar__title{display:none}
 /* 12px de rayon au lieu de 10 : avec la hauteur à 44 (v0.8.0), la pilule active a la place
    de se lire comme une pilule. Pas de jeton --sidenav-radius — ce serait un jeton de plus au
@@ -472,15 +494,17 @@
    et par la GRAISSE du libellé, et le libellé lui-même reste en --foreground. L'icône est
    un renfort décoratif, jamais le seul porteur de l'information — c'est ce qui rend
    l'écart tenable. Le jour où il déplaît, --primary-readable (5,09) est le repli. */
-.ds-sidenav.is-active svg{color:var(--brand-via)}
+/* L'icône de l'item actif est DÉCORATIVE et de marque : elle prend --primary, comme la
+   pastille de marque. Voir la règle consolidée au-dessus de .ds-pastille--brand. */
+.ds-sidenav.is-active svg{color:var(--primary)}
 .ds-sidenav:focus-visible{outline:2px solid var(--ring);outline-offset:2px}
 .ds-sidebar.is-collapsed .ds-sidenav{justify-content:center;padding:0}
 .ds-sidebar.is-collapsed .ds-sidenav__label{display:none}
 /* Le pied de NAVIGATION : une colonne d'entrées, séparée du contenu par un filet.
    Distinct de .ds-sidebar__foot, qui est une rangée horizontale pour « avatar + nom ». */
 .ds-sidebar__footnav{display:flex;flex-direction:column;gap:var(--space-1);border-top:1px solid var(--border);padding-top:var(--space-2);margin-top:var(--space-2)}
-.ds-sidebar__foot{display:flex;align-items:center;gap:var(--space-3);border-top:1px solid var(--border);padding-top:var(--space-3);margin-top:var(--space-2)}
-.ds-sidebar.is-collapsed .ds-sidebar__foot{justify-content:center}
+.ds-sidebar__foot{display:flex;align-items:center;gap:var(--space-3);border-top:1px solid var(--border);padding:var(--space-3) var(--space-4) 0;margin-top:var(--space-2)}
+.ds-sidebar.is-collapsed .ds-sidebar__foot{justify-content:center;padding-inline:0}
 .ds-appshell__scrim{position:fixed;inset:0;z-index:var(--z-scrim);background:color-mix(in srgb,var(--tone-dark) 45%,transparent);backdrop-filter:blur(2px);-webkit-backdrop-filter:blur(2px)}
 @media (min-width:64.0625rem){.ds-appshell__scrim{display:none}}
 @media (max-width:64rem){

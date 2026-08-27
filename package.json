@@ -42,7 +42,7 @@
     "typecheck": "tsc --noEmit",
     "setup": "npm install && npm install --prefix demo",
     "rebrand": "node rebrand.mjs",
-    "lint": "npm run typecheck && node check-token-refs.mjs && node check-version.mjs && node check-contract.mjs && node check-utility-collisions.mjs && node check-dark-substitution.mjs && node check-contrast.mjs && node check-surfaces.mjs && node check-catalogue.mjs && bash check-literals.sh",
+    "lint": "npm run typecheck && node check-token-refs.mjs && node check-version.mjs && node check-contract.mjs && node check-utility-collisions.mjs && node check-dark-substitution.mjs && node check-contrast.mjs && node check-surfaces.mjs && node check-catalogue.mjs && node check-preflight-drift.mjs && bash check-literals.sh",
     "demo": "npm --prefix demo run dev",
     "demo:build": "npm --prefix demo run build",
     "demo:install": "npm --prefix demo install",

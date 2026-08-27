@@ -156,9 +156,9 @@ function pairs(theme, { ROOT, DARK }, fichier) {
   add('Marque-contenu', '.ds-badge--accent', g('--primary-readable'), g('--accent'), 4.5, '12 / 700');
   add('Marque-contenu', '.ds-banner--info', g('--primary-readable'), g('--accent'), 4.5, '15 / 400');
   add('Marque-contenu', '.ds-cal__day.is-today', g('--primary-readable'), g(C), 4.5, '14 / 700');
-  /* L'icône de la pastille de marque est DÉCORATIVE et porte --brand-via depuis la v0.9.0,
-     pas le jumeau lisible : la paire mesurée doit être celle que l'œil reçoit. */
-  add('Marque-contenu', '.ds-pastille--brand — icône', g('--brand-via'), over(g('--brand-from'), softAlpha[0], g(C)), 3, 'icône');
+  /* L'icône de la pastille de marque est DÉCORATIVE et porte --primary : la paire mesurée
+     doit être celle que l'œil reçoit, pas le jumeau lisible ni un arrêt du dégradé. */
+  add('Marque-contenu', '.ds-pastille--brand — icône', g('--primary'), over(g('--brand-from'), softAlpha[0], g(C)), 3, 'icône');
   add('Marque-contenu', '.ds-icon-btn[aria-pressed] — icône', g('--primary-readable'), g('--accent'), 3, 'icône');
   add('Marque-contenu', '.ds-error', g('--destructive-readable'), g(C), 4.5, '13 / 500');
   add('Marque-contenu', '.ds-dropdown__item--danger', g('--destructive-readable'), g('--popover'), 4.5, '14 / 400');

@@ -35,11 +35,15 @@ v "pied de navigation"                   src/styles/patterns.css ".ds-sidebar__f
 v "Sidebar : prop linkAs"                src/components/navigation/Sidebar.tsx "linkAs"
 v "Sidebar : prop footerItems"           src/components/navigation/Sidebar.tsx "footerItems"
 
+echo "── Le reset ──"
+v "preflight versé dans le dépôt"    src/styles/core.css          "tokens/preflight.css' layer(base)"
+v "couleur de bordure par défaut"    src/styles/tokens/base.css   "border-color:var(--border,currentColor)"
+
 echo "── L'échelle d'app ──"
 if grep -q -- "--text-" src/styles/app-scale.css; then
   printf '  ✗ app-scale.css retouche un palier typo — retiré en v0.5.5, ne pas réintroduire\n'; ko=$((ko+1))
 else printf '  ✓ app-scale.css ne retouche aucun palier typo\n'; fi
 
 echo
-if [ "$ko" -eq 0 ]; then echo "✓ portage — les 15 correctifs sont intacts"; exit 0
+if [ "$ko" -eq 0 ]; then echo "✓ portage — les 17 correctifs sont intacts"; exit 0
 else echo "✗ portage — $ko correctif(s) perdu(s). Les rejouer AVANT de taguer."; exit 1; fi

@@ -69,9 +69,9 @@ Quatre niveaux, pas sept. Au-delà, plus personne ne sait lequel choisir.
 
 | Jeton | Valeur | Rôle |
 |---|---|---|
-| `--primary` | | LA couleur d'action. Un REMPLISSAGE, jamais une couleur de texte |
+| `--primary` | | LA couleur d'action. Un REMPLISSAGE, jamais une couleur de texte — et l'unique exception, les icônes DÉCORATIVES de marque : pastille d'état vide ou d'en-tête, item de nav actif. Une icône se colore selon ce qu'elle PORTE, pas selon l'endroit où elle est |
 | `--primary-readable` | | le même accent, rendu LISIBLE : ≥ 4,5:1 sur les six surfaces. C'est lui que prennent les liens, les libellés actifs, et toute icône PORTEUSE D'INFORMATION (erreur, jour courant, état) |
-| `--brand-via` | | l'arrêt médian du dégradé, employé seul : l'anneau de focus, et toute icône DÉCORATIVE de marque (pastille d'état vide ou d'en-tête, item de nav actif). Une icône se colore selon ce qu'elle PORTE, pas selon l'endroit où elle est |
+| `--brand-via` | | l'arrêt médian du dégradé, employé seul : l'anneau de focus |
 | `--destructive` / `--destructive-readable` | | même paire, pour le danger |
 | `--brand-from/via/to` | | les trois arrêts du dégradé signature. Pas de dégradé ? mets la même valeur dans les trois : tout continue de fonctionner, en aplat |
 

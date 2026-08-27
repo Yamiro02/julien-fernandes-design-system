@@ -45,7 +45,7 @@
 @font-face{font-family:'JetBrains Mono';font-style:normal;font-weight:500;font-display:swap;src:url('./assets/fonts/JetBrainsMono-500.woff2') format('woff2')}
 
 /* ---------- 2 · ÉCARTS D'ACCESSIBILITÉ ASSUMÉS ----------
-   Mesurés sur CETTE palette. Quatorze paires, cinq familles, et les cinq sont des
+   Mesurés sur CETTE palette. Treize paires, quatre familles, et les quatre sont des
    décisions de marque — aucune n'est un oubli.
      · le CTA porte le DÉGRADÉ (ambre -> corail) : aucun arrêt chaud ne tient 4,5:1 sous un
        label blanc, c'est la définition même d'un dégradé chaud ;
@@ -55,10 +55,11 @@
      · les CONTOURS DOUX (crème sur crème) : le système sépare ses surfaces à l'ombre et à
        l'écart de luminance, pas au filet ;
      · l'ANNEAU DE FOCUS, depuis la v0.8.0 : --ring vaut --brand-via, un arrêt du dégradé.
-       Il perd en contraste ce qu'il regagne en surface — voir son bloc ci-dessous ;
-     · l'ICÔNE DÉCORATIVE DE MARQUE, depuis la v0.9.0 : un graphique qui ne porte rien seul
-       n'a pas de seuil à tenir, et --brand-via y rend la marque là où le jumeau lisible
-       rendait de l'encre colorée.
+       Il perd en contraste ce qu'il regagne en surface — voir son bloc ci-dessous.
+   Les ICÔNES DÉCORATIVES DE MARQUE ont figuré ici un temps : passées sur --primary, la
+   pastille (3,08 / 3,14) et l'icône de nav active (3,00 / 3,78) tiennent le seuil des
+   graphiques non textuels. Elles ne sont plus des écarts — leur bloc est parti avec sa
+   raison d'être.
    Le TEXTE courant, les liens, les libellés et les six pilules tiennent tous 4,5:1 dans les
    deux thèmes — c'est là que la lisibilité se joue. */
 
@@ -126,20 +127,6 @@
    1,22:1. Un séparateur n'est pas un contrôle et ne porte aucune information seule : il
    respire entre deux blocs qui, eux, se lisent. La variante .ds-sep--label porte son texte
    en --text-muted (5,12 sur carte). */
-
-/* @a11y-assume: .ds-pastille--brand — icône
-   2,38 en clair (2,34 à 2,38 selon l'arrêt du lavis), 4,07 à 4,85 en sombre. Sous 3:1 en
-   clair, et c'est ADMIS : un graphique purement DÉCORATIF n'a pas de seuil à tenir,
-   précisément parce qu'il ne porte rien seul — le titre et la description de l'état vide
-   disent tout, et la pastille ne fait que teinter la scène.
-   La règle, et elle vaut partout — une icône se colore selon ce qu'elle PORTE, pas selon
-   l'endroit où elle est : décorative -> currentColor ; décorative mais de marque ->
-   --brand-via ; porteuse d'information -> --primary-readable.
-   L'ancienne valeur, --primary-readable, sortait à 5,30 et tenait donc le seuil — mais un
-   brun-brique sombre sur un lavis chaud se lit comme de l'encre colorée, pas comme la
-   marque. On échange un seuil qui ne s'applique pas contre une identité qui se voit.
-   LES TONS SÉMANTIQUES NE SUIVENT PAS : les six pastilles de statut gardent leur couleur
-   lisible et tiennent 4,5:1, parce qu'elles, elles informent. */
 
 /* @a11y-assume: anneau de focus --ring sur --background
    2,41 en clair — 2,41 sur la page, 2,51 sur la carte, 2,53 sur --secondary, 2,60 sur le

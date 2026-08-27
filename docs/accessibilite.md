@@ -1,7 +1,7 @@
 # Accessibilité — le contraste du système, mesuré
 
 > **Les chiffres de ce document sont ceux de la marque du dépôt,
-> `src/styles/brand-julien-fernandes.css`** (tableaux régénérés en v0.9.0). Une palette
+> `src/styles/brand-julien-fernandes.css`** (tableaux régénérés en v0.10.0). Une palette
 > différente produirait d'autres ratios et d'autres écarts assumés : régénérez les
 > tableaux avec `node check-contrast.mjs --table` si la marque change.
 
@@ -56,11 +56,40 @@ grep -rE '(^|[^-[:alnum:]])color:var\(--(primary|destructive)\)' src/styles/
 
 Une sortie vide = la règle tient. Aujourd'hui : vide.
 
+### 1.1 · Le corollaire — une icône se colore selon ce qu'elle PORTE
+
+Pas selon l'endroit où elle est. La distinction sort de la même mesure, et c'est la ligne
+qu'on cassera un jour en voulant « harmoniser » :
+
+| l'icône est… | sa couleur | exemples |
+|---|---|---|
+| décorative | `currentColor` | elle suit son texte |
+| décorative mais **de marque** | `--primary` | pastille d'état vide, pastille d'en-tête de carte, icône de l'item de nav actif |
+| **porteuse d'information** | `--primary-readable` | message d'erreur, jour courant, état — et là le seuil de 4,5:1 s'applique pleinement |
+
+**Ces deux emplois de marque sont les seuls** où `--primary` touche du non-texte : partout
+ailleurs il reste un aplat — CTA, piste de switch, case cochée. Les deux tiennent le seuil
+de 3:1 des graphiques non textuels : la pastille à **3,08 / 3,14**, l'icône de nav active à
+**3,00 / 3,78**.
+
+Le chemin y a mené en deux temps, et les deux étapes sont instructives.
+`--primary-readable` tenait le seuil (5,30) mais rendait un brun-brique sombre sur un lavis
+chaud — de l'encre colorée, pas la marque. `--brand-via` a corrigé l'éclat mais tombait à
+**2,34**, sous le seuil. `--primary` tient les deux bouts. *Contrepartie assumée* : en
+sombre, `--primary` est plus dense que `--brand-via` sur la plaque — la marque gagne en
+densité ce qu'elle perd en éclat.
+
+**Les tons sémantiques ne suivent pas.** `success`, `warning`, `danger`, `coral`, `amber`,
+`neutral` gardent leur couleur lisible : une pastille de statut porte une information.
+
+> L'icône de nav active est à **3,0027** en clair — au-dessus du seuil, mais de 0,003. Ni
+> `--primary` ni `--surface-alt` ne peuvent bouger d'un cran sans la faire passer dessous.
+
 ---
 
 ## 2. Les paires conformes
 
-36 paires sur 50, dans les deux thèmes.
+37 paires sur 50, dans les deux thèmes.
 
 | Paire | contenu | seuil | clair | sombre |
 |---|---|--:|--:|--:|
@@ -78,6 +107,7 @@ Une sortie vide = la règle tient. Aujourd'hui : vide.
 | `.ds-badge--accent` | 12 / 700 | 4,5 | 5,16 | 5,85 |
 | `.ds-banner--info` | 15 / 400 | 4,5 | 5,16 | 5,85 |
 | `.ds-cal__day.is-today` | 14 / 700 | 4,5 | 5,59 | 6,12 |
+| `.ds-pastille--brand — icône` | icône | 3 | 3,08 | 3,14 |
 | `.ds-icon-btn[aria-pressed] — icône` | icône | 3 | 5,16 | 5,85 |
 | `.ds-error` | 13 / 500 | 4,5 | 6,62 | 6,07 |
 | `.ds-dropdown__item--danger` | 14 / 400 | 4,5 | 6,84 | 5,73 |
@@ -105,19 +135,17 @@ Une sortie vide = la règle tient. Aujourd'hui : vide.
 
 ## 3. Les écarts assumés
 
-14 paires. Chacune est déclarée **dans le fichier de marque**,
+13 paires. Chacune est déclarée **dans le fichier de marque**,
 `src/styles/brand-julien-fernandes.css`, par un bloc `@a11y-assume:` — pas dans le script.
 Le script porte la mécanique, la marque porte ses renoncements : un client qui écrit sa
 marque repart d'une liste VIDE et n'hérite d'aucune dérogation qu'il n'a pas prise. Le
-build tombe si une **quinzième** apparaît.
+build tombe si une **quatorzième** apparaît.
 
-Cinq familles, et les cinq sont des décisions de marque — aucune n'est un oubli. Deux ont
-été prises après le portage : l'anneau de focus en v0.8.0, l'icône décorative de marque en
-v0.9.0.
+Quatre familles, et les quatre sont des décisions de marque — aucune n'est un oubli. Une
+seule a été prise après le portage : l'anneau de focus, en v0.8.0.
 
 | Paire | contenu | seuil | clair | sombre |
 |---|---|--:|--:|--:|
-| `.ds-pastille--brand — icône` | icône | 3 | 2,38 ✗ | 4,07 |
 | `.ds-btn--primary — label sur --primary à plat` | 15 / 600 | 4,5 | 3,48 ✗ | 3,48 ✗ |
 | `.ds-btn--primary — label sur --brand-from (pire arrêt)` | 15 / 600 | 4,5 | 2,04 ✗ | 2,04 ✗ |
 | `.ds-btn--primary — label sur --brand-via` | 15 / 600 | 4,5 | 2,68 ✗ | 2,68 ✗ |
@@ -229,35 +257,6 @@ sert aux boutons, aux onglets et aux entrées de nav.
 **Le remède.** `--brand-to` (`#e84c3d`), qui tient **3,40** en restant un arrêt du dégradé.
 Si quelqu'un retire un jour le halo du champ, c'est ce basculement qu'il faut faire dans le
 même geste.
-
-### 3.5 · L'icône décorative de marque — `2,38` en clair
-
-**L'écart.** La pastille `tone="brand"` porte son icône en `--brand-via` sur `--grad-soft`,
-un lavis chaud : **2,34 à 2,38** en clair selon l'arrêt du lavis, 4,07 à 4,85 en sombre.
-
-**Pourquoi il est assumé.** Un graphique purement **décoratif** n'a pas de seuil à tenir,
-précisément parce qu'il ne porte rien seul. Dans un état vide — le cas le plus visible, où
-la pastille fait 80 px — le titre et la description disent tout ; la pastille teinte la
-scène. L'ancienne valeur, `--primary-readable`, sortait à 5,30 et tenait donc le seuil, mais
-un brun-brique sombre sur un lavis chaud se lit comme de l'encre colorée, pas comme la
-marque. On échange un seuil qui ne s'applique pas contre une identité qui se voit.
-
-**La règle qui en sort, et elle vaut partout.** Une icône se colore selon ce qu'elle
-**porte**, pas selon l'endroit où elle est :
-
-| l'icône est… | sa couleur | exemples |
-|---|---|---|
-| décorative | `currentColor` | elle suit son texte |
-| décorative mais **de marque** | `--brand-via` | pastille d'état vide, pastille d'en-tête de carte, icône de l'item de nav actif |
-| **porteuse d'information** | `--primary-readable` | message d'erreur, jour courant, état |
-
-`--primary` n'est **jamais** une couleur d'icône : 3,00 sur `--surface-alt`, 3,03 sur un
-lavis de marque. Il reste un aplat — CTA, piste de switch, case cochée.
-
-**Les tons sémantiques ne suivent PAS.** `success`, `warning`, `danger`, `coral`, `amber`,
-`neutral` gardent leur couleur lisible et tiennent 4,5:1 : une pastille de statut porte une
-information. C'est toute la différence entre décorer et informer, et c'est la ligne qu'on
-cassera un jour en voulant « harmoniser ».
 
 ---
 
