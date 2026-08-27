@@ -96,7 +96,7 @@ export function NavigationPage() {
                   storageKey="ds-demo-sidebar"
                   sections={[
                     { title: 'Pilotage', items: [
-                      { label: 'Tableau de bord', icon: <Icon name="layout-dashboard" size="1.25rem" />, active: true },
+                      { label: 'Accueil', icon: <Icon name="house" size="1.25rem" />, active: true },
                       { label: 'Vidéos', icon: <Icon name="video" size="1.25rem" /> },
                       { label: 'Séries', icon: <Icon name="folder" size="1.25rem" /> },
                     ] },
@@ -118,7 +118,7 @@ export function NavigationPage() {
               }
             >
               <div className="flex flex-col gap-space-4 p-space-5">
-                <h3>Tableau de bord</h3>
+                <h3>Accueil</h3>
                 <p className="caption">Le contenu de l'outil vit ici. Replie la barre avec le bouton en tête pour voir le mode icônes seules — l'état est retenu.</p>
                 <Row><Button size="sm" icon={<Icon name="plus" size="1rem" />}>Nouveau build</Button></Row>
               </div>
@@ -138,7 +138,7 @@ export function NavigationPage() {
                   collapsible={false}
                   storageKey="ds-demo-sidebar-collapsed"
                   sections={[{ items: [
-                    { label: 'Tableau de bord', icon: <Icon name="layout-dashboard" size="1.25rem" />, active: true },
+                    { label: 'Accueil', icon: <Icon name="house" size="1.25rem" />, active: true },
                     { label: 'Vidéos', icon: <Icon name="video" size="1.25rem" /> },
                     { label: 'Réglages', icon: <Icon name="settings" size="1.25rem" /> },
                   ] }]}

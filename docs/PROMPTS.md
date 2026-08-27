@@ -645,7 +645,7 @@ Navigation d'app sur `--secondary` : marque en tête, sections titrées, item ac
 ```tsx
 <Sidebar
   sections={[{ title: 'Outils', items: [
-    { label: 'Dashboard', icon: <Icon name="layout-dashboard" />, active: true },
+    { label: 'Accueil', icon: <Icon name="house" />, active: true },
     { label: 'Contenu', icon: <Icon name="video" /> },
   ] }]}
   footer={<Avatar size="2rem" />}

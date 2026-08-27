@@ -9,6 +9,9 @@ import {
   type LucideIcon,
 } from 'lucide-react';
 import { Github } from './brand-glyphs';
+/* `house` est dessinée dans le socle, pas importée : son nom lucide n'est pas stable sur
+   toute la plage du peer (`House` après renommage, `Home` avant). Voir compat-glyphs.ts. */
+import { House } from './compat-glyphs';
 
 /**
  * Lucide icon renderer — the ONLY icon system in this design system.
@@ -29,7 +32,7 @@ export type IconName =
   | 'github' | 'folder' | 'trending-up' | 'user' | 'book-open'
   | 'message-square' | 'quote' | 'rocket' | 'file-text'
   | 'chevrons-left' | 'chevrons-right' | 'ellipsis' | 'panel-left'
-  | 'sliders-horizontal' | 'layout-dashboard' | 'video' | 'dumbbell' | 'settings';
+  | 'sliders-horizontal' | 'layout-dashboard' | 'house' | 'video' | 'dumbbell' | 'settings';
 
 export interface IconProps {
   /** Lucide icon name, kebab-case (e.g. "circle-check", "arrow-right"). */
@@ -87,7 +90,12 @@ const ICONS: Record<IconName, LucideIcon> = {
   'ellipsis': Ellipsis,
   'panel-left': PanelLeft,
   'sliders-horizontal': SlidersHorizontal,
+  /* L'ENTRÉE D'ACCUEIL PORTE `house`. `layout-dashboard` — les quatre tuiles — annonce une
+     GRILLE DE WIDGETS, pas la destination d'accueil d'une app : elle reste au catalogue, pour
+     un vrai tableau de bord. La maison est la convention la plus ancienne de la navigation et
+     ne demande aucun apprentissage. */
   'layout-dashboard': LayoutDashboard,
+  'house': House,
   'video': Video,
   'dumbbell': Dumbbell,
   'settings': Settings,

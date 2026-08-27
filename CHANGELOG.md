@@ -23,6 +23,73 @@ concordent.
 
 ---
 
+## 0.14.0 — la barre respire d'un cran, et l'accueil retrouve une maison
+
+Deux points indépendants. Une icône **ajoutée** au catalogue, aucun jeton CSS ajouté ni
+retiré, aucune prop touchée.
+
+**Pour une app consommatrice** : le contenu de toute `Sidebar` recule de **4 px**. Et une
+entrée d'accueil qui porte `name="layout-dashboard"` devrait passer à `name="house"` — rien
+ne casse si elle ne le fait pas, l'ancienne icône reste au catalogue.
+
+### Le retrait horizontal de la barre remonte d'un cran : 20 → 24 px
+
+La v0.12.0 avait fait passer le bord optique de 40 à 20 px. Le geste était bon, il allait un
+cran trop loin : à 20, la colonne est **au ras du bord**.
+
+Une seule déclaration change — `.ds-sidebar` passe à `padding: var(--space-5) var(--space-4)`.
+**C'est le retrait de BOÎTE qui bouge, jamais celui du contenu** : les quatre blocs
+(`__head`, `__title`, `.ds-sidenav`, `__foot`) restent à `--space-2`. Ces 8 px existent pour
+que la pilule de survol dépasse du texte, ce qui est leur seul rôle, et 8 suffisent à le lire.
+Le vide de trop était dans la boîte, il se corrige dans la boîte. Le vertical reste
+`--space-5`, l'état replié reste `--space-3`.
+
+Le commentaire du bord optique unique dit maintenant **pourquoi le chiffre a bougé deux fois**
+— 40, puis 20, puis 24 — pour que ça ne se lise pas comme une hésitation.
+
+Vérifié à 1280, dans les deux thèmes, sur la vitrine : logo, texte du titre de section, icône
+d'entrée et avatar de pied tombent tous sur **une seule verticale, à 24 px** du bord.
+
+### Une icône `house`, et c'est elle qui va sur l'accueil
+
+`layout-dashboard` — les quatre tuiles — servait d'icône à l'entrée « Tableau de bord ». Ce
+n'est pas ce qu'elle dit : quatre tuiles annoncent une **grille de widgets**, pas la
+destination d'accueil d'une app. Une maison le dit en un glyphe, c'est la convention la plus
+ancienne de la navigation, et elle ne demande aucun apprentissage.
+
+**`layout-dashboard` reste au catalogue** — elle est juste, pour un vrai tableau de bord. Ce
+qui change, c'est l'endroit où on la pose. La règle entre dans les interdits de
+`docs/DESIGN.md` : l'entrée d'accueil porte `house`, `layout-dashboard` est réservée à une
+grille de widgets.
+
+Les usages basculent dans la démo (deux endroits) et dans `docs/PROMPTS.md`, et l'entrée est
+renommée **« Accueil »** au passage — « Tableau de bord » sous une maison serait un libellé
+qui contredit son icône.
+
+#### Le glyphe est DESSINÉ dans le socle, pas importé de lucide
+
+Nouveau fichier `src/components/icons/compat-glyphs.ts`, et il ne faut pas le confondre avec
+`brand-glyphs.ts` : celui-là existe pour une raison **juridique**, celui-ci pour une raison
+**mécanique**.
+
+Le peer déclare `lucide-react: ">=0.400"`. Le glyphe s'appelle `House` depuis son renommage et
+`Home` avant. Les deux coexistent sur la version installée ici (0.469) — vérifié — mais **pas
+sur toute la plage du peer** : une app en 0.4xx d'avant le renommage n'expose que `Home`, et
+une app future peut voir l'alias disparaître. Un import nommé absent n'est pas une erreur
+rattrapable : Rollup refuse le module, et c'est le `vite build` de **l'app** qui casse, jamais
+le nôtre. Le peer serait redevenu un mensonge, exactement comme avant le sous-lot des icônes
+de marque en 0.5.3.
+
+Le fichier ne porte que les **coordonnées** du dessin, relevées au caractère près sur
+lucide-react 0.469.0, clés comprises, et reconstruites par `createLucideIcon` — l'usine que
+lucide expose de façon stable. Le résultat est un `LucideIcon` ordinaire : vérifié sur la
+planche d'inventaire, il rend en 20 × 20, `stroke-width` 2, `viewBox 0 0 24 24`, comme tous
+les autres. Contrepartie : ce dessin est à nous, une refonte du glyphe chez lucide ne nous
+parviendra plus.
+
+`check-portage.sh` gagne trois points — le retrait de boîte à `--space-4`, le glyphe dessiné
+ici, et l'entrée d'accueil sur `house` — et passe de 17 à **20**.
+
 ## 0.13.0 — le texte reprend son poids, et la marque a sa tuile pleine
 
 **Changement de rendu pour TOUTES les apps : tout le corps de texte s'épaissit sur macOS.**

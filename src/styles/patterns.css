@@ -479,7 +479,7 @@
   .ds-appshell .ds-sidebar{position:sticky;top:0;align-self:start;height:100dvh}
 }
 .ds-appshell__main{min-width:0}
-.ds-sidebar{display:flex;flex-direction:column;gap:var(--space-2);width:var(--sidebar-w);background:var(--secondary);border-right:1px solid var(--border);padding:var(--space-5) var(--space-3);box-sizing:border-box;transition:width var(--duration-base) var(--ease-standard)}
+.ds-sidebar{display:flex;flex-direction:column;gap:var(--space-2);width:var(--sidebar-w);background:var(--secondary);border-right:1px solid var(--border);padding:var(--space-5) var(--space-4);box-sizing:border-box;transition:width var(--duration-base) var(--ease-standard)}
 .ds-sidebar.is-collapsed{width:var(--sidebar-w-collapsed);padding-inline:var(--space-3)}
 /* UN SEUL BORD OPTIQUE GAUCHE — tout ce qui vit dans la barre s'aligne dessus.
    Une ENTRÉE porte `padding:0 var(--space-4)` pour que sa pilule de survol dépasse du
@@ -489,12 +489,15 @@
    extérieure de la barre (--space-5) ne bouge pas, ces retraits s'y ajoutent.
    LE RETRAIT DOIT RESTER ÉGAL À CELUI DE .ds-sidenav. Si l'un bouge, les autres suivent —
    c'est le genre de lien qu'on casse six mois plus tard sans le voir.
-   LE RETRAIT A ÉTÉ DIVISÉ PAR DEUX (v0.12.0) : la barre cumulait --space-5 de boîte et
-   --space-4 de contenu, soit 40px avant le premier glyphe — un couloir vide sur une colonne
-   de 256, 16 % de la largeur de chaque côté. Elle est maintenant à --space-3 + --space-2,
-   soit 20. Les 8px du contenu suffisent à faire dépasser la pilule de survol du texte, ce
-   qui est son SEUL rôle ; 16 le payaient deux fois. Ne remonte pas à 16 en croyant réparer
-   un tassement.
+   LE CHIFFRE A BOUGÉ DEUX FOIS, ET CE N'EST PAS UNE HÉSITATION. Il valait 40px — --space-5
+   de boîte + --space-4 de contenu — soit un couloir vide sur une colonne de 288, 16 % de la
+   largeur de chaque côté. La v0.12.0 l'a mis à 20 (--space-3 + --space-2) ; à l'écran, 20
+   était au ras du bord. Il est à 24 depuis la v0.14.0 : --space-4 de boîte + --space-2 de
+   contenu.
+   CE QUI BOUGE EST LE RETRAIT DE BOÎTE, JAMAIS CELUI DU CONTENU. Les 8px des quatre blocs
+   existent pour que la pilule de survol dépasse du texte, ce qui est leur SEUL rôle, et 8
+   suffisent à le lire. Le vide de trop était dans la boîte, il se corrige dans la boîte —
+   ne remonte pas le contenu à --space-4 en croyant réparer un tassement.
    Deux décalages fermés dans le même geste : le TITRE DE SECTION était à --space-3, soit
    4px à gauche des entrées qu'il coiffe — assez petit pour ne pas se voir, assez grand pour
    salir la colonne ; et l'AVATAR DU PIED, qui ne s'alignait sur rien.

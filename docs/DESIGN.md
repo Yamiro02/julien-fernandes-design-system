@@ -186,7 +186,9 @@ Celle qu'on relit avant une PR. Cinq à dix lignes, pas plus.
    lisibles.
 4. Jamais un rayon pill sur un bouton, un champ ou une barre d'onglets.
 5. Jamais la couleur seule pour porter un sens — toujours + icône + texte.
-6. _(à compléter)_
+6. L'entrée d'**accueil** porte `house`. `layout-dashboard` — les quatre tuiles — est réservée
+   à un vrai **tableau de bord de widgets** : elle annonce une grille, pas une destination.
+7. _(à compléter)_
 
 ---
 

@@ -20,6 +20,8 @@ if [ "$n" -ge 37 ]; then printf '  ✓ JSX importé depuis react (%s fichiers)\n
 else printf '  ✗ JSX importé depuis react : %s fichiers seulement, 37 attendus\n' "$n"; ko=$((ko+1)); fi
 v "brand-glyphs : github/youtube/instagram dessinés ici" src/components/icons/brand-glyphs.ts "createLucideIcon"
 v "Icon n'importe plus Github de lucide"                 src/components/icons/Icon.tsx        "from './brand-glyphs'"
+v "house dessinée ici (nom lucide instable)"            src/components/icons/compat-glyphs.ts "createLucideIcon('House'"
+v "l'entrée d'accueil porte house"                      src/components/icons/Icon.tsx        "'house': House"
 
 echo "── Le dégradé, partout où la marque se remplit ──"
 v "barre de progression"          src/styles/patterns.css ".ds-progress__bar{.*--brand-gradient"
@@ -35,6 +37,9 @@ v "pied de navigation"                   src/styles/patterns.css ".ds-sidebar__f
 v "Sidebar : prop linkAs"                src/components/navigation/Sidebar.tsx "linkAs"
 v "Sidebar : prop footerItems"           src/components/navigation/Sidebar.tsx "footerItems"
 
+echo "── La coque, suite ──"
+v "retrait de boîte de la barre latérale à --space-4" src/styles/patterns.css "padding:var(--space-5) var(--space-4);box-sizing:border-box;transition:width"
+
 echo "── Le reset ──"
 v "preflight versé dans le dépôt"    src/styles/core.css          "tokens/preflight.css' layer(base)"
 v "couleur de bordure par défaut"    src/styles/tokens/base.css   "border-color:var(--border,currentColor)"
@@ -45,5 +50,5 @@ if grep -q -- "--text-" src/styles/app-scale.css; then
 else printf '  ✓ app-scale.css ne retouche aucun palier typo\n'; fi
 
 echo
-if [ "$ko" -eq 0 ]; then echo "✓ portage — les 17 correctifs sont intacts"; exit 0
+if [ "$ko" -eq 0 ]; then echo "✓ portage — les 20 correctifs sont intacts"; exit 0
 else echo "✗ portage — $ko correctif(s) perdu(s). Les rejouer AVANT de taguer."; exit 1; fi
