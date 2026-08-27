@@ -23,6 +23,84 @@ concordent.
 
 ---
 
+## 0.12.0 — la barre latérale se resserre
+
+**Changement de rendu pour toute app qui affiche une `Sidebar`** : elle est plus étroite, et
+son contenu est plus près du bord. Rien à migrer — aucune classe, aucune prop, aucun jeton
+ajouté ni retiré, aucune API touchée.
+
+### Le `*/` orphelin : VÉRIFIÉ, ABSENT ICI
+
+Le kit maître porte un défaut de syntaxe où le long commentaire précédant `--sidebar-w` se
+ferme deux fois : la prose restante devient du CSS brut, le parseur part en récupération
+d'erreur en avalant tout jusqu'au premier `;` — c'est-à-dire **la déclaration `--sidebar-w`
+elle-même**. La barre tombe alors en `width:auto` et prend la largeur de son contenu, ce qui
+ressemble à une barre un peu étroite et jamais à une erreur.
+
+**Ce dépôt n'a pas ce défaut.** Balayage caractère par caractère des douze fichiers CSS du
+socle, de la marque et du gabarit : **aucun `*/` orphelin, aucun bloc non fermé**. Et mesuré
+dans la vitrine, dans les deux thèmes : `--sidebar-w` résout bien, et `.ds-sidebar` rend son
+palier et non la largeur de son contenu.
+
+**`check-token-refs.mjs` attrape déjà ce cas** — vérifié en injectant le défaut exact du
+maître, puis en le retirant :
+
+```
+✗ token-refs — 1 jeton(s) LU(S) sans être déclaré(s), sur 1 site(s) :
+    --sidebar-w  —  1 référence(s)
+      src/styles/patterns.css:472
+```
+
+Il le voit parce qu'il retire les commentaires avec la **même règle non gourmande** que le
+parseur CSS : la prose orpheline reste alors dans le texte, et la déclaration avalée ne
+correspond plus au motif ancré `(?:^|[;{}])\s*--x:`. Aucun garde à ajouter — la couverture
+existe. À noter tout de même : il ne la voit que parce que `patterns.css` **lit**
+`var(--sidebar-w)`. Un jeton avalé que rien ne lit passerait toujours.
+
+### Le retrait horizontal est divisé par deux — 40 px → 20
+
+La barre cumulait deux retraits : `--space-5` de boîte et `--space-4` de contenu, soit **40 px
+avant le premier glyphe**. Sur une colonne de 256, c'est 16 % de la largeur en vide de chaque
+côté — un couloir dans un couloir.
+
+Le nouveau bord optique est **20 px** : `--space-3` de boîte (12) + `--space-2` de contenu (8).
+Les 8 px de contenu ne sont pas décoratifs — ils existent pour que la pilule de survol dépasse
+du texte, et c'est leur **seul** rôle. 8 suffisent à le lire ; 16 payaient deux fois.
+
+Cinq déclarations : le `padding` de `.ds-sidebar` (le **vertical reste** à `--space-5`, seul
+l'horizontal bouge), puis `.ds-sidebar__head`, `.ds-sidebar__title`, `.ds-sidenav` et
+`.ds-sidebar__foot`, qui portent tous le même retrait — c'est la règle du bord optique unique,
+inchangée. Les trois règles de l'état replié ne bougent pas : elles retirent le retrait pour
+recentrer le logo et les icônes.
+
+Vérifié à 1280, dans les deux thèmes : logo, texte du titre de section, icône d'entrée et
+avatar de pied tombent tous sur **une seule verticale, à 20 px** du bord de la barre. Replié :
+logo et icône centrés sur le milieu exact des 72 px.
+
+### `--sidebar-w` — nouvelle échelle, 240 → 288
+
+`clamp(17rem,10rem + 7vw,21rem)` → **`clamp(15rem,11rem + 5vw,18rem)`**. La pente reste
+**positive** : la barre grandit toujours avec l'écran.
+
+| écran | largeur |
+|---|---|
+| ≤ 1280 | **240** (plancher) |
+| 1600 | 256 |
+| 1920 | 272 |
+| ≥ 2240 | **288** (plafond) |
+
+**C'est la conséquence du point précédent, pas un goût.** Le retrait divisé par deux rend la
+colonne plus efficace de 20 px utiles : elle n'a plus besoin d'être aussi large pour tenir le
+libellé le plus long sur une ligne. 336 sur un 27 pouces était déjà généreux avec l'ancien
+retrait ; avec le nouveau, c'est un couloir.
+
+Le commentaire garde ce qui reste vrai — pourquoi `rem` + `vw`, la composition avec
+`app-scale.css`, et surtout que **c'est le plancher le vrai réglage**, plus encore
+qu'avant : 240 gouverne tous les portables et les 13-14 pouces.
+
+Au passage, le § FACULTATIF de `brand.template.css` annonçait encore `clamp(16rem,15vw,23rem)`
+comme défaut du socle — la valeur d'avant la 0.10.0. Recalé.
+
 ## 0.11.0 — la déduction de surface a un cran de rattrapage
 
 **Aucune rupture. `surface` vaut `auto` par défaut, et `auto` ne pose aucune classe : tout

@@ -101,16 +101,21 @@
      donc sur le plancher et le plafond en rem : les deux mécanismes se composent au lieu de
      se contredire.
      LE VRAI RÉGLAGE EST LE PLANCHER, PAS LE PLAFOND, et c'est contre-intuitif : le plancher
-     gouverne TOUS les écrans de bureau courants, le plafond ne se voit qu'au-delà de 2500.
-     Qui ajuste le plafond en croyant agir sur ce qu'il a sous les yeux ne verra rien bouger.
+     gouverne tous les portables et les 13-14 pouces, le plafond ne se voit qu'au-delà de
+     2240. Qui ajuste le plafond en croyant agir sur ce qu'il a sous les yeux ne verra rien
+     bouger.
      La PENTE a d'ailleurs été refaite pour ça : en `15vw` pur, un 1440 donnait 216 — SOUS le
-     plancher — donc la barre restait figée à 256 sur tout écran réel et n'atteignait son
-     plafond de 368 qu'au-delà de 2450, où elle est un couloir vide. Le clamp ne servait à
-     rien dans la plage où vivent les écrans. La forme « base en rem + pente en vw » décolle
-     vers 1600 : 272 jusqu'à 1600, 294 à 1920, 328 à 2400, 336 au-delà de 2514. Le plancher
-     monte (256 -> 272), le plafond descend (368 -> 336) : l'écart utile se resserre là où
-     les écrans existent. */
-  --sidebar-w:clamp(17rem,10rem + 7vw,21rem); /* 272 -> 336 — .ds-sidebar déployée */
+     plancher — donc la barre restait figée sur tout écran réel et n'atteignait son plafond
+     qu'au-delà de 2450, où elle est un couloir vide. Le clamp ne servait à rien dans la
+     plage où vivent les écrans. La forme « base en rem + pente en vw » corrige ça, et la
+     pente reste POSITIVE : la barre grandit avec l'écran.
+     Les paliers :  240 jusqu'à 1280  ·  256 à 1600  ·  272 à 1920  ·  288 au-delà de 2240.
+     L'ÉCHELLE DESCEND D'UN CRAN par rapport à la 0.11.0 (272 -> 336) parce que le retrait
+     intérieur a été divisé par deux le même jour — voir « UN SEUL BORD OPTIQUE GAUCHE » dans
+     patterns.css. La colonne a gagné 20px utiles : elle n'a plus besoin de la largeur qu'elle
+     réclamait avant pour tenir le libellé le plus long sur une ligne. 336 sur un 27 pouces
+     était déjà généreux avec l'ancien retrait ; avec le nouveau, c'est un couloir. */
+  --sidebar-w:clamp(15rem,11rem + 5vw,18rem); /* 240 -> 288 — .ds-sidebar déployée */
   --sidebar-w-collapsed:4.5rem;   /* 72 — .ds-sidebar.is-collapsed */
   --sidebar-head-h:3rem;          /* 48 — .ds-sidebar__head. Vaut le --control-md de bureau
                                      par coïncidence, PAS par alignement : il ne descend pas

@@ -307,10 +307,12 @@
 
   /* Navigation */
   /* --navbar-h:4.5rem; */              /* socle : 72 — hauteur de la barre */
-  /* --sidebar-w:clamp(16rem,15vw,23rem); */ /* socle : 256 -> 368 — tiroir déployé. Le seul
-                                           défaut du socle qui mêle rem et vw : une largeur
-                                           de couloir suit la FENÊTRE, pas la taille de
-                                           texte. Une valeur fixe ici la fige, c'est permis. */
+  /* --sidebar-w:clamp(15rem,11rem + 5vw,18rem); */ /* socle : 240 -> 288 — tiroir déployé.
+                                           Le seul défaut du socle qui mêle rem et vw : une
+                                           largeur de couloir suit la FENÊTRE, pas la taille
+                                           de texte. C'est le PLANCHER le vrai réglage — il
+                                           gouverne tous les portables. Une valeur fixe ici
+                                           la fige, c'est permis. */
   /* --sidebar-w-collapsed:4.5rem; */   /* socle : 72 — tiroir replié */
   /* --sidebar-head-h:3rem; */          /* socle : 48 — en-tête du tiroir */
   /* --sidenav-h:2.75rem; */           /* socle : 44 — un lien de tiroir, au seuil tactile */

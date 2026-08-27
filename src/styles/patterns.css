@@ -469,7 +469,7 @@
   .ds-appshell .ds-sidebar{position:sticky;top:0;align-self:start;height:100dvh}
 }
 .ds-appshell__main{min-width:0}
-.ds-sidebar{display:flex;flex-direction:column;gap:var(--space-2);width:var(--sidebar-w);background:var(--secondary);border-right:1px solid var(--border);padding:var(--space-5);box-sizing:border-box;transition:width var(--duration-base) var(--ease-standard)}
+.ds-sidebar{display:flex;flex-direction:column;gap:var(--space-2);width:var(--sidebar-w);background:var(--secondary);border-right:1px solid var(--border);padding:var(--space-5) var(--space-3);box-sizing:border-box;transition:width var(--duration-base) var(--ease-standard)}
 .ds-sidebar.is-collapsed{width:var(--sidebar-w-collapsed);padding-inline:var(--space-3)}
 /* UN SEUL BORD OPTIQUE GAUCHE — tout ce qui vit dans la barre s'aligne dessus.
    Une ENTRÉE porte `padding:0 var(--space-4)` pour que sa pilule de survol dépasse du
@@ -479,23 +479,29 @@
    extérieure de la barre (--space-5) ne bouge pas, ces retraits s'y ajoutent.
    LE RETRAIT DOIT RESTER ÉGAL À CELUI DE .ds-sidenav. Si l'un bouge, les autres suivent —
    c'est le genre de lien qu'on casse six mois plus tard sans le voir.
+   LE RETRAIT A ÉTÉ DIVISÉ PAR DEUX (v0.12.0) : la barre cumulait --space-5 de boîte et
+   --space-4 de contenu, soit 40px avant le premier glyphe — un couloir vide sur une colonne
+   de 256, 16 % de la largeur de chaque côté. Elle est maintenant à --space-3 + --space-2,
+   soit 20. Les 8px du contenu suffisent à faire dépasser la pilule de survol du texte, ce
+   qui est son SEUL rôle ; 16 le payaient deux fois. Ne remonte pas à 16 en croyant réparer
+   un tassement.
    Deux décalages fermés dans le même geste : le TITRE DE SECTION était à --space-3, soit
    4px à gauche des entrées qu'il coiffe — assez petit pour ne pas se voir, assez grand pour
    salir la colonne ; et l'AVATAR DU PIED, qui ne s'alignait sur rien.
    En REPLIÉ, l'en-tête et le pied perdent ce retrait comme l'entrée le fait déjà, sinon le
    logo se décentre. */
-.ds-sidebar__head{display:flex;align-items:center;justify-content:space-between;gap:var(--space-2);min-height:var(--sidebar-head-h);margin-bottom:var(--space-2);padding-inline:var(--space-4)}
+.ds-sidebar__head{display:flex;align-items:center;justify-content:space-between;gap:var(--space-2);min-height:var(--sidebar-head-h);margin-bottom:var(--space-2);padding-inline:var(--space-2)}
 .ds-sidebar.is-collapsed .ds-sidebar__head{flex-direction:column;justify-content:center;gap:var(--space-2);padding-inline:0}
 .ds-sidebar__toggle{appearance:none;border:0;background:transparent;color:var(--text-muted);cursor:pointer;display:inline-flex;padding:var(--space-2);border-radius:var(--radius-sm);transition:background-color var(--duration-fast) var(--ease-standard),color var(--duration-fast) var(--ease-standard)}
 .ds-sidebar__toggle:hover{background:var(--surface-alt);color:var(--foreground)}
 .ds-sidebar__toggle:focus-visible{outline:2px solid var(--ring);outline-offset:2px}
 .ds-sidebar__nav{display:flex;flex-direction:column;gap:var(--space-1);flex:1;overflow-y:auto;min-height:0}
-.ds-sidebar__title{font-family:var(--font-body);font-size:0.6875rem;font-weight:var(--weight-bold);letter-spacing:0.08em;text-transform:uppercase;color:var(--text-muted);padding:var(--space-3) var(--space-4) var(--space-1)}
+.ds-sidebar__title{font-family:var(--font-body);font-size:0.6875rem;font-weight:var(--weight-bold);letter-spacing:0.08em;text-transform:uppercase;color:var(--text-muted);padding:var(--space-3) var(--space-2) var(--space-1)}
 .ds-sidebar.is-collapsed .ds-sidebar__title{display:none}
 /* 12px de rayon au lieu de 10 : avec la hauteur à 44 (v0.8.0), la pilule active a la place
    de se lire comme une pilule. Pas de jeton --sidenav-radius — ce serait un jeton de plus au
    contrat pour une valeur que personne ne redéclarera. */
-.ds-sidenav{display:flex;align-items:center;gap:var(--space-3);min-height:var(--sidenav-h);padding:0 var(--space-4);border-radius:var(--radius-md);border:0;background:transparent;color:var(--text-secondary);font-family:var(--font-body);font-size:var(--text-control);font-weight:var(--weight-medium);text-align:left;text-decoration:none;cursor:pointer;white-space:nowrap;transition:background-color var(--duration-fast) var(--ease-standard),color var(--duration-fast) var(--ease-standard)}
+.ds-sidenav{display:flex;align-items:center;gap:var(--space-3);min-height:var(--sidenav-h);padding:0 var(--space-2);border-radius:var(--radius-md);border:0;background:transparent;color:var(--text-secondary);font-family:var(--font-body);font-size:var(--text-control);font-weight:var(--weight-medium);text-align:left;text-decoration:none;cursor:pointer;white-space:nowrap;transition:background-color var(--duration-fast) var(--ease-standard),color var(--duration-fast) var(--ease-standard)}
 .ds-sidenav:hover{background:var(--surface-alt);color:var(--foreground)}
 /* L'item actif se signale par sa GRAISSE et son ICÔNE, pas par un libellé coloré.
    L'orange est rationné : une icône de 20 px le porte, une ligne de texte entière le
@@ -519,7 +525,7 @@
 /* Le pied de NAVIGATION : une colonne d'entrées, séparée du contenu par un filet.
    Distinct de .ds-sidebar__foot, qui est une rangée horizontale pour « avatar + nom ». */
 .ds-sidebar__footnav{display:flex;flex-direction:column;gap:var(--space-1);border-top:1px solid var(--border);padding-top:var(--space-2);margin-top:var(--space-2)}
-.ds-sidebar__foot{display:flex;align-items:center;gap:var(--space-3);border-top:1px solid var(--border);padding:var(--space-3) var(--space-4) 0;margin-top:var(--space-2)}
+.ds-sidebar__foot{display:flex;align-items:center;gap:var(--space-3);border-top:1px solid var(--border);padding:var(--space-3) var(--space-2) 0;margin-top:var(--space-2)}
 .ds-sidebar.is-collapsed .ds-sidebar__foot{justify-content:center;padding-inline:0}
 .ds-appshell__scrim{position:fixed;inset:0;z-index:var(--z-scrim);background:color-mix(in srgb,var(--tone-dark) 45%,transparent);backdrop-filter:blur(2px);-webkit-backdrop-filter:blur(2px)}
 @media (min-width:64.0625rem){.ds-appshell__scrim{display:none}}
