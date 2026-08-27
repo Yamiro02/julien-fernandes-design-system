@@ -21,9 +21,31 @@
    montage insensible à l’ordre de chargement. */
 @layer theme, base, components, utilities;
 
-/* Import SÉLECTIF : `preflight.css` est volontairement omis. Le design system
-   embarque son propre reset (`tokens/base.css` : h1→h4 en --font-display, liens,
-   focus) que le preflight neutraliserait. */
+/* Import SÉLECTIF : `preflight.css` n'est PAS importé ici — ET IL NE DOIT PAS L'ÊTRE.
+   N'ajoute pas `@import "tailwindcss/preflight.css"` dans ce fichier.
+
+   Ce n'est pas que le socle se passe de preflight : il en PORTE un depuis la 0.10.0,
+   versé dans le dépôt et chargé par `core.css` en `layer(base)` juste avant
+   `tokens/base.css`. La raison est qu'il ne peut pas être chargé D'ICI.
+
+   `theme.css` et `core.css` sont DEUX POINTS D'ENTRÉE INDÉPENDANTS : l'app les importe
+   séparément, et ce fichier n'importe pas `core.css`. Un reset posé ici n'a donc AUCUN
+   rapport d'ordre garanti avec `tokens/base.css`, qui vit dans l'autre entrée — or le
+   reset du socle ne tient QUE par cet ordre-là. La copie versée dans `core.css` le
+   garantit parce qu'elle est dans le même fichier, à la ligne d'avant.
+
+   ET LE PIÈGE EST PIRE QUE ÇA, mesuré : un `@import` SANS `layer()` atterrit HORS COUCHE,
+   et le CSS hors couche l'emporte sur TOUTES les couches, quelle que soit sa position dans
+   la feuille. Vérifié sur les quatre cas — hors couche gagne qu'il soit inséré avant ou
+   après le socle ; en `layer(base)` il ne gagne que s'il vient après. Un preflight importé
+   ici sans couche écrase donc h1→h4, les liens et le focus du socle, TOUJOURS. C'est
+   très probablement l'observation d'origine — « le preflight écrase notre reset » — prise
+   à l'époque pour une incompatibilité alors que c'était un problème d'ORDRE et de COUCHE.
+
+   Deux autres raisons interdisent l'import direct de `tailwindcss/preflight.css`, où que
+   ce soit : l'import de police de la marque avalé, et le peer optionnel. Elles sont
+   écrites une seule fois, dans l'en-tête de `tokens/preflight.css` — un raisonnement écrit
+   à deux endroits est un raisonnement qui divergera. */
 @import "tailwindcss/theme.css" layer(theme);
 @import "tailwindcss/utilities.css" layer(utilities);
 

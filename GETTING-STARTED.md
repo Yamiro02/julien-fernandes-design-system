@@ -320,8 +320,10 @@ import '@client/ds/brand-<client>.css';
 
 > **Il n'y a pas de preset.** `theme.css` porte lui-même les `@import "tailwindcss/…"` :
 > l'app ne doit **pas** écrire `@import "tailwindcss";` de son côté, elle chargerait
-> Tailwind deux fois. Le preflight est volontairement omis — le design system embarque son
-> propre reset, que le preflight neutraliserait.
+> Tailwind deux fois — et le second preflight arriverait APRÈS le reset du design system
+> et l'écraserait. Le socle, lui, PORTE son preflight : il est versé dans le dépôt et
+> chargé par `core.css` juste avant son propre reset, dans le même fichier, pour que
+> l'ordre soit garanti. Il n'y a rien à ajouter de ton côté.
 
 ---
 

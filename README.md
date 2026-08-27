@@ -55,7 +55,7 @@ géométrique. Si un pixel chaud apparaît, une valeur de marque est restée dan
 Pas de registry : chaque app épingle une version par un tag git.
 
 ```bash
-npm i github:Yamiro02/julien-fernandes-design-system#v0.10.0
+npm i github:Yamiro02/julien-fernandes-design-system#v0.10.1
 ```
 
 Cinq **peer dependencies**, à la charge de l'app :
@@ -143,17 +143,24 @@ Plus de `tailwind.config.js`, plus de `postcss.config.js`, plus d'`autoprefixer`
 CSS.
 
 > **Supprime ton `@import "tailwindcss";`.** `theme.css` porte lui-même les imports de Tailwind —
-> `theme.css` et `utilities.css`, chacun dans sa couche, **sans `preflight.css`**. Si ton app garde
-> sa propre ligne `@import "tailwindcss";`, Tailwind est chargé **deux fois** et le preflight
-> revient neutraliser le reset du design system.
+> `theme.css` et `utilities.css`, chacun dans sa couche. Si ton app garde sa propre ligne,
+> Tailwind est chargé **deux fois**, et ce second chargement amène un preflight qui arrive
+> **après** le reset du design system : c'est l'ordre qui te coûte tes titres, pas une
+> incompatibilité. Le socle porte déjà son preflight — voir juste en dessous.
 
 #### Ce que `theme.css` règle pour toi
 
-- **Le preflight est coupé**, et le morceau qui manquait est restauré. Sans preflight, les
-  utilitaires `border-*` perdent la remise à zéro des bordures natives (`input`, `button`,
-  `fieldset`, `hr`) et leur couleur par défaut retombe sur `currentColor` au lieu du token —
-  une bordure de la couleur du texte courant là où on attend `--border`. C'était à ta charge en v3, le paquet
-  s'en occupe maintenant.
+- **Le preflight est là, et c'est `core.css` qui le porte** — depuis la 0.10.0. Il est versé
+  dans le dépôt (`src/styles/tokens/preflight.css`, copie conforme de celui de Tailwind) et
+  chargé en `layer(base)` **juste avant** le reset du socle, dans le même fichier : le
+  preflight normalise, l'identité du socle repasse par-dessus. Tu n'as rien à importer, et
+  surtout rien à ajouter dans `theme.css` — son en-tête explique pourquoi le geste y est
+  interdit.
+- **La couleur de bordure par défaut est celle du système**, pas celle du texte. Tailwind v4
+  laisse `border-color: currentColor` : un `border` nu tracerait un filet quasi noir là où on
+  attend le gris doux de `--border`. `tokens/base.css` repose le défaut sur
+  `var(--border, currentColor)` — écart délibéré, et le cas inverse s'écrit
+  `border-current`.
 - **Les couches** : `@layer theme, base, components, utilities`. Le reset du DS est en `base`, les
   états `.ds-*` en `components`. C'est ce qui permet à un utilitaire Tailwind passé en `className`
   de **surcharger** un composant — `<Card className="p-space-7">` applique bien `--space-7` —

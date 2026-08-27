@@ -23,6 +23,52 @@ concordent.
 
 ---
 
+## 0.10.1 — le socle se contredit sur son propre preflight
+
+**Documentation seule. Aucun changement de rendu, aucune API, aucun jeton, aucune classe —
+une app n'a aucune raison de re-épingler.** Il n'y a rien à revoir à l'écran.
+
+Ce n'est pas cosmétique pour autant : trois documents affirmaient encore que « le preflight
+est volontairement omis, le design system embarque son propre reset **que le preflight
+neutraliserait** ». C'est exactement le raisonnement qui a coûté au socle des mois sans
+reset — quelqu'un lit une raison périmée, la croit, et agit dessus.
+
+**`README.md` est le point qui justifie la publication** : c'est la documentation
+d'installation, et son § « Ce que `theme.css` règle pour toi » décrivait du code **retiré en
+0.10.0** — les deux rustines `border-width:0` / `border-style:solid`. Quelqu'un qui monte le
+socle aujourd'hui y lit les instructions d'une version disparue. Il dit maintenant l'état
+réel : le socle porte son preflight, et il repose `border-color: var(--border, currentColor)`
+dans `tokens/base.css`, dont le cas inverse s'écrit `border-current`.
+
+L'avertissement « supprime ton `@import "tailwindcss";` » **reste valable** — un second
+Tailwind amène un second preflight, qui arrive **après** le reset du socle. Mais il est
+reformulé en problème d'**ordre**, pas en incompatibilité : « le preflight revient
+neutraliser le reset » est la phrase qui a fait retirer le preflight, elle ne doit plus
+exister nulle part.
+
+**`theme.css` n'est pas seulement corrigé, il est verrouillé.** Un commentaire neutre
+laisserait le prochain lecteur libre d'y ajouter `@import "tailwindcss/preflight.css"` —
+c'est-à-dire de rejouer le bug. Il **interdit** le geste et dit pourquoi : `theme.css` et
+`core.css` sont deux points d'entrée **indépendants**, l'app les importe séparément et
+`theme.css` n'importe pas `core.css`. Un reset posé là-bas n'a donc aucun rapport d'ordre
+garanti avec `tokens/base.css` — or le reset du socle ne tient QUE par cet ordre.
+
+Et le piège est pire, **mesuré sur les quatre cas** : un `@import` **sans `layer()`** atterrit
+hors couche, et le CSS hors couche l'emporte sur **toutes** les couches, qu'il soit inséré
+avant ou après le socle. En `layer(base)`, il ne gagne que s'il vient après. Un preflight
+importé depuis `theme.css` sans couche écrase donc h1→h4, les liens et le focus du socle,
+**toujours** — c'est très probablement l'observation d'origine, prise à l'époque pour une
+incompatibilité alors que c'était un problème d'ordre et de couche.
+
+Les deux autres arguments contre l'import direct — l'import de police avalé, le peer
+optionnel — ne sont pas recopiés : `theme.css` renvoie à l'en-tête de `tokens/preflight.css`,
+où ils sont écrits une seule fois. Un raisonnement écrit à deux endroits est un raisonnement
+qui divergera.
+
+`GETTING-STARTED.md` reçoit la même correction, en plus court.
+
+Les trois corrections sont reportées à l'identique dans `design-system-template`.
+
 ## 0.10.0 — le preflight de Tailwind revient, et l'addenda v0.8.0 est appliqué
 
 Le rendu de **tout élément HTML nu** change, dans les deux thèmes. Aucune prop, aucune
