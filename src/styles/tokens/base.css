@@ -25,7 +25,20 @@
    le jour où le preflight bouge. */
 *,*::before,*::after{box-sizing:border-box}
 html{-webkit-text-size-adjust:100%}
-body{margin:0;background:var(--background);color:var(--foreground);font-family:var(--font-body);font-size:var(--text-body);font-weight:var(--weight-regular);line-height:var(--leading-body);-webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility}
+/* `-webkit-font-smoothing: auto`, ET SURTOUT PAS `antialiased`. Le nom trompe : la valeur
+   `antialiased` n'AJOUTE pas de lissage, elle force le lissage en niveaux de gris à la
+   place du rendu dense par défaut. Les fûts perdent une fraction de pixel de chaque côté
+   et TOUT le corps de texte descend d'environ un demi-cran de graisse sur macOS. Le corps
+   entre 13 et 16 est là où ça se voit ; une display à 40 ne bouge presque pas — d'où une
+   maquette qui paraît juste et une app qui paraît anémique.
+   C'est l'une des lignes les plus copiées-collées du web. Elle réglait un défaut de Chrome
+   sur macOS disparu depuis ; elle est restée dans à peu près tous les resets.
+   `auto` EXPLICITE plutôt que rien : sans la déclaration, quelqu'un remet `antialiased`.
+   Le jumeau Firefox `-moz-osx-font-smoothing: grayscale` n'est PAS posé non plus, et ne
+   doit pas l'être : le socle ne demande à aucun moteur d'amincir son texte.
+   Constaté et vérifié à l'écran sur macOS le 28/08/2026, inspecteur ouvert, en décochant
+   la déclaration : tout le texte s'épaissit d'un coup. */
+body{margin:0;background:var(--background);color:var(--foreground);font-family:var(--font-body);font-size:var(--text-body);font-weight:var(--weight-regular);line-height:var(--leading-body);-webkit-font-smoothing:auto;text-rendering:optimizeLegibility}
 /* LE TITRAGE LIT DEUX JETONS DE MARQUE, il n'impose plus rien. Ces deux lignes posaient
    `uppercase` + graisse 400 : ce n'est pas de la structure, c'est le régime d'UNE face
    display particulière — une condensée à capitales qui ne livre qu'une graisse. Sous une

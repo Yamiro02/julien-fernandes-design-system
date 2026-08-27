@@ -23,6 +23,69 @@ concordent.
 
 ---
 
+## 0.13.0 — le texte reprend son poids, et la marque a sa tuile pleine
+
+**Changement de rendu pour TOUTES les apps : tout le corps de texte s'épaissit sur macOS.**
+Aucune classe retirée, aucune prop cassée, aucun jeton touché. Rien à migrer — mais c'est le
+genre de version qu'on regarde à l'écran avant de la propager.
+
+### 1 · `-webkit-font-smoothing` passe de `antialiased` à `auto`
+
+`tokens/base.css` posait `-webkit-font-smoothing: antialiased` sur `body` depuis l'origine.
+Le nom trompe, et c'est tout le problème : la valeur **n'ajoute pas** de lissage, elle force
+le lissage en **niveaux de gris** à la place du rendu dense par défaut. Les fûts perdent une
+fraction de pixel de chaque côté, et **tout le corps de texte descend d'environ un demi-cran
+de graisse** sur macOS.
+
+C'est l'une des lignes les plus copiées-collées du web. Elle réglait un défaut de Chrome sur
+macOS qui n'existe plus depuis des années ; elle est restée dans à peu près tous les resets,
+celui-ci compris.
+
+**Ce qui rendait le défaut difficile à voir** : l'écart est proportionnel à la finesse du
+trait. Anton à 22, 29 ou 40 ne bouge presque pas — la maquette et le titrage paraissent
+justes. C'est **DM Sans entre 13 et 16** qui perd son poids, c'est-à-dire les libellés, les
+champs, les tableaux, les cartes : l'interface entière, partout où on ne la regarde pas
+comme une image.
+
+**Et le socle était déjà incohérent d'un navigateur à l'autre** : le jumeau Firefox
+`-moz-osx-font-smoothing: grayscale` n'a jamais été posé. Chrome et Safari amincissaient,
+Firefox non, sur la même machine. Il n'est toujours pas posé, et il ne doit pas l'être : le
+socle ne demande à aucun moteur d'amincir son texte.
+
+`auto` est écrit **explicitement** plutôt que la déclaration retirée : sans elle, quelqu'un
+remet `antialiased`. Le commentaire qui l'accompagne dit pourquoi, pour que ce quelqu'un
+s'arrête.
+
+`text-rendering: optimizeLegibility`, sur la même ligne, **n'est pas touché** — c'est une
+autre question, et deux variables changées ensemble ne s'attribuent plus.
+
+### 2 · `Pastille` prend un ton `brand-solid`
+
+Le socle avait la tuile de marque **douce** (`tone="brand"`, `--grad-soft`) et le bouton de
+marque **plein** (`.ds-btn--primary`, `.ds-icon-btn--primary`). Rien entre les deux : une app
+qui voulait un carré en dégradé plein **non interactif** devait recomposer le remplissage à
+la main, sur trois utilitaires.
+
+`tone="brand-solid"` porte `--brand-gradient` et `--primary-foreground`. En `size="dialogue"`
+il est le **jumeau exact d'un `IconButton` `md`** — `--pastille-dialogue` et
+`--icon-control-md` valent tous deux 2,625 rem, et les deux prennent `--radius-md`.
+
+**Pourquoi ça compte, et ce n'est pas cosmétique** : un `<button>` posé dans un `<label>` est
+du contenu interactif imbriqué, donc du HTML invalide, et le navigateur **ne transmet pas**
+l'activation du label depuis cet enfant. Mesuré dans une app : `<button>` → **0** ouverture
+du sélecteur de fichier, `<span>` → **1**. Une tuile d'icône interactive au milieu d'une zone
+de dépôt rend donc inerte la cible la plus évidente de la zone — invisible à la relecture,
+évident à l'usage. `brand-solid` donne l'apparence sans le défaut.
+
+⚠ **Aucune lueur, et c'est délibéré.** Dans ce système la lueur marque ce qui se **presse** :
+seuls les deux boutons primaires la portent. Les cinq autres endroits où le dégradé remplit
+quelque chose — barre de progression, case à cocher, pastille du radio, piste de
+l'interrupteur, jour sélectionné du calendrier — n'en ont aucune, et une `Pastille` ne se
+clique jamais. Un appelant qui veut le halo ajoute `shadow-glow` chez lui, en le sachant.
+
+`check-contrast.mjs` mesure le glyphe sur les **trois arrêts** du dégradé, pas sur un aplat,
+au seuil de 3 des graphiques non textuels — le même que sa jumelle douce.
+
 ## 0.12.0 — la barre latérale se resserre
 
 **Changement de rendu pour toute app qui affiche une `Sidebar`** : elle est plus étroite, et

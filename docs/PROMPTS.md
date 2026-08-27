@@ -193,11 +193,23 @@ en div : c'est exactement ce que ce composant remplace.
 <Pastille size="dialogue" tone="danger"><Icon name="triangle-alert" size="1.25rem" /></Pastille>
 <Pastille size="panneau" tone="brand" outlined><Icon name="folder" size="1.5rem" /></Pastille>
 <Pastille size="heros" shape="round" tone="inverse"><Icon name="rocket" size="1.5rem" /></Pastille>
+<Pastille size="dialogue" tone="brand-solid"><Icon name="plus" size="1.25rem" /></Pastille>
 ```
 
 - Props : `size` (`carte` 2.25 · `dialogue` 2.625 · `panneau` 3.25 · `heros` 4 · `ecran`
-  5rem — le rayon suit la taille) · `shape` (`square·round`) · `tone` (`brand` + les 6
-  paires sémantiques + `inverse`) · `outlined` (contour 1px currentColor à 22 %).
+  5rem — le rayon suit la taille) · `shape` (`square·round`) · `tone` (`brand` ·
+  `brand-solid` + les 6 paires sémantiques + `inverse`) · `outlined` (contour 1px
+  currentColor à 22 %).
+- **`tone="brand-solid"` porte le dégradé PLEIN**, avec son glyphe en
+  `--primary-foreground` : la tuile de marque affirmée, là où `brand` est la tuile douce.
+  `size="dialogue"` en fait le jumeau exact d'un `IconButton` `md` — même 2,625 rem, même
+  `--radius-md` — mais en `<span>`, donc **posable dans un `<label>` ou une zone cliquable,
+  là où un vrai `<button>` imbriqué est du contenu interactif invalide dont le navigateur
+  ne transmet pas l'activation.**
+- ⚠️ `brand-solid` ne porte **aucune lueur**, et c'est délibéré : dans ce système la lueur
+  marque ce qui se **presse**, et seuls `.ds-btn--primary` et `.ds-icon-btn--primary` la
+  portent. Une `Pastille` ne se clique jamais. Un appelant qui veut le halo l'ajoute
+  lui-même, en le sachant.
 - `tone="brand"` porte son icône en `--primary` : elle est **décorative**, elle rend la
   marque, et elle tient le seuil de 3:1 des graphiques non textuels. Les six tons
   sémantiques gardent leur couleur **lisible** — une pastille de statut porte une

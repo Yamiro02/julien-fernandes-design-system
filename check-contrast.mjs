@@ -159,6 +159,12 @@ function pairs(theme, { ROOT, DARK }, fichier) {
   /* L'icône de la pastille de marque est DÉCORATIVE et porte --primary : la paire mesurée
      doit être celle que l'œil reçoit, pas le jumeau lisible ni un arrêt du dégradé. */
   add('Marque-contenu', '.ds-pastille--brand — icône', g('--primary'), over(g('--brand-from'), softAlpha[0], g(C)), 3, 'icône');
+  /* Le ton PLEIN : le glyphe est --primary-foreground sur le dégradé opaque, donc mesuré
+     sur ses trois arrêts et pas sur un aplat. Seuil 3 comme sa jumelle douce — un glyphe de
+     pastille est un graphique non textuel. Il tient de toute façon 4,5 : c'est la même encre
+     sur le même remplissage que le label de .ds-btn--primary, mesuré plus bas. */
+  for (const arret of ['--brand-from', '--brand-via', '--brand-to'])
+    add('Marque-contenu', `.ds-pastille--brand-solid — glyphe sur ${arret}`, g('--primary-foreground'), g(arret), 3, 'icône');
   add('Marque-contenu', '.ds-icon-btn[aria-pressed] — icône', g('--primary-readable'), g('--accent'), 3, 'icône');
   add('Marque-contenu', '.ds-error', g('--destructive-readable'), g(C), 4.5, '13 / 500');
   add('Marque-contenu', '.ds-dropdown__item--danger', g('--destructive-readable'), g('--popover'), 4.5, '14 / 400');

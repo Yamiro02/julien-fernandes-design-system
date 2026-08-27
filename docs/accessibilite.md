@@ -89,7 +89,7 @@ densité ce qu'elle perd en éclat.
 
 ## 2. Les paires conformes
 
-37 paires sur 50, dans les deux thèmes.
+38 paires sur 53, dans les deux thèmes.
 
 | Paire | contenu | seuil | clair | sombre |
 |---|---|--:|--:|--:|
@@ -135,11 +135,11 @@ densité ce qu'elle perd en éclat.
 
 ## 3. Les écarts assumés
 
-13 paires. Chacune est déclarée **dans le fichier de marque**,
+15 paires. Chacune est déclarée **dans le fichier de marque**,
 `src/styles/brand-julien-fernandes.css`, par un bloc `@a11y-assume:` — pas dans le script.
 Le script porte la mécanique, la marque porte ses renoncements : un client qui écrit sa
 marque repart d'une liste VIDE et n'hérite d'aucune dérogation qu'il n'a pas prise. Le
-build tombe si une **quatorzième** apparaît.
+build tombe si une **seizième** apparaît.
 
 Quatre familles, et les quatre sont des décisions de marque — aucune n'est un oubli. Une
 seule a été prise après le portage : l'anneau de focus, en v0.8.0.
@@ -150,6 +150,8 @@ seule a été prise après le portage : l'anneau de focus, en v0.8.0.
 | `.ds-btn--primary — label sur --brand-from (pire arrêt)` | 15 / 600 | 4,5 | 2,04 ✗ | 2,04 ✗ |
 | `.ds-btn--primary — label sur --brand-via` | 15 / 600 | 4,5 | 2,68 ✗ | 2,68 ✗ |
 | `.ds-btn--primary — label sur --brand-to` | 15 / 600 | 4,5 | 3,80 ✗ | 3,80 ✗ |
+| `.ds-pastille--brand-solid — glyphe sur --brand-from` | icône | 3 | 2,04 ✗ | 2,04 ✗ |
+| `.ds-pastille--brand-solid — glyphe sur --brand-via` | icône | 3 | 2,68 ✗ | 2,68 ✗ |
 | `.ds-btn--danger — label sur --destructive` | 15 / 600 | 4,5 | 3,80 ✗ | 3,80 ✗ |
 | `.ds-cal__day.is-selected` | 14 / 600 | 4,5 | 3,48 ✗ | 3,48 ✗ |
 | `.eyebrow / .accent — dégradé clippé en texte` | 12 / 600 | 4,5 | 1,83 ✗ | 8,16 |
@@ -160,9 +162,9 @@ seule a été prise après le portage : l'anneau de focus, en v0.8.0.
 | `.ds-card — bordure --border vs page` | contour 1px | 3 | 1,17 ✗ | 1,44 ✗ |
 | `.ds-sep — filet --border sur --card` | filet 1px | 3 | 1,22 ✗ | 1,24 ✗ |
 
-### 3.1 · Le label blanc sur les aplats et le dégradé chauds — `2,04` au pire arrêt
+### 3.1 · Le blanc sur les aplats et le dégradé chauds — `2,04` au pire arrêt
 
-**L'écart.** Six paires, de **2,04 à 3,80**, dans les deux thèmes : le CTA primaire porte
+**L'écart.** Huit paires, de **2,04 à 3,80**, dans les deux thèmes : le CTA primaire porte
 `--brand-gradient` (ambre `#f5a524` → orange `#f08029` → corail `#e84c3d`) sous un label
 blanc, l'aplat `--primary` (`#e85d2f`) sert de repli et de piste de switch, le bouton
 danger porte le corail sémantique `#e84c3d`, et le jour sélectionné du calendrier est un
@@ -182,6 +184,12 @@ seul : toujours couleur + icône + mot (« Supprimer »), et le texte de danger 
 passe par `--destructive-readable` (6,62 sur carte). Le jour sélectionné est le seul
 rempli de la grille — la forme porte l'information autant que le contraste — et le jour
 du jour, lui, est en `--primary-readable` (5,16).
+
+La tuile `brand-solid` (v0.13.0) entre dans cette même famille, avec l'argument en plus
+fort : elle fait 2,625 rem, le dégradé la traverse en entier, et son glyphe est CENTRÉ —
+il reçoit donc `--brand-to` (3,80, au-dessus du seuil de 3), jamais l'arrêt clair du bord
+gauche. Et le glyphe d'une `Pastille` est DÉCORATIF : le libellé voisin porte
+l'information, la tuile n'est jamais la seule chose à lire.
 
 **Le remède, si l'écart ne peut pas être assumé.** Basculer `--primary-foreground` sur
 l'encre dans les deux thèmes. C'est une décision d'identité, pas une correction

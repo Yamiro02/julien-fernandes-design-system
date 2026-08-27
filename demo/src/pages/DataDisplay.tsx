@@ -3,7 +3,7 @@ import { Block, Grid, Row, Section, Stack } from '../ui';
 
 const TONES = ['coral', 'amber', 'danger', 'warning', 'success', 'neutral', 'accent', 'outline'] as const;
 const TAILLES = ['carte', 'dialogue', 'panneau', 'heros', 'ecran'] as const;
-const TONS_PASTILLE = ['brand', 'coral', 'amber', 'success', 'warning', 'danger', 'neutral', 'inverse'] as const;
+const TONS_PASTILLE = ['brand', 'brand-solid', 'coral', 'amber', 'success', 'warning', 'danger', 'neutral', 'inverse'] as const;
 
 export function DataDisplayPage() {
   return (

@@ -247,6 +247,16 @@
    la différence entre décorer et informer, et c'est la ligne qu'on cassera un jour en
    voulant « harmoniser ». */
 .ds-pastille--brand{background:var(--grad-soft);color:var(--primary)}
+/* LE TON PLEIN DE LA MARQUE — la tuile que le socle n'avait pas. Il portait la tuile
+   DOUCE (--grad-soft, ci-dessus) et le bouton PLEIN (.ds-btn--primary,
+   .ds-icon-btn--primary), et rien entre les deux : une app qui voulait un carré en dégradé
+   plein NON interactif devait recomposer le remplissage à la main.
+   ⚠ AUCUNE LUEUR ICI, et ce n'est pas un oubli. Dans ce système la lueur marque ce qui se
+   PRESSE : seuls les deux boutons primaires la portent. Les cinq autres endroits où le
+   dégradé remplit quelque chose — barre de progression, case à cocher, pastille du radio,
+   piste de l'interrupteur, jour sélectionné du calendrier — n'en ont pas, et une Pastille
+   ne se clique jamais. Un appelant qui veut le halo l'ajoute chez lui, en le sachant. */
+.ds-pastille--brand-solid{background:var(--brand-gradient);color:var(--primary-foreground)}
 .ds-pastille--coral{background:var(--pill-coral-bg);color:var(--pill-coral-fg)}
 .ds-pastille--amber{background:var(--pill-amber-bg);color:var(--pill-amber-fg)}
 .ds-pastille--success{background:var(--pill-success-bg);color:var(--pill-success-fg)}

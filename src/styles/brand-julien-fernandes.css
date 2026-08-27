@@ -78,6 +78,18 @@
 /* @a11y-assume: .ds-btn--primary — label sur --brand-via
    2,68:1. Même dégradé, arrêt médian #f08029. Même raison. */
 
+/* @a11y-assume: .ds-pastille--brand-solid — glyphe sur --brand-from
+   2,04:1. Le MÊME ambre #f5a524 sous le même blanc que le label du CTA deux blocs plus haut :
+   une seule décision de marque, mesurée à deux endroits. L'argument y est même plus fort — la
+   tuile fait 2,625 rem, le dégradé la traverse en entier, et le glyphe est CENTRÉ : il se pose
+   sur --brand-via et --brand-to, jamais sur l'arrêt clair, qui n'occupe que le bord gauche.
+   Atténué : le glyphe d'une Pastille est DÉCORATIF — le libellé voisin porte l'information —
+   et la tuile n'est jamais la seule chose à lire. */
+
+/* @a11y-assume: .ds-pastille--brand-solid — glyphe sur --brand-via
+   2,68:1. Même dégradé, arrêt médian #f08029, même raison. L'arrêt --brand-to, lui, tient le
+   seuil (3,80), et c'est celui que le centre du glyphe reçoit réellement. */
+
 /* @a11y-assume: .ds-btn--primary — label sur --brand-to
    3,80:1. Même dégradé, arrêt corail #e84c3d — le plus foncé des trois, et celui sous le
    centre du label. C'est la mesure réelle du CTA. Décision de marque : le dégradé chaud EST
