@@ -15,7 +15,7 @@
 export { BRAND_NAME, BRAND_MONOGRAM, BRAND_WORDMARK_LINES } from './brand';
 
 export { Icon } from './components/icons/Icon';
-export type { IconProps, IconName } from './components/icons/Icon';
+export type { IconProps, IconBaseProps, IconName } from './components/icons/Icon';
 
 /* actions */
 export { Button } from './components/actions/Button';

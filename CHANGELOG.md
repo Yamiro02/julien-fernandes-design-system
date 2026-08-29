@@ -23,6 +23,71 @@ concordent.
 
 ---
 
+## 0.15.0 — le catalogue d'icônes cesse d'être une impasse
+
+Une PROP ajoutée, aucun jeton CSS touché, aucun composant retiré. **Rien ne casse** : tout
+code existant qui écrit `<Icon name="…" />` continue de fonctionner à l'identique.
+
+**Pour une app consommatrice** : une icône absente du catalogue n'oblige plus à publier une
+version du design system. L'app importe le tracé lucide et le passe en `glyph`.
+
+### Le manque n'était pas dans la librairie, il était dans la porte
+
+Le socle est bâti sur **lucide-react** — environ 1500 tracés disponibles — dont **47** sont
+importés à la main dans `Icon.tsx` et typés par `IconName`. Ce jeu curé est une bonne chose :
+il se relit, il se documente, il empêche une app de piocher au hasard.
+
+Mais il était FERMÉ. Une app qui avait besoin de `shopping-bag` avait trois issues, toutes
+mauvaises : dessiner son propre SVG (ce que la charte interdit — `Icon` est le seul jeu
+d'icônes du système), prendre une icône approchante qui ne veut pas dire la même chose, ou
+rouvrir le design system et publier une version pour une ligne. C'est arrivé sur Dashboard,
+avec deux icônes d'un coup.
+
+Or **le mécanisme existait déjà**, à l'intérieur : `Glyph`, le rendu nu, écrit pour que
+l'extension métier affiche ses icônes de plateforme « avec exactement les mêmes règles de
+taille et d'épaisseur, sans dupliquer huit lignes ni rouvrir le socle ». Il était interne.
+On l'expose, sous la forme d'une prop.
+
+### `name` OU `glyph`, jamais les deux
+
+```tsx
+import { ShoppingBag } from 'lucide-react';
+
+<Icon name="folder" />          // le catalogue — la voie normale
+<Icon glyph={ShoppingBag} />    // un tracé lucide quelconque
+```
+
+`IconProps` devient une **union discriminée** avec `?: never` de part et d'autre. Passer les
+deux, ou n'en passer aucun, est une **erreur de compilation** — pas une surprise au rendu où
+l'un gagnerait silencieusement sur l'autre. Vérifié dans les deux sens sur un fichier
+d'essai : les deux formes valides compilent, les deux formes invalides échouent.
+
+Trois propriétés sont conservées, et ce sont elles qui justifient cette forme plutôt qu'un
+simple élargissement du type :
+
+- **le tree-shaking** — l'import reste statique et vit dans l'app, donc seule l'icône
+  réellement employée entre dans son bundle ;
+- **la cohérence** — le rendu reste celui du socle : grille 24, épaisseur, `aria-hidden`,
+  taille en rem. `glyph` ouvre le choix du TRACÉ, jamais la liberté graphique ;
+- **le catalogue** — `name` reste la voie normale, et la doc le dit : un besoin qui revient
+  dans DEUX apps a vocation à entrer au catalogue plutôt qu'à rester en `glyph`.
+
+### Un détail de typage qui aurait mordu en silence
+
+`GlyphProps` étendait `Omit<IconProps, 'name'>`. Depuis qu'`IconProps` est une union, un
+`Omit` dessus ne garde que les clés COMMUNES aux deux branches : `size`, `strokeWidth`,
+`className` et `style` auraient disparu de `GlyphProps`, donc de `ContentIconProps`, sans
+qu'aucun test ne le dise. Les propriétés partagées sont donc extraites dans **`IconBaseProps`**,
+désormais exporté — une app qui écrit un composant relayant des props d'icône en a besoin.
+
+### Porté au template
+
+`design-system-template` reçoit la même API. C'est la règle du dossier : ce qui se porte
+systématiquement, c'est l'**API des composants**, pas le traitement visuel. Sans ça, chaque
+design system client naîtrait avec un manque déjà comblé ailleurs.
+
+---
+
 ## 0.14.0 — la barre respire d'un cran, et l'accueil retrouve une maison
 
 Deux points indépendants. Une icône **ajoutée** au catalogue, aucun jeton CSS ajouté ni

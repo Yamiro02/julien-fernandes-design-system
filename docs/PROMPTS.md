@@ -565,8 +565,26 @@ c'est voulu.
 <Icon name="arrow-right" size="1rem" style={{ color: 'var(--primary-readable)' }} />
 ```
 
-- Props : `name` (`IconName`) · `size` (longueur CSS, toujours rem — 1 / 1.25 / 1.5rem) ·
+**Ce que le catalogue ne couvre pas se passe en `glyph`.** Lucide compte ~1500 tracés ;
+le catalogue en cure 47. Pour le reste, l'app importe le tracé et le socle lui applique
+ses propres règles — même grille, même épaisseur. Plus besoin de publier une version du
+design system pour une icône.
+
+```tsx
+import { ShoppingBag } from 'lucide-react';
+
+<Icon glyph={ShoppingBag} />
+```
+
+- Props : `name` (`IconName`) **ou** `glyph` (tracé lucide), jamais les deux — ils sont
+  mutuellement exclusifs, et le TYPE l'impose : passer les deux, ou aucun, est une erreur
+  de compilation. · `size` (longueur CSS, toujours rem — 1 / 1.25 / 1.5rem) ·
   `strokeWidth` (2 standard · 2.5 dans les pills et les toasts · 3 pour la coche).
+- **`name` reste la voie normale** : le catalogue est relu, documenté, et garantit qu'un
+  nom existe. `glyph` est la porte de sortie, pas le chemin par défaut — un besoin qui
+  revient dans DEUX apps mérite d'entrer au catalogue.
+- `glyph` n'autorise PAS un SVG maison : le rendu reste celui du socle. Ce qui s'ouvre,
+  c'est le choix du tracé dans lucide, pas la liberté graphique.
 - La couleur suit `currentColor`. Les actions destructives prennent `trash-2`.
 
 ---

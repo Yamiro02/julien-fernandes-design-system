@@ -34,9 +34,8 @@ export type IconName =
   | 'chevrons-left' | 'chevrons-right' | 'ellipsis' | 'panel-left'
   | 'sliders-horizontal' | 'layout-dashboard' | 'house' | 'video' | 'dumbbell' | 'settings';
 
-export interface IconProps {
-  /** Lucide icon name, kebab-case (e.g. "circle-check", "arrow-right"). */
-  name: IconName;
+/** Ce que tout rendu d'icône partage, quelle que soit la provenance du tracé. */
+export interface IconBaseProps {
   /** CSS length — always rem. Default '1.25rem'. */
   size?: string;
   /** SVG stroke width in px (2 · 2.5 in pills/toasts · 3 for check). Default 2. */
@@ -44,6 +43,39 @@ export interface IconProps {
   className?: string;
   style?: CSSProperties;
 }
+
+/**
+ * DEUX FAÇONS DE NOMMER UN TRACÉ, ET UNE SEULE À LA FOIS.
+ *
+ * `name` puise dans le CATALOGUE — le jeu curé, celui qu'on relit, celui dont la doc
+ * garantit qu'il existe. C'est la voie normale, et elle le reste.
+ *
+ * `glyph` prend un tracé lucide QUELCONQUE, importé par l'app. Il existe parce que le
+ * manque n'était pas dans la librairie — lucide en compte ~1500 — mais dans la PORTE :
+ * une icône absente du catalogue obligeait à publier une version du design system pour
+ * une ligne. Désormais l'app importe `<ShoppingBag />` et le socle lui applique ses
+ * propres règles de taille et d'épaisseur. Le tree-shaking est conservé : l'import reste
+ * statique, côté app.
+ *
+ * ⚠️ Les deux sont MUTUELLEMENT EXCLUSIFS, et c'est le TYPE qui l'impose (`?: never`) :
+ * passer les deux est une erreur de compilation, pas une surprise au rendu où l'un
+ * gagnerait silencieusement sur l'autre.
+ *
+ * ⚠️ Ce que `glyph` n'autorise PAS : dessiner son propre SVG. Le rendu reste celui du
+ * socle — même grille 24, même épaisseur, même `aria-hidden`. Ce qui s'ouvre, c'est le
+ * choix du tracé dans lucide, pas la liberté graphique.
+ */
+export type IconProps =
+  | (IconBaseProps & {
+      /** Lucide icon name, kebab-case (e.g. "circle-check", "arrow-right"). */
+      name: IconName;
+      glyph?: never;
+    })
+  | (IconBaseProps & {
+      /** Tracé lucide importé par l'app, pour ce que le catalogue ne couvre pas. */
+      glyph: LucideIcon;
+      name?: never;
+    });
 
 /* Même jeu de noms que le composant Icon source — tracés fournis par lucide-react. */
 const ICONS: Record<IconName, LucideIcon> = {
@@ -102,9 +134,10 @@ const ICONS: Record<IconName, LucideIcon> = {
 };
 
 export function Icon({
-  name, size = '1.25rem', strokeWidth = 2, className = '', style, ...rest
+  name, glyph, size = '1.25rem', strokeWidth = 2, className = '', style, ...rest
 }: IconProps): JSX.Element | null {
-  const Icône = ICONS[name];
+  /* `glyph` d'abord : quand il est là, `name` est `never` — il n'y a rien à départager. */
+  const Icône = glyph ?? (name ? ICONS[name] : undefined);
   if (!Icône) return null;
   return <Glyph glyph={Icône} size={size} strokeWidth={strokeWidth} className={className} style={style} {...rest} />;
 }
@@ -114,7 +147,10 @@ export function Icon({
  * l'extension métier de rendre ses icônes de plateforme avec exactement les mêmes règles
  * de taille et d'épaisseur, sans dupliquer huit lignes ni rouvrir le socle.
  */
-export interface GlyphProps extends Omit<IconProps, 'name'> { glyph: LucideIcon }
+/* ⚠️ Étend `IconBaseProps`, PAS `Omit<IconProps, 'name'>` : depuis qu'`IconProps` est une
+   union, un `Omit` dessus ne garderait que les clés COMMUNES aux deux branches et
+   perdrait silencieusement `size`, `strokeWidth`, `className` et `style`. */
+export interface GlyphProps extends IconBaseProps { glyph: LucideIcon }
 
 export function Glyph({
   glyph: G, size = '1.25rem', strokeWidth = 2, className, style, ...rest
