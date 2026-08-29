@@ -56,11 +56,18 @@ n'est pas une règle.
   écrit en dur — rien ne bouge chez lui, même le jour où il bumpe.
 
 **L'audit demandé — que laisse encore l'en-tête à l'appelant sans le dire ?** Un seul
-vrai trou, remonté et NON tranché ici : **`eyebrow` + titre sans sous-titre** fait aussi
-une colonne à deux lignes, mais la règle arbitrée ne déclenche que sur `subtitle` —
-l'action centrée y flotte entre sur-titre et titre, exactement le défaut que `--stacked`
-ferme pour le sous-titre. Le relevé ne couvre pas ce cas ; à arbitrer (étendre le
-déclencheur à `eyebrow && title` serait une ligne). Le reste est en règle : la gouttière
+cas hors règle, remonté : **`eyebrow` + titre sans sous-titre** fait aussi une colonne à
+deux lignes, que la règle ne couvre pas. ⚠️ Ce ne serait PAS « une ligne » à corriger, et
+étendre le déclencheur à `eyebrow && title` serait FAUX : avec `title + subtitle`,
+`flex-start` cale l'action sur le TITRE parce que le titre est la première ligne ; avec
+`eyebrow + title`, il la calerait sur l'EYEBROW — un sur-titre de 12px. On échangerait
+un défaut contre un autre. La règle qui se cache dessous est « l'action s'aligne sur la
+ligne du TITRE » : elle se confond avec `center` quand le titre est seul, avec
+`flex-start` quand le titre est premier de deux, et cesse de se confondre avec quoi que
+ce soit dès que le titre n'est pas premier. Ce n'est pas une valeur d'`align-items`,
+c'est une AUTRE mise en page. Et il n'y a **aucun demandeur** : zéro `eyebrow` dans les
+six maquettes de Dashboard, zéro prop `eyebrow=` dans les deux apps (vérifié). Candidat,
+pas besoin — on n'écrit pas une mise en page pour personne. Le reste est en règle : la gouttière
 basse est variable ET annoncée (`headerGap`), les gaps internes (icône/colonne
 `--space-3`, titre/sous-titre 3px) sont des littéraux de compacité couverts par la
 doctrine en tête de patterns.css, et chaque nœud de l'en-tête porte une classe
