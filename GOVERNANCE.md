@@ -156,6 +156,53 @@ L'ordre, sans exception :
 version, README, existence du tag — et fait tomber le build s'ils divergent. La procédure
 écrite a échoué trois fois de suite ; c'est pour ça que le contrôle existe.
 
+---
+
+## Côté APP — RECEVOIR une version, ce n'est pas la même chose que la publier
+
+La section ci-dessus couvre la publication. Le piège suivant est de l'autre côté, chez
+l'app consommatrice, et **il est silencieux** : rien n'échoue, les types de l'ancienne
+version compilent, les contrôles passent, et on croit avoir monté de version.
+
+**Ce qui se passe.** `package-lock.json` n'épingle pas le tag, il épingle le **SHA du
+commit** que le tag désignait au moment de l'installation :
+
+```
+git+ssh://git@github.com/<compte>/<dépôt>.git#736e8eeb0320e358529b700666da0b94f86fc1a7
+```
+
+Changer `#vX.Y.Z` dans `package.json` ne suffit donc pas : `npm install` lit le lock, y
+trouve un SHA résolu, et le ressert **sans jamais relire le tag**. Mesuré sur Dashboard au
+passage 0.14.0 → 0.15.0 : ni `npm install`, ni `npm install --force`, ni la suppression de
+`node_modules` n'ont changé quoi que ce soit. Le paquet installé annonçait toujours 0.14.0.
+
+**Les deux gestes, et il faut les deux.**
+
+1 · Réinstaller **par la spec explicite** — c'est ce qui force npm à re-résoudre le tag :
+
+```bash
+npm install "github:<compte>/<dépôt>#vX.Y.Z"
+```
+
+2 · **Vérifier après coup que le SHA du lock est bien celui du nouveau tag.** C'est le seul
+contrôle qui distingue « monté » de « cru monté » — un numéro de version affiché peut venir
+d'un artefact en cache, un SHA ne ment pas :
+
+```bash
+node -p "require('./node_modules/<scope>/ds/package.json').version"
+git ls-remote <url-du-dépôt> "refs/tags/vX.Y.Z^{}"   # le SHA du commit taggué
+grep -o '#[0-9a-f]\{40\}' package-lock.json | sort -u
+```
+
+Les deux dernières commandes doivent donner **le même SHA**. Le `^{}` compte : sans lui,
+`ls-remote` rend l'objet du tag ANNOTÉ, pas le commit qu'il désigne — et les deux diffèrent
+toujours.
+
+⚠️ Une dernière étape, souvent oubliée : **le `package.json` reste dans la forme
+d'épinglage du dossier** (`git+https://…#vX.Y.Z`). `npm install "github:…"` réécrit
+l'entrée dans sa forme courte ; la remettre ensuite, sinon les apps divergent sur la façon
+de déclarer la même dépendance.
+
 ```bash
 node check-version.mjs
 ```
