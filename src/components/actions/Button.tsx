@@ -60,7 +60,6 @@ export function Button({
 }: ButtonProps): JSX.Element {
   const Tag = (as ?? 'button') as ElementType;
   const cls = [button({ variant, size, surface, fullWidth, loading }), className].filter(Boolean).join(' ');
-  const iconSize = size === 'sm' ? '1rem' : '1.25rem';
   return (
     <Tag
       className={cls}
@@ -69,7 +68,11 @@ export function Button({
       aria-disabled={disabled || undefined}
       {...rest}
     >
-      {loading ? <Spinner size={iconSize} /> : icon}
+      {/* Sans taille : le créneau du bouton (--ds-icon-size, patterns.css) dimensionne le
+          spinner COMME l'icône qu'il remplace — le même bouton rend pareil en chargement
+          et au repos. La constante JS qui vivait ici disait md -> 1.25rem ; la marque dit
+          1.125, attesté 13 fois : c'est la règle CSS qui porte la bonne valeur. */}
+      {loading ? <Spinner /> : icon}
       <span>{children}</span>
       {!loading && iconRight}
     </Tag>

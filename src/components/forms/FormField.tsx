@@ -23,7 +23,7 @@ export function FormField({
     <div className={cn('ds-field', className)}>
       {label ? (
         <label className="ds-label" htmlFor={htmlFor}>
-          {label}{required ? <span style={{ color: 'var(--primary)' }}> *</span> : null}
+          {label}{required ? <span className="ds-label__required"> *</span> : null}
         </label>
       ) : null}
       {children}

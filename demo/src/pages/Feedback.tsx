@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Banner, Button, EmptyState, Icon, Progress, Skeleton, SkeletonCard, Spinner, Toast } from '@julienfernandes/ds';
+import { Banner, Button, EmptyState, Icon, Pastille, Progress, Skeleton, SkeletonCard, Spinner, Toast } from '@julienfernandes/ds';
 import { Block, Grid, Row, Section, Stack } from '../ui';
 
 export function FeedbackPage() {
@@ -43,7 +43,7 @@ export function FeedbackPage() {
         <Grid cols={2}>
           <Block label="Complet">
             <EmptyState
-              icon={<Icon name="folder" size="1.5rem" />}
+              icon={<Icon name="folder" />}
               title="Aucun build ici"
               description="Choisis une série pour voir les vidéos correspondantes."
               action={<Button variant="secondary">Voir tout</Button>}
@@ -51,9 +51,16 @@ export function FeedbackPage() {
           </Block>
           <Block label="Sans action">
             <EmptyState
-              icon={<Icon name="search" size="1.5rem" />}
+              icon={<Icon name="search" />}
               title="Rien ne correspond"
               description="Essaie un autre mot-clé, ou repars de la liste complète."
+            />
+          </Block>
+          <Block label="Tuile composée" hint="tile remplace la Pastille par défaut (panneau brand outlined) quand elle ne convient pas — icon est alors ignoré.">
+            <EmptyState
+              tile={<Pastille size="dialogue" tone="neutral"><Icon name="search" /></Pastille>}
+              title="Aucun résultat"
+              description="Essaie un autre mot-clé."
             />
           </Block>
         </Grid>

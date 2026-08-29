@@ -85,3 +85,28 @@
    Les deux ou aucun : ne couvrir que patterns.css laisserait base.css gagner sur lui. */
 @import './tokens/base.css' layer(base);
 @import './patterns.css' layer(components);
+
+/* LE CRÉNEAU D'ICÔNE — l'enregistrement qui rend les créneaux possibles (v0.17.0).
+   Une icône ou un spinner lit `var(--ds-icon-size, 1.25rem)` ; un créneau (bouton sm,
+   badge dense, pastille de dialogue…) pose la propriété par une règle CSS ; un site
+   d'appel la surcharge en la posant inline via la prop `size`. Voir la section
+   « LES CRÉNEAUX D'ICÔNE » de patterns.css pour les règles et la doctrine.
+
+   `inherits: false` EST LE POINT NON NÉGOCIABLE. Sans lui, une règle posée sur un
+   CONTENEUR descendrait sur tous les svg descendants — `EmptyState` rend une Pastille
+   ET un Button dans son créneau `action` : une règle sur `.ds-empty` grossirait l'icône
+   du bouton, en silence. Avec, une règle mal placée devient INERTE au lieu d'être
+   fuyante : le défaut reprend la main, rien ne ment. Les règles ciblent donc toujours
+   le `svg` (ou le `.ds-spinner`) lui-même, jamais son conteneur.
+
+   `syntax: '*'` SANS `initial-value`, et c'est mesuré au spec : avec la syntaxe
+   universelle, `initial-value` peut être omis et la valeur initiale est alors la
+   guaranteed-invalid value — donc `var(--ds-icon-size, 1.25rem)` prend son REPLI tant
+   que personne n'a posé la propriété. L'universelle est choisie exprès : `<length>`
+   exigerait un `initial-value` (qui tuerait le repli) et refuserait un `size="100%"`
+   en silence à l'usage.
+
+   HORS COUCHE, comme les jetons : un @property est un enregistrement, pas une règle en
+   cascade — il vit ici, dans le fichier d'entrée, pour être chargé partout où le socle
+   l'est. */
+@property --ds-icon-size { syntax: '*'; inherits: false; }

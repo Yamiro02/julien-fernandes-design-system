@@ -75,7 +75,8 @@ export const DatePicker = forwardRef<HTMLSpanElement, DatePickerProps>(function 
         onClick={() => setOpen(o => !o)}
       >
         <span className={value ? '' : 'ds-datepicker__ph'}>{value ? fmt.format(value) : placeholder}</span>
-        <Icon name="calendar" size="1.25rem" />
+        {/* Sans taille : le créneau du déclencheur rend 1rem (patterns.css, v0.17.0). */}
+        <Icon name="calendar" />
       </button>
       {name ? <input type="hidden" name={name} value={value ? iso(value) : ''} /> : null}
       {open ? (

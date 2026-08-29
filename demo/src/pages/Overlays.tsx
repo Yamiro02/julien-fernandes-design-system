@@ -37,7 +37,7 @@ export function OverlaysPage() {
             open={open}
             phase={phase}
             onClose={() => setOpen(false)}
-            icon={<Icon name="triangle-alert" size="1.25rem" />}
+            icon={<Icon name="triangle-alert" />}
             title={phase === 'loading' ? 'Suppression en cours' : 'Supprimer ce build ?'}
             description={phase === 'loading' ? 'Ne ferme pas cette fenêtre.' : 'Cette action est définitive.'}
             result={{
@@ -58,10 +58,10 @@ export function OverlaysPage() {
 
         <Block label="Les trois phases" hint="confirm → loading → result, dans UN seul dialogue. En loading rien ne ferme : Échap, clic dehors et croix sont inertes, le piège de focus tient toujours.">
           <div className="flex flex-wrap gap-space-5">
-            <Modal inline iconVariant="danger" icon={<Icon name="trash-2" size="1.25rem" />}
+            <Modal inline iconVariant="danger" icon={<Icon name="trash-2" />}
               title="Supprimer ce build ?" description="Cette action est définitive."
               footer={<><Button variant="ghost" size="sm">Annuler</Button><Button variant="danger" size="sm">Supprimer</Button></>} />
-            <Modal inline phase="loading" iconVariant="danger" icon={<Icon name="trash-2" size="1.25rem" />}
+            <Modal inline phase="loading" iconVariant="danger" icon={<Icon name="trash-2" />}
               onClose={() => undefined}
               title="Suppression en cours" description="Ne ferme pas cette fenêtre."
               footer={<><Button variant="ghost" size="sm" disabled>Annuler</Button><Button variant="danger" size="sm" loading>Suppression…</Button></>} />
@@ -79,19 +79,19 @@ export function OverlaysPage() {
 
         <Block label="Variantes de tuile d'icône" hint="La tuile est une <Pastille size=&quot;dialogue&quot;>. neutral lit la paire --pill-neutral-* comme Badge, Banner et Toast — une seule source sémantique.">
           <div className="flex flex-wrap gap-space-5">
-            <Modal inline iconVariant="danger" icon={<Icon name="triangle-alert" size="1.25rem" />}
+            <Modal inline iconVariant="danger" icon={<Icon name="triangle-alert" />}
               title="Supprimer ce build ?" description="Cette action est définitive."
               footer={<><Button variant="ghost" size="sm">Annuler</Button><Button variant="danger" size="sm">Supprimer</Button></>} />
-            <Modal inline iconVariant="brand" icon={<Icon name="rocket" size="1.25rem" />}
+            <Modal inline iconVariant="brand" icon={<Icon name="rocket" />}
               title="Lancer le build ?" description="Claude Code va créer le projet et installer les dépendances."
               footer={<><Button variant="ghost" size="sm">Plus tard</Button><Button size="sm">Lancer</Button></>} />
-            <Modal inline iconVariant="neutral" icon={<Icon name="info" size="1.25rem" />}
+            <Modal inline iconVariant="neutral" icon={<Icon name="info" />}
               title="À propos de cette série" description="Trois vidéos pour construire ton premier outil interne."
               footer={<Button variant="secondary" size="sm">Compris</Button>} />
-            <Modal inline iconVariant="warning" icon={<Icon name="clock" size="1.25rem" />}
+            <Modal inline iconVariant="warning" icon={<Icon name="clock" />}
               title="Quota bientôt atteint" description="Il te reste deux exports ce mois-ci."
               footer={<Button variant="secondary" size="sm">Compris</Button>} />
-            <Modal inline iconVariant="success" icon={<Icon name="circle-check" size="1.25rem" />}
+            <Modal inline iconVariant="success" icon={<Icon name="circle-check" />}
               title="Déploiement terminé" description="Ton outil est en ligne."
               footer={<Button variant="secondary" size="sm">Voir</Button>} />
           </div>
@@ -100,6 +100,17 @@ export function OverlaysPage() {
         <Block label="Sans icône, avec fermeture">
           <Modal inline onClose={() => undefined} title="Ta session a expiré" description="Reconnecte-toi pour reprendre là où tu en étais."
             footer={<Button size="sm">Se reconnecter</Button>} />
+        </Block>
+
+        <Block label="Croix et gestes de fuite découplés" hint="closeButton={false} retire la croix en gardant Échap et le clic-voile ; dismissable={false} fait l'inverse — la croix devient le seul geste de fermeture, pour une saisie qu'un clic à côté ne doit pas jeter. Défauts à true : comportement historique.">
+          <div className="flex flex-wrap gap-space-4">
+            <Modal inline onClose={() => undefined} closeButton={false} title="Sans croix"
+              description="Échap et le clic-voile ferment toujours — la croix seule a disparu."
+              footer={<Button variant="secondary" size="sm">Fermer</Button>} />
+            <Modal inline onClose={() => undefined} dismissable={false} title="Croix seule"
+              description="Échap et le clic-voile sont inertes : on ne jette pas une saisie d'un clic à côté."
+              footer={<Button size="sm">Enregistrer</Button>} />
+          </div>
         </Block>
 
         <Block label="Avec un champ contrôlé" hint="Le cas de recette du focus : chaque frappe re-rend le parent (état contrôlé) ET recrée la lambda onClose. Si l'effet du piège de focus se relançait à chaque rendu, le focus sauterait du champ après chaque caractère — tape plusieurs caractères d'affilée pour le vérifier. Échap ferme et rend le focus au bouton déclencheur.">

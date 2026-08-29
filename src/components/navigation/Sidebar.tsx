@@ -127,16 +127,20 @@ export function Sidebar({
               aria-expanded={!collapsed}
               onClick={toggle}
             >
-              <Icon name="panel-left" size="1.25rem" />
+              <Icon name="panel-left" />
             </button>
           ) : null}
         </div>
         <nav className="ds-sidebar__nav">
+          {/* Chaque section est un GROUPE — v0.17.0. C'est le gap de la nav qui sépare
+              les groupes, celui du groupe qui sépare ses entrées : deux sections SANS
+              titre se distinguent désormais aussi (avant, seule la marge du titre les
+              espaçait). Voir le commentaire de .ds-sidebar__nav dans patterns.css. */}
           {sections.map((s, i) => (
-            <Fragment key={i}>
+            <div key={i} className="ds-sidebar__group">
               {s.title ? <span className="ds-sidebar__title">{s.title}</span> : null}
               {(s.items || []).map(rendreEntree)}
-            </Fragment>
+            </div>
           ))}
         </nav>
         {footerItems.length ? (

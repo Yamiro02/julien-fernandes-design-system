@@ -15,6 +15,45 @@ Les exemples supposent les imports depuis la racine du paquet :
 import { Button, Card, Icon } from '@julienfernandes/ds';
 ```
 
+**⚠️ LA DOCTRINE, avant les cas particuliers : aucune valeur du socle ne doit être hors
+de portée de l'appelant.** Cinq défauts en un mois, trois formes d'un même mal :
+
+1. la valeur est **battue par la cascade** — `.accent`, `.mono` : la couche des
+   utilitaires ou des composants gagne toujours, la panne est muette ;
+2. la valeur est **hors d'atteinte de la cascade** — le créneau d'icône muré par un
+   style inline, deux nœuds sans classe du tout : aucun sélecteur ne peut viser la
+   valeur, même en théorie ;
+3. la valeur est **atteignable mais non prévue pour varier** — les quatre mesures de
+   `.ds-logo__dot` : une classe parfaitement ciblable, mais rien ne dit que ces valeurs
+   sont censées varier, donc la seule façon d'en changer est de les recopier.
+
+Même issue à chaque fois : l'app recopie ou surcharge, et le socle ne le sait pas. C'est
+la doctrine du socle prise à revers — il fournit les VALEURS, l'app écrit les NOMS. Le
+premier réflexe de revue, sur tout nouveau composant comme sur tout écran : **cette
+valeur, l'appelant peut-il la reprendre ?** Si non, elle est mal placée, quel que soit le
+moyen. Et la forme 3 impose la seconde question : **si oui, le sait-il ?** — une valeur
+reprise en aveugle est une valeur recopiée.
+
+**La règle du style inline** — elle décide où une valeur a le droit de vivre :
+
+- **Légitime** quand la valeur vient de l'appelant à chaque rendu — `Skeleton`, `Avatar`,
+  `Logo`, `Progress` : la prop EST la valeur, il n'y a rien à redéfinir.
+- **Illégitime** dès qu'il porte un **défaut**. Un défaut est un arbitrage de design ;
+  l'écrire inline le range au seul endroit du langage que la cascade n'atteint pas.
+  `Glyph` et `Spinner` faisaient exactement ça — corrigé en v0.17.0 : le défaut vit dans
+  le repli de `var(--ds-icon-size, 1.25rem)`, côté cascade, où un créneau peut le battre.
+- **Sans excuse** quand il n'y a même pas de prop — l'astérisque de `FormField`, le hint
+  de `Dropdown` : une décision du socle qu'aucun sélecteur ne pouvait viser. Corrigés
+  (`.ds-label__required`, `.ds-dropdown__hint`).
+
+**⚠️ Les utilitaires de marque perdent contre les composants.** Les huit de
+`tokens/base.css` — `.display`, `.display-xl`, `.eyebrow`, `.chip`, `.accent`, `.mono`,
+`.caption`, `.prose` — vivent en `layer(base)` ; les 185 redéclarations de `patterns.css`
+vivent en `layer(components)` et gagnent toujours sur le même nœud, quelle que soit la
+spécificité. `.mono` posé sur un nœud qu'une règle `.ds-*` typographie ne rend rien, en
+silence. **La parade** : l'utilitaire Tailwind équivalent sur le même jeton — `font-mono`
+lit `--font-mono` et vit en `layer(utilities)`, il gagne. On ne déplace pas la couche.
+
 **⚠️ Deux classes CSS pièges, avant tout écran : `.accent` et `.eyebrow`.** Elles peignent
 le dégradé de marque dans le texte par quatre déclarations solidaires (`background`,
 `background-clip: text`, `color: transparent`, `width: fit-content`) en `layer(base)` — un
@@ -57,6 +96,9 @@ navigation dans du texte (un `<a>` suffit).
   `primary` et `danger`, qui ne portent pas `--secondary`.
 - Rayon toujours `--radius-md`. **Jamais un pill** — le pill est réservé aux badges.
 - Rail partagé : min-height 3rem (2.75rem sous 64rem). `lg` (3.25rem) = CTA de héros.
+- **Les icônes ne se dimensionnent pas au site d'appel** : le créneau du bouton s'en
+  charge (sm 1rem · md 1.125rem, via `--ds-icon-size` — voir la section Icon). Le spinner
+  de `loading` prend la même taille que l'icône qu'il remplace.
 - États rendus : repos, hover (lueur + translateY), pressé, focus-visible, désactivé,
   loading.
 
@@ -70,12 +112,21 @@ qu'il fait le dit.
 
 ```tsx
 <IconButton label="Copier le prompt"><Icon name="copy" /></IconButton>
-<IconButton label="Fermer" variant="secondary" size="sm"><Icon name="x" size="1rem" /></IconButton>
+<IconButton label="Fermer" variant="secondary" size="sm"><Icon name="x" /></IconButton>
+<IconButton label="Boutique" variant="accent" as="a" href="/boutique"><Icon name="external-link" /></IconButton>
 ```
 
-- Props : `variant` (`primary·secondary·ghost·danger`, défaut `ghost`) · `size`
-  (`sm·md·lg`) · `surface` (`auto·page·card`) · `label` (requis).
+- Props : `variant` (`primary·secondary·ghost·danger·accent`, défaut `ghost`) · `size`
+  (`sm·md·lg`) · `surface` (`auto·page·card`) · `label` (requis) · `as` / `href`.
 - `surface` a le même rôle et les mêmes valeurs que sur `Button` — voir sa section.
+- **`variant="accent"`** (v0.17.0) : fond `--accent`, sans bordure, icône `--primary` —
+  l'état « sélectionné doux » d'un lien-icône ou d'un raccourci. Ne pas le recomposer
+  avec `is-active` (une aide de démo) et un style inline : c'est cette fraude que la
+  variante remplace.
+- **`as="a"` + `href`** (v0.17.0) : un lien-icône reste un LIEN — clic-milieu, « ouvrir
+  dans un onglet », annonce correcte au lecteur d'écran. Jumeau du `as` de `Button`.
+- L'icône ne se dimensionne pas au site d'appel : le créneau s'en charge (sm 1rem ·
+  md 1.125rem) — voir la section Icon.
 - Carré sur son propre rail (`--icon-control-*`), rayon `--radius-md`, jamais un pill.
 - États rendus : repos, hover, pressé (`aria-pressed` = actif), focus-visible, désactivé.
 
@@ -175,7 +226,7 @@ sous 1.5rem.
 <Card>Contenu</Card>
 <Card variant="interactive" onClick={() => ouvrir()}>Card cliquable</Card>
 <Card variant="feature" size="lg">Mise en avant — lavis --grad-soft + bordure de marque</Card>
-<Card icon={<Pastille size="carte"><Icon name="rocket" size="1rem" /></Pastille>}
+<Card icon={<Pastille size="carte"><Icon name="rocket" /></Pastille>}
   title="Déployer" subtitle="En un clic" action={<IconButton label="Options"><Icon name="ellipsis" /></IconButton>}>
   Contenu sous l'en-tête
 </Card>
@@ -197,17 +248,20 @@ nommées par **contexte**, jamais par mesure : un site d'appel n'écrit jamais u
 en div : c'est exactement ce que ce composant remplace.
 
 ```tsx
-<Pastille size="carte"><Icon name="terminal" size="1rem" /></Pastille>
-<Pastille size="dialogue" tone="danger"><Icon name="triangle-alert" size="1.25rem" /></Pastille>
-<Pastille size="panneau" tone="brand" outlined><Icon name="folder" size="1.5rem" /></Pastille>
+<Pastille size="carte"><Icon name="terminal" /></Pastille>
+<Pastille size="dialogue" tone="danger"><Icon name="triangle-alert" /></Pastille>
+<Pastille size="panneau" tone="brand" outlined><Icon name="folder" /></Pastille>
 <Pastille size="heros" shape="round" tone="inverse"><Icon name="rocket" size="1.5rem" /></Pastille>
-<Pastille size="dialogue" tone="brand-solid"><Icon name="plus" size="1.25rem" /></Pastille>
+<Pastille size="dialogue" tone="brand-solid"><Icon name="plus" /></Pastille>
 ```
 
 - Props : `size` (`carte` 2.25 · `dialogue` 2.625 · `panneau` 3.25 · `heros` 4 · `ecran`
   5rem — le rayon suit la taille) · `shape` (`square·round`) · `tone` (`brand` ·
   `brand-solid` + les 6 paires sémantiques + `inverse`) · `outlined` (contour 1px
   currentColor à 22 %).
+- L'icône ne se dimensionne pas au site d'appel : le créneau s'en charge — `dialogue` et
+  `panneau` rendent 1.5rem, `carte` le repli 1.25rem. Seules `heros` et `ecran` attendent
+  encore une taille explicite.
 - **`tone="brand-solid"` porte le dégradé PLEIN**, avec son glyphe en
   `--primary-foreground` : la tuile de marque affirmée, là où `brand` est la tuile douce.
   `size="dialogue"` en fait le jumeau exact d'un `IconButton` `md` — même 2,625 rem, même
@@ -307,12 +361,16 @@ suite.
 chargement (c'est `Skeleton`).
 
 ```tsx
-<EmptyState icon={<Icon name="folder" size="1.5rem" />} title="Aucun build ici"
+<EmptyState icon={<Icon name="folder" />} title="Aucun build ici"
   description="Choisis une série pour voir les vidéos correspondantes."
   action={<Button variant="secondary">Voir tout</Button>} />
+<EmptyState tile={<Pastille size="dialogue" tone="neutral"><Icon name="search" /></Pastille>}
+  title="Aucun résultat" description="Essaie un autre mot-clé." />
 ```
 
-- Props : `icon` · `title` (requis) · `description` · `action`.
+- Props : `icon` (glyphe nu — la Pastille par défaut l'enveloppe) · `tile` (v0.17.0 : la
+  tuile complète, quand `panneau brand outlined` ne convient pas ; `icon` est alors
+  ignoré) · `title` (requis) · `description` · `action`.
 
 ## Progress
 
@@ -333,7 +391,10 @@ indéterminée (barre glissante).
 ## Skeleton
 
 Silhouette de chargement sur `--muted`, shimmer discret. Dimensions en chaînes CSS (rem
-ou %) — c'est le style inline légitime : la valeur vient d'une prop.
+ou %) — c'est le style inline **légitime** au sens de la règle générale en tête de ce
+fichier : la valeur vient de l'appelant à chaque rendu, il n'y a aucun défaut de design à
+reprendre. (La même règle rend illégitime un défaut écrit inline — c'était le cas de
+`Glyph` et `Spinner` avant la v0.17.0.)
 
 **Ne pas l'utiliser** après le premier rendu : un skeleton qui persiste est un bug
 d'affichage, pas un état.
@@ -371,7 +432,8 @@ le bouton avec.
 <Spinner size="1.5rem" />
 ```
 
-- Props : `size` (`sm·md·lg` ou longueur CSS).
+- Props : `size` (`sm·md·lg` ou longueur CSS — omise, le créneau décide, comme pour
+  Icon : même propriété `--ds-icon-size`, même repli 1.25rem).
 - ARIA : `role="status"`, `aria-label="Chargement"`.
 
 ## Toast
@@ -413,6 +475,14 @@ popover.
   (sans le cadre — l'usage interne du DatePicker).
 - États rendus : jour au repos, survolé, sélectionné (aplat `--primary`), aujourd'hui
   (`--primary-readable` gras), désactivé, focus-visible.
+- **Pas de plage.** En attendant le mode plage (manque n° 9, en tête de file pour la
+  prochaine version : deux mois, surlignage des jours intermédiaires, présélections),
+  un calendrier fait main peut émettre lui-même les classes du socle et hériter de ses
+  espacements, de sa typo et de ses états au lieu de les réinventer : `.ds-cal` (cadre,
+  ou `.ds-cal--bare`), `.ds-cal__head` / `.ds-cal__label` / `.ds-cal__nav`,
+  `.ds-cal__grid` / `.ds-cal__wd` / `.ds-cal__day` et ses états `.is-today` /
+  `.is-selected` / `:disabled`. Ces classes sont un contrat de rendu — le socle les
+  garde stables tant que la parade est nécessaire.
 
 ## Checkbox
 
@@ -484,10 +554,15 @@ l'`<input>` natif.
 <Input surface="card" placeholder="Dans une Card" />
 <Input invalid defaultValue="pas-un-email" />
 <Input size="lg" placeholder="CTA de héros" />
+<Input unit="kg" inputMode="decimal" placeholder="72" />
 ```
 
 - Props : `size` (`sm·md·lg`) · `invalid` · `surface` (`page` = fond `--secondary`, posé
-  à même le layout · `card` = fond `--background`, dans une Card) + attributs natifs.
+  à même le layout · `card` = fond `--background`, dans une Card) · `unit` + attributs
+  natifs.
+- **`unit`** (v0.17.0) : l'unité — « kg », « € », « min » — posée DANS le champ, à
+  droite, en sourdine. **Trois caractères au plus** ; plus long, c'est un suffixe de
+  libellé, pas une unité. Elle est `aria-hidden` : le libellé du `FormField` la nomme.
 - États rendus : repos, focus, invalide, désactivé — sur les deux surfaces.
 
 ## Radio
@@ -568,8 +643,18 @@ c'est voulu.
 `ContentIcon`, sur le sous-chemin optionnel `@julienfernandes/ds/brand-content`. Et jamais
 `sparkles` : l'étoile-éclair est bannie du set.
 
+**La taille vient du CRÉNEAU, plus du site d'appel — v0.17.0.** Une icône sans `size` lit
+`var(--ds-icon-size, 1.25rem)` ; les créneaux du socle posent la propriété par une règle
+CSS (bouton sm 1rem · bouton et IconButton md 1.125rem · badge dense 0.75rem · pastille
+dialogue et panneau 1.5rem · déclencheurs de champ 1rem — le relevé des artboards, dans
+patterns.css). **Ne passez `size` que pour une correction optique** — un `plus` dans un
+créneau sm se rend à 1.125rem, c'est attesté — ou hors de tout créneau : passée, elle
+gagne sur la règle. Une app pose son propre créneau en ciblant le `svg` lui-même
+(`.ma-tuile svg { --ds-icon-size: 1.5rem }`) — jamais le conteneur : la propriété est
+enregistrée `inherits: false`, une règle de conteneur est inerte, et c'est voulu.
+
 ```tsx
-<Icon name="circle-check" size="1.25rem" strokeWidth={2} />
+<Icon name="circle-check" strokeWidth={2} />
 <Icon name="arrow-right" size="1rem" style={{ color: 'var(--primary-readable)' }} />
 ```
 
@@ -586,7 +671,7 @@ import { ShoppingBag } from 'lucide-react';
 
 - Props : `name` (`IconName`) **ou** `glyph` (tracé lucide), jamais les deux — ils sont
   mutuellement exclusifs, et le TYPE l'impose : passer les deux, ou aucun, est une erreur
-  de compilation. · `size` (longueur CSS, toujours rem — 1 / 1.25 / 1.5rem) ·
+  de compilation. · `size` (longueur CSS, toujours rem — omise, le créneau décide) ·
   `strokeWidth` (2 standard · 2.5 dans les pills et les toasts · 3 pour la coche).
 - **`name` reste la voie normale** : le catalogue est relu, documenté, et garantit qu'un
   nom existe. `glyph` est la porte de sortie, pas le chemin par défaut — un besoin qui
@@ -679,8 +764,11 @@ Navigation d'app sur `--secondary` : marque en tête, sections titrées, item ac
 ```
 
 - Props : `sections` (`{title?, items:[{label, icon?, href?, active?, onClick?}]}[]`) ·
-  `footer` · `brand` / `brandCollapsed` · `collapsible` (défaut `true`) ·
-  `defaultCollapsed` · `storageKey` · `open` / `onClose` (tiroir mobile) · `staticLayout`.
+  `footer` · `footerItems` · `brand` / `brandCollapsed` · `collapsible` (défaut `true`) ·
+  `defaultCollapsed` · `storageKey` · `open` / `onClose` (tiroir mobile) · `staticLayout`
+  · `linkAs`.
+- Chaque section est un **groupe** (v0.17.0) : les groupes se séparent par le gap de la
+  nav (16px), avec ou sans titre — deux sections sans titre ne se collent plus.
 - États rendus : dépliée, repliée, item au repos / survolé / actif, tiroir ouvert.
 
 ## Tabs
@@ -777,7 +865,7 @@ d'actions (c'est `Dropdown` / `ActionSheet`).
 <Modal
   open={open}
   onClose={() => setOpen(false)}
-  icon={<Icon name="triangle-alert" size="1.25rem" />}
+  icon={<Icon name="triangle-alert" />}
   title="Supprimer ce build ?"
   description="Cette action est définitive."
   footer={<>
@@ -791,8 +879,12 @@ d'actions (c'est `Dropdown` / `ActionSheet`).
 
 - Props : `open` · `icon` + `iconVariant` (`danger·brand·neutral·warning·success` — la
   tuile est une `Pastille dialogue`) · `title` / `description` / `children` · `footer` ·
-  `onClose` · `phase` (`confirm·loading·result`) · `result`
-  (`{status, title?, message?, onRetry?}`) · `inline` (spécimen sans voile).
+  `onClose` · `closeButton` · `dismissable` · `phase` (`confirm·loading·result`) ·
+  `result` (`{status, title?, message?, onRetry?}`) · `inline` (spécimen sans voile).
+- **La croix et les gestes de fuite sont découplés** (v0.17.0) : `closeButton={false}`
+  retire la croix en gardant Échap et le clic-voile ; `dismissable={false}` fait
+  l'inverse — la croix devient le seul geste de fermeture, pour une modale à saisie
+  qu'un clic à côté ne doit pas jeter. Les deux à `true` par défaut : rien ne bouge.
 - Un champ dans une modale : voir le spécimen « Avec un champ contrôlé » de la vitrine —
   le piège de focus tient la frappe.
 - États rendus : les trois phases, avec et sans icône, succès et erreur, feuille basse

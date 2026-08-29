@@ -39,6 +39,13 @@ export function FormsPage() {
             <Input surface="card" placeholder="surface=card" />
           </Stack>
         </Block>
+        <Block label="Unité" hint="unit pose l'unité dans le champ, à droite, en sourdine — trois caractères au plus. aria-hidden : c'est le libellé du FormField qui la nomme.">
+          <Stack>
+            <Input unit="kg" inputMode="decimal" placeholder="72" />
+            <Input unit="€" inputMode="decimal" placeholder="49" />
+            <Input unit="min" inputMode="numeric" invalid defaultValue="beaucoup" />
+          </Stack>
+        </Block>
       </Section>
 
       <Section title="Textarea" note="Hauteur automatique — jamais de min-height. Redimensionnement vertical uniquement. Même règle de surface que l'Input.">

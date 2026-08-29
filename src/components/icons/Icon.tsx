@@ -36,7 +36,12 @@ export type IconName =
 
 /** Ce que tout rendu d'icône partage, quelle que soit la provenance du tracé. */
 export interface IconBaseProps {
-  /** CSS length — always rem. Default '1.25rem'. */
+  /**
+   * CSS length — always rem. OMISE, c'est la voie normale : le CRÉNEAU décide
+   * (`--ds-icon-size` posé par une règle CSS — bouton sm, badge dense, pastille de
+   * dialogue… — repli 1.25rem). Passée, elle écrit la propriété inline et GAGNE sur
+   * le créneau : c'est la surcharge optique au site d'appel, et elle doit le rester.
+   */
   size?: string;
   /** SVG stroke width in px (2 · 2.5 in pills/toasts · 3 for check). Default 2. */
   strokeWidth?: number;
@@ -134,11 +139,15 @@ const ICONS: Record<IconName, LucideIcon> = {
 };
 
 export function Icon({
-  name, glyph, size = '1.25rem', strokeWidth = 2, className = '', style, ...rest
+  name, glyph, size, strokeWidth = 2, className = '', style, ...rest
 }: IconProps): JSX.Element | null {
   /* `glyph` d'abord : quand il est là, `name` est `never` — il n'y a rien à départager. */
   const Icône = glyph ?? (name ? ICONS[name] : undefined);
   if (!Icône) return null;
+  /* ⚠️ PAS DE DÉFAUT SUR `size`, et c'est le cœur de la v0.17.0 : un défaut de paramètre
+     écrit inline aurait existé À CHAQUE RENDU — aucune règle CSS n'aurait jamais pu
+     dimensionner un créneau. Le défaut vit dans le repli de `var(--ds-icon-size, 1.25rem)`,
+     côté cascade, où un créneau peut le battre. */
   return <Glyph glyph={Icône} size={size} strokeWidth={strokeWidth} className={className} style={style} {...rest} />;
 }
 
@@ -153,16 +162,24 @@ export function Icon({
 export interface GlyphProps extends IconBaseProps { glyph: LucideIcon }
 
 export function Glyph({
-  glyph: G, size = '1.25rem', strokeWidth = 2, className, style, ...rest
+  glyph: G, size, strokeWidth = 2, className, style, ...rest
 }: GlyphProps): JSX.Element {
+  /* Les QUATRE déclarations qui vivaient ici en inline — width, height, flex, display —
+     sont parties dans `.ds-icon` (patterns.css) : inline, elles étaient hors de portée
+     de toute règle. Ne reste inline que l'écriture de `--ds-icon-size`, et SEULEMENT
+     quand l'appelant passe `size` : c'est le style inline légitime — la valeur vient de
+     l'appelant à ce rendu — et c'est ce qui fait gagner le site d'appel sur le créneau. */
+  const taille = size !== undefined
+    ? ({ '--ds-icon-size': size } as CSSProperties)
+    : undefined;
   return (
     <G
-      className={className}
+      className={className ? `ds-icon ${className}` : 'ds-icon'}
       strokeWidth={strokeWidth}
       aria-hidden="true"
       focusable="false"
-      /* La taille est posée en CSS (rem) — le viewBox 24x24 reste sans unité. */
-      style={{ width: size, height: size, flex: 'none', display: 'block', ...style }}
+      /* La taille est une longueur CSS (rem) — le viewBox 24x24 reste sans unité. */
+      style={taille || style ? { ...taille, ...style } : undefined}
       {...rest}
     />
   );

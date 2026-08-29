@@ -52,6 +52,37 @@
    (--leading-normal) : toutes deux sont plus bas dans le fichier, elles restent maîtres. */
 .ds-input,.ds-tab,.ds-dropdown__item{line-height:normal}
 
+/* ---------- LES CRÉNEAUX D'ICÔNE — v0.17.0 ---------- */
+/* UNE ICÔNE SE DIMENSIONNE SELON LE CRÉNEAU QUI LA PORTE, et le créneau est du CSS.
+   Le mécanisme : `.ds-icon` (et `.ds-spinner`) lisent `var(--ds-icon-size, 1.25rem)` ;
+   la propriété est enregistrée `inherits:false` dans core.css — une règle posée sur un
+   conteneur est INERTE, une règle doit viser le `svg` (ou le `.ds-spinner`) lui-même.
+   La prop `size` d'un site d'appel écrit la propriété INLINE : elle gagne sur toute
+   règle de créneau — la surcharge optique reste possible (un `plus` dans un créneau sm
+   se rend à 1.125rem, c'est une correction attestée).
+   LES TAILLES SONT LE RELEVÉ DES SIX ARTBOARDS (131 icônes) : IconButton sm 1rem (47) ·
+   Button sm 1rem (16) · IconButton md 1.125rem (11) · Input/déclencheur 1rem (8) ·
+   Badge dense 0.75rem (6) · Pastille dialogue 1.5rem (4) · Button md 1.125rem (3) ·
+   Pastille carte et nav de Sidebar 1.25rem — le repli, aucune règle à écrire.
+   (Button md : l'artboard donne 1.125 ×2 et 1 ×1 ; le cas isolé est le 404, écran qui
+   dévie déjà ailleurs — 1.125 est la seule valeur cohérente avec sm 1rem et
+   IconButton md 1.125.) Pastille panneau 1.5rem vient de la vitrine et de la doc, pas
+   du relevé. heros, ecran, Badge md et lg restent au site d'appel.
+   Ces tailles sont des mesures de COMPACITÉ interne, pas d'identité : des littéraux,
+   comme les gaps — voir la doctrine en tête de fichier.
+   @tokenref-fallback: --ds-icon-size — le repli EST le défaut : la propriété n'est
+   déclarée nulle part exprès (enregistrée guaranteed-invalid dans core.css), pour que
+   1.25rem reprenne la main partout où ni un créneau ni un site d'appel ne la pose. */
+.ds-icon{width:var(--ds-icon-size,1.25rem);height:var(--ds-icon-size,1.25rem);flex:none;display:block}
+.ds-btn--sm :is(svg,.ds-spinner){--ds-icon-size:1rem}
+.ds-btn--md :is(svg,.ds-spinner){--ds-icon-size:1.125rem}
+.ds-icon-btn--sm svg{--ds-icon-size:1rem}
+.ds-icon-btn--md svg{--ds-icon-size:1.125rem}
+.ds-select__chev,.ds-datepicker__trigger svg{--ds-icon-size:1rem}
+.ds-badge--dense svg{--ds-icon-size:0.75rem}
+.ds-pastille--dialogue svg{--ds-icon-size:1.5rem}
+.ds-pastille--panneau svg{--ds-icon-size:1.5rem}
+
 /* ---------- actions: Button ---------- */
 .ds-btn{display:inline-flex;align-items:center;justify-content:center;gap:0.5rem;min-height:var(--control-md);padding:0.8125rem 1.375rem;font-family:var(--font-body);font-size:var(--text-control);font-weight:var(--weight-semibold);line-height:1;border:none;border-radius:var(--radius-md);cursor:pointer;text-decoration:none;white-space:nowrap;box-sizing:border-box;outline:none;transition:transform var(--duration-fast) var(--ease-standard),box-shadow var(--duration-base) var(--ease-standard),background var(--duration-base) var(--ease-standard),border-color var(--duration-base) var(--ease-standard),filter var(--duration-base) var(--ease-standard)}
 .ds-btn--sm{gap:0.4375rem;min-height:var(--control-sm);padding:0.5625rem 1rem;font-size:var(--text-body-sm)}
@@ -110,6 +141,18 @@
 .ds-icon-btn--primary:hover:not(:disabled),.ds-icon-btn--primary.is-hover{box-shadow:var(--shadow-glow-lg);transform:translateY(-1px)}
 .ds-icon-btn--danger{border:none;background:var(--destructive);color:var(--destructive-foreground)}
 .ds-icon-btn--danger:hover:not(:disabled),.ds-icon-btn--danger.is-hover{filter:brightness(.93)}
+/* LA VARIANTE QUI EXISTAIT DÉJÀ DANS LES APPS, EN FRAUDE — v0.17.0. Fond --accent, sans
+   bordure, icône --primary : l'état « sélectionné doux » d'un lien-icône. Faute de
+   variante, un artboard attrapait `is-active` — une AIDE DE DÉMO — et annulait la
+   bordure en style inline (4+ occurrences). L'icône est DÉCORATIVE et de marque : elle
+   prend --primary, comme la pastille — 3,08:1 en clair, 3,14 en sombre sur la plaque,
+   au-dessus du seuil 3:1 des graphiques non textuels (mesure de la règle consolidée,
+   au-dessus de .ds-pastille--brand). Le survol tire la plaque vers la marque, pas vers
+   --surface-alt : la variante EST une teinte, son survol reste dans la teinte.
+   Button n'a pas ce jumeau, et c'est délibéré : le besoin n'est attesté que sur le
+   carré d'icône — on promeut au deuxième appelant, jamais avant. */
+.ds-icon-btn--accent{border:none;background:var(--accent);color:var(--primary)}
+.ds-icon-btn--accent:hover:not(:disabled),.ds-icon-btn--accent.is-hover{background:color-mix(in srgb,var(--primary) 10%,var(--accent))}
 .ds-icon-btn.is-active,.ds-icon-btn--secondary[aria-pressed="true"]{border-color:var(--primary);background:var(--accent);color:var(--primary-readable)}
 .ds-icon-btn:focus-visible,.ds-icon-btn.is-focus{box-shadow:0 0 0 3px color-mix(in srgb,var(--ring) 35%,transparent)}
 .ds-icon-btn:disabled,.ds-icon-btn.is-disabled{opacity:.5;cursor:not-allowed;transform:none}
@@ -117,6 +160,9 @@
 /* ---------- forms ---------- */
 .ds-field{display:flex;flex-direction:column;gap:var(--space-2)}
 .ds-label{font-size:var(--text-caption);font-weight:var(--weight-semibold);color:var(--text-secondary);letter-spacing:0}
+/* L'astérisque « requis ». Était un style inline dans FormField.tsx — une décision du
+   socle qu'aucun sélecteur ne pouvait viser (v0.17.0, la doctrine du créneau). */
+.ds-label__required{color:var(--primary)}
 .ds-help{font-size:var(--text-caption);color:var(--text-muted)}
 .ds-error{display:flex;align-items:center;gap:var(--space-2);font-size:var(--text-caption);font-weight:var(--weight-medium);color:var(--destructive-readable)}
 .ds-input{width:100%;min-height:var(--control-md);padding:0.6875rem 1rem;box-sizing:border-box;font-family:var(--font-body);font-size:var(--text-control);color:var(--foreground);background:var(--secondary);border:1.5px solid var(--input);border-radius:var(--radius-md);outline:none;transition:border-color var(--duration-base) var(--ease-standard),box-shadow var(--duration-base) var(--ease-standard)}
@@ -144,6 +190,14 @@
 .ds-input.is-error,.ds-input[aria-invalid="true"]{border-color:var(--destructive)}
 .ds-input.is-error:focus,.ds-input[aria-invalid="true"]:focus{border-color:var(--destructive)}
 .ds-input:disabled,.ds-input.is-disabled{cursor:not-allowed;background:var(--muted);color:var(--muted-foreground)}
+/* LE CHAMP À UNITÉ — v0.17.0, manque remonté par Dashboard. L'unité (« kg », « € »,
+   « min ») est une méta posée DANS le champ, à droite, en sourdine : elle ne se clique
+   pas, ne se lit pas deux fois (aria-hidden — le libellé du FormField la nomme). Le
+   padding réservé vaut --space-7 : assez pour trois caractères, la limite documentée.
+   Une unité plus longue est un SUFFIXE de libellé, pas une unité de champ. */
+.ds-input-unit{position:relative;display:block;width:100%}
+.ds-input-unit .ds-input{padding-right:var(--space-7)}
+.ds-input-unit__label{position:absolute;right:1rem;top:50%;transform:translateY(-50%);pointer-events:none;color:var(--text-muted);font-size:var(--text-body-sm)}
 .ds-textarea{height:auto;min-height:0;resize:vertical;line-height:var(--leading-normal)}
 .ds-select{position:relative;display:block}
 .ds-select select{appearance:none;-webkit-appearance:none;padding-right:var(--space-7);cursor:pointer}
@@ -154,13 +208,23 @@
 .ds-choice__box--radio{border-radius:var(--radius-pill)}
 .ds-choice__box>*{opacity:0;transition:opacity var(--duration-fast) var(--ease-standard)}
 .ds-choice:hover .ds-choice__box,.ds-choice.is-hover .ds-choice__box{border-color:var(--primary)}
-.ds-choice input:checked+.ds-choice__box,.ds-choice.is-checked .ds-choice__box{background:var(--brand-gradient);border-color:var(--brand-to)}
+/* PAS DE LISERÉ SUR LE DÉGRADÉ — v0.17.0. Une bordure de couleur PLATE autour d'un fond
+   en dégradé se voit : en haut à gauche le fond est à son arrêt clair, la bordure au bout
+   sombre — un liseré, vu pendant des mois et attribué à tort au template. La bordure passe
+   TRANSPARENTE et le dégradé se peint `border-box` : il se dessine SOUS elle, sur toute la
+   boîte — le mot-clé règle origin ET clip, sinon l'origine resterait padding-box et la
+   zone de bordure montrerait la répétition du tile, pas son prolongement. La boîte garde
+   sa taille : les 1.5px sont toujours là. */
+.ds-choice input:checked+.ds-choice__box,.ds-choice.is-checked .ds-choice__box{background:var(--brand-gradient) border-box;border-color:transparent}
 .ds-choice input:checked+.ds-choice__box>*,.ds-choice.is-checked .ds-choice__box>*{opacity:1}
-.ds-choice input:checked+.ds-choice__box--radio,.ds-choice.is-checked .ds-choice__box--radio{background:var(--background)}
+/* Le radio coché revient sur un fond PLAT : sa bordure redevient un anneau visible, et
+   doit donc REPRENDRE --brand-to — sans cette déclaration il hériterait du transparent
+   posé juste au-dessus et l'anneau disparaîtrait. */
+.ds-choice input:checked+.ds-choice__box--radio,.ds-choice.is-checked .ds-choice__box--radio{background:var(--background);border-color:var(--brand-to)}
 /* Indéterminée — la case d'en-tête d'une sélection partielle : remplie comme cochée, mais
    un trait (minus) à la place de la coche. La propriété DOM `indeterminate` est posée par
    le composant via sa ref ; le CSS ne lit que la classe. */
-.ds-choice.is-indeterminate .ds-choice__box{background:var(--brand-gradient);border-color:var(--brand-to)}
+.ds-choice.is-indeterminate .ds-choice__box{background:var(--brand-gradient) border-box;border-color:transparent}
 .ds-choice.is-indeterminate .ds-choice__box>*{opacity:1}
 .ds-choice input:focus-visible+.ds-choice__box,.ds-choice.is-focus .ds-choice__box{box-shadow:0 0 0 3px color-mix(in srgb,var(--ring) 35%,transparent)}
 .ds-choice.is-disabled{opacity:.5;cursor:not-allowed}
@@ -362,6 +426,9 @@
 .ds-dropdown__item{display:flex;align-items:center;gap:0.625rem;width:100%;padding:0.625rem 0.8125rem;border:0;background:transparent;color:var(--foreground);font-family:var(--font-body);font-size:var(--text-body-sm);text-align:left;border-radius:var(--radius-sm);cursor:pointer;transition:background var(--duration-fast) var(--ease-standard)}
 .ds-dropdown__item:hover,.ds-dropdown__item.is-hover,.ds-dropdown__item:focus-visible{background:var(--surface-alt);outline:none}
 .ds-dropdown__item--danger{color:var(--destructive-readable)}
+/* Le hint d'un item — le raccourci, la méta. Était couleur + taille inline dans
+   Dropdown.tsx : une décision du socle qu'aucun sélecteur ne pouvait viser (v0.17.0). */
+.ds-dropdown__hint{color:var(--text-muted);font-size:var(--text-caption)}
 .ds-dropdown__sep{height:1px;margin:0.25rem 0.375rem;background:var(--border);border:0}
 /* MAIS POSÉ DANS UNE CARTE OU UNE MODALE, UN MENU DOIT CONTINUER DE FLOTTER : il retombe
    alors sur --popover, 1,035 au-dessus de sa porteuse. Sans cette règle on rouvre
@@ -425,7 +492,10 @@
 .ds-sep--label::before,.ds-sep--label::after{content:"";flex:1;height:1px;background:var(--border)}
 
 /* ---------- spinner ---------- */
-.ds-spinner{display:inline-block;flex:none;box-sizing:border-box;border-radius:var(--radius-pill);border:2px solid color-mix(in srgb,currentColor 25%,transparent);border-top-color:currentColor;animation:ds-spin var(--duration-spin) linear infinite}
+/* La taille vient du créneau, comme l'icône — même propriété, même repli (voir LES
+   CRÉNEAUX D'ICÔNE) : c'est lui qui remplit le créneau quand un bouton charge, il doit
+   rendre la MÊME taille que l'icône qu'il remplace. */
+.ds-spinner{display:inline-block;flex:none;box-sizing:border-box;width:var(--ds-icon-size,1.25rem);height:var(--ds-icon-size,1.25rem);border-radius:var(--radius-pill);border:2px solid color-mix(in srgb,currentColor 25%,transparent);border-top-color:currentColor;animation:ds-spin var(--duration-spin) linear infinite}
 
 /* ---------- progress ---------- */
 /* Rail sur --surface-alt : un cran de séparation depuis la porteuse, dans les deux
@@ -508,8 +578,17 @@
 .ds-sidebar__toggle{appearance:none;border:0;background:transparent;color:var(--text-muted);cursor:pointer;display:inline-flex;padding:var(--space-2);border-radius:var(--radius-sm);transition:background-color var(--duration-fast) var(--ease-standard),color var(--duration-fast) var(--ease-standard)}
 .ds-sidebar__toggle:hover{background:var(--surface-alt);color:var(--foreground)}
 .ds-sidebar__toggle:focus-visible{outline:2px solid var(--ring);outline-offset:2px}
-.ds-sidebar__nav{display:flex;flex-direction:column;gap:var(--space-1);flex:1;overflow-y:auto;min-height:0}
-.ds-sidebar__title{font-family:var(--font-body);font-size:0.6875rem;font-weight:var(--weight-bold);letter-spacing:0.08em;text-transform:uppercase;color:var(--text-muted);padding:var(--space-3) var(--space-2) var(--space-1)}
+/* L'ESPACEMENT INTER-GROUPES EST AU GROUPE, PLUS AU TITRE — v0.17.0, manque remonté par
+   Dashboard. Chaque section rend désormais un `.ds-sidebar__group` ; le gap de la nav
+   sépare les GROUPES (--space-4), le gap du groupe sépare ses entrées (--space-1, la
+   valeur historique de la nav). Avant, la séparation venait du padding-top du TITRE
+   (--space-3 + le gap --space-1 = 16px) : deux groupes SANS titre se collaient à 4px.
+   La somme est CONSERVÉE — 16px entre groupes titrés, à l'identique — le titre perd son
+   padding-top, devenu le rôle du gap. Deux groupes sans titre passent de 4 à 16px : c'est
+   le correctif. */
+.ds-sidebar__nav{display:flex;flex-direction:column;gap:var(--space-4);flex:1;overflow-y:auto;min-height:0}
+.ds-sidebar__group{display:flex;flex-direction:column;gap:var(--space-1)}
+.ds-sidebar__title{font-family:var(--font-body);font-size:0.6875rem;font-weight:var(--weight-bold);letter-spacing:0.08em;text-transform:uppercase;color:var(--text-muted);padding:0 var(--space-2) var(--space-1)}
 .ds-sidebar.is-collapsed .ds-sidebar__title{display:none}
 /* 12px de rayon au lieu de 10 : avec la hauteur à 44 (v0.8.0), la pilule active a la place
    de se lire comme une pilule. Pas de jeton --sidenav-radius — ce serait un jeton de plus au

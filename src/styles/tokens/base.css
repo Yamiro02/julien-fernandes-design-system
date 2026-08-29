@@ -118,4 +118,9 @@ img{max-width:100%;display:block}
    titrage en capitales mais mot-marque en casse mixte — se règle par une ligne
    `.ds-logo{text-transform:none}` dans le fichier de marque. */
 .ds-logo{display:inline-flex;align-items:flex-end;font-family:var(--font-display);font-weight:var(--heading-weight);text-transform:var(--heading-transform);line-height:0.92;letter-spacing:0;white-space:nowrap;color:var(--foreground)}
+/* ⚠️ QUATRE MESURES FIGÉES (taille, deux marges, alignement) — la troisième forme du
+   défaut de doctrine (PROMPTS.md, en tête) : atteignables par la cascade, mais rien ne
+   dit qu'elles sont censées varier — une app qui en veut d'autres les recopie. Candidat
+   à une ouverture (jetons ou doc de surcharge), PAS un besoin : un seul appelant, un
+   seul contexte — on promeut au deuxième demandeur. */
 .ds-logo__dot{display:inline-block;flex:none;width:0.26em;height:0.26em;border-radius:25%;margin-left:0.08em;margin-bottom:0.02em;background:var(--brand-gradient-diagonal);box-shadow:var(--shadow-logo-dot)}

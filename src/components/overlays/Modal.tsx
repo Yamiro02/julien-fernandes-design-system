@@ -35,6 +35,17 @@ export interface ModalProps {
   footer?: ReactNode;
   /** Ignored while phase="loading": Escape, scrim click and the close button are all inert. */
   onClose?: () => void;
+  /**
+   * LA CROIX ET LES GESTES DE FUITE SONT DÉCOUPLÉS — v0.17.0, manque remonté par
+   * Dashboard. `onClose` seul rendait les TROIS d'un bloc : croix, Échap, clic-voile.
+   * `closeButton={false}` retire la croix en gardant Échap et le voile ;
+   * `dismissable={false}` fait l'inverse — la croix reste le seul geste de fermeture,
+   * pour une modale à saisie qu'un clic à côté ne doit pas jeter. Les deux à `true`
+   * (défaut) : comportement historique, rien ne bouge.
+   */
+  closeButton?: boolean;
+  /** Escape and scrim click call onClose. Default true. */
+  dismissable?: boolean;
   /** confirm (default) · loading = nothing dismisses · result = success or error in the same dialog. */
   phase?: 'confirm' | 'loading' | 'result';
   /** Result payload — required when phase="result". */
@@ -52,14 +63,19 @@ const TILE_TONE: Record<string, TileTone> = {
 
 export function Modal({
   open = true, icon, iconVariant = 'danger', title, description, footer,
-  onClose, inline = false, phase = 'confirm', result, className = '', children,
+  onClose, closeButton = true, dismissable = true, inline = false,
+  phase = 'confirm', result, className = '', children,
 }: ModalProps): JSX.Element | null {
   const locked = phase === 'loading';
   /* initialFocus 'container' : le panneau porte role="dialog", aria-modal et un nom accessible,
      donc y poser le focus fait annoncer la modale ET lire son contenu. Sur une confirmation
      destructive, le TEXTE doit être entendu avant l'action — or la croix « Fermer » précède le
      titre dans l'ordre du DOM, un focus sur le premier focusable y atterrirait. */
-  const panelRef = useModalSurface({ open, locked, onClose, inline, initialFocus: 'container' });
+  /* `dismissable={false}` prive le hook de onClose : Échap ne ferme plus — le piège de
+     focus, le verrou de défilement et la restitution du focus, eux, ne bougent pas. */
+  const panelRef = useModalSurface({
+    open, locked, onClose: dismissable ? onClose : undefined, inline, initialFocus: 'container',
+  });
 
   if (!open) return null;
 
@@ -67,7 +83,7 @@ export function Modal({
   const r = result ?? ({} as ModalResult);
   const resultTone: TileTone = r.status === 'error' ? 'danger' : 'success';
 
-  const closeBtn = onClose ? (
+  const closeBtn = onClose && closeButton ? (
     <button
       type="button"
       className="ds-modal__close"
@@ -94,7 +110,9 @@ export function Modal({
           <div className="ds-modal__head ds-modal__head--end">{closeBtn}</div>
           <div className="ds-modal__result">
             <Pastille size="dialogue" tone={resultTone}>
-              <Icon name={r.status === 'error' ? 'circle-x' : 'circle-check'} size="1.25rem" />
+              {/* Sans taille : le créneau de la pastille de dialogue rend 1.5rem — le
+                  relevé des artboards, posé par patterns.css (v0.17.0). */}
+              <Icon name={r.status === 'error' ? 'circle-x' : 'circle-check'} />
             </Pastille>
             {r.title ? <h3>{r.title}</h3> : null}
             {r.message ? <p className="ds-modal__desc ds-modal__desc--block">{r.message}</p> : null}
@@ -137,7 +155,7 @@ export function Modal({
   /* Le rang du voile (--z-modal, au-dessus du tiroir mobile) et son position:fixed
      vivent dans .ds-scrim — plus aucun style inline à surcharger. */
   return (
-    <div className="ds-scrim" onClick={locked ? undefined : onClose}>
+    <div className="ds-scrim" onClick={locked || !dismissable ? undefined : onClose}>
       <div onClick={e => e.stopPropagation()} className="ds-modal-wrap">
         <div className="ds-modal-slot">{panel}</div>
       </div>

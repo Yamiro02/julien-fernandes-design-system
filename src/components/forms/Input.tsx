@@ -14,10 +14,17 @@ export interface InputProps extends Omit<InputHTMLAttributes<HTMLInputElement>, 
   invalid?: boolean;
   /** 'page' (default) = sits directly on the layout (fill --secondary, like navbar/tabs/search) · 'card' = inside a card (fill --background). */
   surface?: 'page' | 'card';
+  /**
+   * L'unité du champ — « kg », « € », « min » — posée DANS le champ, à droite, en
+   * sourdine (v0.17.0, manque remonté par Dashboard). Trois caractères au plus : le
+   * padding réservé est fixe (--space-7) ; plus long, c'est un suffixe de libellé, pas
+   * une unité. `aria-hidden` : c'est au libellé du FormField de la nommer.
+   */
+  unit?: string;
 }
 
 export const Input = forwardRef<HTMLInputElement, InputProps>(function Input({
-  size = 'md', invalid = false, surface = 'page', className = '', ...rest
+  size = 'md', invalid = false, surface = 'page', unit, className = '', ...rest
 }: InputProps, ref): JSX.Element {
   // surface: 'page' (default) = the input sits directly on the layout (fill --secondary) · 'card' = inside a card (fill --background).
   // Since the surface-inference rule in patterns.css, a field inside a Card, Modal, ActionSheet, Dropdown or DatePicker pop deduces --background by itself — the prop is only needed for other containers.
@@ -31,6 +38,15 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(function Input({
     invalid && 'is-error',
     className,
   );
-  return <input ref={ref} className={cls} aria-invalid={invalid || undefined} {...rest} />;
+  const champ = <input ref={ref} className={cls} aria-invalid={invalid || undefined} {...rest} />;
+  if (!unit) return champ;
+  /* L'enveloppe n'existe QUE si `unit` est passé : sans elle, le DOM d'hier — un <input>
+     nu — ne bouge pas d'un nœud. */
+  return (
+    <span className="ds-input-unit">
+      {champ}
+      <span className="ds-input-unit__label" aria-hidden="true">{unit}</span>
+    </span>
+  );
 });
 Input.displayName = 'Input';

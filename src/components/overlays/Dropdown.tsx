@@ -35,7 +35,7 @@ export function Dropdown({ items = [], inline = false, className = '', ...rest }
           >
             {it.icon}
             <span style={{ flex: 1 }}>{it.label}</span>
-            {it.hint ? <span style={{ color: 'var(--text-muted)', fontSize: 'var(--text-caption)' }}>{it.hint}</span> : null}
+            {it.hint ? <span className="ds-dropdown__hint">{it.hint}</span> : null}
           </button>
         ))}
     </div>

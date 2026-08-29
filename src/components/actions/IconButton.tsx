@@ -1,4 +1,4 @@
-import type { ButtonHTMLAttributes, JSX, ReactNode } from 'react';
+import type { ButtonHTMLAttributes, ElementType, JSX, ReactNode } from 'react';
 import { cva } from 'class-variance-authority';
 
 /**
@@ -7,7 +7,13 @@ import { cva } from 'class-variance-authority';
  * Always pass `label` — it becomes aria-label and title. Never a pill.
  */
 export interface IconButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
-  variant?: 'primary' | 'secondary' | 'ghost' | 'danger';
+  /**
+   * `accent` (v0.17.0) : fond `--accent`, sans bordure, icône `--primary` — l'état
+   * « sélectionné doux » d'un lien-icône ou d'un raccourci. La variante que les apps
+   * recomposaient à la main en détournant l'aide de démo `is-active` et en annulant la
+   * bordure en inline.
+   */
+  variant?: 'primary' | 'secondary' | 'ghost' | 'danger' | 'accent';
   size?: 'sm' | 'md' | 'lg';
   /**
    * The surface the button sits on — the twin of Button's `surface`, same three values,
@@ -18,6 +24,15 @@ export interface IconButtonProps extends ButtonHTMLAttributes<HTMLButtonElement>
   surface?: 'auto' | 'page' | 'card';
   /** Accessible name. Required. */
   label: string;
+  /**
+   * Render as another tag — le jumeau exact du `as` de Button, et pour le même besoin :
+   * un lien-icône (`as="a"` + `href`) reste un LIEN — clic-milieu, « ouvrir dans un
+   * onglet », annonce correcte au lecteur d'écran — là où un `<button onClick>` qui
+   * navigue n'en est pas un. Manque remonté par Dashboard (v0.17.0).
+   */
+  as?: keyof JSX.IntrinsicElements;
+  /** Link target — only meaningful with as="a". */
+  href?: string;
   children?: ReactNode;
 }
 
@@ -28,6 +43,7 @@ const iconButton = cva('ds-icon-btn', {
       secondary: 'ds-icon-btn--secondary',
       ghost: 'ds-icon-btn--ghost',
       danger: 'ds-icon-btn--danger',
+      accent: 'ds-icon-btn--accent',
     },
     size: { sm: 'ds-icon-btn--sm', md: 'ds-icon-btn--md', lg: 'ds-icon-btn--lg' },
     surface: { auto: '', page: 'ds-icon-btn--on-page', card: 'ds-icon-btn--on-card' },
@@ -36,12 +52,24 @@ const iconButton = cva('ds-icon-btn', {
 });
 
 export function IconButton({
-  variant = 'ghost', size = 'md', surface = 'auto', label, className = '', children, ...rest
+  variant = 'ghost', size = 'md', surface = 'auto', label, as, disabled,
+  className = '', children, ...rest
 }: IconButtonProps): JSX.Element {
+  const Tag = (as ?? 'button') as ElementType;
   const cls = [iconButton({ variant, size, surface }), className].filter(Boolean).join(' ');
+  /* Même contrat que Button : `type` et `disabled` n'existent que sur un vrai <button> ;
+     ailleurs, l'état désactivé passe par aria-disabled. */
   return (
-    <button type="button" className={cls} aria-label={label} title={label} {...rest}>
+    <Tag
+      type={Tag === 'button' ? 'button' : undefined}
+      disabled={Tag === 'button' ? disabled : undefined}
+      aria-disabled={disabled || undefined}
+      className={cls}
+      aria-label={label}
+      title={label}
+      {...rest}
+    >
       {children}
-    </button>
+    </Tag>
   );
 }

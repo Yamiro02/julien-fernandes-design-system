@@ -195,7 +195,12 @@ Celle qu'on relit avant une PR. Cinq à dix lignes, pas plus.
    `width: fit-content` (le dégradé se peint sur la boîte, les lettres n'en montrent qu'une
    tranche). La typographie (`font-*`, paliers, `leading-*`) ne touche aucune des quatre
    déclarations et est sans risque ; la mise en page, elle, va sur un span externe.
-8. _(à compléter)_
+8. Jamais un **défaut de design** écrit en style inline — inline est le seul endroit du
+   langage que la cascade n'atteint pas, et la panne est muette. Un style inline n'est
+   légitime que si la valeur vient de l'appelant à chaque rendu (`Skeleton`, `Avatar`).
+   Le réflexe de revue, sur toute valeur d'un composant : **l'appelant peut-il la
+   reprendre ?** Si non, elle est mal placée, quel que soit le moyen.
+9. _(à compléter)_
 
 ---
 

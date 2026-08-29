@@ -84,7 +84,7 @@ export function NavigationPage() {
       </Section>
 
       <Section title="AppShell et Sidebar" note="Le squelette des outils internes : grille [barre latérale | contenu]. La barre est sur --secondary, repliable en icônes seules, et l'état est persisté en localStorage.">
-        <Block label="Complet" hint="responsive={false} et staticLayout épinglent la mise en page à deux colonnes pour la vitrine.">
+        <Block label="Complet" hint="responsive={false} et staticLayout épinglent la mise en page à deux colonnes pour la vitrine. Chaque section est un groupe : 16px les séparent, avec ou sans titre — le dernier groupe, sans titre, ne se colle plus au précédent.">
           <div className="overflow-hidden rounded-xl border border-border">
             <AppShell
               responsive={false}
@@ -96,13 +96,15 @@ export function NavigationPage() {
                   storageKey="ds-demo-sidebar"
                   sections={[
                     { title: 'Pilotage', items: [
-                      { label: 'Accueil', icon: <Icon name="house" size="1.25rem" />, active: true },
-                      { label: 'Vidéos', icon: <Icon name="video" size="1.25rem" /> },
-                      { label: 'Séries', icon: <Icon name="folder" size="1.25rem" /> },
+                      { label: 'Accueil', icon: <Icon name="house" />, active: true },
+                      { label: 'Vidéos', icon: <Icon name="video" /> },
+                      { label: 'Séries', icon: <Icon name="folder" /> },
                     ] },
                     { title: 'Perso', items: [
-                      { label: 'Sport', icon: <Icon name="dumbbell" size="1.25rem" /> },
-                      { label: 'Réglages', icon: <Icon name="settings" size="1.25rem" /> },
+                      { label: 'Sport', icon: <Icon name="dumbbell" /> },
+                    ] },
+                    { items: [
+                      { label: 'Réglages', icon: <Icon name="settings" /> },
                     ] },
                   ]}
                   footer={
@@ -120,7 +122,7 @@ export function NavigationPage() {
               <div className="flex flex-col gap-space-4 p-space-5">
                 <h3>Accueil</h3>
                 <p className="caption">Le contenu de l'outil vit ici. Replie la barre avec le bouton en tête pour voir le mode icônes seules — l'état est retenu.</p>
-                <Row><Button size="sm" icon={<Icon name="plus" size="1rem" />}>Nouveau build</Button></Row>
+                <Row><Button size="sm" icon={<Icon name="plus" />}>Nouveau build</Button></Row>
               </div>
             </AppShell>
           </div>
@@ -138,9 +140,9 @@ export function NavigationPage() {
                   collapsible={false}
                   storageKey="ds-demo-sidebar-collapsed"
                   sections={[{ items: [
-                    { label: 'Accueil', icon: <Icon name="house" size="1.25rem" />, active: true },
-                    { label: 'Vidéos', icon: <Icon name="video" size="1.25rem" /> },
-                    { label: 'Réglages', icon: <Icon name="settings" size="1.25rem" /> },
+                    { label: 'Accueil', icon: <Icon name="house" />, active: true },
+                    { label: 'Vidéos', icon: <Icon name="video" /> },
+                    { label: 'Réglages', icon: <Icon name="settings" /> },
                   ] }]}
                 />
               }

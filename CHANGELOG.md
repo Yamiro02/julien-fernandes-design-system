@@ -23,10 +23,144 @@ concordent.
 
 ---
 
-## Non publié — le piège de `.accent` entre dans la doc, et deux textes disent le vrai
+## 0.17.0 — aucune valeur du socle hors de portée de l'appelant
+
+Cinq défauts en un mois, trois formes d'un même mal : une valeur **battue par la cascade**
+(`.accent`, `.mono` — la couche gagne toujours), une valeur **hors d'atteinte de la
+cascade** (le créneau d'icône muré par un style inline, deux nœuds sans classe), une
+valeur **atteignable mais non prévue pour varier** (`.ds-logo__dot`). Même issue à chaque
+fois : l'app recopie ou surcharge, le socle ne le sait pas, et la panne est **muette**.
+Cette version ferme la deuxième forme en entier, écrit la doctrine des trois là où on la
+lit, et embarque les manques que Dashboard a accumulés.
+
+### Le créneau d'icône — le défaut principal
+
+`Glyph` posait `width`/`height` inline avec `size = '1.25rem'` en **défaut de
+paramètre** : la déclaration existait à chaque rendu, aucune règle CSS ne pouvait donc
+dimensionner un créneau — `.ds-badge--dense svg { width: .75rem }` était mort-né. Le socle
+se contredisait lui-même : `Button` calculait une taille pour son `Spinner` mais pas pour
+l'icône passée par l'appelant — le même bouton `sm` rendait 1rem en chargement et 1.25rem
+au repos.
+
+Le mécanisme, désormais : `.ds-icon` et `.ds-spinner` lisent
+`var(--ds-icon-size, 1.25rem)` ; les **créneaux** posent la propriété par une règle CSS
+(patterns.css, § LES CRÉNEAUX D'ICÔNE) ; la prop `size` d'un site d'appel l'écrit inline
+et **gagne** — la surcharge optique reste possible, et doit le rester. La propriété est
+**enregistrée** :
+
+    @property --ds-icon-size { syntax: '*'; inherits: false; }
+
+`inherits: false` est le point non négociable : une règle posée sur un conteneur est
+INERTE au lieu d'être fuyante — `EmptyState` rend une Pastille ET un Button dans son
+créneau `action`, une règle sur `.ds-empty` aurait grossi l'icône du bouton en silence.
+Les règles ciblent le `svg` lui-même. `syntax: '*'` sans `initial-value` laisse la
+propriété **guaranteed-invalid** (vérifié au spec ET au rendu) : le repli `1.25rem` est
+actif partout où rien ne pose la propriété — `<length>` aurait exigé un `initial-value`
+qui tuerait le repli, et refusé un `size="100%"` en silence.
+
+Les créneaux posés sont **le relevé des six artboards** (131 icônes) : IconButton sm 1rem
+· Button sm 1rem · IconButton md 1.125rem · déclencheurs de champ (chevron du Select,
+calendrier du DatePicker) 1rem · Badge dense 0.75rem · Pastille dialogue 1.5rem · Button
+md 1.125rem · Pastille panneau 1.5rem (vitrine et doc). Pastille carte et nav de Sidebar
+rendent déjà le repli. La constante JS de `Button` (`md → 1.25rem` — la marque dit 1.125,
+attesté 13 fois) est **supprimée**, pas corrigée : c'est la règle CSS qui porte la valeur.
+
+**⚠ Ce qui change à l'écran** — les créneaux corrigent des tailles fausses, c'est le but :
+une icône SANS `size` explicite rend désormais 1.125rem dans un bouton ou IconButton `md`
+(avant 1.25), 1rem dans un `sm`, 1.5rem dans une pastille `dialogue`/`panneau` (le Modal
+result compris), 1rem sur le chevron du Select (avant 1.125) et le déclencheur du
+DatePicker (avant 1.25). Les `size` explicites des apps continuent de gagner, à
+l'identique. Le spinner d'un bouton `md` passe de 1.25 à 1.125rem — il rend enfin comme
+l'icône qu'il remplace. Aucune rupture d'API ; `Glyph` porte maintenant la classe
+`.ds-icon` (les quatre déclarations inline — width, height, flex, display — vivent là).
+
+### Les deux nœuds sans classe — même leçon
+
+L'astérisque « requis » de `FormField` et le hint d'un item de `Dropdown` étaient des
+styles inline **sans même une prop** : une décision du socle qu'aucun sélecteur ne pouvait
+viser. Ils deviennent `.ds-label__required` et `.ds-dropdown__hint`, valeurs identiques.
+
+### Le liseré sur le dégradé — un bug vu depuis des mois, attribué au template
+
+Une bordure de couleur **plate** (`--brand-to`) entourait un fond `--brand-gradient` : en
+haut à gauche le fond est à son arrêt clair, la bordure au bout sombre — liseré visible.
+Deux sites dans patterns.css : la case cochée de `.ds-choice` et son état indéterminé. La
+bordure passe `transparent` et le dégradé se peint `border-box` — il se dessine SOUS elle,
+la boîte garde sa taille. Le radio coché, qui revient sur fond plat, **reprend**
+explicitement sa bordure `--brand-to`, sinon son anneau disparaissait. Balayage complet :
+aucun autre site — les autres fonds dégradés (boutons primaires, switch, progress, jour
+sélectionné, pastille brand-solid) n'ont pas de bordure ; le seul cas restant est
+`Pastille brand-solid` + `outlined`, dont le contour currentColor à 22 % est translucide
+et délibéré.
+
+### Les manques remontés par Dashboard
+
+- **`IconButton` : `variant="accent"` + `as`/`href`.** Fond `--accent`, sans bordure,
+  icône `--primary` (3,08:1 clair / 3,14 sombre — au-dessus du seuil 3:1 des graphiques
+  non textuels) — la variante que l'artboard des Achats recomposait en détournant l'aide
+  de démo `is-active` et en annulant la bordure en inline, 4+ occurrences. Et le même
+  nœud est un `<a href>` : `as`/`href` arrivent, jumeaux exacts de ceux de `Button`.
+  `Button` n'a pas reçu le jumeau `accent` : le besoin n'est attesté que sur le carré
+  d'icône — on promeut au deuxième appelant.
+- **`Modal` : la croix et les gestes de fuite sont découplés.** `closeButton={false}`
+  retire la croix en gardant Échap et le clic-voile ; `dismissable={false}` fait
+  l'inverse. Défauts à `true` : comportement historique inchangé.
+- **`EmptyState` : la tuile n'est plus figée.** `tile` reçoit la tuile complète quand
+  `panneau brand outlined` ne convient pas ; `icon` garde son rendu d'hier.
+- **`Sidebar` : l'espacement inter-groupes.** Chaque section rend un
+  `.ds-sidebar__group` ; le gap de la nav sépare les groupes (16px), celui du groupe ses
+  entrées (4px). La somme est conservée pour les sections titrées — deux sections SANS
+  titre passent de 4 à 16px, c'est le correctif. Seul autre effet visible : le premier
+  titre de section ne porte plus 12px de padding mort en tête de nav.
+- **`Input` : le champ à unité.** `unit="kg"` pose l'unité dans le champ, à droite, en
+  sourdine, `aria-hidden` (le libellé du FormField la nomme). Trois caractères au plus —
+  plus long, c'est un suffixe de libellé. Sans `unit`, le DOM d'hier ne bouge pas d'un
+  nœud.
+
+### La doctrine entre dans la doc — là où on la lit
+
+En tête de `docs/PROMPTS.md`, au-dessus des cas particuliers : la thèse (« aucune valeur
+du socle hors de portée de l'appelant ») et ses **trois formes** — battue par la cascade
+(`.accent`, `.mono`) ; hors d'atteinte de la cascade (style inline, nœuds sans classe) ;
+atteignable mais non prévue pour varier (`.ds-logo__dot`, dont les quatre mesures sont
+ciblables mais que rien n'annonce comme variables — la forme trouvée par Dashboard,
+probablement la plus fréquente ; **pas d'API ouverte dessus** : un seul appelant, un seul
+contexte, on promeut au deuxième demandeur). Les deux questions de revue : « cette
+valeur, l'appelant peut-il la reprendre ? » — et pour la forme 3 : « si oui, le
+sait-il ? ». S'y ajoute **la règle du style inline**, remontée de sous `Skeleton` où
+elle était enterrée et affûtée en trois cas — légitime (la valeur vient de l'appelant à
+chaque rendu), illégitime (il porte un défaut), sans excuse (pas même une prop). S'y
+ajoute la règle des **utilitaires de marque** : les huit de `tokens/base.css` vivent en
+`layer(base)` et perdent contre les 185 redéclarations de `layer(components)` — la parade
+est l'utilitaire Tailwind équivalent sur le même jeton, on ne déplace pas la couche.
+`docs/DESIGN.md` § 9 reçoit l'interdit n° 8 (la même règle, format liste de PR).
+
+Le garde-fou **mécanique** étudié — « un paramètre avec défaut qui alimente un
+`style={{}}` » — attrape bien `Glyph` et `Spinner` mais aussi `Skeleton` (trois défauts :
+width/height/radius) et `Avatar` (`size = '4rem'`) : deux faux positifs sur quatre
+composants. Non retenu ; le réflexe de revue reste la protection.
+
+### Reporté, et pourquoi
+
+- **Déclencheur composable de `DatePicker`** : la seule forme composable honnête est un
+  render-prop (`trigger?: ({ open, value, toggle }) => ReactNode`), et le câblage du
+  retour de focus (Échap, sélection) plus l'ARIA du déclencheur rendent l'API non
+  triviale — un mauvais choix coûterait une rupture. À arbitrer avant d'écrire.
+- **Manque n° 9 — `Calendar` en plage**, en tête de file pour la prochaine version.
+  Périmètre acté : mode plage, deux mois, surlignage des jours intermédiaires,
+  présélections externes. Pas dans celle-ci : la version a une thèse, un calendrier de
+  plage en ferait un fourre-tout en retardant ce dont Dashboard a besoin. **La parade est
+  documentée** dans la section Calendar de PROMPTS.md : les classes `.ds-cal__*` qu'un
+  calendrier fait main peut émettre pour hériter des espacements, de la typo et des états
+  du socle — c'est le contrat de rendu que Dashboard applique cette semaine.
+- Les spans structurels encore inline (`flex:1` du libellé de Dropdown et d'ActionSheet,
+  `width:100%` d'un wrapper d'ActionSheet) : de la structure pure, sans valeur de design
+  à reprendre — notés, pas touchés.
+
+## 0.17.0 · le lot doc déjà commité — le piège de `.accent`, et deux textes disent le vrai
 
 Commentaires et documentation seuls : aucun jeton, aucune règle CSS, aucun composant ne
-change. **Rien ne casse.** Part avec la prochaine version.
+change. **Rien ne casse.** Commité en amont (`c33e2b0`), publié avec cette version.
 
 ### `.accent` — quatre déclarations solidaires, et rien ne le disait
 

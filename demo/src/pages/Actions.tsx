@@ -3,6 +3,8 @@ import { ContentIcon } from '@julienfernandes/ds/brand-content';
 import { Block, Row, Section } from '../ui';
 
 const VARIANTS = ['primary', 'secondary', 'ghost', 'danger'] as const;
+/* `accent` n'existe que sur IconButton — Button attend son deuxième appelant. */
+const ICON_VARIANTS = ['primary', 'secondary', 'ghost', 'danger', 'accent'] as const;
 
 export function ActionsPage() {
   return (
@@ -44,7 +46,7 @@ export function ActionsPage() {
           <Row>
             <Button variant="primary" size="lg" iconRight={<Icon name="arrow-right" />}>On build une app</Button>
             <Button variant="secondary" icon={<ContentIcon name="youtube" />}>Voir la chaîne</Button>
-            <Button variant="ghost" size="sm" icon={<Icon name="copy" size="1rem" />}>Copier</Button>
+            <Button variant="ghost" size="sm" icon={<Icon name="copy" />}>Copier</Button>
             <Button variant="danger" icon={<Icon name="triangle-alert" />}>Supprimer</Button>
           </Row>
         </Block>
@@ -54,8 +56,8 @@ export function ActionsPage() {
             <div className="flex flex-wrap items-center gap-space-3 rounded-md border border-border bg-background p-space-3">
               <Button variant="secondary">auto — il disparaît</Button>
               <Button variant="secondary" surface="page">surface=page</Button>
-              <IconButton label="Fermer" variant="secondary"><Icon name="x" size="1rem" /></IconButton>
-              <IconButton label="Fermer" variant="secondary" surface="page"><Icon name="x" size="1rem" /></IconButton>
+              <IconButton label="Fermer" variant="secondary"><Icon name="x" /></IconButton>
+              <IconButton label="Fermer" variant="secondary" surface="page"><Icon name="x" /></IconButton>
             </div>
           </Row>
           <Row label="à même la carte">
@@ -71,18 +73,25 @@ export function ActionsPage() {
       </Section>
 
       <Section title="IconButton" note="Carré, rayon --radius-md. md fait 2.625rem — la cible de touche minimale. Jamais un pill.">
-        <Block label="Variantes et tailles">
-          {VARIANTS.map(v => (
+        <Block label="Variantes et tailles" hint="Les icônes ne portent aucun size : le créneau les dimensionne (sm 1rem · md 1.125rem). accent = fond --accent, sans bordure, icône --primary — l'état « sélectionné doux » d'un lien-icône.">
+          {ICON_VARIANTS.map(v => (
             <Row key={v} label={v}>
-              <IconButton label="Copier" variant={v} size="sm"><Icon name="copy" size="1rem" /></IconButton>
+              <IconButton label="Copier" variant={v} size="sm"><Icon name="copy" /></IconButton>
               <IconButton label="Copier" variant={v} size="md"><Icon name="copy" /></IconButton>
               <IconButton label="Copier" variant={v} size="lg"><Icon name="copy" /></IconButton>
             </Row>
           ))}
         </Block>
 
+        <Block label="Lien-icône" hint="as=a + href : clic-milieu, ouvrir dans un onglet, annonce de lien au lecteur d'écran. La variante accent remplace le détournement d'is-active + style inline.">
+          <Row>
+            <IconButton label="Boutique" variant="accent" as="a" href="#actions"><Icon name="external-link" /></IconButton>
+            <IconButton label="GitHub" variant="secondary" as="a" href="#actions"><Icon name="github" /></IconButton>
+          </Row>
+        </Block>
+
         <Block label="États">
-          {VARIANTS.map(v => (
+          {ICON_VARIANTS.map(v => (
             <Row key={v} label={v}>
               <IconButton label="Repos" variant={v}><Icon name="menu" /></IconButton>
               <IconButton label="Hover" variant={v} className="is-hover"><Icon name="menu" /></IconButton>

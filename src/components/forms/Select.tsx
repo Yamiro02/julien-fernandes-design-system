@@ -27,7 +27,9 @@ export const Select = forwardRef<HTMLSelectElement, SelectProps>(function Select
       >
         {options.map(o => <option key={o.value} value={o.value}>{o.label}</option>)}
       </select>
-      <Icon name="chevron-down" size="1.125rem" className="ds-select__chev" />
+      {/* Sans taille : le créneau du déclencheur rend 1rem — relevé des artboards,
+          posé par patterns.css (v0.17.0). */}
+      <Icon name="chevron-down" className="ds-select__chev" />
     </span>
   );
 });
