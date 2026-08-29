@@ -33,7 +33,7 @@ export type { SelectProps, SelectOption } from './components/forms/Select';
 export { Calendar } from './components/forms/Calendar';
 export type { CalendarProps } from './components/forms/Calendar';
 export { DatePicker } from './components/forms/DatePicker';
-export type { DatePickerProps } from './components/forms/DatePicker';
+export type { DatePickerProps, DatePickerTriggerApi } from './components/forms/DatePicker';
 export { Checkbox } from './components/forms/Checkbox';
 export type { CheckboxProps } from './components/forms/Checkbox';
 export { Radio } from './components/forms/Radio';

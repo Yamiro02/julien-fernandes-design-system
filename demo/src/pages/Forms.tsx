@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { IDENTITY } from '../identity';
-import { Calendar, Checkbox, DatePicker, FormField, Input, Radio, Select, Switch, Textarea } from '@julienfernandes/ds';
+import { Calendar, Checkbox, DatePicker, FormField, Icon, Input, Radio, Select, Switch, Textarea } from '@julienfernandes/ds';
 import { Block, Grid, Row, Section, Stack } from '../ui';
 
 const SERIES = [
@@ -115,6 +115,20 @@ export function FormsPage() {
             <DatePicker surface="card" value={date} onChange={setDate} />
             <DatePicker invalid value={date} onChange={setDate} />
             <DatePicker disabled />
+          </Stack>
+        </Block>
+        <Block label="Déclencheur composé" hint="trigger rend l'élément de l'app, qui ÉTALE triggerProps — le socle garde la ref (retour de focus sur Échap et sélection) et pose l'ARIA. Un élément qui reçoit ref : un <button> nu, pas un composant sans forwardRef.">
+          <Stack>
+            <DatePicker
+              value={date}
+              onChange={setDate}
+              trigger={({ value, triggerProps }) => (
+                <button type="button" className="ds-btn ds-btn--secondary" {...triggerProps}>
+                  {value ? value.toLocaleDateString('fr-FR') : 'Choisir une date'}
+                  <Icon name="calendar" />
+                </button>
+              )}
+            />
           </Stack>
         </Block>
       </Section>

@@ -1,5 +1,5 @@
-import { forwardRef, useEffect, useRef, useState } from 'react';
-import type { HTMLAttributes, JSX, Ref } from 'react';
+import { forwardRef, useEffect, useId, useRef, useState } from 'react';
+import type { HTMLAttributes, JSX, KeyboardEvent as ReactKeyboardEvent, ReactNode, Ref } from 'react';
 import { cn } from '../../lib/cn';
 import { Icon } from '../icons/Icon';
 import { Calendar } from './Calendar';
@@ -30,6 +30,38 @@ export interface DatePickerProps extends Omit<HTMLAttributes<HTMLSpanElement>, '
   disabled?: boolean;
   /** Nom du champ soumis par le <form>. Sans lui, pas d'input caché : rien n'est soumis. */
   name?: string;
+  /**
+   * LE DÉCLENCHEUR COMPOSABLE — v0.17.1, manque remonté par Dashboard, forme arbitrée.
+   *
+   * Un render-prop qui rend de l'état seul (`{open, toggle}`) ne suffit pas : le socle
+   * NE TIENDRAIT PLUS L'ÉLÉMENT — pas de ref, donc pas de retour de focus sur Échap et
+   * sur sélection ; pas de prise, donc pas d'ARIA. La forme éprouvée rend des PROPS À
+   * ÉTALER : l'appelant dessine ce qu'il veut et étale `triggerProps` sur SON élément —
+   * le socle récupère sa ref et pose l'ARIA lui-même, qui cesse d'être la charge de
+   * l'app. Sans l'étalement, rien de tout ça ne marche : c'est le contrat.
+   *
+   * L'élément rendu doit être focusable — idéalement un `<button type="button">`.
+   * `onKeyDown` n'ouvre que sur ArrowDown/ArrowUp (la convention des déclencheurs de
+   * sélection) : Entrée et Espace passent par le `click` NATIF du bouton — les gérer
+   * aussi au clavier doublerait la bascule. `disabled` reste la charge de l'appelant
+   * sur son propre élément.
+   */
+  trigger?: (api: DatePickerTriggerApi) => ReactNode;
+}
+
+/** Ce que reçoit le render-prop `trigger` de DatePicker. */
+export interface DatePickerTriggerApi {
+  open: boolean;
+  value?: Date;
+  /** À étaler tel quel sur l'élément déclencheur — ref, clic, clavier, ARIA. */
+  triggerProps: {
+    ref: Ref<HTMLElement | null>;
+    onClick: () => void;
+    onKeyDown: (e: ReactKeyboardEvent<HTMLElement>) => void;
+    'aria-haspopup': 'dialog';
+    'aria-expanded': boolean;
+    'aria-controls'?: string;
+  };
 }
 
 /* La date au format de soumission — local, pas UTC : toISOString() décalerait d'un
@@ -41,11 +73,15 @@ function iso(d: Date): string {
 
 export const DatePicker = forwardRef<HTMLSpanElement, DatePickerProps>(function DatePicker({
   value, onChange, placeholder = 'Choisir une date', locale = 'fr-FR', min, max,
-  disabledDates, surface = 'page', invalid = false, disabled = false, name, className = '', ...rest
+  disabledDates, surface = 'page', invalid = false, disabled = false, name, trigger,
+  className = '', ...rest
 }: DatePickerProps, refExterne: Ref<HTMLSpanElement>): JSX.Element {
   const [open, setOpen] = useState(false);
   const ref = useRef<HTMLSpanElement | null>(null);
-  const triggerRef = useRef<HTMLButtonElement>(null);
+  /* HTMLElement, plus HTMLButtonElement : avec `trigger`, l'élément est celui de
+     l'appelant — la ref ne présume plus de sa balise, elle ne sert qu'au focus. */
+  const triggerRef = useRef<HTMLElement | null>(null);
+  const popId = useId();
   useEffect(() => {
     if (!open) return;
     const onDoc = (e: MouseEvent) => { if (ref.current && !ref.current.contains(e.target as Node)) setOpen(false); };
@@ -63,24 +99,39 @@ export const DatePicker = forwardRef<HTMLSpanElement, DatePickerProps>(function 
     if (typeof refExterne === 'function') refExterne(node);
     else if (refExterne) (refExterne as { current: HTMLSpanElement | null }).current = node;
   };
+  /* UN SEUL JEU DE PROPS DE DÉCLENCHEUR — étalé par le bouton par défaut ET donné tel
+     quel au render-prop `trigger` : les deux chemins ne peuvent pas diverger, c'est le
+     point (même construction que `rendreEntree` dans Sidebar). */
+  const triggerProps: DatePickerTriggerApi['triggerProps'] = {
+    ref: triggerRef,
+    onClick: () => setOpen(o => !o),
+    onKeyDown: (e: ReactKeyboardEvent<HTMLElement>) => {
+      if (!open && (e.key === 'ArrowDown' || e.key === 'ArrowUp')) { e.preventDefault(); setOpen(true); }
+    },
+    'aria-haspopup': 'dialog',
+    'aria-expanded': open,
+    /* Pointer un id non rendu serait un lien mort pour le lecteur d'écran : la prop
+       n'existe que quand le popover existe. */
+    'aria-controls': open ? popId : undefined,
+  };
   return (
     <span className={cn('ds-datepicker', className)} ref={poserRefs} {...rest}>
-      <button
-        ref={triggerRef}
-        type="button"
-        disabled={disabled}
-        aria-haspopup="dialog"
-        aria-expanded={open}
-        className={cn('ds-input', 'ds-datepicker__trigger', surface === 'card' && 'ds-input--on-card', invalid && 'is-error')}
-        onClick={() => setOpen(o => !o)}
-      >
-        <span className={value ? '' : 'ds-datepicker__ph'}>{value ? fmt.format(value) : placeholder}</span>
-        {/* Sans taille : le créneau du déclencheur rend 1rem (patterns.css, v0.17.0). */}
-        <Icon name="calendar" />
-      </button>
+      {trigger ? trigger({ open, value, triggerProps }) : (
+        <button
+          {...triggerProps}
+          ref={triggerProps.ref as Ref<HTMLButtonElement>}
+          type="button"
+          disabled={disabled}
+          className={cn('ds-input', 'ds-datepicker__trigger', surface === 'card' && 'ds-input--on-card', invalid && 'is-error')}
+        >
+          <span className={value ? '' : 'ds-datepicker__ph'}>{value ? fmt.format(value) : placeholder}</span>
+          {/* Sans taille : le créneau du déclencheur rend 1rem (patterns.css, v0.17.0). */}
+          <Icon name="calendar" />
+        </button>
+      )}
       {name ? <input type="hidden" name={name} value={value ? iso(value) : ''} /> : null}
       {open ? (
-        <span className="ds-datepicker__pop" role="dialog" aria-label="Choisir une date">
+        <span id={popId} className="ds-datepicker__pop" role="dialog" aria-label="Choisir une date">
           <Calendar
             bare
             value={value}

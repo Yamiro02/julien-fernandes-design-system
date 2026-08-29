@@ -516,10 +516,29 @@ un `<input type="hidden">` porte la date en ISO (`YYYY-MM-DD`) pour la soumissio
 <DatePicker value={date} onChange={setDate} placeholder="Choisir une date" />
 <DatePicker surface="card" name="echeance" value={date} onChange={setDate} />
 <DatePicker invalid value={date} onChange={setDate} />
+<DatePicker value={date} onChange={setDate}
+  trigger={({ value, triggerProps }) => (
+    <button type="button" className="ds-btn ds-btn--secondary" {...triggerProps}>
+      {value ? value.toLocaleDateString('fr-FR') : 'Choisir une date'}
+      <Icon name="calendar" />
+    </button>
+  )} />
 ```
 
 - Props : `value` · `onChange(Date)` · `placeholder` · `locale` · `min` / `max` ·
-  `disabledDates` · `surface` (`page·card`) · `invalid` · `disabled` · `name`.
+  `disabledDates` · `surface` (`page·card`) · `invalid` · `disabled` · `name` ·
+  `trigger`.
+- **`trigger` — le déclencheur composable** (v0.17.1). Un render-prop qui reçoit
+  `{ open, value, triggerProps }` et rend l'élément de son choix en **étalant
+  `triggerProps`** dessus — ref, clic, clavier, ARIA. C'est l'étalement qui est le
+  contrat : par lui le socle garde la ref (retour de focus sur Échap et sur sélection)
+  et pose l'ARIA lui-même (`aria-haspopup` / `aria-expanded` / `aria-controls`), qui
+  cesse d'être la charge de l'app. L'élément doit être **focusable et recevoir `ref`** —
+  un `<button type="button">` nu, pas un composant sans `forwardRef` (le `Button` du
+  socle n'en a pas : la ref s'y perdrait, et le retour de focus avec). `disabled` reste
+  la charge de l'appelant sur son élément. Sans `trigger`, rien ne change : le bouton
+  façon Input d'hier, qui étale les mêmes `triggerProps` — les deux chemins ne peuvent
+  pas diverger.
 - États rendus : vide, rempli, ouvert, invalide, désactivé, focus-visible.
 
 ## FormField

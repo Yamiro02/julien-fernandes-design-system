@@ -23,6 +23,52 @@ concordent.
 
 ---
 
+## 0.17.1 — les quatre couleurs hors de portée, et le déclencheur arbitré
+
+Le patch sous le titre de la 0.17.0 : deux valeurs de plus rendues à l'appelant.
+
+### Quatre couleurs que le socle employait sans les exposer
+
+Le balayage (celui de Dashboard, refait indépendamment ici — mêmes quatre, rien d'autre) :
+`--surface-alt` (15 usages dans les règles du socle), `--primary-readable` (6),
+`--destructive-readable` (3), `--success` (1) n'existaient pas en `--color-*` dans
+`theme.css`, contre 43 couleurs exposées dont `overlay-play`. Ce n'était pas une
+politique — `primary` et `destructive` étaient exposés quand leurs jumeaux `-readable`,
+précisément ceux qui posent une couleur sur du TEXTE, ne l'étaient pas. Une app qui en
+avait besoin recopiait le `var()` : la forme 2 du défaut, côté utilitaires. Les quatre
+entrent au `@theme inline`. Vérifié : zéro collision (ni un nom natif de Tailwind 4.3.3,
+ni un `@utility` du socle — le garde passe à 119 jetons), et les quatre GÉNÈRENT, mesuré
+sur la feuille émise, variantes comprises (`hover:bg-surface-alt`,
+`dark:text-primary-readable`). Seul autre non-exposé : `--tone-deep`, exclusion
+délibérée déjà documentée (extension métier).
+
+### `DatePicker` : le déclencheur composable — la forme arbitrée
+
+Pas `({open, toggle})` : le socle ne tiendrait plus l'élément — pas de ref, donc pas de
+retour de focus ; pas de prise, donc pas d'ARIA. `trigger` reçoit
+`{ open, value, triggerProps }` et l'appelant **étale `triggerProps`** sur l'élément de
+son choix : le socle récupère sa ref (retour de focus sur Échap ET sur sélection, mesuré
+au rendu) et pose l'ARIA lui-même (`aria-haspopup` / `aria-expanded` / `aria-controls` —
+ce dernier n'existe que quand le popover existe : pointer un id non rendu serait un lien
+mort pour le lecteur d'écran). Le bouton par défaut étale LE MÊME objet `triggerProps` :
+les deux chemins ne peuvent pas diverger. Détails d'implémentation assumés :
+`onKeyDown` n'ouvre que sur ArrowDown/ArrowUp — Entrée et Espace passent par le `click`
+natif du bouton, les gérer aussi au clavier doublerait la bascule ; l'élément doit être
+focusable et **recevoir `ref`** (un composant sans `forwardRef` — le `Button` du socle
+compris — perdrait le retour de focus) ; `disabled` reste la charge de l'appelant.
+`DatePickerTriggerApi` est exporté. Le manque n° 4 de Dashboard est fermé.
+
+### Le contrôle de couverture des classes est au gabarit
+
+`check-classes.mjs` — né chez Dashboard, falsifié chez lui comme au gabarit — confronte
+les classes littérales du JSX à la feuille émise par le build et attrape toute classe
+muette. Sa place est le gabarit (v0.3.1) : chaque app née de lui l'a au premier commit.
+Ce dépôt-ci ne le porte pas — sa vitrine est déjà couverte par celle du gabarit, aux
+mêmes sources près. Au passage, une affirmation de `theme.css` re-mesurée : parmi les
+classes tuées par les trois `--*: initial`, `rounded-none` et `rounded-full` SURVIVENT
+bien (staticValues), comme le commentaire le disait — mais `text-sm`, `text-base`,
+`text-lg`, tout `tracking-*` natif, `rounded` nu et `rounded-3xl/4xl` sont muets.
+
 ## 0.17.0 — aucune valeur du socle hors de portée de l'appelant
 
 Cinq défauts en un mois, trois formes d'un même mal : une valeur **battue par la cascade**

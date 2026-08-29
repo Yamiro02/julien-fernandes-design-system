@@ -86,6 +86,18 @@
   --color-border: var(--border);
   --color-input: var(--input);
   --color-ring: var(--ring);
+  /* LES QUATRE QUI MANQUAIENT — v0.17.1. Le socle les emploie dans ses propres règles
+     (15 usages pour --surface-alt, 6 pour --primary-readable, 3 pour
+     --destructive-readable, 1 pour --success) mais ne les exposait pas : une app qui en
+     avait besoin recopiait le var() à la main — la forme 2 du défaut de doctrine, côté
+     utilitaires. Ce n'était pas une politique : primary et destructive étaient exposés
+     quand leurs jumeaux -readable — précisément ceux qui posent une couleur sur du
+     TEXTE — ne l'étaient pas. Balayé : seuls ces quatre manquaient ; --tone-deep reste
+     dehors, exclusion délibérée documentée plus bas. */
+  --color-surface-alt: var(--surface-alt);
+  --color-primary-readable: var(--primary-readable);
+  --color-destructive-readable: var(--destructive-readable);
+  --color-success: var(--success);
 
   /* ---------- Couleurs : neutres de marque ----------
      --color-tone-deep n’est pas ici : il appartient à l’extension métier et vit dans
