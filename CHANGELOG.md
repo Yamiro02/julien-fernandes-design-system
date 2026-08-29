@@ -23,6 +23,70 @@ concordent.
 
 ---
 
+## Non publié — le piège de `.accent` entre dans la doc, et deux textes disent le vrai
+
+Commentaires et documentation seuls : aucun jeton, aucune règle CSS, aucun composant ne
+change. **Rien ne casse.** Part avec la prochaine version.
+
+### `.accent` — quatre déclarations solidaires, et rien ne le disait
+
+`.accent` peint le dégradé de marque dans le texte avec quatre déclarations qui ne
+fonctionnent qu'ensemble : `background`, `background-clip: text`, `color: transparent`,
+`width: fit-content`. Retirez-en une, l'effet disparaît — et **la panne est muette**, le
+texte reste lisible.
+
+Or la règle vit en `layer(base)` quand les utilitaires Tailwind vivent en
+`layer(utilities)` : posés sur le même nœud, **ils gagnent toujours**, quelle que soit la
+spécificité. Le piège a mordu trois fois, dans deux apps : une classe `text-*` de couleur
+qui écrase `color: transparent` — le dégradé disparaît, le mot s'affiche en couleur
+pleine — et une largeur `w-12` qui écrase `width: fit-content` — le dégradé se peint sur
+toute la boîte puis se découpe aux lettres, qui n'en montrent qu'une tranche, et deux
+nombres de largeurs différentes n'ont plus la même couleur.
+
+Rien dans le dépôt ne prévenait. Quatre entrées le font désormais : un commentaire au-dessus
+de la déclaration dans `tokens/base.css`, l'interdit n° 7 de `docs/DESIGN.md` — et, parce
+qu'une règle écrite hors du parcours de lecture ne protège personne, deux lignes au
+paragraphe « L'accent est rationné » de `PORTAGE.md` et un avertissement en tête de
+`docs/PROMPTS.md`, les deux fichiers qu'un agent lit avant d'écrire un écran.
+
+La règle est calibrée, pas totale. **Dangereux** : couleur, fond, `background-clip`,
+dimension — tout ce qui touche l'une des quatre déclarations. **Sans risque** : la
+typographie (`font-*`, paliers, `leading-*`), qui n'en touche aucune — quatre des six
+usages réels en posent sur le nœud, à raison. La parade, quand une mise en page est
+nécessaire : un span externe la porte, le span `.accent` n'en porte pas. `.eyebrow` clippe
+le dégradé avec les mêmes quatre déclarations : même piège, même règle.
+
+Un composant `<Accent>` a été étudié et **n'est pas retenu** : il n'aurait couvert qu'une
+classe d'une famille de deux, et la classe resterait publique de toute façon. Le
+déclencheur est écrit : si le piège mord encore malgré ces quatre textes, on promeut — sur
+la **famille**, pas sur `.accent` seule.
+
+**Intention notée, à payer ce jour-là** : la règle vit aussi, recopiée, dans le
+`PROJECT-CONTEXT.md` de Dashboard (§ 7), que son agent lit avant ce dépôt. Tant que la
+règle est jeune, la redondance protège plus qu'elle ne coûte. Le jour où la formulation
+bouge — promotion comprise — le socle devient la source et le `PROJECT-CONTEXT` y
+**renvoie** au lieu de recopier, en ne gardant que ce qui est propre à Dashboard. Sans
+cette ligne, c'est le genre de dette qu'on découvre en la payant.
+
+### Le commentaire de `--tracking-*: initial` annonçait un faux coût
+
+L'avertissement au-dessus de la ligne, dans `theme.css`, affirmait qu'un mauvais placement
+« emporterait la typographie de la marque avec lui ». **C'est faux, et c'est mesuré** :
+posée après les jetons, la ligne coûte les **utilitaires** `tracking-*` — tous, y compris
+ceux du système — mais les paliers `.text-*` gardent leur interlettrage, qui vient de
+`tokens/typography.css` et se résout à l'exécution. Le commentaire reprend la formulation
+que le CHANGELOG 0.2.0 du gabarit porte déjà. La ligne, elle, ne bouge pas — l'avertissement
+reste, il dit le vrai coût.
+
+### La mesure de 0.16.0 ne se rejoue pas par la chaîne de la vitrine
+
+La section 0.16.0 ci-dessous annonce une mesure « `vite build` de la vitrine, puis lecture
+du bundle ». `npx vite build` dans `demo/` passe toujours — la mesure elle-même se rejoue.
+Mais **`npm run demo:build` échoue** : la chaîne commence par `tsc --noEmit`, qui tombe sur
+**51 × TS2786** — la vitrine épingle `@types/react` 18 quand le paquet est en 19. Défaut
+antérieur à 0.16.0 et sans rapport avec elle ; signalé ici plutôt que de laisser une
+affirmation que la commande annoncée du dépôt ne peut pas reproduire.
+
 ## 0.16.0 — l'échelle d'interlettrage de Tailwind cesse d'exister
 
 Une ligne dans `theme.css`. Aucune prop, aucun composant, aucun jeton retiré : **rien ne

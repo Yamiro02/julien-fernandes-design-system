@@ -75,7 +75,24 @@ img{max-width:100%;display:block}
 .caption{font-size:var(--text-caption);font-weight:var(--weight-medium);line-height:var(--leading-normal);color:var(--text-muted)}
 .prose{line-height:var(--leading-prose)}
 
-/* The signature: ONE gradient word per title. Never two. */
+/* The signature: ONE gradient word per title. Never two.
+   QUATRE DÉCLARATIONS SOLIDAIRES — background, background-clip, color, width. Retirez-en
+   une, l'effet disparaît, et LA PANNE EST MUETTE : le texte reste lisible, l'écran est
+   juste faux. Or cette règle vit en layer(base) et les utilitaires Tailwind en
+   layer(utilities) : posés sur le MÊME nœud, ils gagnent TOUJOURS, quelle que soit la
+   spécificité. Deux cas réels, dans deux apps différentes :
+   · un `text-*` de couleur écrase `color:transparent` → le dégradé disparaît, le mot
+     s'affiche en couleur pleine ;
+   · une largeur (`w-12`…) écrase `width:fit-content` → le dégradé se peint sur toute la
+     boîte puis se découpe aux lettres, qui n'en montrent qu'une tranche — deux nombres
+     de largeurs différentes n'ont plus la même couleur.
+   DANGEREUX : tout utilitaire de couleur, de fond, de background-clip ou de dimension —
+   ce qui touche l'une des quatre déclarations. SANS RISQUE : la typographie (`font-*`,
+   paliers `text-heading`…, `leading-*`), qui n'en touche aucune — quatre des six usages
+   réels en posent sur le nœud, à raison. LA PARADE, quand une mise en page est
+   nécessaire : un span externe la porte, le span `.accent` n'en porte pas.
+   `.eyebrow`, plus haut, clippe le dégradé avec les mêmes quatre déclarations : même
+   piège, même règle. L'interdit est dans docs/DESIGN.md § 9. */
 .accent{background:var(--brand-gradient);-webkit-background-clip:text;background-clip:text;color:transparent;width:fit-content}
 
 /* Warm radial halo — bottom-anchored, never full-screen */

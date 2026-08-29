@@ -188,7 +188,14 @@ Celle qu'on relit avant une PR. Cinq à dix lignes, pas plus.
 5. Jamais la couleur seule pour porter un sens — toujours + icône + texte.
 6. L'entrée d'**accueil** porte `house`. `layout-dashboard` — les quatre tuiles — est réservée
    à un vrai **tableau de bord de widgets** : elle annonce une grille, pas une destination.
-7. _(à compléter)_
+7. Jamais un utilitaire de couleur, de fond, de `background-clip` ou de dimension sur le nœud
+   qui porte `.accent` ou `.eyebrow`. Le socle vit en `layer(base)`, les utilitaires en
+   `layer(utilities)` : **ils gagnent toujours**, et la panne est muette — un `text-*` de
+   couleur écrase `color: transparent` (le mot passe en aplat), un `w-*` écrase
+   `width: fit-content` (le dégradé se peint sur la boîte, les lettres n'en montrent qu'une
+   tranche). La typographie (`font-*`, paliers, `leading-*`) ne touche aucune des quatre
+   déclarations et est sans risque ; la mise en page, elle, va sur un span externe.
+8. _(à compléter)_
 
 ---
 

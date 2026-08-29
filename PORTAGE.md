@@ -132,7 +132,11 @@ veut pouvoir poser une section sombre dans une page claire.
 qui garantit son contraste.
 
 **L'accent est rationné** — logo, un mot de titre, le sur-titre, le CTA, le halo. Jamais un
-grand aplat, jamais un fond de page.
+grand aplat, jamais un fond de page. Et sur le nœud qui porte `.accent` ou `.eyebrow`, jamais
+un utilitaire de couleur, de fond ou de dimension : ces classes clippent le dégradé en quatre
+déclarations solidaires (`layer(base)`), tout utilitaire (`layer(utilities)`) qui en écrase
+une gagne toujours et l'effet meurt en silence. La typographie (`font-*`, paliers,
+`leading-*`) est sans risque ; la mise en page va sur un span externe.
 
 **Les surfaces se distinguent par de petits écarts — et c'est MESURÉ.** Si `--card` vaut
 `--background`, les cartes disparaissent ; si `--muted`, `--secondary`, `--popover` ou

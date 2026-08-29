@@ -15,6 +15,14 @@ Les exemples supposent les imports depuis la racine du paquet :
 import { Button, Card, Icon } from '@julienfernandes/ds';
 ```
 
+**⚠️ Deux classes CSS pièges, avant tout écran : `.accent` et `.eyebrow`.** Elles peignent
+le dégradé de marque dans le texte par quatre déclarations solidaires (`background`,
+`background-clip: text`, `color: transparent`, `width: fit-content`) en `layer(base)` — un
+utilitaire posé sur le même nœud vit en `layer(utilities)` et gagne toujours, sans rien
+casser à l'écran. **Dangereux** : couleur, fond, `background-clip`, dimension (`text-*` de
+couleur, `bg-*`, `w-*`…) — le dégradé meurt en silence. **Sans risque** : la typographie
+(`font-*`, paliers `text-heading`…, `leading-*`). La mise en page va sur un span externe.
+
 ---
 
 # actions

@@ -186,8 +186,11 @@
      (+0,1em) là où sa maquette demandait `--tracking-display` (−0,02em) : 0,12em d'écart,
      signe inversé, aucune valeur « proche » n'existait. La classe cesse d'exister ; le seul
      interlettrage disponible est celui de la marque.
-     ⚠️ CETTE LIGNE DOIT RESTER AVANT les jetons ci-dessous — placée après, `initial` les
-     effacerait tous et emporterait la typographie de la marque avec lui.
+     ⚠️ LA LIGNE DOIT RESTER AVANT LES JETONS. Posée après, elle vide l'espace de noms une
+     fois qu'ils y sont : plus AUCUN utilitaire `tracking-*`, pas même ceux du système. Les
+     paliers `.text-*`, eux, gardent leur interlettrage dans les deux cas — il vient de
+     `tokens/typography.css` et se résout à l'exécution. Le mauvais placement coûte les
+     utilitaires, pas la typographie. Mesuré sur les deux compilations, pas déduit.
      Rappel : chaque palier de texte porte DÉJÀ son interlettrage (`--text-display--letter-spacing`),
      donc une app n'a jamais à l'écrire à la main. */
   --tracking-*: initial;
