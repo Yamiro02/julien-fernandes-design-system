@@ -246,7 +246,21 @@
 
 /* ---------- data-display: Card · Badge · Tooltip ---------- */
 /* Card — header slots. Passing no slot renders exactly as before. */
-.ds-card__header{display:flex;align-items:flex-start;gap:var(--space-3);margin-bottom:var(--space-4)}
+/* L'ALIGNEMENT DE L'EN-TÊTE EST DÉCIDÉ PAR LE SOCLE, EN DEUX CAS — v0.18.0.
+   Le flex-start historique n'avait JAMAIS rencontré un design réel : sur les six
+   artboards de Dashboard, l'en-tête du socle apparaît zéro fois sur 48 cartes — 48
+   en-têtes recomposés à la main — et le relevé des alignements y donne 99 × center,
+   11 × flex-start, 5 × baseline, 2 × flex-end. Le centrage est la langue du design.
+   La règle : titre SIMPLE -> center (le défaut ci-dessous) ; titre ET sous-titre ->
+   flex-start (--stacked, posé par Card lui-même quand `subtitle` est passé) — l'action
+   s'aligne sur le titre, elle ne flotte pas entre deux lignes. AUCUNE prop d'alignement
+   au site d'appel : c'est tout l'objet de la règle.
+   `baseline` est ÉCARTÉ, preuve à l'appui : pour qu'un badge tombe juste dans une
+   rangée en baseline, l'artboard a dû écrire `align-self:center; position:relative;
+   top:-1px` dessus — une règle qui exige une retouche par instance n'est pas une
+   règle. */
+.ds-card__header{display:flex;align-items:center;gap:var(--space-3);margin-bottom:var(--space-4)}
+.ds-card__header--stacked{align-items:flex-start}
 .ds-card__header--airy{margin-bottom:var(--space-6)}
 .ds-card__header-main{display:flex;flex-direction:column;gap:0.1875rem;flex:1;min-width:0}
 .ds-card__title{margin:0;font-family:var(--font-display);font-weight:var(--heading-weight);text-transform:var(--heading-transform);font-size:var(--text-heading-sm);letter-spacing:var(--tracking-heading-sm);line-height:var(--leading-snug)}

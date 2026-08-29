@@ -23,6 +23,49 @@ concordent.
 
 ---
 
+## 0.18.0 — l'en-tête de carte apprend le centrage
+
+Le `align-items:flex-start` de `.ds-card__header` n'avait **jamais rencontré un design
+réel** : sur les six artboards de Dashboard, l'en-tête du socle apparaît zéro fois sur
+48 cartes — 48 en-têtes recomposés à la main — et le relevé des alignements donne
+99 × center, 11 × flex-start, 5 × baseline, 2 × flex-end. Trois cartes d'un même écran
+s'alignaient de trois façons, aucune n'étant celle du socle. Le centrage est la langue
+du design ; le socle la parle désormais, et la décide seul.
+
+**La règle, deux cas, aucune prop d'alignement :** titre simple → `center` (le nouveau
+défaut) ; titre **et** sous-titre → `flex-start` (`--stacked`, posé par `Card` lui-même
+quand `subtitle` est passé) — l'action s'aligne sur la ligne du haut, elle ne flotte pas
+entre deux lignes. `baseline` est **écarté**, preuve à l'appui : pour qu'un badge tombe
+juste dans une rangée en baseline, l'artboard a dû écrire `align-self:center;
+position:relative; top:-1px` dessus — une règle qui exige une retouche par instance
+n'est pas une règle.
+
+**⚠ Changement de rendu, pas un ajout — impact mesuré :**
+
+- bouge : toute `Card` à en-tête **sans sous-titre** portant une `action` ou une icône
+  plus haute que la ligne de titre — le bloc icône + titre descend vers l'axe central
+  (de l'ordre de la demi-différence de hauteur, ~5 à 9px selon l'action). Vérifié au
+  rendu : l'écart entre le centre du titre et le centre de l'action passe à **0**.
+- ne bouge pas : les cartes **à sous-titre** (`--stacked` = l'ancien défaut, au pixel),
+  les cartes **sans en-tête** (aucun nœud émis), et les en-têtes recomposés à la main
+  (ils n'emploient pas la classe).
+- la vitrine : ses deux spécimens d'en-tête portaient tous deux un sous-titre — rendu
+  inchangé ; un spécimen « titre simple, rangée centrée » est ajouté, c'est lui qui
+  montre le nouveau défaut.
+- Creator : 9 sites `<Card`, **zéro** avec un slot d'en-tête, zéro `.ds-card__header`
+  écrit en dur — rien ne bouge chez lui, même le jour où il bumpe.
+
+**L'audit demandé — que laisse encore l'en-tête à l'appelant sans le dire ?** Un seul
+vrai trou, remonté et NON tranché ici : **`eyebrow` + titre sans sous-titre** fait aussi
+une colonne à deux lignes, mais la règle arbitrée ne déclenche que sur `subtitle` —
+l'action centrée y flotte entre sur-titre et titre, exactement le défaut que `--stacked`
+ferme pour le sous-titre. Le relevé ne couvre pas ce cas ; à arbitrer (étendre le
+déclencheur à `eyebrow && title` serait une ligne). Le reste est en règle : la gouttière
+basse est variable ET annoncée (`headerGap`), les gaps internes (icône/colonne
+`--space-3`, titre/sous-titre 3px) sont des littéraux de compacité couverts par la
+doctrine en tête de patterns.css, et chaque nœud de l'en-tête porte une classe
+atteignable.
+
 ## 0.17.1 — les quatre couleurs hors de portée, et le déclencheur arbitré
 
 Le patch sous le titre de la 0.17.0 : deux valeurs de plus rendues à l'appelant.

@@ -55,7 +55,15 @@ export function Card({
   return (
     <Tag className={cls} {...rest}>
       {hasHeader ? (
-        <div className={['ds-card__header', headerGap === 'airy' ? 'ds-card__header--airy' : ''].filter(Boolean).join(' ')}>
+        /* L'alignement est DÉCIDÉ ICI, jamais au site d'appel (v0.18.0) : titre simple
+           -> centré ; titre + sous-titre -> --stacked (flex-start), l'action s'aligne
+           sur le titre au lieu de flotter entre les deux lignes. Voir la règle et son
+           relevé au-dessus de .ds-card__header dans patterns.css. */
+        <div className={[
+          'ds-card__header',
+          subtitle ? 'ds-card__header--stacked' : '',
+          headerGap === 'airy' ? 'ds-card__header--airy' : '',
+        ].filter(Boolean).join(' ')}>
           {icon}
           {(eyebrow || title || subtitle) ? (
             <div className="ds-card__header-main">

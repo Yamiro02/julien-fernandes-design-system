@@ -48,16 +48,23 @@ export function DataDisplayPage() {
           </Grid>
         </Block>
 
-        <Block label="En-tête à slots" hint="eyebrow · icon · title · subtitle · action, tous optionnels. Aucun slot passé = AUCUN noeud d'en-tête émis : le DOM d'une card sans en-tête est celui d'avant la v0.4.">
+        <Block label="En-tête à slots" hint="eyebrow · icon · title · subtitle · action, tous optionnels. Aucun slot passé = AUCUN noeud d'en-tête émis. L'ALIGNEMENT est décidé par le socle, jamais par une prop : titre simple = rangée centrée ; titre + sous-titre = flex-start, l'action s'aligne sur le titre au lieu de flotter entre les deux lignes.">
           <Grid cols={2}>
             <Card
+              icon={<Pastille size="carte" tone="brand"><Icon name="terminal" /></Pastille>}
+              title="Titre simple — rangée centrée"
+              action={<IconButton size="sm" label="Actions"><Icon name="ellipsis" /></IconButton>}
+            >
+              <p className="caption">Le cas majoritaire du relevé (99 × center) : icône, titre et action partagent un axe.</p>
+            </Card>
+            <Card
               eyebrow="Build"
-              icon={<Pastille size="carte" tone="brand"><Icon name="rocket" size="1rem" /></Pastille>}
+              icon={<Pastille size="carte" tone="brand"><Icon name="rocket" /></Pastille>}
               title="Premier outil interne"
               subtitle="Créé il y a deux jours"
-              action={<IconButton size="sm" label="Actions"><Icon name="ellipsis" size="1.125rem" /></IconButton>}
+              action={<IconButton size="sm" label="Actions"><Icon name="ellipsis" /></IconButton>}
             >
-              <p className="caption">Le corps suit l'en-tête, séparé par --space-4.</p>
+              <p className="caption">Avec un sous-titre : flex-start — l'action tient la ligne du haut.</p>
             </Card>
             <Card
               size="lg"

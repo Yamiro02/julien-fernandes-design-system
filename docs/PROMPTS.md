@@ -236,6 +236,12 @@ sous 1.5rem.
 - Props : `variant` (`default·interactive·feature`) · `size` (`md·lg`) · `flush` (sans
   padding, media plein bord) · slots d'en-tête `eyebrow` / `icon` / `title` / `subtitle` /
   `action` · `titleSize` (`sm·lg`) · `headerGap` (`normal·airy`) · `as`.
+- **L'alignement de l'en-tête est décidé par le socle, jamais par une prop** (v0.18.0) :
+  titre simple → rangée **centrée** — icône, titre et action partagent un axe, la langue
+  du design (99 × center sur le relevé) ; titre **et** sous-titre → `flex-start` —
+  l'action s'aligne sur la ligne du haut au lieu de flotter entre les deux. `baseline`
+  est écarté : il exigeait une retouche par instance. Ne recomposez pas l'en-tête à la
+  main pour choisir un alignement — c'est le composant qui le sait.
 - États rendus : repos ; `interactive` ajoute hover (levée + `--shadow-md`), pressé,
   focus-visible.
 
