@@ -55,7 +55,7 @@ géométrique. Si un pixel chaud apparaît, une valeur de marque est restée dan
 Pas de registry : chaque app épingle une version par un tag git.
 
 ```bash
-npm i github:Yamiro02/julien-fernandes-design-system#v0.15.0
+npm i github:Yamiro02/julien-fernandes-design-system#v0.16.0
 ```
 
 Cinq **peer dependencies**, à la charge de l'app :
@@ -316,7 +316,7 @@ npm run typecheck    # tsc --noEmit
 npm run lint         # typecheck + contrôle anti-collision
 ```
 
-`npm run lint` enchaîne le typecheck et **neuf gardes**. Le premier de la chaîne est
+`npm run lint` enchaîne le typecheck et **dix gardes**. Le premier de la chaîne est
 [`check-token-refs.mjs`](check-token-refs.mjs) — c'est le moins cher, et un jeton manquant rend le
 diagnostic des autres trompeur : il refuse tout `var(--x)` lu par le CSS du système ou par un style
 inline de composant sans qu'un `--x:` soit déclaré. Un `var()` non résolu n'est pas ignoré, il rend

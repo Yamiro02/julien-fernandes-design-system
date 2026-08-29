@@ -179,6 +179,18 @@
   --font-weight-bold: var(--weight-bold);
 
   /* ---------- Interlettrage ---------- */
+  /* Même raison que `--text-*` plus haut, et un incident réel derrière : l'échelle native
+     de Tailwind (`tracking-tight`, `-wide`, `-widest`…) est presque entièrement POSITIVE,
+     alors que l'interlettrage de la display de marque est NÉGATIF. Les deux vocabulaires
+     cohabitaient, rien ne disait lequel était le bon, et une app a écrit `tracking-widest`
+     (+0,1em) là où sa maquette demandait `--tracking-display` (−0,02em) : 0,12em d'écart,
+     signe inversé, aucune valeur « proche » n'existait. La classe cesse d'exister ; le seul
+     interlettrage disponible est celui de la marque.
+     ⚠️ CETTE LIGNE DOIT RESTER AVANT les jetons ci-dessous — placée après, `initial` les
+     effacerait tous et emporterait la typographie de la marque avec lui.
+     Rappel : chaque palier de texte porte DÉJÀ son interlettrage (`--text-display--letter-spacing`),
+     donc une app n'a jamais à l'écrire à la main. */
+  --tracking-*: initial;
   --tracking-display: var(--tracking-display);
   --tracking-heading-xl: var(--tracking-heading-xl);
   --tracking-heading: var(--tracking-heading);

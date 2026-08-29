@@ -23,6 +23,57 @@ concordent.
 
 ---
 
+## 0.16.0 — l'échelle d'interlettrage de Tailwind cesse d'exister
+
+Une ligne dans `theme.css`. Aucune prop, aucun composant, aucun jeton retiré : **rien ne
+casse**, sauf une classe qu'aucune app n'aurait dû écrire.
+
+**Pour une app consommatrice** : `tracking-tight`, `tracking-wide`, `tracking-widest` et le
+reste de l'échelle native **ne génèrent plus rien**. Une app qui en écrit une voit son
+interlettrage retomber sur celui du palier de texte — c'est-à-dire le bon.
+
+### Deux vocabulaires, et rien ne disait lequel était le bon
+
+C'est le même traitement que les paliers de texte ont déjà reçu, pour la même raison, et il
+manquait ici. L'échelle native de Tailwind est presque entièrement **positive** —
+`tracking-wide` vaut +0,025em, `tracking-widest` +0,1em — alors que l'interlettrage de la
+display de marque est **négatif** : `--tracking-display` vaut −0,02em.
+
+Les deux vocabulaires cohabitaient dans le même espace de noms. Une app a écrit
+`tracking-widest` là où sa maquette demandait `--tracking-display` : **0,12em d'écart, et le
+signe inversé**. Ce n'est pas une approximation, c'est le contraire de ce qui était demandé —
+et aucune valeur « proche » n'existait dans l'échelle native, donc aucun choix n'était bon.
+
+```css
+--tracking-*: initial;   /* dans @theme, AVANT les jetons de la marque */
+```
+
+Les neuf jetons du système sont redéclarés juste après et restent seuls disponibles.
+
+### La ligne doit rester où elle est, et le commentaire le dit
+
+`--tracking-*: initial` **efface tout l'espace de noms**. Placée après les neuf jetons, elle
+les emporterait avec elle : plus un seul interlettrage dans le système, la typographie de la
+marque à plat, et rien pour le signaler à l'écran — un `letter-spacing` vide ne casse pas, il
+rend simplement faux. L'avertissement est écrit au-dessus de la déclaration.
+
+**Mesuré sur le CSS livré**, pas déduit — `vite build` de la vitrine, puis lecture du
+bundle : zéro classe `.tracking-*` native générée, les **neuf** jetons `--tracking-*` du
+système présents avec leur valeur réelle, et les **neuf** références `var(--tracking-*)` du
+bundle qui résolvent. `.text-heading` sort bien en
+`letter-spacing:var(--tw-tracking,var(--tracking-heading))`, et `--tracking-heading` vaut
+`-.01em`.
+
+**Rappel qui rend la classe inutile** : chaque palier porte DÉJÀ son interlettrage, par
+`--text-<palier>--letter-spacing`. Une app n'a jamais eu à l'écrire à la main — écrire
+`text-display` suffit, et suffisait déjà.
+
+### `README.md` — le compte des gardes était faux
+
+La chaîne de `npm run lint` en enchaîne **dix**, le README en annonçait neuf : `check-literals.sh`
+a été branché en fin de chaîne sans que le compte suive. Une doc qui compte faux fait douter
+du reste.
+
 ## 0.15.0 — le catalogue d'icônes cesse d'être une impasse
 
 Une PROP ajoutée, aucun jeton CSS touché, aucun composant retiré. **Rien ne casse** : tout
