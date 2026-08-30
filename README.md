@@ -56,7 +56,7 @@ gabarit, dont la marque d'exemple est froide et n'est celle de personne.)
 Pas de registry : chaque app épingle une version par un tag git.
 
 ```bash
-npm i github:Yamiro02/julien-fernandes-design-system#v0.18.0
+npm i github:Yamiro02/julien-fernandes-design-system#v0.19.0
 ```
 
 Cinq **peer dependencies**, à la charge de l'app :

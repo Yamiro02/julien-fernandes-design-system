@@ -23,6 +23,127 @@ concordent.
 
 ---
 
+## 0.19.0 — la vitrine type-checke, et le déclencheur s'étale sans cast
+
+Passe de clôture : un renommage qui n'était pas descendu, une vitrine qui ne compilait
+plus depuis assez longtemps pour cacher un défaut de contrat, et trois commentaires qui
+prescrivaient l'état d'avant. Rien de neuf au catalogue.
+
+### `npm run demo:build` — 56 erreurs, et ce qu'elles cachaient
+
+La dernière étape du job `qualite` était rouge. **La cause n'est pas la plage de version
+déclarée, c'est le nombre de copies.** Le `paths` de `demo/tsconfig.json` fait résoudre
+`../src/index.ts` — donc la source du socle se type contre les `@types/react` de la
+RACINE pendant que les fichiers de la vitrine se typent contre les SIENS. Deux copies,
+deux identités.
+
+⚠️ **Aligner les numéros ne suffit pas, et c'est le piège.** Passer la vitrine en `^19`
+fait tomber 55 erreurs sur 56 — puis en laisse une nouvelle, `Ref<HTMLButtonElement>
+n'est pas assignable à Ref<HTMLButtonElement>`. React 19 type le retour de `RefCallback`
+avec un `unique symbol` : deux copies de la **même** version ne sont pas assignables
+l'une à l'autre. (En 18 elles l'étaient — d'où un dépôt qui a pu vivre avec la
+duplication tant que les deux copies étaient en 18.) La vitrine ne déclare donc plus
+`@types/react` ni `@types/react-dom` du tout et lit ceux de la racine : **une seule
+identité de types, celle que le paquet publie.** Le socle, lui, garde son garde-fou —
+sa source se type contre la 19 avec un runtime en 18.
+
+### `DatePicker` : `triggerProps.ref` devient une ref de RAPPEL
+
+Une fois la vitrine compilée, elle a attrapé ce que `tsconfig.json` cachait en excluant
+`demo` : **l'exemple `trigger` du catalogue ne compilait pas.** `triggerProps.ref` était
+un `Ref<HTMLElement | null>`, c'est-à-dire un objet de ref — invariant sur son contenu,
+donc refusé par le `ref` d'un `<button>`. Le socle s'en sortait par un cast interne que
+la doc ne montrait pas, **tout en présentant l'étalement nu comme LE contrat**. La
+vitrine recopie l'exemple au caractère près : le contrat était faux, et rien ne le
+disait.
+
+`ref` est désormais `(node: HTMLElement | null) => void`. Une ref de rappel est
+**contravariante sur son paramètre** : elle s'assigne au `ref` de n'importe quelle
+balise. Plus un seul cast — ni chez l'appelant, ni dans le socle, dont le bouton par
+défaut se contente maintenant du `{...triggerProps}` nu. Les deux chemins redeviennent
+identiques, ce qui était le point de la forme arbitrée en 0.17.1.
+
+⚠ **Changement de TYPE public**, `DatePickerTriggerApi['triggerProps'].ref` :
+
+- **ne casse rien pour qui étale** — `{...triggerProps}` est le cas documenté et le seul
+  attesté ; un cast déjà écrit reste compilable, il devient seulement inutile ;
+- **casse** un appelant qui aurait traité cette valeur comme un objet de ref et lu son
+  `.current`. Ce n'était pas le contrat, aucun appelant connu ne le fait, mais la
+  signature change et le journal le dit.
+
+Recette au rendu, sur les deux chemins (bouton par défaut **et** déclencheur composé) :
+ARIA posé par le socle, `aria-controls` qui pointe le popover réel et n'existe qu'avec
+lui, retour de focus sur Échap **et** sur sélection, ArrowDown qui ouvre.
+
+### `--shadow-glow-sm` entre au `@theme inline`
+
+Déclaré par la marque, employé par le socle (l'état enfoncé de `.ds-btn--primary`),
+jamais atteignable : une app le recopiait en `shadow-[var(--shadow-glow-sm)]`. C'est
+exactement le défaut des quatre couleurs de la 0.17.1, un espace de noms plus loin —
+et le commentaire qui déclarait ce balayage terminé avait donc tort d'un cran. Les
+**trois** paliers de lueur sont exposés ; `.shadow-glow-sm` est généré, vérifié sur une
+compilation Tailwind réelle. `--shadow-logo-dot` reste dehors, et c'est écrit : sa seule
+lecture est `.ds-logo__dot`, un nœud que le socle rend lui-même.
+
+### `brand-example.css` — 23 endroits pour un fichier mort
+
+Le renommage en `brand-julien-fernandes.css` n'était pas descendu. Le coût réel n'est
+pas dans les commentaires, il est dans **les trois lignes d'installation du README** :
+elles ne lèvent aucune erreur au copier-coller et lèvent un module introuvable chez
+celui qui installe. Plus l'alias de `demo/vite.config.ts`, qui pointait sur un fichier
+inexistant. Balayé partout — README, `src/index.ts`, `PORTAGE.md`,
+`GETTING-STARTED.md`, `brand.template.css`, `rebrand.mjs`, `check-contrast.mjs`,
+`ci.yml`. Les quatre lignes d'installation du README résolvent, vérifié contre la carte
+d'`exports`.
+
+Là où le renommage rendait la phrase fausse **autrement**, la phrase suit la marque
+réelle au lieu de décrire celle du gabarit : la marque livrée ici n'est pas « froide,
+serif, celle de personne », son dossier de polices n'est pas vide (Anton et JetBrains
+Mono y sont), et elle ne redéclare aucun rayon. La preuve de neutralité du socle se fait
+dans le gabarit — c'est désormais écrit là où on lisait le contraire, `ci.yml` compris.
+
+### La doc contre le code — quatre écarts, et un garde pour le dernier
+
+- **`Toast`** : la doc disait `--popover`, `patterns.css` pose `--card` ;
+- **`Progress`** : la doc annonçait un remplissage `--primary` ; la barre porte le
+  dégradé de marque depuis la 0.6.0, la phrase n'avait pas suivi ;
+- **`Navbar.children`** était déclaré, rendu dans un emplacement précis — l'emplacement
+  de droite, juste **avant** `cta` — et c'était la seule prop de `NavbarProps` sans
+  commentaire, absente du catalogue. Les deux sont écrits ;
+- **le catalogue compte 48 glyphes**, la doc en annonçait 47 à trois endroits.
+
+Le dernier ne reviendra pas. `check-catalogue.mjs` gagne une **cinquième vérité** : le
+nombre de glyphes annoncé dans `README.md` et `docs/PROMPTS.md` doit être la taille du
+type `IconName`. Le contrôle 3 vérifiait que chaque icône **citée** existe ; il ne
+regardait jamais le COMPTE. Falsifié : remis à 47, le garde tombe.
+
+### Trois commentaires qui prescrivaient l'état d'avant
+
+- `patterns.css`, bloc « UN SEUL BORD OPTIQUE GAUCHE » : sa phrase d'ouverture donnait
+  `padding:0 var(--space-4)` pour une entrée quand `.ds-sidenav` pose `--space-2` depuis
+  la 0.14.0 — et c'est **elle** qui sert de référence, puisque le bloc ajoute « si l'un
+  bouge, les autres suivent ». Qui appliquait la consigne remettait quatre blocs à 16px ;
+- au-dessus de `.ds-sidenav.is-active svg`, un bloc de sept lignes décrivait un
+  `--brand-via` « pâle mais assumé » avec ses mesures (2,29 / 5,34). La règle juste en
+  dessous pose `--primary` depuis la 0.10.0 (l'addenda v0.8.0), et `docs/accessibilite.md`
+  porte d'autres chiffres (2,34 pour l'option écartée, 3,00 / 3,78 pour celle en place).
+  Le bloc part, l'historique reste là où il se mesure ;
+- `patterns.css` renvoyait à « Modal.jsx » ; le fichier est `Modal.tsx`.
+
+### Le socle cesse d'emprunter la numérotation d'une de ses apps
+
+`docs/PROMPTS.md` renvoyait au « manque n° 9 » — un numéro qui appartient au § 8 de
+Dashboard, où il désigne aujourd'hui autre chose — et annonçait le mode plage « en tête
+de file pour la prochaine version », ce que la 0.18.0 avait déjà démenti. Le besoin est
+décrit par son périmètre, sans numéro emprunté : le paragraphe `Calendar` est maintenant
+identique, mot pour mot, à celui du gabarit.
+
+Ride avec ce lot, sans matière propre : la note `eyebrow` de la section 0.18.0, corrigée
+en place — étendre le déclencheur `--stacked` à `eyebrow && title` calerait l'action sur
+le sur-titre, ce n'est pas une valeur d'`align-items` mais une autre mise en page.
+
+**Vérifié avant tag :** `npm run lint` (dix gardes), `npm run demo:build`, `npm run build`.
+
 ## 0.18.0 — l'en-tête de carte apprend le centrage
 
 Le `align-items:flex-start` de `.ds-card__header` n'avait **jamais rencontré un design
