@@ -23,6 +23,145 @@ concordent.
 
 ---
 
+## 0.20.0 — les pièges du socle cessent d'être du savoir oral
+
+Trois pièges du code livré ne vivaient que dans la tête de qui s'était fait avoir, ou dans
+les tests d'UNE app. Ils deviennent trois gardes du socle et une page de doc qui voyage
+avec le paquet. Aucun changement de rendu, aucun changement d'API.
+
+### Trois gardes, portés depuis une app
+
+Ils existaient, écrits et éprouvés, dans `architecture.test.ts` d'une app consommatrice —
+sous vitest, avec leurs listes écrites à la main. Ils entrent au socle dans son idiome :
+des scripts `check-*.mjs` à la racine, sans framework, enchaînés par `npm run lint`, qui
+passe de dix à **treize gardes**.
+
+| Garde | Ce qu'il ferme |
+|---|---|
+| `check-dead-utilities.mjs` | une classe que `theme.css` a supprimée et qui ne rend RIEN |
+| `check-font-px.mjs` | une taille de police en pixels, qui ne suit pas `app-scale.css` |
+| `check-fragile-classes.mjs` | un utilitaire posé sur `.accent` ou `.eyebrow`, qui tue le dégradé |
+
+**Le périmètre est PARAMÉTRABLE, et c'est la moitié de l'intérêt de les tenir ici.** Chacun
+prend des dossiers en argument (défaut : `src demo/src`). Une app consommatrice pointe le
+même garde sur son propre `src/` :
+
+```bash
+node check-dead-utilities.mjs src      # THEME= et TAILWIND_THEME= si le socle est en node_modules
+node check-font-px.mjs src
+node check-fragile-classes.mjs src
+```
+
+### Deux exigences de conception, et elles portent tout le lot
+
+**1 · Ce qu'un garde surveille est DÉRIVÉ, jamais recopié.** La liste des classes mortes se
+calcule à chaque appel — *entrées natives de Tailwind moins entrées que notre `theme.css`
+redéclare* — en lisant quels espaces de noms sont mis à `initial`. Elle donne aujourd'hui
+**64 classes** (`--text-*`, `--tracking-*`, `--radius-*`). Une liste en dur périmerait au
+premier changement de `theme.css`, et un garde périmé qui reste vert est exactement le
+défaut qu'on essaie d'empêcher, une couche plus haut. Même principe pour les classes
+fragiles : elles se dérivent du CSS (toute règle à classe unique qui clippe un fond dans son
+texte ET pose `color:transparent`), ce qui donne `.accent` et `.eyebrow` — et couvrira la
+troisième AVANT son premier usage.
+
+⚠️ **Les faux positifs sont la moitié du travail, et ils sont épinglés.** Un garde qui crie
+sur du code correct se fait désactiver aussi sûrement qu'un garde muet. Trois pièges, tous
+mesurés sur une compilation Tailwind réelle plutôt que déduits :
+
+- `text-primary` / `text-muted` **survivent** — l'utilitaire `text-` lit deux espaces de
+  noms, les tailles et les couleurs ; seule l'échelle de TAILLES est morte ;
+- `text-shadow-lg` **survit** — `--text-shadow-*` est un espace de noms à part, que
+  `--text-*: initial` ne touche pas (Tailwind résout le plus long) ;
+- `rounded-full` / `rounded-none` **survivent** — ce sont des valeurs statiques de
+  l'utilitaire, pas des entrées de `--radius-*` : elles ne peuvent pas mourir avec lui.
+
+**2 · Chaque garde porte son JUMEAU DE FALSIFICATION, et le rejoue à chaque appel.** C'est
+la partie de l'original qui avait le plus de valeur, et elle est conservée telle quelle : le
+motif doit reconnaître une violation ET laisser passer ce qui est légitime. Le jumeau tourne
+AVANT le scan ; s'il tombe, le garde échoue au lieu de scanner. Un motif qui ne reconnaît
+plus rien rend un garde toujours vert, donc décoratif — et **ce mode de panne est aussi
+silencieux que les défauts qu'il surveille**. 57 cas au total (7 · 30 · 20).
+
+Les trois ont aussi été falsifiés de bout en bout sur le dépôt, comme `check-catalogue.mjs`
+l'avait été à 47 glyphes : violation introduite dans la vitrine, échec constaté, violation
+retirée. Le même passage a prouvé les faux positifs — `text-primary`, `rounded-full`,
+`text-shadow-lg`, `bg-accent px-3` et une branche de ternaire étaient posés à côté des
+violations, et sont tous passés.
+
+**Ce qu'ils lisent, et pourquoi ce n'est pas un `grep`.** Les trois extraient les valeurs de
+`className` plutôt que de chercher une sous-chaîne dans le fichier. Sans ça, `theme.css`
+échouerait sur ses propres commentaires — ils citent `text-sm` et `tracking-widest` pour
+EXPLIQUER la règle — et on désactiverait le garde plutôt que la prose. Le découpage en mots
+écarte au passage `bg-accent` et `text-eyebrow`, qui nomment le jeton de surface et le
+palier typographique.
+
+**Une limite, écrite plutôt que cachée** : `check-fragile-classes.mjs` juge un `className`
+construit par un TERNAIRE branche par branche, jamais en union — sinon
+`cond ? 'accent' : 'text-muted'`, qui est correct, serait signalé. Les autres formes
+(`cn('accent', x && 'w-full')`) sont bien vues en union.
+
+### `docs/PIEGES.md` — et son critère d'admission
+
+Une page qui rassemble les pièges du socle : ce qui casse, **pourquoi la panne est muette**,
+la parade, et le garde qui l'attrape quand il y en a un. Elle vit dans `docs/`, qui voyage
+avec le paquet (`files`) : une règle qui doit protéger les apps doit être lisible DEPUIS
+l'app. `docs/DESIGN.md` s'adresse à qui écrit une marque ; celle-ci à qui écrit un écran.
+
+⚠️ **Le critère d'admission est en tête de page, avant la liste**, et c'est lui qui la garde
+utile : **un piège entre ici si sa CAUSE est dans le code livré.** Si la cause est dans une
+marque, dans un environnement de travail ou dans une décision d'app, il n'y entre pas — même
+s'il a coûté cher. Sans critère, une page de pièges devient un fourre-tout en trois mois,
+cesse d'être lue, et les vrais pièges repartent dans le savoir oral qu'elle existe pour
+remplacer. Le critère se teste en une question : *si je supprime ce paragraphe du code
+source du socle, le piège disparaît-il ?*
+
+Sept entrées : les classes Tailwind qui n'existent pas · l'utilitaire de marque qui perd
+contre un composant (`layer(base)` contre `layer(components)`) · le pochoir à quatre
+déclarations de `.accent`/`.eyebrow` · **les tailles de police en pixels** · l'absence de
+portail — un flottant absolu clippé par le `overflow:hidden` d'une `Card flush` · `Select`
+qui est un `<select>` natif · et la forme récurrente du défaut, avec ses trois formes et ses
+deux questions de revue.
+
+La quatrième est ENTRÉE par le critère sans figurer au cahier des charges : sa cause est
+`app-scale.css`, qui est dans le paquet. Sans lui, une taille en px serait une préférence de
+style ; avec lui, c'est un défaut de rendu — et un défaut de rendu qu'on ne voit que sur
+l'écran de quelqu'un d'autre. Quatre candidats sont SORTIS, avec le fichier qui les
+accueille, écrit dans un tableau au lieu d'être laissé au jugement : l'historique des
+incidents, le piège du lock npm sur un tag, la numérotation des manques d'une app, et les
+préférences propres à un projet.
+
+Liée depuis le tableau « Par où commencer » du README et depuis la tête de `docs/PROMPTS.md`.
+
+### `GOVERNANCE.md` — à quel moment lancer les gardes
+
+La procédure de version listait ses six étapes sans dire QUAND jouer les gardes, et chaque
+lot le redécouvrait en le signalant comme une entorse. Ce n'en est pas une, c'est la
+séquence : `check-version.mjs` **ne peut pas** passer avant le tag — il exige que le tag
+existe, c'est son travail. La procédure passe à huit étapes, avec deux passages :
+
+- **avant le tag** — les douze autres gardes, `npm run demo:build`, `npm run build` : verts.
+  `check-version.mjs` est rouge, et c'est correct ;
+- **après le tag, avant le push** — `npm run lint` en entier. **Rien ne part sans les
+  treize.**
+
+### Trois chiffres corrigés au passage
+
+- `docs/PROMPTS.md` et cette page annonçaient « les **185 redéclarations** de
+  `patterns.css` ». Le nombre n'est reproductible par aucune mesure du fichier
+  d'aujourd'hui — 318 groupes de sélecteurs, 393 sélecteurs, 125 règles touchant une
+  propriété typographique. Il a été mesuré une fois et le fichier a grossi. La phrase dit
+  désormais « toutes les règles de `patterns.css` » : le mécanisme ne dépend pas du compte,
+  et un compte qui dérive en silence est le défaut que ce lot combat ;
+- `README.md` annonçait « dix gardes » — treize ;
+- `.github/workflows/ci.yml` annonçait « les trois gardes du dépôt » dans son en-tête, et
+  nommait quatre gardes dans le libellé du pas `lint`. Corrigé, avec le rappel que la
+  réciproque est fausse : un garde peut vivre hors de `lint` (dans `build`), donc on ne
+  conclut jamais de la lecture du seul script `lint` qu'un garde ne tourne pas. Vérifié en
+  énumérant les `run:` réels du job `qualite`, pas en lisant le script.
+
+**Vérifié avant tag :** les douze gardes hors version, `npm run demo:build`, `npm run build`.
+**Après tag, avant push :** `npm run lint` en entier, les treize.
+
 ## 0.19.0 — la vitrine type-checke, et le déclencheur s'étale sans cast
 
 Passe de clôture : un renommage qui n'était pas descendu, une vitrine qui ne compilait

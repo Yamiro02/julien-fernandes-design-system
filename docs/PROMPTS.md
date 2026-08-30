@@ -15,6 +15,11 @@ Les exemples supposent les imports depuis la racine du paquet :
 import { Button, Card, Icon } from '@julienfernandes/ds';
 ```
 
+**➜ Les pièges du socle sont rassemblés dans [`PIEGES.md`](PIEGES.md)** — un par section,
+avec ce qui casse, pourquoi la panne est muette, la parade, et le garde qui l'attrape quand
+il y en a un. Ce qui suit en reprend l'essentiel au fil des composants ; la page en est la
+version complète, et c'est elle qu'on lit avant d'écrire un écran.
+
 **⚠️ LA DOCTRINE, avant les cas particuliers : aucune valeur du socle ne doit être hors
 de portée de l'appelant.** Cinq défauts en un mois, trois formes d'un même mal :
 
@@ -48,7 +53,7 @@ reprise en aveugle est une valeur recopiée.
 
 **⚠️ Les utilitaires de marque perdent contre les composants.** Les huit de
 `tokens/base.css` — `.display`, `.display-xl`, `.eyebrow`, `.chip`, `.accent`, `.mono`,
-`.caption`, `.prose` — vivent en `layer(base)` ; les 185 redéclarations de `patterns.css`
+`.caption`, `.prose` — vivent en `layer(base)` ; toutes les règles de `patterns.css`
 vivent en `layer(components)` et gagnent toujours sur le même nœud, quelle que soit la
 spécificité. `.mono` posé sur un nœud qu'une règle `.ds-*` typographie ne rend rien, en
 silence. **La parade** : l'utilitaire Tailwind équivalent sur le même jeton — `font-mono`

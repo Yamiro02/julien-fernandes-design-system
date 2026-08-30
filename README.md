@@ -22,6 +22,7 @@ import '@julienfernandes/ds/brand-julien-fernandes.css';  // la marque — rempl
 |---|---|
 | **un agent qui doit produire ce design system** (Claude Design, Claude Code) | **[`PORTAGE.md`](PORTAGE.md)** |
 | **un humain qui monte un projet** | **[`GETTING-STARTED.md`](GETTING-STARTED.md)** |
+| **quiconque écrit un écran AVEC ce système** | **[`docs/PIEGES.md`](docs/PIEGES.md)** — ce que le code livré fait et qui ne se devine pas |
 
 La marque livrée, `src/styles/brand-julien-fernandes.css`, est **celle de ce dépôt** —
 crème chaude, orange rationné, Anton et DM Sans. Un autre projet la remplace par la sienne
@@ -47,6 +48,7 @@ gabarit, dont la marque d'exemple est froide et n'est celle de personne.)
 | ce qui a changé, version par version | [`CHANGELOG.md`](CHANGELOG.md) |
 | les ratios de contraste mesurés et les écarts assumés | [`docs/accessibilite.md`](docs/accessibilite.md) |
 | l'usage détaillé, composant par composant | [`docs/PROMPTS.md`](docs/PROMPTS.md) |
+| les pièges du socle — la panne muette et sa parade | [`docs/PIEGES.md`](docs/PIEGES.md) |
 | la fiche de portage pour un agent | [`PORTAGE.md`](PORTAGE.md) |
 
 ---
@@ -56,7 +58,7 @@ gabarit, dont la marque d'exemple est froide et n'est celle de personne.)
 Pas de registry : chaque app épingle une version par un tag git.
 
 ```bash
-npm i github:Yamiro02/julien-fernandes-design-system#v0.19.0
+npm i github:Yamiro02/julien-fernandes-design-system#v0.20.0
 ```
 
 Cinq **peer dependencies**, à la charge de l'app :
@@ -317,7 +319,7 @@ npm run typecheck    # tsc --noEmit
 npm run lint         # typecheck + contrôle anti-collision
 ```
 
-`npm run lint` enchaîne le typecheck et **dix gardes**. Le premier de la chaîne est
+`npm run lint` enchaîne le typecheck et **treize gardes**. Le premier de la chaîne est
 [`check-token-refs.mjs`](check-token-refs.mjs) — c'est le moins cher, et un jeton manquant rend le
 diagnostic des autres trompeur : il refuse tout `var(--x)` lu par le CSS du système ou par un style
 inline de composant sans qu'un `--x:` soit déclaré. Un `var()` non résolu n'est pas ignoré, il rend
@@ -328,6 +330,25 @@ Vient ensuite, entre autres, [`check-utility-collisions.mjs`](check-utility-coll
 refuse tout `@utility` de `theme.css` portant le nom d'une classe qu'un jeton de thème génère
 déjà : en Tailwind v4 les deux déclarations **fusionnent** dans la même règle et la dernière gagne,
 sans erreur ni avertissement.
+
+**Trois gardes lisent le CODE, pas le CSS** — [`check-dead-utilities.mjs`](check-dead-utilities.mjs),
+[`check-font-px.mjs`](check-font-px.mjs) et [`check-fragile-classes.mjs`](check-fragile-classes.mjs).
+Ils ferment les pièges de [`docs/PIEGES.md`](docs/PIEGES.md) : une classe que `theme.css` a
+supprimée et qui ne rend rien, une taille de police en pixels qui ne suit pas `app-scale.css`, un
+utilitaire posé sur `.accent` ou `.eyebrow` qui tue le dégradé. **Ils prennent un dossier en
+argument** — une app les pointe sur son propre `src/`, c'est la moitié de l'intérêt de les tenir
+ici :
+
+```bash
+node check-dead-utilities.mjs src
+node check-font-px.mjs src
+node check-fragile-classes.mjs src
+```
+
+Chacun **dérive** ce qu'il surveille au lieu de le recopier (les classes mortes se déduisent des
+`initial` de `theme.css`, les classes fragiles du CSS qui les déclare) et **rejoue son jumeau de
+falsification à chaque appel** : un motif qui ne reconnaît plus rien rend un garde toujours vert,
+donc décoratif — et ce mode de panne est aussi silencieux que les défauts qu'il surveille.
 
 ### La vitrine de recette
 

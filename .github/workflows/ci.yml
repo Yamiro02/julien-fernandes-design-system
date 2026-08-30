@@ -1,7 +1,11 @@
 # CI — ce qui doit être vrai à chaque poussée.
 #
 # Quatre jobs, et ils ne se remplacent pas :
-#   · `qualité`   compile, construit, et fait tourner les trois gardes du dépôt ;
+#   · `qualité`   compile, construit, et fait tourner LES TREIZE GARDES du dépôt — c'est
+#                 `npm run lint` qui les enchaîne, et c'est la seule chose à lire pour
+#                 savoir ce qui tourne. ⚠️ La réciproque est fausse : un garde peut vivre
+#                 ailleurs que dans `lint` (dans `build`, par exemple) — ne conclus jamais
+#                 de la lecture du seul script `lint` qu'un garde ne tourne pas ;
 #   · `version`   et `contrat` : deux vérifications de LIVRAISON, bloquantes, qui existent
 #                 parce qu'une procédure écrite a échoué. Elles sont dans deux jobs séparés
 #                 pour qu'un échec de l'une n'empêche pas l'autre de s'exprimer ;
@@ -34,9 +38,15 @@ jobs:
       - run: npm ci
       - run: npm ci --prefix demo
 
-      # `lint` enchaîne typecheck + les quatre gardes : collision d'utilitaires, substitution
-      # figée, contraste de la marque livrée, cohérence code ↔ catalogue.
-      - name: lint (typecheck · utilitaires · substitution · contraste · catalogue)
+      # `lint` enchaîne le typecheck et LES TREIZE GARDES : références de jetons, version,
+      # contrat de marque, collision d'utilitaires, classes mortes, tailles en px, classes
+      # fragiles, substitution figée, contraste, échelle des surfaces, catalogue, dérive du
+      # preflight, littéraux.
+      # Les trois derniers arrivés lisent le CODE, pas le CSS — ils sont nés dans une app
+      # et versés au socle en v0.20.0 : `check-dead-utilities`, `check-font-px`,
+      # `check-fragile-classes`. Chacun porte son jumeau de falsification et le rejoue à
+      # chaque appel : un garde qu'on n'a jamais vu échouer ne garde rien.
+      - name: lint (typecheck · les treize gardes)
         run: npm run lint
 
       # Le garde qui lit les COMPOSANTS et la DOC (les autres lisent le CSS) : sections du

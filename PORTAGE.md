@@ -109,10 +109,15 @@ noms de classes ni la structure du DOM — la vitrine et les composants les lise
 **6 · Vérifie.** Trois commandes, trente secondes :
 
 ```bash
-npm run lint          # types + collisions d'utilitaires + substitution figée + contraste + échelle de surfaces
+npm run lint          # types + les treize gardes (jetons, contrat, utilitaires, classes mortes,
+                      # tailles en px, classes fragiles, substitution, contraste, surfaces,
+                      # catalogue, preflight, littéraux, version)
 node check-contract.mjs   # aucun jeton du contrat oublié
 npm run demo          # et on regarde
 ```
+
+Les pièges que ces gardes ferment — et les trois qu'aucun garde n'attrape — sont dans
+[`docs/PIEGES.md`](docs/PIEGES.md), qui voyage avec le paquet.
 
 Le contrôle de contraste refuse toute paire sous seuil qui n'est pas assumée par écrit.
 C'est la seule chose qu'un générateur rate systématiquement : un lien à 3:1 se voit très
