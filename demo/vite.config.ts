@@ -16,7 +16,7 @@ export default defineConfig({
          `brand-entry.css` — c'est la seule ligne concernée. */
       'virtual:ds-entry': fileURLToPath(new URL('./brand-entry.css', import.meta.url)),
       '@julienfernandes/ds/core.css': fileURLToPath(new URL('../src/styles/core.css', import.meta.url)),
-      '@julienfernandes/ds/brand-example.css': fileURLToPath(new URL('../src/styles/brand-example.css', import.meta.url)),
+      '@julienfernandes/ds/brand-julien-fernandes.css': fileURLToPath(new URL('../src/styles/brand-julien-fernandes.css', import.meta.url)),
       '@julienfernandes/ds/brand-content.css': fileURLToPath(new URL('../src/styles/brand-content.css', import.meta.url)),
       '@julienfernandes/ds/brand-content': fileURLToPath(new URL('../src/brand-content.tsx', import.meta.url)),
       '@julienfernandes/ds/theme.css': fileURLToPath(new URL('../src/styles/theme.css', import.meta.url)),

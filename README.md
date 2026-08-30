@@ -13,7 +13,7 @@ implicite.
 
 ```ts
 import '@julienfernandes/ds/core.css';           // la structure, invariante
-import '@julienfernandes/ds/brand-example.css';  // la marque — remplacez-la par la vôtre
+import '@julienfernandes/ds/brand-julien-fernandes.css';  // la marque — remplacez-la par la vôtre
 ```
 
 ## Par où commencer
@@ -23,10 +23,11 @@ import '@julienfernandes/ds/brand-example.css';  // la marque — remplacez-la p
 | **un agent qui doit produire ce design system** (Claude Design, Claude Code) | **[`PORTAGE.md`](PORTAGE.md)** |
 | **un humain qui monte un projet** | **[`GETTING-STARTED.md`](GETTING-STARTED.md)** |
 
-La marque livrée, `src/styles/brand-example.css`, est **un exemple à remplacer**. Elle
-existe pour que la vitrine s'affiche immédiatement et pour prouver que le socle ne porte
-aucune couleur : sa palette est froide et ses polices sont une serif et une grotesque
-géométrique. Si un pixel chaud apparaît, une valeur de marque est restée dans le socle.
+La marque livrée, `src/styles/brand-julien-fernandes.css`, est **celle de ce dépôt** —
+crème chaude, orange rationné, Anton et DM Sans. Un autre projet la remplace par la sienne
+sans que le socle bouge : le contrat annoté `src/styles/brand.template.css` dit ce que son
+fichier doit fournir. (La preuve que le socle ne porte aucune couleur se fait dans le
+gabarit, dont la marque d'exemple est froide et n'est celle de personne.)
 
 ## Deux façons de s'en servir
 
@@ -93,7 +94,7 @@ Socle plus marque. Deux lignes, pas une : c'est ce qui rend explicite la marque 
 ```ts
 // src/main.tsx — une app du projet
 import '@julienfernandes/ds/core.css';
-import '@julienfernandes/ds/brand-example.css';
+import '@julienfernandes/ds/brand-julien-fernandes.css';
 ```
 
 ```ts
@@ -190,7 +191,7 @@ par palier de largeur d'écran pour garder une mise en page effective proche de 
 
 ```ts
 import '@julienfernandes/ds/core.css';
-import '@julienfernandes/ds/brand-example.css';
+import '@julienfernandes/ds/brand-julien-fernandes.css';
 import '@julienfernandes/ds/app-scale.css';   // outils internes desktop uniquement
 ```
 
@@ -266,7 +267,7 @@ de Tailwind, sur laquelle reposent les composants shadcn de ton app.
 
 | Famille | Composants |
 |---|---|
-| `icons` | `Icon` — 47 glyphes Lucide ; la taille vient du **créneau** (`--ds-icon-size`, repli `1.25rem`), `size` reste la surcharge au site d'appel |
+| `icons` | `Icon` — 48 glyphes Lucide ; la taille vient du **créneau** (`--ds-icon-size`, repli `1.25rem`), `size` reste la surcharge au site d'appel |
 | `actions` | `Button` · `IconButton` — 4 variantes (5 pour `IconButton`, `accent` compris), 3 tailles, jamais un pill |
 | `forms` | `Input` · `Textarea` · `Select` · `Checkbox` · `Radio` · `Switch` · `FormField` · `Calendar` · `DatePicker` |
 | `data-display` | `Card` (+ en-tête à slots) · `Pastille` · `Badge` (2 rembourrages) · `Tooltip` · `Separator` · `Table` (+ `THead` `TBody` `Tr` `Th` `Td`) — `framed` · `columns` · `striped` · `hoverable`, composables |

@@ -55,7 +55,15 @@ export interface DatePickerTriggerApi {
   value?: Date;
   /** À étaler tel quel sur l'élément déclencheur — ref, clic, clavier, ARIA. */
   triggerProps: {
-    ref: Ref<HTMLElement | null>;
+    /**
+     * REF DE RAPPEL, ET C'EST CE QUI REND L'ÉTALEMENT NU POSSIBLE. Un `RefObject<HTMLElement>`
+     * n'est pas assignable au `ref` d'un `<button>` — `HTMLElement` n'est pas `HTMLButtonElement`,
+     * et un objet de ref est INVARIANT sur son contenu. L'appelant aurait dû caster, et la doc
+     * aurait dû montrer le cast alors qu'elle présente l'étalement nu comme LE contrat.
+     * Une ref de RAPPEL, elle, est contravariante sur son paramètre : `(node: HTMLElement | null)`
+     * accepte n'importe quelle balise, et le socle continue de tenir l'élément.
+     */
+    ref: (node: HTMLElement | null) => void;
     onClick: () => void;
     onKeyDown: (e: ReactKeyboardEvent<HTMLElement>) => void;
     'aria-haspopup': 'dialog';
@@ -103,7 +111,7 @@ export const DatePicker = forwardRef<HTMLSpanElement, DatePickerProps>(function 
      quel au render-prop `trigger` : les deux chemins ne peuvent pas diverger, c'est le
      point (même construction que `rendreEntree` dans Sidebar). */
   const triggerProps: DatePickerTriggerApi['triggerProps'] = {
-    ref: triggerRef,
+    ref: (node: HTMLElement | null): void => { triggerRef.current = node; },
     onClick: () => setOpen(o => !o),
     onKeyDown: (e: ReactKeyboardEvent<HTMLElement>) => {
       if (!open && (e.key === 'ArrowDown' || e.key === 'ArrowUp')) { e.preventDefault(); setOpen(true); }
@@ -119,7 +127,6 @@ export const DatePicker = forwardRef<HTMLSpanElement, DatePickerProps>(function 
       {trigger ? trigger({ open, value, triggerProps }) : (
         <button
           {...triggerProps}
-          ref={triggerProps.ref as Ref<HTMLButtonElement>}
           type="button"
           disabled={disabled}
           className={cn('ds-input', 'ds-datepicker__trigger', surface === 'card' && 'ds-input--on-card', invalid && 'is-error')}

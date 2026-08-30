@@ -1,9 +1,9 @@
 /**
- * @julienfernandes/ds — le TEMPLATE de design system, et sa marque d'exemple.
+ * @julienfernandes/ds — le socle du design system, et la marque Julien Fernandes.
  *
  * Les styles sont un import séparé, en JS :
  *   import '@julienfernandes/ds/core.css';
- *   import '@julienfernandes/ds/brand-example.css';
+ *   import '@julienfernandes/ds/brand-julien-fernandes.css';
  *
  * La couche Tailwind v4 s'importe depuis le CSS de l'app, jamais en JS :
  *   @import '@julienfernandes/ds/theme.css';

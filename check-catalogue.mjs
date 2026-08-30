@@ -8,14 +8,18 @@
  * citaient des icônes sorties du type — un agent qui les recopiait produisait du code qui
  * ne compile pas.
  *
- * QUATRE VÉRITÉS, vérifiées à chaque `npm run lint` :
+ * CINQ VÉRITÉS, vérifiées à chaque `npm run lint` :
  *   1. chaque composant exporté par src/index.ts a sa section `## <Nom>` dans
  *      docs/PROMPTS.md — un composant non documenté ne sera jamais bien utilisé ;
  *   2. chaque section de docs/PROMPTS.md correspond à un export réel — une section
  *      fantôme fait écrire du code qui n'existe pas ;
  *   3. chaque `<Icon name="…">` écrit dans la doc existe dans le type IconName ;
  *   4. le nombre de composants annoncé dans PORTAGE.md, README.md et
- *      src/styles/core.css est le décompte réel de src/components/[star][star]/*.tsx.
+ *      src/styles/core.css est le décompte réel de src/components/[star][star]/*.tsx ;
+ *   5. le nombre de GLYPHES annoncé dans README.md et docs/PROMPTS.md est la taille réelle
+ *      du type IconName. Le point 3 vérifiait que chaque icône CITÉE existe, jamais le
+ *      COMPTE : trois lignes ont annoncé 47 pour 48 glyphes pendant deux versions, dans
+ *      les deux dépôts. Une liste dont on annonce la taille doit voir sa taille vérifiée.
  *
  * « Composant » = le FICHIER : les sous-exports d'un même fichier (THead, Tr, Td…)
  * appartiennent à la section de leur composant (Table) et n'exigent pas la leur.
@@ -86,6 +90,18 @@ for (const f of ['PORTAGE.md', 'README.md', 'src/styles/core.css']) {
   }
 }
 
+/* ── 5 · le compte de GLYPHES annoncé = la taille du type ─────────────────── */
+/* Le compte vient du TYPE IconName, pas de la table ICONS : c'est le type qui décide ce
+   qu'un appelant a le droit d'écrire. (`noms` est lu au point 3.) */
+for (const f of ['README.md', 'docs/PROMPTS.md']) {
+  const texte = lire(f);
+  for (const m of texte.matchAll(/(\d+)\s+glyphes/g)) {
+    if (Number(m[1]) !== noms.size) erreurs.push(
+      `${f} annonce « ${m[0]} », le type IconName en compte ${noms.size}.\n`
+      + `      Un compte faux fait chercher un glyphe qui n'existe pas — ou en rate un.`);
+  }
+}
+
 /* ── verdict ──────────────────────────────────────────────────────────────── */
 if (erreurs.length) {
   console.error(`\n✗ catalogue — ${erreurs.length} incohérence(s) entre le code et sa doc :\n`);
@@ -96,4 +112,5 @@ if (erreurs.length) {
   process.exit(1);
 }
 console.log(`✓ catalogue — ${composants.size} composants exportés, ${sections.size} sections, `
-  + `icônes de la doc toutes dans IconName, compte « ${reel} composants » exact partout`);
+  + `icônes de la doc toutes dans IconName, comptes « ${reel} composants » et `
+  + `« ${noms.size} glyphes » exacts partout`);

@@ -92,8 +92,12 @@
      avait besoin recopiait le var() à la main — la forme 2 du défaut de doctrine, côté
      utilitaires. Ce n'était pas une politique : primary et destructive étaient exposés
      quand leurs jumeaux -readable — précisément ceux qui posent une couleur sur du
-     TEXTE — ne l'étaient pas. Balayé : seuls ces quatre manquaient ; --tone-deep reste
-     dehors, exclusion délibérée documentée plus bas. */
+     TEXTE — ne l'étaient pas. Balayé : ces quatre étaient les seuls manquants PARMI LES
+     COULEURS ; --tone-deep reste dehors, exclusion délibérée documentée plus bas.
+     ⚠️ La phrase disait « seuls ces quatre manquaient » tout court, et c'était FAUX d'un
+     cran : --shadow-glow-sm cochait exactement les mêmes cases dans l'espace des OMBRES —
+     déclaré par la marque, employé par le socle, jamais exposé, recopié à la main par
+     l'app. Il est exposé plus bas ; le balayage vaut désormais pour les deux espaces. */
   --color-surface-alt: var(--surface-alt);
   --color-primary-readable: var(--primary-readable);
   --color-destructive-readable: var(--destructive-readable);
@@ -258,9 +262,15 @@
   --shadow-sm: var(--shadow-sm);
   --shadow-md: var(--shadow-md);
   --shadow-lg: var(--shadow-lg);
-  /* Réservé au CTA primaire et aux éléments de marque. */
+  /* Réservé au CTA primaire et aux éléments de marque. Les TROIS paliers sont exposés :
+     -sm manquait alors que le socle l'emploie (l'état enfoncé de .ds-btn--primary) et
+     qu'une app le recopiait en shadow-[var(--shadow-glow-sm)] — même défaut que les
+     quatre couleurs de la v0.17.1, un espace de noms plus loin.
+     --shadow-logo-dot n'est PAS ici, et c'est délibéré : sa seule lecture est
+     `.ds-logo__dot`, un élément que le socle rend lui-même. Aucun appelant ne l'écrit. */
   --shadow-glow: var(--shadow-glow);
   --shadow-glow-lg: var(--shadow-glow-lg);
+  --shadow-glow-sm: var(--shadow-glow-sm);
 
   /* ---------- Espacement ----------
      Échelle NOMMÉE : elle n’écrase pas l’échelle numérique de Tailwind

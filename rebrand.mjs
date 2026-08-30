@@ -19,7 +19,7 @@
  *     recevraient le paquet de quelqu'un d'autre.
  *
  * Il ne crée AUCUN fichier de marque : la marque se fabrique ensuite, en copiant
- * src/styles/brand-example.css et en repeignant chaque valeur (GETTING-STARTED, étape 3).
+ * src/styles/brand-julien-fernandes.css et en repeignant chaque valeur (GETTING-STARTED, étape 3).
  *
  * Ce qu'il NE touche PAS, et c'est volontaire, ce sont des choix de design :
  *   · les valeurs de la palette → le fichier de marque que vous écrivez ensuite
@@ -157,7 +157,7 @@ Il reste l'essentiel, et le script ne peut pas le faire à votre place : ÉCRIRE
 
   1. supprimez  le fichier de marque du dépôt d'origine, sa doc, et le contenu de
                 src/styles/assets/fonts/   — la liste exacte est dans GETTING-STARTED.md
-  2. copiez     src/styles/brand-example.css en src/styles/brand-${slug}.css et
+  2. copiez     src/styles/brand-julien-fernandes.css en src/styles/brand-${slug}.css et
                 repeignez chaque valeur — le gabarit src/styles/brand.template.css
                 porte le contrat, jeton par jeton : gardez-le ouvert à côté
   3. montez-la  dans le montage de la vitrine (demo/*-entry.css) et dans vos apps :

@@ -32,6 +32,8 @@ export interface NavbarProps {
   /** Force the scrolled state (specimen cards / screenshots). */
   scrolled?: boolean;
   className?: string;
+  /** Rendu dans l'emplacement de DROITE, juste AVANT `cta` — pour poser une action de plus
+   *  (bascule de thème, sélecteur de langue) sans avoir à remplacer le CTA. */
   children?: ReactNode;
 }
 

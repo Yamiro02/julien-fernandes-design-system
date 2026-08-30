@@ -380,8 +380,9 @@ chargement (c'est `Skeleton`).
 
 ## Progress
 
-Barre fine : rail `--surface-alt`, remplissage `--primary`. Déterminée (0–max) ou
-indéterminée (barre glissante).
+Barre fine : rail `--surface-alt`, remplissage `--brand-gradient` — depuis la v0.6.0, la
+barre remplie porte le dégradé de marque, jamais l'aplat (la piste, elle, reste un creux).
+Déterminée (0–max) ou indéterminée (barre glissante).
 
 **Ne pas l'utiliser** pour une attente sans notion d'avancement dans un contrôle — c'est
 `Spinner` (ou `Button loading`).
@@ -444,7 +445,7 @@ le bouton avec.
 
 ## Toast
 
-Notification transitoire, en bas à droite du viewport, sur `--popover` avec `--shadow-lg`.
+Notification transitoire, en bas à droite du viewport, sur `--card` avec `--shadow-lg`.
 Toujours couleur + icône + texte. Le texte d'erreur est concret, jamais dramatisé.
 
 **Ne pas l'utiliser** pour un message qui doit rester lisible (c'est `Banner`) ni pour une
@@ -481,8 +482,8 @@ popover.
   (sans le cadre — l'usage interne du DatePicker).
 - États rendus : jour au repos, survolé, sélectionné (aplat `--primary`), aujourd'hui
   (`--primary-readable` gras), désactivé, focus-visible.
-- **Pas de plage.** En attendant le mode plage (manque n° 9, en tête de file pour la
-  prochaine version : deux mois, surlignage des jours intermédiaires, présélections),
+- **Pas de plage.** En attendant un mode plage (périmètre envisagé : deux mois,
+  surlignage des jours intermédiaires, présélections externes),
   un calendrier fait main peut émettre lui-même les classes du socle et hériter de ses
   espacements, de sa typo et de ses états au lieu de les réinventer : `.ds-cal` (cadre,
   ou `.ds-cal--bare`), `.ds-cal__head` / `.ds-cal__label` / `.ds-cal__nav`,
@@ -541,7 +542,12 @@ un `<input type="hidden">` porte la date en ISO (`YYYY-MM-DD`) pour la soumissio
   et pose l'ARIA lui-même (`aria-haspopup` / `aria-expanded` / `aria-controls`), qui
   cesse d'être la charge de l'app. L'élément doit être **focusable et recevoir `ref`** —
   un `<button type="button">` nu, pas un composant sans `forwardRef` (le `Button` du
-  socle n'en a pas : la ref s'y perdrait, et le retour de focus avec). `disabled` reste
+  socle n'en a pas : la ref s'y perdrait, et le retour de focus avec).
+  **L'étalement est nu : aucun cast.** `triggerProps.ref` est une ref de RAPPEL
+  (`(node: HTMLElement | null) => void`), donc assignable au `ref` de n'importe quelle
+  balise. Un objet de ref sur `HTMLElement` ne l'aurait pas été — l'appelant aurait dû
+  écrire `ref={triggerProps.ref as Ref<HTMLButtonElement>}`, et l'exemple ci-dessus
+  n'aurait pas compilé. `disabled` reste
   la charge de l'appelant sur son élément. Sans `trigger`, rien ne change : le bouton
   façon Input d'hier, qui étale les mêmes `triggerProps` — les deux chemins ne peuvent
   pas diverger.
@@ -661,7 +667,7 @@ vertical uniquement. Même règle de `surface` que l'Input. `forwardRef` sur le
 ## Icon
 
 LE système d'icônes : Lucide, exclusivement. Jamais un emoji, jamais un SVG dessiné à la
-main. 47 glyphes typés (`IconName`) — un nom hors du type est une erreur TypeScript, et
+main. 48 glyphes typés (`IconName`) — un nom hors du type est une erreur TypeScript, et
 c'est voulu.
 
 **Ne pas** chercher `youtube` ou `instagram` ici : les icônes de PLATEFORME vivent dans
@@ -684,7 +690,7 @@ enregistrée `inherits: false`, une règle de conteneur est inerte, et c'est vou
 ```
 
 **Ce que le catalogue ne couvre pas se passe en `glyph`.** Lucide compte ~1500 tracés ;
-le catalogue en cure 47. Pour le reste, l'app importe le tracé et le socle lui applique
+le catalogue en cure 48 glyphes. Pour le reste, l'app importe le tracé et le socle lui applique
 ses propres règles — même grille, même épaisseur. Plus besoin de publier une version du
 design system pour une icône.
 
@@ -756,7 +762,9 @@ scroll : teinte + blur + ombre. C'est le SEUL endroit du système qui emploie
 ```
 
 - Props : `links` (`{label, href?, active?}[]`) · `cta` · `brand` (défaut : le `Logo`) ·
-  `homeHref` / `homeLabel` · `letters` · `scrolled` (force l'état scrollé — spécimens).
+  `homeHref` / `homeLabel` · `letters` · `scrolled` (force l'état scrollé — spécimens) ·
+  `children` (rendu dans l'emplacement de DROITE, juste **avant** `cta` : une action de plus
+  — bascule de thème, sélecteur de langue — sans remplacer le CTA).
 - États rendus : repos, scrollée, lien au repos / survolé / actif.
 
 ## Pagination

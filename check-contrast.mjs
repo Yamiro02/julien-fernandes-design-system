@@ -22,7 +22,7 @@
  *
  * Usage : node check-contrast.mjs [--table]   (STYLES=<dossiers séparés par des virgules>)
  * TOUTES LES MARQUES DU DÉPÔT, une ligne de verdict chacune, sortie non-zéro si l'une
- * échoue — aujourd'hui il n'y en a qu'une, `src/styles/brand-example.css`, mais le script
+ * échoue — aujourd'hui il n'y en a qu'une, `src/styles/brand-julien-fernandes.css`, mais le script
  * mesure tout `brand-*.css` qu'il trouve : un garde qu'il faut penser à invoquer n'est
  * pas un garde.
  * TOKENS=<chemin> mesure UN fichier isolé — celui d'un client avant de l'installer.
@@ -225,7 +225,7 @@ function mesurer(fichier) {
 
 if (process.argv.includes('--table')) {
   /* Un seul fichier pour le tableau : TOKENS= s'il est posé, sinon la première marque —
-     `brand-example.css`, celle que documente docs/accessibilite.md. */
+     `brand-julien-fernandes.css`, celle que documente docs/accessibilite.md. */
   const fichier = process.env.TOKENS || CIBLES[0];
   const { rows } = mesurer(fichier);
   const md = sel => { const out = ['| Paire | contenu | seuil | clair | sombre |', '|---|---|--:|--:|--:|'];

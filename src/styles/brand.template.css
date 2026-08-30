@@ -9,8 +9,8 @@
 
      1. `npm run rebrand -- "@vous/ds" "Votre Marque"` — renomme le paquet et l'identité
         textuelle (`src/brand.ts`). Il ne crée AUCUN fichier de marque.
-     2. Copiez `src/styles/brand-example.css` en `src/styles/brand-<vous>.css` et repeignez
-        chaque valeur : partir du fichier d'exemple donne les 54 emplacements dans le bon
+     2. Copiez `src/styles/brand-julien-fernandes.css` en `src/styles/brand-<vous>.css` et
+        repeignez chaque valeur : partir du fichier livré donne les 54 emplacements dans le bon
         ordre avec leurs commentaires, et comme on remplace toutes les valeurs, on n'hérite
         d'aucune couleur. CE fichier-ci reste le CONTRAT annoté qu'on garde ouvert à côté
         pendant qu'on remplit — il n'est pas le point de départ à recopier.

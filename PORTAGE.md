@@ -27,17 +27,17 @@ Tout le visuel, sans exception : palette claire et sombre, polices, échelle
 typographique, arrondis, ombres, dégradés, lueurs, densité, et la façon dont chaque
 composant est traité (plein ou contour, ombre ou bordure, uni ou dégradé).
 
-**Le dépôt rend dès l'installation.** `src/styles/brand-example.css` est une marque
-d'exemple — froide, serif, celle de personne. Elle existe pour que la vitrine s'affiche
-tout de suite et pour prouver que le socle ne porte aucune couleur : si un pixel chaud
-apparaît, une valeur de marque est restée coincée dans le socle. **C'est elle que tu
-remplaces.**
+**Le dépôt rend dès l'installation.** `src/styles/brand-julien-fernandes.css` est la
+marque de ce dépôt — crème chaude, orange rationné. Elle existe pour que la vitrine
+s'affiche tout de suite, et **c'est elle que tu remplaces.** (La preuve que le socle ne
+porte aucune couleur se fait dans le gabarit, dont la marque d'exemple est froide et n'est
+celle de personne.)
 
 Deux endroits :
 
-- `src/styles/brand-<projet>.css` — **les valeurs.** Copie `brand-example.css` sous ce nom
-  et repeins chaque valeur — la copie donne les 54 emplacements dans le bon ordre, et comme
-  tout est remplacé, rien n'est hérité. Garde le contrat annoté
+- `src/styles/brand-<projet>.css` — **les valeurs.** Copie `brand-julien-fernandes.css`
+  sous ce nom et repeins chaque valeur — la copie donne les 54 emplacements dans le bon
+  ordre, et comme tout est remplacé, rien n'est hérité. Garde le contrat annoté
   `src/styles/brand.template.css` ouvert à côté : il liste chaque jeton et dit ce qu'il
   tient. Puis repointe l'import de `demo/brand-entry.css` sur ton fichier.
 - `src/styles/patterns.css` — **les règles**, si un traitement demande une autre règle et
@@ -86,7 +86,7 @@ C'est la page de recette. Si elle est juste, le design system est juste.
 **1 · Lis le contrat.** `src/styles/brand.template.css` — chaque jeton, ce qu'il tient, et
 les règles de structure d'une palette. C'est le seul fichier à lire avant d'écrire.
 
-**2 · Écris `src/styles/brand-<client>.css`** — en copiant `brand-example.css` puis en
+**2 · Écris `src/styles/brand-<client>.css`** — en copiant `brand-julien-fernandes.css` puis en
 repeignant chaque valeur. Les `@font-face` du client en haut, puis les jetons. Un jeton
 d'identité oublié fait que la variable n'existe pas : ça casse à l'écran, c'est voulu. Les
 jetons de forme, eux, retombent sur la valeur du socle si tu les omets.

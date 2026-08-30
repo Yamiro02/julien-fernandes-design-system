@@ -394,7 +394,7 @@
 .ds-modal__head--end{justify-content:flex-end}
 .ds-modal__title{margin:0}
 .ds-modal__text{margin:0}
-/* Modal phases — __desc and __foot officialise Modal.jsx's inline styles, values identical. */
+/* Modal phases — __desc and __foot officialise Modal.tsx's inline styles, values identical. */
 .ds-modal__desc{font-size:var(--text-body-sm);color:var(--muted-foreground);line-height:1.5;display:flex;flex-direction:column;gap:var(--space-3)}
 .ds-modal__foot{display:flex;gap:0.625rem;justify-content:flex-end;margin-top:0.25rem}
 .ds-modal__desc--block{display:block}
@@ -566,7 +566,7 @@
 .ds-sidebar{display:flex;flex-direction:column;gap:var(--space-2);width:var(--sidebar-w);background:var(--secondary);border-right:1px solid var(--border);padding:var(--space-5) var(--space-4);box-sizing:border-box;transition:width var(--duration-base) var(--ease-standard)}
 .ds-sidebar.is-collapsed{width:var(--sidebar-w-collapsed);padding-inline:var(--space-3)}
 /* UN SEUL BORD OPTIQUE GAUCHE — tout ce qui vit dans la barre s'aligne dessus.
-   Une ENTRÉE porte `padding:0 var(--space-4)` pour que sa pilule de survol dépasse du
+   Une ENTRÉE porte `padding:0 var(--space-2)` pour que sa pilule de survol dépasse du
    texte. Les blocs SANS pilule — l'en-tête, le titre de section, le pied — n'avaient donc
    aucun retrait, et le logo commençait 16px à gauche des icônes qu'il surplombe. Ils
    reprennent le même retrait, et c'est le bord du CONTENU, pas celui de la boîte : la marge
@@ -612,18 +612,17 @@
 /* L'item actif se signale par sa GRAISSE et son ICÔNE, pas par un libellé coloré.
    L'orange est rationné : une icône de 20 px le porte, une ligne de texte entière le
    gaspille — et un libellé en encre pleine sur la plaque tient bien mieux son contraste.
-   L'icône passe par le jumeau lisible (--primary-readable), jamais par --primary : une
-   icône qui porte l'information de sélection est du contenu. */
+   L'icône, elle, est de MARQUE : elle prend --primary — voir la règle et sa mesure juste
+   en dessous. (La phrase qui tenait ici — « le jumeau lisible --primary-readable, jamais
+   --primary » — décrivait un état que la ligne suivante dément depuis deux versions.) */
 .ds-sidenav.is-active{background:var(--surface-alt);color:var(--foreground);font-weight:var(--weight-semibold)}
-/* L'ICÔNE de l'item actif porte --brand-via, l'arrêt MÉDIAN du dégradé.
-   ⚠️ ÉCART DE CONTRASTE ASSUMÉ, mesuré : 2,29:1 en clair sur --surface-alt, 5,34:1 en
-   sombre. En clair, l'icône est donc PÂLE — c'est un choix de marque, pas un oubli.
-   Ce qu'il faut savoir avant de le « corriger » : l'état actif est déjà porté par le FOND
-   et par la GRAISSE du libellé, et le libellé lui-même reste en --foreground. L'icône est
-   un renfort décoratif, jamais le seul porteur de l'information — c'est ce qui rend
-   l'écart tenable. Le jour où il déplaît, --primary-readable (5,09) est le repli. */
 /* L'icône de l'item actif est DÉCORATIVE et de marque : elle prend --primary, comme la
-   pastille de marque. Voir la règle consolidée au-dessus de .ds-pastille--brand. */
+   pastille de marque. Voir la règle consolidée au-dessus de .ds-pastille--brand.
+   Le bloc qui décrivait ici un --brand-via « pâle mais assumé » (2,29 / 5,34) est parti :
+   il décrivait l'état d'AVANT, contredisait la ligne juste en dessous, et ses chiffres ne
+   sont plus ceux de docs/accessibilite.md. --brand-via a bien été essayé et écarté — à
+   2,34, sous le seuil ; --primary tient 3,00 / 3,78. L'historique est dans le § de
+   docs/accessibilite.md, pas dans un commentaire que la règle dément. */
 .ds-sidenav.is-active svg{color:var(--primary)}
 .ds-sidenav:focus-visible{outline:2px solid var(--ring);outline-offset:2px}
 .ds-sidebar.is-collapsed .ds-sidenav{justify-content:center;padding:0}

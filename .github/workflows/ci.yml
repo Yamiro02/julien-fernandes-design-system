@@ -48,10 +48,10 @@ jobs:
       - name: build du paquet
         run: npm run build
 
-      # Le montage de la vitrine sur la marque livrée, `brand-example.css` — la palette
-      # froide, serif, sans un orange : c'est le dispositif qui prouve que le socle ne porte
-      # aucune valeur de marque. Si un pixel chaud apparaît, une valeur est retournée dans
-      # le socle.
+      # Le montage de la vitrine sur la marque livrée, `brand-julien-fernandes.css` : le
+      # dispositif qui prouve que les deux couches se montent et rendent ensemble. La preuve
+      # de NEUTRALITÉ du socle, elle, se fait dans le gabarit — c'est sa marque d'exemple qui
+      # est froide, serif et sans un orange.
       - name: vitrine — marque par défaut
         run: npm run demo:build
 
