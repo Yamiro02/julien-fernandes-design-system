@@ -22,7 +22,13 @@ import { BRAND_MONOGRAM, BRAND_WORDMARK_LINES } from '../../brand';
  * graisse suivent --heading-transform / --heading-weight, comme tout le titrage.
  */
 export interface LogoProps extends HTMLAttributes<HTMLSpanElement> {
-  variant?: 'wordmark' | 'stacked' | 'monogram';
+  /**
+   * `dot` (v0.21.0) : LA PASTILLE SEULE, sans lettre — le point de marque en tête d'un
+   * `Rail`. C'est le même nœud `.ds-logo__dot` (même dégradé, même rayon 25 %, même
+   * lueur), dimensionné à `height` au lieu de suivre un corps de texte. Relevé sur les
+   * maquettes v2 d'une app : 1.75rem en tête du rail. Pas un second dessin de la marque.
+   */
+  variant?: 'wordmark' | 'stacked' | 'monogram' | 'dot';
   /**
    * Force la couleur des LETTRES : `dark` = lettres sombres (sur une surface claire),
    * `light` = lettres claires (sur une surface sombre). Omise, elles suivent le
@@ -72,6 +78,15 @@ export function Logo({
     : dot;
   const base: CSSProperties = { fontSize: 'calc(' + height + ' * 1.25)', color, ...style };
 
+  if (variant === 'dot') {
+    /* Le font-size EST la hauteur : .ds-logo--dot pose la pastille à 1em (tokens/base.css).
+       role="img" + le libellé : la pastille seule est une image de la marque, pas un texte. */
+    return (
+      <span className={cn('ds-logo', 'ds-logo--dot', className)} style={{ fontSize: height, color, ...style }} role="img" aria-label={name} {...rest}>
+        {mark}
+      </span>
+    );
+  }
   if (variant === 'monogram') {
     return (
       <span className={cn('ds-logo', className)} style={base} aria-label={name} {...rest}>

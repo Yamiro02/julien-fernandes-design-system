@@ -147,13 +147,13 @@ L'ordre, sans exception :
 1. `package.json` → `version`
 2. `README.md` → la ligne `npm i …#vX.Y.Z`
 3. `CHANGELOG.md` → la section de la version, avec ses **⚠ ruptures**
-4. **les gardes, premier passage** — les DOUZE autres, plus `demo:build` et `build` (voir
+4. **les gardes, premier passage** — les TREIZE autres, plus `demo:build` et `build` (voir
    ci-dessous : `check-version.mjs` ne peut pas passer à cette étape)
 5. le commit unique du lot
 6. `git tag -a vX.Y.Z -m "…"` — **annoté**, comme tous les tags depuis la v0.1.0 : un tag
    léger ne part pas avec `--follow-tags`
-7. **les gardes, second passage** — `npm run lint` en ENTIER, les treize. Rien ne part sans
-   les treize
+7. **les gardes, second passage** — `npm run lint` en ENTIER, les quatorze. Rien ne part sans
+   les quatorze
 8. `git push --follow-tags`
 
 ### À quel moment lancer les gardes — et pourquoi il y a DEUX passages
@@ -167,15 +167,15 @@ Ce n'est pas une entorse à signaler à chaque lot, c'est la séquence :
 
 | Quand | Quoi | Attendu |
 |---|---|---|
-| avant le tag (4) | les douze autres gardes + `npm run demo:build` + `npm run build` | tous verts |
+| avant le tag (4) | les treize autres gardes + `npm run demo:build` + `npm run build` | tous verts |
 | avant le tag (4) | `check-version.mjs` | **rouge**, et c'est correct : le tag n'existe pas encore |
-| après le tag (7) | `npm run lint` en entier | **les treize verts** |
+| après le tag (7) | `npm run lint` en entier | **les quatorze verts** |
 | puis (8) | `git push --follow-tags` | — |
 
 Lancer `npm run lint` à l'étape 4 est utile quand même : il s'arrête sur `check-version` et
-laisse les onze suivants non joués. Le premier passage se fait donc garde par garde, ou en
+laisse les douze suivants non joués. Le premier passage se fait donc garde par garde, ou en
 acceptant de relancer. **La règle qui compte est la dernière ligne : rien ne part sans les
-treize verts, tag posé.**
+quatorze verts, tag posé.**
 
 **C'est un job de CI bloquant, pas une checklist.** `check-version.mjs` compare les trois —
 version, README, existence du tag — et fait tomber le build s'ils divergent. La procédure

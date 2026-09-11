@@ -124,10 +124,11 @@ qu'il fait le dit.
 - Props : `variant` (`primary·secondary·ghost·danger·accent`, défaut `ghost`) · `size`
   (`sm·md·lg`) · `surface` (`auto·page·card`) · `label` (requis) · `as` / `href`.
 - `surface` a le même rôle et les mêmes valeurs que sur `Button` — voir sa section.
-- **`variant="accent"`** (v0.17.0) : fond `--accent`, sans bordure, icône `--primary` —
-  l'état « sélectionné doux » d'un lien-icône ou d'un raccourci. Ne pas le recomposer
-  avec `is-active` (une aide de démo) et un style inline : c'est cette fraude que la
-  variante remplace.
+- **`variant="accent"`** (v0.17.0) : fond `--accent`, sans bordure, icône `--active` —
+  l'état « sélectionné doux » d'un lien-icône ou d'un raccourci, et l'entrée active d'un
+  `Rail`. Ne pas le recomposer avec `is-active` (une aide de démo) et un style inline :
+  c'est cette fraude que la variante remplace. Le bouton enfoncé (`aria-pressed`) est le
+  même état, plus le contour.
 - **`as="a"` + `href`** (v0.17.0) : un lien-icône reste un LIEN — clic-milieu, « ouvrir
   dans un onglet », annonce correcte au lecteur d'écran. Jumeau du `as` de `Button`.
 - L'icône ne se dimensionne pas au site d'appel : le créneau s'en charge (sm 1rem ·
@@ -187,10 +188,15 @@ graisse suivent `--heading-transform` / `--heading-weight`, comme tout le titrag
 <Logo variant="wordmark" height="1.75rem" />
 <Logo variant="wordmark" letters="light" height="1.75rem" />
 <Logo variant="monogram" height="2.5rem" />
+<Logo variant="dot" height="1.75rem" />
 <Logo wordmark="Acme" dot={false} />
 ```
 
-- Props : `variant` (`wordmark·stacked·monogram`) · `letters` (`dark·light` — force la
+- **`variant="dot"`** (v0.21.0) : la pastille SEULE — le point de marque en tête d'un
+  `Rail`. Même nœud, même dégradé, même lueur ; `height` est son côté. Pas un second
+  dessin de la marque.
+
+- Props : `variant` (`wordmark·stacked·monogram·dot`) · `letters` (`dark·light` — force la
   couleur des lettres ; omise, elles suivent `--foreground`) · `height` · `wordmark` ·
   `monogram` · `dot` (`false` = sans pastille ; un nœud la remplace) · `label`.
 - En HTML nu, le même mark existe en `.ds-logo` / `.ds-logo__dot` (tokens/base.css).
@@ -238,9 +244,31 @@ sous 1.5rem.
 <Card flush><img src="/cover.png" alt="" style={{ width: '100%' }} /></Card>
 ```
 
+```tsx
+// L'en-tête à FILET (v0.21.0) : une Card flush qui porte un slot d'en-tête le rend à filet
+// toute seule — padding --space-4 --space-5, border-bottom, pas de gouttière ; le corps
+// porte son padding.
+<Card flush title="Projets actifs"
+  action={<Tabs onCard items={filtres} value={filtre} onChange={setFiltre} />}>
+  <Table>…</Table>
+</Card>
+
+// L'en-tête seul, en tête d'une zone qui n'est pas une Card — même grammaire, mêmes réglages.
+<CardHeader flush title="Sections" subtitle="Dans l'ordre de lecture"
+  action={<Button size="sm" variant="secondary">Proposer un découpage</Button>} />
+```
+
 - Props : `variant` (`default·interactive·feature`) · `size` (`md·lg`) · `flush` (sans
-  padding, media plein bord) · slots d'en-tête `eyebrow` / `icon` / `title` / `subtitle` /
-  `action` · `titleSize` (`sm·lg`) · `headerGap` (`normal·airy`) · `as`.
+  padding, media plein bord — et l'en-tête à filet s'il y a un slot) · slots d'en-tête
+  `eyebrow` / `icon` / `title` / `subtitle` / `action` · `titleSize` (`sm·lg`) ·
+  `headerGap` (`normal·airy`) · `as`.
+- **`CardHeader` est exporté** (v0.21.0), du même fichier : c'est UN SEUL en-tête au socle
+  — `Card` le compose par ses props, `Modal` le rend (pastille · titre + sous-titre ·
+  croix), et une app le pose seule en tête d'une zone. Ses réglages : les cinq slots,
+  `titleSize`, `headerGap`, et `flush` (le mode à filet). Il n'émet aucun nœud sans slot.
+- **Le titre ne descend jamais sous 1.125rem** (`sm`, le plus petit palier de la display).
+  Une maquette qui pose un `h3` à `--text-control` — un palier de CONTRÔLE — fait une
+  approximation de l'outil, pas une décision de marque : on rend `sm`.
 - **L'alignement de l'en-tête est décidé par le socle, jamais par une prop** (v0.18.0) :
   titre simple → rangée **centrée** — icône, titre et action partagent un axe, la langue
   du design (99 × center sur le relevé) ; titre **et** sous-titre → `flex-start` —
@@ -249,6 +277,24 @@ sous 1.5rem.
   main pour choisir un alignement — c'est le composant qui le sait.
 - États rendus : repos ; `interactive` ajoute hover (levée + `--shadow-md`), pressé,
   focus-visible.
+
+## Kbd
+
+La touche (v0.21.0) : « ⌘ », « K », « ↵ », « Échap ». `min-width` et `height` 1.375rem,
+rayon `xs`, fond `--secondary`, filet interne `--border`, caption semi-gras en
+`--text-secondary` — la forme unique des 47 touches des maquettes v2 d'une app. Une vraie
+balise `<kbd>`, en corps de texte.
+
+**Ne pas** en faire un `Badge` (pilule, 1.5rem, méta) ni y écrire une combinaison : une
+combinaison est une SUITE de touches.
+
+```tsx
+<span className="flex items-center gap-space-1"><Kbd>⌘</Kbd><Kbd>K</Kbd></span>
+<Kbd>Échap</Kbd>
+```
+
+- Props : les attributs natifs de `<kbd>`.
+- États rendus : un seul — une touche ne se presse pas à l'écran.
 
 ## Pastille
 
@@ -591,11 +637,16 @@ l'`<input>` natif.
 <Input invalid defaultValue="pas-un-email" />
 <Input size="lg" placeholder="CTA de héros" />
 <Input unit="kg" inputMode="decimal" placeholder="72" />
+<Input icon={<Icon name="search" />} type="search" placeholder="Chercher une vidéo…" />
 ```
 
 - Props : `size` (`sm·md·lg`) · `invalid` · `surface` (`page` = fond `--secondary`, posé
-  à même le layout · `card` = fond `--background`, dans une Card) · `unit` + attributs
-  natifs.
+  à même le layout · `card` = fond `--background`, dans une Card) · `unit` · `icon` +
+  attributs natifs.
+- **`icon`** (v0.21.0) : l'icône de TÊTE — le miroir de `unit`, à gauche. Passez un
+  `<Icon>` sans `size` : le créneau des déclencheurs de champ la rend à 1rem, à .875rem
+  du bord, en `--text-muted`. Elle est `aria-hidden` : c'est le `placeholder` ou le
+  libellé qui nomme le champ. `icon` et `unit` se cumulent.
 - **`unit`** (v0.17.0) : l'unité — « kg », « € », « min » — posée DANS le champ, à
   droite, en sourdine. **Trois caractères au plus** ; plus long, c'est un suffixe de
   libellé, pas une unité. Elle est `aria-hidden` : le libellé du `FormField` la nomme.
@@ -712,6 +763,11 @@ import { ShoppingBag } from 'lucide-react';
 - **`name` reste la voie normale** : le catalogue est relu, documenté, et garantit qu'un
   nom existe. `glyph` est la porte de sortie, pas le chemin par défaut — un besoin qui
   revient dans DEUX apps mérite d'entrer au catalogue.
+- **Ne demandez plus un glyphe au socle.** `lucide-react` est une peer dependency : chaque
+  app l'a déjà, et `glyph` prend n'importe lequel de ses ~1500 tracés (`merge`, `scissors`,
+  `link`, `rotate-ccw`, `square`, `pause`, `chevron-up`, `film`…). Un glyphe absent du
+  catalogue n'est pas un manque du socle, c'est un import dans l'app — le catalogue ne
+  s'agrandit qu'au deuxième demandeur.
 - `glyph` n'autorise PAS un SVG maison : le rendu reste celui du socle. Ce qui s'ouvre,
   c'est le choix du tracé dans lucide, pas la liberté graphique.
 - La couleur suit `currentColor`. Les actions destructives prennent `trash-2`.
@@ -733,8 +789,11 @@ tiroir piloté par `open`/`onClose` de `Sidebar`.
 </AppShell>
 ```
 
-- Props : `sidebar` (un `<Sidebar>`) · `responsive` (défaut `true` ; `false` fige la
-  double colonne desktop).
+- Props : `sidebar` (un `<Sidebar>` — ou un `<Rail>`) · `responsive` (défaut `true` ;
+  `false` fige la double colonne desktop).
+- **Avec un `<Rail>`, `responsive={false}` est obligatoire** (v0.21.0) : un rail n'a pas
+  de forme tiroir — sous 64rem, la grille responsive passe en une colonne et il
+  s'empilerait au-dessus du contenu. `AppShell` le signale en console en développement.
 
 ## Footer
 
@@ -775,7 +834,8 @@ scroll : teinte + blur + ombre. C'est le SEUL endroit du système qui emploie
 ## Pagination
 
 Pagination contrôlée sur une barre `--secondary` (même traitement que Tabs). Ellipse
-au-delà de 7 pages ; la page courante reçoit le traitement de l'onglet actif.
+au-delà de 7 pages ; la page courante est ACTIVE — plaque `--card`, libellé `--active`,
+comme l'onglet sélectionné (v0.21.0).
 
 ```tsx
 <Pagination page={page} pageCount={12} onPageChange={setPage} />
@@ -807,7 +867,48 @@ Navigation d'app sur `--secondary` : marque en tête, sections titrées, item ac
   · `linkAs`.
 - Chaque section est un **groupe** (v0.17.0) : les groupes se séparent par le gap de la
   nav (16px), avec ou sans titre — deux sections sans titre ne se collent plus.
+- **L'entrée active est d'une seule couleur, icône et libellé** (v0.21.0) : `--active`,
+  la couleur de tout ce qui est actif, sur `--surface-alt`. Contraste 3,00 / 3,78 : écart
+  assumé par la marque ([`PIEGES.md`](PIEGES.md) § 8). La graisse reste le second signal.
+- **Sidebar ou Rail ?** Sidebar = libellés, sections titrées, repliable par l'utilisateur.
+  Rail = icônes seules, largeur fixe, jamais de repli. Une app choisit l'un — la barre
+  repliée n'est pas un rail (4,5 rem contre 3,75, des pilules contre des carrés d'icône,
+  un bouton de repli contre aucun).
 - États rendus : dépliée, repliée, item au repos / survolé / actif, tiroir ouvert.
+
+## Rail
+
+Le rail d'icônes (v0.21.0) : une colonne de `--rail-w` (3.75rem) sur `--secondary`, filet
+droit. Le point de marque en tête (`Logo variant="dot"`), des entrées en icône SEULE — leur
+`label` est leur `title` et leur nom accessible —, un ressort, les entrées de pied,
+l'avatar. Relevé sur les quinze écrans des maquettes v2 d'une app.
+
+**Ne pas** l'employer quand les entrées ont besoin d'un libellé lisible ou d'un repli :
+c'est `Sidebar`. Ne pas le monter dans un `AppShell` responsive : il n'a pas de forme
+tiroir.
+
+```tsx
+<AppShell responsive={false} sidebar={
+  <Rail
+    linkAs={NavLink}
+    items={[
+      { label: 'Accueil — la liste des vidéos', href: '/', icon: <Icon name="house" />, active: true },
+      { label: 'Studio — le process maître', href: '/studio', icon: <Icon name="sliders-horizontal" /> },
+    ]}
+    footerItems={[{ label: "Réglages de l'application", href: '/reglages', icon: <Icon name="settings" /> }]}
+    footer={<Avatar size="1.75rem" halo={false} />}
+  />
+}>
+  {contenu}
+</AppShell>
+```
+
+- Props : `items` / `footerItems` (`SidebarItem[]` — `label` requis) · `brand` (défaut :
+  le point de marque à 1.75rem) · `footer` · `label` (nom de la `<nav>`) · `linkAs`.
+- Une entrée est un `IconButton` par ses classes : `ghost` au repos (`--text-muted`, encre
+  au survol), `accent` quand elle est active — plaque `--accent`, icône `--primary`
+  (3,00 / 3,94, seuil des graphiques). Le rail compose, il ne redessine rien.
+- États rendus : entrée au repos / survolée / active / focus.
 
 ## Tabs
 
@@ -826,6 +927,13 @@ Tabs filtre un contenu en place.
 ```
 
 - Props : `items` (`{value, label}[]`) · `value` / `onChange` (contrôlé) · `onCard`.
+- **L'onglet sélectionné est une plaque `--accent`, libellé en `--active`** (v0.21.0) —
+  la couleur de tout ce qui est actif ; la même plaque sur la page, sur une carte, en
+  clair, en sombre. Pas de contour. Le survol reste couleur seule, sans fond : c'est ce
+  qui le distingue de la sélection, puisqu'en clair `--accent` et `--surface-alt` sont la
+  même couleur. Une app qui émet `ds-tab` en dur porte le même état par
+  `aria-selected="true"` ou `is-selected`. Contraste 3,00 / 3,94 : écart assumé par la
+  marque, voir [`PIEGES.md`](PIEGES.md) § 8.
 - États rendus : onglet au repos, survolé, sélectionné (`aria-selected`), focus-visible.
 
 ---
@@ -905,6 +1013,7 @@ d'actions (c'est `Dropdown` / `ActionSheet`).
   onClose={() => setOpen(false)}
   icon={<Icon name="triangle-alert" />}
   title="Supprimer ce build ?"
+  subtitle="Trois décisions, pas une de plus."
   description="Cette action est définitive."
   footer={<>
     <Button variant="ghost" onClick={() => setOpen(false)}>Annuler</Button>
@@ -916,9 +1025,15 @@ d'actions (c'est `Dropdown` / `ActionSheet`).
 ```
 
 - Props : `open` · `icon` + `iconVariant` (`danger·brand·neutral·warning·success` — la
-  tuile est une `Pastille dialogue`) · `title` / `description` / `children` · `footer` ·
-  `onClose` · `closeButton` · `dismissable` · `phase` (`confirm·loading·result`) ·
-  `result` (`{status, title?, message?, onRetry?}`) · `inline` (spécimen sans voile).
+  tuile est une `Pastille dialogue`) · `title` / `subtitle` / `description` / `children` ·
+  `footer` · `onClose` · `closeButton` · `dismissable` · `phase` (`confirm·loading·result`)
+  · `result` (`{status, title?, message?, onRetry?}`) · `inline` (spécimen sans voile).
+- **L'en-tête est celui de `Card`** (v0.21.0) : pastille · titre + sous-titre · croix sur
+  UNE ligne, rendus par `CardHeader` (titre en cran `lg`, la croix en `action`).
+  `subtitle` est la ligne sous le titre, DANS l'en-tête ; `description` reste le corps, à
+  1,5 rem sous l'en-tête. Sans sous-titre la rangée est centrée ; avec, elle passe en
+  `--stacked` et la croix s'aligne sur le titre. La largeur reste `--modal-w`, redéclarée
+  au site d'appel si besoin (`className="[--modal-w:38rem]"`).
 - **La croix et les gestes de fuite sont découplés** (v0.17.0) : `closeButton={false}`
   retire la croix en gardant Échap et le clic-voile ; `dismissable={false}` fait
   l'inverse — la croix devient le seul geste de fermeture, pour une modale à saisie

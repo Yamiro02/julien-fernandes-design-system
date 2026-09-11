@@ -2,6 +2,7 @@ import type { JSX, ReactNode } from 'react';
 import { cn } from '../../lib/cn';
 import { Icon } from '../icons/Icon';
 import { Pastille } from '../data-display/Pastille';
+import { CardHeader } from '../data-display/Card';
 import { Button } from '../actions/Button';
 import { useModalSurface } from './useModalSurface';
 
@@ -10,6 +11,13 @@ import { useModalSurface } from './useModalSurface';
  * Width 23.75rem at 64rem and up; UNDER 64rem the same modal becomes a bottom sheet
  * (full width, top corners radius-2xl, grip, enter from the bottom) — CSS only, same component.
  * Three phases in ONE dialog: confirm → loading → result.
+ *
+ * L'EN-TÊTE EST CELUI DE Card — v0.21.0. Pastille · titre + sous-titre · croix sur UNE
+ * ligne, rendus par `CardHeader` (titre en cran `lg`, la croix en `action`). Jusqu'à la
+ * 0.20.0 la modale posait la pastille et la croix sur un rang et le titre sur un second,
+ * sans sous-titre : les maquettes v2 d'une app dessinent la ligne unique, et c'est la
+ * grammaire que le socle avait déjà pour la carte. `description` reste le CORPS ;
+ * `subtitle` est la ligne sous le titre, dans l'en-tête.
  *
  * MODAL SURFACE — focus moved in on open, focus trapped, Escape closes, focus restored to the
  * opener on close (hook `useModalSurface`, shared with ActionSheet). phase="loading" keeps the
@@ -31,6 +39,9 @@ export interface ModalProps {
   /** Tile tint: danger (default) · brand · neutral · warning · success. */
   iconVariant?: 'danger' | 'brand' | 'neutral' | 'warning' | 'success';
   title?: ReactNode;
+  /** One muted line under the title, IN the header (v0.21.0). Not the body — that is `description`. */
+  subtitle?: ReactNode;
+  /** The body text, under the header. */
   description?: ReactNode;
   footer?: ReactNode;
   /** Ignored while phase="loading": Escape, scrim click and the close button are all inert. */
@@ -62,15 +73,16 @@ const TILE_TONE: Record<string, TileTone> = {
 };
 
 export function Modal({
-  open = true, icon, iconVariant = 'danger', title, description, footer,
+  open = true, icon, iconVariant = 'danger', title, subtitle, description, footer,
   onClose, closeButton = true, dismissable = true, inline = false,
   phase = 'confirm', result, className = '', children,
 }: ModalProps): JSX.Element | null {
   const locked = phase === 'loading';
   /* initialFocus 'container' : le panneau porte role="dialog", aria-modal et un nom accessible,
      donc y poser le focus fait annoncer la modale ET lire son contenu. Sur une confirmation
-     destructive, le TEXTE doit être entendu avant l'action — or la croix « Fermer » précède le
-     titre dans l'ordre du DOM, un focus sur le premier focusable y atterrirait. */
+     destructive, le TEXTE doit être entendu avant l'action — or la croix « Fermer » est le
+     premier focusable du panneau (elle est dans l'en-tête, avant le corps et le pied), un
+     focus sur le premier focusable y atterrirait sans que la description ait été lue. */
   /* `dismissable={false}` prive le hook de onClose : Échap ne ferme plus — le piège de
      focus, le verrou de défilement et la restitution du focus, eux, ne bougent pas. */
   const panelRef = useModalSurface({
@@ -132,13 +144,16 @@ export function Modal({
         </>
       ) : (
         <>
-          {(icon || closeBtn) ? (
-            <div className="ds-modal__head">
-              {icon ? <Pastille size="dialogue" tone={TILE_TONE[iconVariant] ?? 'danger'}>{icon}</Pastille> : null}
-              {closeBtn}
-            </div>
-          ) : null}
-          {title ? <h3 className="ds-modal__title">{title}</h3> : null}
+          {/* Sans icône, sans titre, sans sous-titre et sans croix, CardHeader n'émet
+              aucun nœud — le DOM d'une modale nue ne bouge pas. Le titre garde sa taille
+              d'avant : le cran `lg` EST --text-subheading, celle du h3 qu'il remplace. */}
+          <CardHeader
+            icon={icon ? <Pastille size="dialogue" tone={TILE_TONE[iconVariant] ?? 'danger'}>{icon}</Pastille> : undefined}
+            title={title}
+            subtitle={subtitle}
+            action={closeBtn ?? undefined}
+            titleSize="lg"
+          />
           {(description || children) ? (
             <div className="ds-modal__desc">
               {description ? <p className="ds-modal__text">{description}</p> : null}

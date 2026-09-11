@@ -20,8 +20,9 @@ export interface ModalSurfaceOptions {
    * `first` — the first focusable child. That is what `ActionSheet` needs: a list of actions with
    * no message to hear, where the first row is the right destination.
    *
-   * Not a detail: in `Modal` the close button precedes the title in DOM order, so `first` would
-   * land on « Fermer » before the question has been read out.
+   * Not a detail: in `Modal` the close button is the first focusable of the panel (it sits in
+   * the header, before the body and the footer), so `first` would land on « Fermer » before
+   * the description has been read out.
    */
   initialFocus?: 'container' | 'first';
 }

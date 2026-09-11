@@ -151,8 +151,13 @@ function pairs(theme, { ROOT, DARK }, fichier) {
   add('Lien', 'a{} au repos sur --card', g('--primary-readable'), g(C), 4.5, '16 / 400');
   add('Lien', 'a:hover — dérivé vers --foreground', over(g('--primary-readable'), .8, g('--foreground')), g(B), 4.5, '16 / 400');
 
-  add('Marque-contenu', '.ds-navlink.is-active', g('--primary-readable'), g('--secondary'), 4.5, '16 / 500');
-  add('Marque-contenu', '.ds-sidenav.is-active', g('--primary-readable'), g('--surface-alt'), 4.5, '15 / 500');
+  /* LES ÉTATS ACTIFS lisent --active, LA couleur de tout ce qui est actif (v0.21.0) : la
+     paire mesurée est celle que l'œil reçoit, pas un jumeau lisible que la règle ne pose
+     plus. Si la marque y met un remplissage, ces paires de TEXTE tombent sous 4,5 — et
+     c'est alors un écart qu'elle assume par écrit, jamais une surprise du garde. */
+  add('Actif', '.ds-navlink.is-active', g('--active'), g('--secondary'), 4.5, '16 / 600');
+  add('Actif', '.ds-sidenav.is-active', g('--active'), g('--surface-alt'), 4.5, '15 / 600');
+  add('Actif', '.ds-page[aria-current]', g('--active'), g(C), 4.5, '15 / 600');
   add('Marque-contenu', '.ds-badge--accent', g('--primary-readable'), g('--accent'), 4.5, '12 / 700');
   add('Marque-contenu', '.ds-banner--info', g('--primary-readable'), g('--accent'), 4.5, '15 / 400');
   add('Marque-contenu', '.ds-cal__day.is-today', g('--primary-readable'), g(C), 4.5, '14 / 700');
@@ -165,7 +170,14 @@ function pairs(theme, { ROOT, DARK }, fichier) {
      sur le même remplissage que le label de .ds-btn--primary, mesuré plus bas. */
   for (const arret of ['--brand-from', '--brand-via', '--brand-to'])
     add('Marque-contenu', `.ds-pastille--brand-solid — glyphe sur ${arret}`, g('--primary-foreground'), g(arret), 3, 'icône');
-  add('Marque-contenu', '.ds-icon-btn[aria-pressed] — icône', g('--primary-readable'), g('--accent'), 3, 'icône');
+  add('Actif', '.ds-icon-btn[aria-pressed] — icône', g('--active'), g('--accent'), 3, 'icône');
+  /* Le bouton-icône `accent` — l'entrée ACTIVE d'un Rail — porte --active sur sa plaque
+     --accent : la paire que l'œil reçoit, seuil des graphiques (une icône). */
+  add('Actif', '.ds-icon-btn--accent — icône', g('--active'), g('--accent'), 3, 'icône');
+  /* L'onglet sélectionné (v0.21.0) : libellé --active sur la plaque --accent, du texte. */
+  add('Actif', '.ds-tab[aria-selected]', g('--active'), g('--accent'), 4.5, '15 / 600');
+  add('Texte', '.ds-rail__item au repos — icône --text-muted sur --secondary', g('--text-muted'), g('--secondary'), 3, 'icône');
+  add('Texte', '.ds-kbd — --text-secondary sur --secondary', g('--text-secondary'), g('--secondary'), 4.5, '13 / 600');
   add('Marque-contenu', '.ds-error', g('--destructive-readable'), g(C), 4.5, '13 / 500');
   add('Marque-contenu', '.ds-dropdown__item--danger', g('--destructive-readable'), g('--popover'), 4.5, '14 / 400');
   add('Marque-contenu', '.ds-actionsheet__item--danger', g('--destructive-readable'), g('--popover'), 4.5, '15 / 500');

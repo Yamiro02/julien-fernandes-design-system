@@ -3,7 +3,7 @@
 Ce dépôt est un **squelette de design system React**. Il apporte trois choses, et
 seulement trois :
 
-1. **L'inventaire** — 37 composants d'interface, leur nom, leur emplacement, leur API.
+1. **L'inventaire** — 39 composants d'interface, leur nom, leur emplacement, leur API.
 2. **La vitrine** — 9 pages qui les montrent tous, prête à ouvrir.
 3. **Le comportement** — focus, clavier, ARIA, cibles tactiles. La partie qu'on ne voit
    pas sur une maquette et qu'on re-casse à chaque régénération.
@@ -17,7 +17,7 @@ Tout le reste — couleurs, typographie, formes, ombres, traitements — **est �
 | | Pourquoi |
 |---|---|
 | La **structure des fichiers** | `src/components/<famille>/<Nom>.tsx`. Le point d'entrée et la vitrine importent par ces chemins. |
-| La **liste des 37 composants** | C'est l'inventaire. On n'en retire pas, on n'en ajoute pas au portage. |
+| La **liste des 39 composants** | C'est l'inventaire. On n'en retire pas, on n'en ajoute pas au portage. |
 | La **structure de la vitrine** | 9 pages — une par famille, plus Fondations. On remplace ce qu'elles montrent, pas leur découpage. |
 | Le **comportement et l'accessibilité** | Piège de focus, touche Échap, verrou de défilement, restitution du focus, `focus-visible`, rôles ARIA, cibles tactiles 44 px. Invisible sur une maquette, indispensable dans une app. |
 
@@ -45,7 +45,7 @@ Deux endroits :
 
 ---
 
-## L'inventaire — 37 composants
+## L'inventaire — 39 composants
 
 Chemin : `src/components/<famille>/<Nom>.tsx` · classes CSS : `src/styles/patterns.css`
 
@@ -53,11 +53,11 @@ Chemin : `src/components/<famille>/<Nom>.tsx` · classes CSS : `src/styles/patte
 |---|---|
 | `actions` | Button · IconButton |
 | `brand` | Avatar · Halo · Logo |
-| `data-display` | Badge · Card · Pastille · Separator · Table · Tooltip |
+| `data-display` | Badge · Card *(+ `CardHeader`, l'en-tête exporté)* · Kbd · Pastille · Separator · Table · Tooltip |
 | `feedback` | Banner · EmptyState · Progress · Skeleton · SkeletonCard · Spinner · Toast |
 | `forms` | Calendar · Checkbox · DatePicker · FormField · Input · Radio · Select · Switch · Textarea |
 | `icons` | Icon |
-| `navigation` | AppShell · Footer · Navbar · Pagination · Sidebar · Tabs |
+| `navigation` | AppShell · Footer · Navbar · Pagination · Rail · Sidebar · Tabs |
 | `overlays` | ActionSheet · Dropdown · Modal *(+ `useModalSurface`, le hook partagé)* |
 
 **En plus, et optionnels** — `src/brand-content.tsx` : `HaloHot`, `ContentIcon`. Outils de
@@ -109,7 +109,7 @@ noms de classes ni la structure du DOM — la vitrine et les composants les lise
 **6 · Vérifie.** Trois commandes, trente secondes :
 
 ```bash
-npm run lint          # types + les treize gardes (jetons, contrat, utilitaires, classes mortes,
+npm run lint          # types + les quatorze gardes (jetons, contrat, utilitaires, classes mortes,
                       # tailles en px, classes fragiles, substitution, contraste, surfaces,
                       # catalogue, preflight, littéraux, version)
 node check-contract.mjs   # aucun jeton du contrat oublié
@@ -168,4 +168,4 @@ C'est volontaire : une régression casse visiblement au lieu de dériver en sile
 `GETTING-STARTED.md` — la même chose en checklist minutée, pour un humain.
 `docs/DESIGN.md` — la charte à remplir avant de toucher au CSS.
 `docs/accessibilite.md` — ce qui est garanti, et ce qui ne l'est pas.
-`README.md` — l'API des 37 composants.
+`README.md` — l'API des 39 composants.

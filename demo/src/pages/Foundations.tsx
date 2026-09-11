@@ -3,7 +3,7 @@ import { Block, Grid, Section, Spec, Swatch } from '../ui';
 
 const SURFACES = ['--background', '--foreground', '--card', '--popover', '--secondary', '--muted', '--accent', '--border', '--input'];
 const TEXT = ['--foreground', '--text-secondary', '--text-muted', '--text-inverted', '--muted-foreground'];
-const BRAND = ['--primary', '--ring', '--brand-from', '--brand-via', '--brand-to', '--destructive'];
+const BRAND = ['--primary', '--active', '--ring', '--brand-from', '--brand-via', '--brand-to', '--destructive'];
 const PILLS = ['--pill-coral-bg', '--pill-amber-bg', '--pill-danger-bg', '--pill-warning-bg', '--pill-success-bg', '--pill-neutral-bg'];
 const SPACES = ['--space-1', '--space-2', '--space-3', '--space-4', '--space-5', '--space-6', '--space-7', '--space-8'];
 const RADII = ['--radius-xs', '--radius-sm', '--radius-md', '--radius-lg', '--radius-xl', '--radius-2xl', '--radius-pill'];
@@ -12,7 +12,7 @@ const RAIL = ['--control-sm', '--control-md', '--control-lg', '--icon-control-sm
    de cette page : ce Block est un miroir du socle, pas une troisième source qui pourrait
    diverger de lui. Les trois derniers sont des ARRONDIS propres à un composant — ils ne
    suivent pas l'échelle --radius-*, d'où le rendu séparé. */
-const DIMENSIONS = ['--navbar-h', '--sidebar-w', '--sidebar-w-collapsed', '--sidebar-head-h', '--sidenav-h', '--page-min', '--modal-w', '--modal-close', '--dropdown-w', '--actionsheet-w-panneau', '--toast-w-min', '--toast-w-max', '--choice-box', '--choice-dot', '--progress-h', '--cal-day', '--cal-nav'];
+const DIMENSIONS = ['--navbar-h', '--sidebar-w', '--sidebar-w-collapsed', '--rail-w', '--sidebar-head-h', '--sidenav-h', '--page-min', '--modal-w', '--modal-close', '--dropdown-w', '--actionsheet-w-panneau', '--toast-w-min', '--toast-w-max', '--choice-box', '--choice-dot', '--progress-h', '--cal-day', '--cal-nav'];
 const DIMENSIONS_RADII = ['--tabs-radius', '--pagination-radius', '--choice-box-radius'];
 const SHADOWS = ['--shadow-sm', '--shadow-md', '--shadow-lg', '--shadow-glow', '--shadow-glow-lg'];
 const WIDTHS = ['--container-shell', '--container-wide', '--container-read', '--container-narrow'];

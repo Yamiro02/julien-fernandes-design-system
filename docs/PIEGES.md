@@ -268,6 +268,52 @@ doctrine prise à revers — le socle fournit les VALEURS, l'app écrit les NOMS
 
 ---
 
+## 8 · L'état actif a UN jeton, `--active` — et ni `text-primary` ni `text-primary-readable` ne le sont
+
+**Ce qui casse.** Jusqu'à la 0.20.0, le socle colorait « actif » de **trois** façons selon
+le composant : le jumeau lisible (`--primary-readable`, brique en clair) sur l'entrée de
+menu et le bouton enfoncé, l'aplat (`--primary`) sur l'entrée de rail et la pastille,
+l'**encre** sur le lien de navbar et la page courante de pagination. Chaque règle avait
+sa raison, écrite ; à l'écran, trois oranges pour dire « tu es ici », et une app qui
+voulait le même état chez elle piochait l'une des trois — `text-primary`,
+`text-primary-readable` — au hasard de ce qu'elle avait sous les yeux. Julien l'a
+redemandé à chaque lot.
+
+**Pourquoi la panne est muette.** Les trois classes existent, compilent et rendent une
+couleur de marque. Rien ne dit qu'elles ne sont pas la MÊME, et le défaut ne se voit
+qu'en mettant deux composants côte à côte.
+
+**La règle, depuis la 0.21.0.** Tout ce qui est actif — icône active, texte actif, libellé
+d'onglet sélectionné, page courante, contour d'un bouton enfoncé — lit **un** jeton :
+`--active` (`text-active` en utilitaire). C'est un RÔLE du contrat de marque, pas un alias
+de `--primary` : la marque de ce dépôt y met son orange d'aplat (`#e85d2f`, « l'orange
+clair » — décision de Julien du 12/09/2026), une autre marque y met ce qu'elle veut.
+
+**Le contraste, et pourquoi il n'est pas une raison de changer de jeton.** Avec cette
+valeur, les quatre états actifs en TEXTE mesurent de **3,00 à 3,28** en clair et de
+**3,78 à 4,12** en sombre — au-dessus du seuil des graphiques (3), sous celui du texte
+courant (4,5). C'est un **écart assumé par la marque, par écrit** (quatre blocs
+`@a11y-assume` dans `brand-julien-fernandes.css`, repris dans `accessibilite.md` § 3.5) :
+l'état actif n'est jamais porté par la couleur seule — la plaque, la graisse et
+`aria-current` / `aria-selected` le portent avec elle. Le remède, si l'écart ne peut plus
+être assumé, est **une ligne dans le fichier de marque** (`--active:#b23a1c` en clair), pas
+un retour à trois jetons. Pour tout texte qui n'est PAS un état actif, la règle de
+`accessibilite.md` § 1 tient : `--primary` est un remplissage, `text-primary` sur un
+libellé tombe à 3,00, on écrit `text-primary-readable`.
+
+**La parade.** `text-active` / `var(--active)` pour un état actif ; `text-primary-readable`
+pour un lien ou une information de marque ; `text-primary` pour rien, jamais.
+
+**Le garde.** `node check-active.mjs` — toute règle de `patterns.css` dont le sélecteur
+nomme un état actif (`.is-active`, `.is-selected`, `[aria-selected="true"]`,
+`[aria-current…]`, `[aria-pressed="true"]`, `.ds-icon-btn--accent`) ne peut colorer son
+contenu et ses contours qu'avec `var(--active)` ; il porte son jumeau de falsification (16
+cas) et le rejoue à chaque appel. Pour le code d'une **app**, aucun garde : `text-primary`
+y est une classe valide. Le réflexe : *un état actif qui n'est pas en `text-active` est
+faux, quelle que soit la couleur qu'il a l'air d'avoir.*
+
+---
+
 ## Ajouter un piège
 
 1. Passe-t-il le **critère d'admission** ? Sinon, écris-le dans le fichier qui lui revient.

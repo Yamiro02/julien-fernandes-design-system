@@ -140,6 +140,41 @@
    respire entre deux blocs qui, eux, se lisent. La variante .ds-sep--label porte son texte
    en --text-muted (5,12 sur carte). */
 
+/* LA COULEUR D'ACTIF EN TEXTE — quatre écarts d'une seule décision, celle de Julien du
+   12/09/2026 : « la couleur d'un icône actif, d'un texte actif, d'un texte d'onglet
+   actif, de n'importe quoi actif, c'est l'orange clair ». --active porte l'orange
+   d'aplat (#e85d2f) et TOUTES les règles d'état actif du socle le lisent — c'est ce qui
+   rend l'état reconnaissable d'un composant à l'autre, et c'est ce que le jumeau lisible
+   (brique en clair) ne donnait pas. Le prix, mesuré : de 3,00 à 3,28 en clair, 3,78 à
+   4,12 en sombre, sur du texte de 15-16 px / 600 — au-dessus du seuil des graphiques,
+   sous celui du texte courant. CE QUI L'ATTÉNUE, dans les quatre cas : l'état actif n'est
+   JAMAIS porté par la couleur seule. La plaque (--surface-alt sous l'entrée de menu,
+   --accent sous l'onglet, --card sous la page courante), la graisse
+   (600, partout) et aria-current le portent avec elle ; et un état actif ne contient
+   aucune information que le contexte ne donne pas déjà (c'est LÀ où on est). Le remède
+   si l'écart ne peut plus être assumé : --active:#b23a1c en clair — une seule ligne, et
+   les quatre paires repassent 4,5 ; ce serait une autre décision de marque. */
+
+/* @a11y-assume: .ds-sidenav.is-active
+   3,00 en clair, 3,78 en sombre — --active sur --surface-alt, 15px/600, icône et libellé.
+   Voir le bloc « LA COULEUR D'ACTIF EN TEXTE » ci-dessus. Atténué : la plaque, la graisse,
+   aria-current="page". */
+
+/* @a11y-assume: .ds-tab[aria-selected]
+   3,00 en clair, 3,94 en sombre — --active sur --accent, 15px/600. Voir le bloc ci-dessus.
+   Atténué : la plaque accent (le survol, lui, n'a pas de fond — c'est ce qui les
+   distingue), la graisse, aria-selected. */
+
+/* @a11y-assume: .ds-page[aria-current]
+   3,25 en clair, 4,12 en sombre — --active sur --card, 15px/600. Voir le bloc ci-dessus.
+   Atténué : la plaque --card sous --shadow-sm, la graisse, aria-current="page" — et la
+   page courante est aussi la seule plaque de la barre. */
+
+/* @a11y-assume: .ds-navlink.is-active
+   3,28 en clair, 4,12 en sombre — --active sur --secondary, 16px/600. Voir le bloc
+   ci-dessus. Atténué : la graisse (les autres liens sont en 500), et le lien actif d'une
+   navbar de site nomme la page qu'on lit — l'information est dans le titre de la page. */
+
 /* @a11y-assume: anneau de focus --ring sur --background
    2,41 en clair — 2,41 sur la page, 2,51 sur la carte, 2,53 sur --secondary, 2,60 sur le
    popover : sous le plancher de 3:1 des indicateurs non textuels, quelle que soit la
@@ -227,6 +262,17 @@
   --primary-readable:#b23a1c;
   --destructive-readable:#a32d2d;
 
+  /* LA COULEUR DE TOUT CE QUI EST ACTIF — décision de Julien du 12/09/2026 : « la couleur
+     d'un icône actif, d'un texte actif, d'un texte d'onglet actif, de n'importe quoi
+     actif, c'est l'orange clair ». Le socle lisait trois couleurs pour cet état (le
+     jumeau brique en clair, l'aplat, l'encre) ; il n'en lit plus qu'une, celle-ci, par
+     toutes ses règles d'actif. La valeur est celle de --primary — l'orange que le rail et
+     la pastille portaient déjà — écrite en clair, comme --ring : un rôle, pas un alias.
+     ELLE NE TIENT PAS 4,5:1 SUR DU TEXTE (3,00 à 3,48 selon la porteuse, en clair comme
+     en sombre) : c'est assumé, par écrit, dans les blocs @a11y-assume ci-dessus — la
+     plaque (accent, surface-alt) et la graisse portent l'état avec la couleur. */
+  --active:#e85d2f;
+
   /* Sémantique — les 6 pilules. Quatre fonds sur six sont calculés par le socle, et ses
      formules sont celles du maître, identiques. */
   --pill-coral-fg:#b23a1c;
@@ -307,6 +353,7 @@
   --destructive:#e84c3d; --destructive-foreground:#ffffff;
   --primary-readable:#f0916b;
   --destructive-readable:#ec8f8f;
+  --active:#e85d2f;
   --grad-soft:linear-gradient(135deg,rgba(245,165,36,.14),rgba(232,76,61,.10)); /* @kind color */
   --pill-coral-fg:#f0916b;
   --pill-amber-fg:#e3b25c;

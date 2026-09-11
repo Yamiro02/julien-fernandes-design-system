@@ -2,7 +2,7 @@
 
 **Un squelette de design system React, à remplir par projet.** Deux couches qui ne se
 mélangent pas : un **socle** générique — structure, comportements, échelles, rail de
-contrôles, motion, 37 composants React + TypeScript, **zéro couleur** — et une **marque**,
+contrôles, motion, 39 composants React + TypeScript, **zéro couleur** — et une **marque**,
 qui porte les couleurs, les polices, les dégradés et la lueur.
 
 Jetons CSS · couche Tailwind v4 · tout est en `rem`.
@@ -58,7 +58,7 @@ gabarit, dont la marque d'exemple est froide et n'est celle de personne.)
 Pas de registry : chaque app épingle une version par un tag git.
 
 ```bash
-npm i github:Yamiro02/julien-fernandes-design-system#v0.20.0
+npm i github:Yamiro02/julien-fernandes-design-system#v0.21.0
 ```
 
 Cinq **peer dependencies**, à la charge de l'app :
@@ -219,7 +219,7 @@ Une section ink au milieu d'une page crème adopte le scope, elle ne peint pas u
 
 | Famille | Utilitaires |
 |---|---|
-| Couleurs | `bg-background` `text-foreground` `bg-card` `text-card-foreground` `bg-popover` `bg-primary` `bg-secondary` `bg-muted` `text-muted-foreground` `bg-accent` `bg-destructive` `border-border` `ring-ring` `bg-tone-dark` `bg-tone-dark-soft` `bg-tone-light` `bg-tone-light-alt` `text-text-secondary` `text-text-muted` `text-text-inverted` `bg-brand-from/via/to` `bg-pill-*-bg` `text-pill-*-fg` |
+| Couleurs | `bg-background` `text-foreground` `bg-card` `text-card-foreground` `bg-popover` `bg-primary` `bg-secondary` `bg-muted` `text-muted-foreground` `bg-accent` `bg-destructive` `border-border` `ring-ring` `bg-tone-dark` `bg-tone-dark-soft` `bg-tone-light` `bg-tone-light-alt` `text-text-secondary` `text-text-muted` `text-text-inverted` `text-primary-readable` **`text-active`** (LA couleur d'un état actif — jamais `text-primary` pour ça) `bg-brand-from/via/to` `bg-pill-*-bg` `text-pill-*-fg` |
 | Dégradés | `bg-brand-gradient` `bg-brand-gradient-diagonal` `bg-grad-soft` `bg-halo` — pas de namespace v4 pour `background-image` : ce sont des `@utility`, donc variantables (`hover:`, `dark:`) |
 | Rayons | `rounded-xs` `rounded-sm` `rounded-md` `rounded-lg` `rounded-xl` `rounded-2xl` `rounded-pill` — le pill est réservé aux **badges et compteurs** : jamais un bouton, un input ni une barre d'onglets. **`rounded` nu n'est pas au barème**, voir plus bas |
 | Ombres | `shadow-sm` `shadow-md` `shadow-lg` `shadow-glow` `shadow-glow-lg` |
@@ -253,7 +253,7 @@ de Tailwind, sur laquelle reposent les composants shadcn de ton app.
 > lève aucune erreur : il passe silencieusement de 20 px à 4 px.
 
 > **Le paquet n'est pas scanné par Tailwind.** v4 ne lit pas `node_modules`. Sans effet
-> aujourd'hui : les 37 composants s'habillent en classes `.ds-*` et n'écrivent aucun utilitaire
+> aujourd'hui : les 39 composants s'habillent en classes `.ds-*` et n'écrivent aucun utilitaire
 > Tailwind. C'est une précaution pour l'avenir — le jour où un composant du DS écrira une classe
 > Tailwind, l'app devra pointer le paquet :
 > ```css
@@ -269,13 +269,13 @@ de Tailwind, sur laquelle reposent les composants shadcn de ton app.
 
 | Famille | Composants |
 |---|---|
-| `icons` | `Icon` — 48 glyphes Lucide ; la taille vient du **créneau** (`--ds-icon-size`, repli `1.25rem`), `size` reste la surcharge au site d'appel |
+| `icons` | `Icon` — 48 glyphes Lucide au catalogue, et **n'importe lequel des ~1500 de `lucide-react` par `glyph`** (c'est une peer dependency : chaque app l'a déjà — un glyphe absent du catalogue est un import dans l'app, pas une demande au socle) ; la taille vient du **créneau** (`--ds-icon-size`, repli `1.25rem`), `size` reste la surcharge au site d'appel |
 | `actions` | `Button` · `IconButton` — 4 variantes (5 pour `IconButton`, `accent` compris), 3 tailles, jamais un pill |
 | `forms` | `Input` · `Textarea` · `Select` · `Checkbox` · `Radio` · `Switch` · `FormField` · `Calendar` · `DatePicker` |
-| `data-display` | `Card` (+ en-tête à slots) · `Pastille` · `Badge` (2 rembourrages) · `Tooltip` · `Separator` · `Table` (+ `THead` `TBody` `Tr` `Th` `Td`) — `framed` · `columns` · `striped` · `hoverable`, composables |
+| `data-display` | `Card` (+ `CardHeader`, l'en-tête à slots exporté, avec son mode à filet `flush`) · `Kbd` · `Pastille` · `Badge` (2 rembourrages) · `Tooltip` · `Separator` · `Table` (+ `THead` `TBody` `Tr` `Th` `Td`) — `framed` · `columns` · `striped` · `hoverable`, composables |
 | `feedback` | `Toast` · `Banner` · `EmptyState` · `Skeleton` · `SkeletonCard` · `Spinner` · `Progress` |
-| `overlays` | `Modal` (3 phases + feuille basse sous 64 rem) · `ActionSheet` · `Dropdown` |
-| `navigation` | `Navbar` · `Footer` · `Tabs` · `Pagination` · `AppShell` · `Sidebar` |
+| `overlays` | `Modal` (3 phases + feuille basse sous 64 rem ; en-tête sur une ligne, celui de `Card`) · `ActionSheet` · `Dropdown` |
+| `navigation` | `Navbar` · `Footer` · `Tabs` · `Pagination` · `AppShell` · `Sidebar` (libellés, repliable) · `Rail` (icônes seules, largeur fixe, jamais de repli) |
 | `brand` | `Logo` · `Halo` · `Avatar` |
 
 Tous sont exportés en nommé depuis la racine, avec leurs types :
@@ -319,12 +319,18 @@ npm run typecheck    # tsc --noEmit
 npm run lint         # typecheck + contrôle anti-collision
 ```
 
-`npm run lint` enchaîne le typecheck et **treize gardes**. Le premier de la chaîne est
+`npm run lint` enchaîne le typecheck et **quatorze gardes**. Le premier de la chaîne est
 [`check-token-refs.mjs`](check-token-refs.mjs) — c'est le moins cher, et un jeton manquant rend le
 diagnostic des autres trompeur : il refuse tout `var(--x)` lu par le CSS du système ou par un style
 inline de composant sans qu'un `--x:` soit déclaré. Un `var()` non résolu n'est pas ignoré, il rend
 la déclaration **invalide at computed-value time** — pour un `font-size`, ça veut dire `inherit`, et
 un `Button size="sm"` rend alors plus GROS qu'un `md`.
+
+[`check-active.mjs`](check-active.mjs) (v0.21.0) ferme un défaut que Julien redemandait à
+chaque lot : **tout ce qui est actif** — icône, texte, libellé d'onglet, contour, page
+courante — lit **un** jeton, `--active`, et le garde refuse toute autre couleur dans une
+règle d'état actif de `patterns.css`. Côté app, c'est `text-active`, jamais `text-primary`
+ni `text-primary-readable` pour dire « actif ».
 
 Vient ensuite, entre autres, [`check-utility-collisions.mjs`](check-utility-collisions.mjs), qui
 refuse tout `@utility` de `theme.css` portant le nom d'une classe qu'un jeton de thème génère

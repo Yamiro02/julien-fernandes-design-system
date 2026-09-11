@@ -101,6 +101,9 @@
   --color-surface-alt: var(--surface-alt);
   --color-primary-readable: var(--primary-readable);
   --color-destructive-readable: var(--destructive-readable);
+  /* `text-active` — LA couleur d'un état actif écrit par une app (v0.21.0). Jamais
+     `text-primary` ni `text-primary-readable` pour dire « actif » : c'est ce jeton. */
+  --color-active: var(--active);
   --color-success: var(--success);
 
   /* ---------- Couleurs : neutres de marque ----------

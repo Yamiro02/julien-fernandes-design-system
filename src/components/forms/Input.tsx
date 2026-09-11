@@ -1,5 +1,5 @@
 import { forwardRef } from 'react';
-import type { InputHTMLAttributes, JSX } from 'react';
+import type { InputHTMLAttributes, JSX, ReactNode } from 'react';
 import { cn } from '../../lib/cn';
 
 /**
@@ -21,10 +21,19 @@ export interface InputProps extends Omit<InputHTMLAttributes<HTMLInputElement>, 
    * une unité. `aria-hidden` : c'est au libellé du FormField de la nommer.
    */
   unit?: string;
+  /**
+   * L'icône de TÊTE — une loupe devant « Chercher une vidéo… » (v0.21.0, relevé sur les
+   * maquettes v2 d'une app). Le miroir exact de `unit`, à gauche : posée DANS le champ,
+   * à .875rem du bord, 1rem, en sourdine, hors du pointeur. Passez un `<Icon>` sans
+   * `size` : le créneau des déclencheurs de champ le rend à 1rem. Elle est décorative
+   * (`aria-hidden`) : c'est au `placeholder` ou au libellé de dire ce que fait le champ.
+   * `icon` et `unit` se cumulent sur un même champ.
+   */
+  icon?: ReactNode;
 }
 
 export const Input = forwardRef<HTMLInputElement, InputProps>(function Input({
-  size = 'md', invalid = false, surface = 'page', unit, className = '', ...rest
+  size = 'md', invalid = false, surface = 'page', unit, icon, className = '', ...rest
 }: InputProps, ref): JSX.Element {
   // surface: 'page' (default) = the input sits directly on the layout (fill --secondary) · 'card' = inside a card (fill --background).
   // Since the surface-inference rule in patterns.css, a field inside a Card, Modal, ActionSheet, Dropdown or DatePicker pop deduces --background by itself — the prop is only needed for other containers.
@@ -39,13 +48,15 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(function Input({
     className,
   );
   const champ = <input ref={ref} className={cls} aria-invalid={invalid || undefined} {...rest} />;
-  if (!unit) return champ;
-  /* L'enveloppe n'existe QUE si `unit` est passé : sans elle, le DOM d'hier — un <input>
-     nu — ne bouge pas d'un nœud. */
+  if (!unit && !icon) return champ;
+  /* L'enveloppe n'existe QUE si `unit` ou `icon` est passé : sans elle, le DOM d'hier — un
+     <input> nu — ne bouge pas d'un nœud. Chaque affixe pose SON modificateur : c'est lui
+     qui réserve le padding de son côté, et seulement de son côté. */
   return (
-    <span className="ds-input-unit">
+    <span className={cn('ds-input-wrap', icon ? 'ds-input-wrap--icon' : null, unit ? 'ds-input-wrap--unit' : null)}>
+      {icon ? <span className="ds-input-wrap__icon" aria-hidden="true">{icon}</span> : null}
       {champ}
-      <span className="ds-input-unit__label" aria-hidden="true">{unit}</span>
+      {unit ? <span className="ds-input-wrap__unit" aria-hidden="true">{unit}</span> : null}
     </span>
   );
 });

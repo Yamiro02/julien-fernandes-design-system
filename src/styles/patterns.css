@@ -63,7 +63,9 @@
    LES TAILLES SONT LE RELEVÉ DES SIX ARTBOARDS (131 icônes) : IconButton sm 1rem (47) ·
    Button sm 1rem (16) · IconButton md 1.125rem (11) · Input/déclencheur 1rem (8) ·
    Badge dense 0.75rem (6) · Pastille dialogue 1.5rem (4) · Button md 1.125rem (3) ·
-   Pastille carte et nav de Sidebar 1.25rem — le repli, aucune règle à écrire.
+   Pastille carte, nav de Sidebar et entrée de Rail 1.25rem — le repli, aucune règle à
+   écrire. L'icône de tête d'un Input (v0.21.0) rejoint le créneau des déclencheurs de
+   champ, 1rem — relevé sur les deux champs de recherche des maquettes v2 d'une app.
    (Button md : l'artboard donne 1.125 ×2 et 1 ×1 ; le cas isolé est le 404, écran qui
    dévie déjà ailleurs — 1.125 est la seule valeur cohérente avec sm 1rem et
    IconButton md 1.125.) Pastille panneau 1.5rem vient de la vitrine et de la doc, pas
@@ -78,7 +80,7 @@
 .ds-btn--md :is(svg,.ds-spinner){--ds-icon-size:1.125rem}
 .ds-icon-btn--sm svg{--ds-icon-size:1rem}
 .ds-icon-btn--md svg{--ds-icon-size:1.125rem}
-.ds-select__chev,.ds-datepicker__trigger svg{--ds-icon-size:1rem}
+.ds-select__chev,.ds-datepicker__trigger svg,.ds-input-wrap__icon svg{--ds-icon-size:1rem}
 .ds-badge--dense svg{--ds-icon-size:0.75rem}
 .ds-pastille--dialogue svg{--ds-icon-size:1.5rem}
 .ds-pastille--panneau svg{--ds-icon-size:1.5rem}
@@ -142,18 +144,22 @@
 .ds-icon-btn--danger{border:none;background:var(--destructive);color:var(--destructive-foreground)}
 .ds-icon-btn--danger:hover:not(:disabled),.ds-icon-btn--danger.is-hover{filter:brightness(.93)}
 /* LA VARIANTE QUI EXISTAIT DÉJÀ DANS LES APPS, EN FRAUDE — v0.17.0. Fond --accent, sans
-   bordure, icône --primary : l'état « sélectionné doux » d'un lien-icône. Faute de
+   bordure, icône ACTIVE : l'état « sélectionné doux » d'un lien-icône. Faute de
    variante, un artboard attrapait `is-active` — une AIDE DE DÉMO — et annulait la
-   bordure en style inline (4+ occurrences). L'icône est DÉCORATIVE et de marque : elle
-   prend --primary, comme la pastille — 3,08:1 en clair, 3,14 en sombre sur la plaque,
-   au-dessus du seuil 3:1 des graphiques non textuels (mesure de la règle consolidée,
-   au-dessus de .ds-pastille--brand). Le survol tire la plaque vers la marque, pas vers
-   --surface-alt : la variante EST une teinte, son survol reste dans la teinte.
+   bordure en style inline (4+ occurrences). L'icône prend --active, LA couleur de tout
+   ce qui est actif (v0.21.0) — 3,00:1 en clair, 3,94 en sombre sur --accent, au-dessus
+   du seuil 3:1 des graphiques non textuels (la paire `.ds-icon-btn--accent — icône` de
+   check-contrast.mjs ; la règle consolidée est au-dessus de .ds-pastille--brand). Le
+   survol tire la plaque vers la marque, pas vers --surface-alt : la variante EST une
+   teinte, son survol reste dans la teinte.
+   C'est l'entrée ACTIVE d'un Rail (v0.21.0) : le rail compose cette variante, il ne la
+   redessine pas. Le bouton ENFONCÉ (aria-pressed, is-active) est le même état : même
+   plaque, même couleur, plus le contour.
    Button n'a pas ce jumeau, et c'est délibéré : le besoin n'est attesté que sur le
    carré d'icône — on promeut au deuxième appelant, jamais avant. */
-.ds-icon-btn--accent{border:none;background:var(--accent);color:var(--primary)}
-.ds-icon-btn--accent:hover:not(:disabled),.ds-icon-btn--accent.is-hover{background:color-mix(in srgb,var(--primary) 10%,var(--accent))}
-.ds-icon-btn.is-active,.ds-icon-btn--secondary[aria-pressed="true"]{border-color:var(--primary);background:var(--accent);color:var(--primary-readable)}
+.ds-icon-btn--accent{border:none;background:var(--accent);color:var(--active)}
+.ds-icon-btn--accent:hover:not(:disabled),.ds-icon-btn--accent.is-hover{background:color-mix(in srgb,var(--active) 10%,var(--accent))}
+.ds-icon-btn.is-active,.ds-icon-btn--secondary[aria-pressed="true"]{border-color:var(--active);background:var(--accent);color:var(--active)}
 .ds-icon-btn:focus-visible,.ds-icon-btn.is-focus{box-shadow:0 0 0 3px color-mix(in srgb,var(--ring) 35%,transparent)}
 .ds-icon-btn:disabled,.ds-icon-btn.is-disabled{opacity:.5;cursor:not-allowed;transform:none}
 
@@ -194,10 +200,21 @@
    « min ») est une méta posée DANS le champ, à droite, en sourdine : elle ne se clique
    pas, ne se lit pas deux fois (aria-hidden — le libellé du FormField la nomme). Le
    padding réservé vaut --space-7 : assez pour trois caractères, la limite documentée.
-   Une unité plus longue est un SUFFIXE de libellé, pas une unité de champ. */
-.ds-input-unit{position:relative;display:block;width:100%}
-.ds-input-unit .ds-input{padding-right:var(--space-7)}
-.ds-input-unit__label{position:absolute;right:1rem;top:50%;transform:translateY(-50%);pointer-events:none;color:var(--text-muted);font-size:var(--text-body-sm)}
+   Une unité plus longue est un SUFFIXE de libellé, pas une unité de champ.
+   LE CHAMP À ICÔNE DE TÊTE — v0.21.0, le miroir exact du même mécanisme, à gauche :
+   une loupe devant « Chercher une vidéo… ». Relevé sur les maquettes v2 d'une app :
+   `padding-left 2.5rem`, l'icône à `.875rem` du bord, 1rem, --text-muted, hors du
+   pointeur. Le padding réservé est ce qu'un site d'appel ne peut PAS recopier sans
+   recopier aussi le padding du champ (1rem) et son créneau d'icône : c'est ce qui en
+   fait une affaire du socle et non de l'app.
+   L'enveloppe s'appelait .ds-input-unit ; elle porte désormais les deux affixes et
+   s'appelle .ds-input-wrap — classe interne, aucune app ne l'écrivait (vérifié). Les
+   deux modificateurs se cumulent : icône à gauche ET unité à droite sur un même champ. */
+.ds-input-wrap{position:relative;display:block;width:100%}
+.ds-input-wrap--unit .ds-input{padding-right:var(--space-7)}
+.ds-input-wrap--icon .ds-input{padding-left:2.5rem}
+.ds-input-wrap__unit{position:absolute;right:1rem;top:50%;transform:translateY(-50%);pointer-events:none;color:var(--text-muted);font-size:var(--text-body-sm)}
+.ds-input-wrap__icon{position:absolute;left:0.875rem;top:50%;transform:translateY(-50%);display:flex;pointer-events:none;color:var(--text-muted)}
 .ds-textarea{height:auto;min-height:0;resize:vertical;line-height:var(--leading-normal)}
 .ds-select{position:relative;display:block}
 .ds-select select{appearance:none;-webkit-appearance:none;padding-right:var(--space-7);cursor:pointer}
@@ -262,6 +279,18 @@
 .ds-card__header{display:flex;align-items:center;gap:var(--space-3);margin-bottom:var(--space-4)}
 .ds-card__header--stacked{align-items:flex-start}
 .ds-card__header--airy{margin-bottom:var(--space-6)}
+/* L'EN-TÊTE À FILET — v0.21.0. Le même en-tête, posé en tête d'une carte SANS padding
+   (`flush`) : il porte alors son propre rembourrage et se sépare du corps par un filet,
+   au lieu d'une marge. Relevé sur les quinze en-têtes de carte flush des maquettes v2
+   d'une app : `padding 1rem 1.5rem` (--space-4 --space-5, sur l'échelle) et
+   `border-bottom 1px --border`, sans teinte — la variante « bandeau » à fond accent
+   qu'une app avait écrite chez elle n'existe plus dans ces maquettes. Dix en-têtes
+   d'une colonne étroite y sont à `1rem 1.25rem` : c'est un resserrement de largeur,
+   pas un second en-tête — UNE valeur, celle des quinze. Le mode ne change ni le gap,
+   ni l'alignement, ni le cran de titre (sm 1.125rem, lg --text-subheading — la display ne
+   descend jamais sous 1.125rem, et ces maquettes n'y changent rien : leur h3 à 15 px est
+   une approximation de l'outil, pas une décision de marque) : c'est le même objet à ras. */
+.ds-card__header--flush{padding:var(--space-4) var(--space-5);margin-bottom:0;border-bottom:1px solid var(--border)}
 .ds-card__header-main{display:flex;flex-direction:column;gap:0.1875rem;flex:1;min-width:0}
 .ds-card__title{margin:0;font-family:var(--font-display);font-weight:var(--heading-weight);text-transform:var(--heading-transform);font-size:var(--text-heading-sm);letter-spacing:var(--tracking-heading-sm);line-height:var(--leading-snug)}
 .ds-card__title--lg{font-size:var(--text-subheading);letter-spacing:var(--tracking-subheading);line-height:var(--leading-heading)}
@@ -285,6 +314,12 @@
 .ds-badge--neutral{background:var(--pill-neutral-bg);color:var(--pill-neutral-fg)}
 .ds-badge--accent{background:var(--accent);color:var(--primary-readable)}
 .ds-badge--outline{background:transparent;color:var(--text-secondary);box-shadow:inset 0 0 0 1px var(--border)}
+/* LA TOUCHE — v0.21.0. Relevé sur 47 occurrences des maquettes v2 d'une app, une seule
+   forme. Ce n'est PAS un badge : carré à coins xs, 1.375rem, sa propre hauteur, un filet
+   interne — là où le badge est une pilule de 1.5rem. `kbd` retombe sur --font-mono dans
+   tokens/base.css ; la touche est en corps de texte, comme dans le relevé, et le redit.
+   line-height:1 pour que la hauteur soit la boîte, pas l'interligne hérité. */
+.ds-kbd{display:inline-flex;align-items:center;justify-content:center;min-width:1.375rem;height:1.375rem;padding:0 0.375rem;box-sizing:border-box;border-radius:var(--radius-xs);background:var(--secondary);box-shadow:inset 0 0 0 1px var(--border);font-family:var(--font-body);font-size:var(--text-caption);font-weight:var(--weight-semibold);line-height:1;color:var(--text-secondary);white-space:nowrap}
 .ds-tooltip{position:relative;display:inline-flex}
 .ds-tooltip__bubble{position:absolute;bottom:calc(100% + 0.5625rem);left:50%;transform:translateX(-50%) translateY(0.25rem);padding:0.5rem 0.75rem;border-radius:var(--radius-md);background:var(--tone-dark);color:var(--text-inverted);font-size:var(--text-caption);font-weight:var(--weight-semibold);line-height:1.3;white-space:nowrap;box-shadow:var(--shadow-lg);opacity:0;pointer-events:none;transition:opacity var(--duration-fast) var(--ease-standard),transform var(--duration-fast) var(--ease-standard);z-index:var(--z-popover)}
 .ds-tooltip__bubble::after{content:"";position:absolute;left:50%;bottom:-0.25rem;width:0.5rem;height:0.5rem;background:inherit;transform:translateX(-50%) rotate(45deg)}
@@ -303,23 +338,32 @@
 .ds-pastille--rond{border-radius:var(--radius-pill)}
 /* UNE ICÔNE SE COLORE SELON CE QU'ELLE PORTE, PAS SELON L'ENDROIT OÙ ELLE EST.
    La règle consolidée du système, écrite une fois, ici :
-     · décorative                  -> currentColor, elle suit son texte
+     · décorative                  -> currentColor, elle suit son texte — l'icône de
+                                     l'item de nav actif est ici depuis la 0.21.0 : elle
+                                     suit son libellé
+     · ACTIVE                      -> --active, LA couleur de tout ce qui est actif
+                                     (v0.21.0) : l'icône du bouton-icône `accent` et du
+                                     bouton enfoncé, l'entrée active d'un Rail — et le
+                                     texte actif prend le MÊME jeton (menu, onglet, page
+                                     courante, lien de navbar). check-active.mjs l'impose.
      · décorative mais DE MARQUE   -> --primary : pastille d'état vide, pastille d'en-tête
-                                     de carte, icône de l'item de nav actif
+                                     de carte
      · PORTEUSE D'INFORMATION      -> --primary-readable : erreur, jour courant, état — et
                                      là le seuil s'applique pleinement
-   CES DEUX EMPLOIS SONT LES SEULS où --primary touche du NON-TEXTE. Partout ailleurs il
-   reste un aplat : CTA, piste de switch, case cochée.
+   CET EMPLOI EST LE SEUL où --primary touche du NON-TEXTE. Partout ailleurs il reste un
+   aplat : CTA, piste de switch, case cochée. --active porte la même valeur dans cette
+   marque, mais c'est un autre jeton, pour un autre rôle.
    L'histoire, parce qu'elle explique les deux virages : --primary-readable (#b23a1c)
    sortait ici à 5,30 — un brun-brique sombre sur un lavis chaud, qui se lit comme de
    l'encre colorée plutôt que comme la marque, surtout dans un état vide où la pastille fait
    80px. --brand-via a corrigé l'éclat mais mesurait 2,34, sous le seuil des graphiques non
    textuels. --primary tient les deux bouts : 3,08 en clair, 3,14 en sombre sur la plaque —
-   et 3,00 / 3,78 pour l'icône de nav active. Aucune des deux paires n'est plus un écart
-   assumé.
+   et --active, de même valeur ici, 3,00 / 3,94 pour l'icône du bouton-icône `accent`.
+   Aucune des deux paires n'est un écart assumé (seuil 3, ce sont des icônes).
    CONTREPARTIE ASSUMÉE : en sombre --primary est plus DENSE que --brand-via sur la plaque.
    La marque gagne en densité ce qu'elle perd en éclat. Repli si l'écart déplaît :
-   --primary-readable, qui tient 5,16 / 5,62.
+   --primary-readable, qui tient 5,16 / 5,85 sur --accent — mais PAS pour un état actif,
+   qui ne lit que --active.
    LES TONS SÉMANTIQUES NE SUIVENT PAS. success, warning, danger, coral, amber et neutral
    gardent leur couleur lisible : une pastille de statut porte une information. C'est toute
    la différence entre décorer et informer, et c'est la ligne qu'on cassera un jour en
@@ -390,9 +434,23 @@
 .ds-modal__close{width:var(--modal-close);height:var(--modal-close);border-radius:var(--radius-sm);border:none;background:transparent;color:var(--muted-foreground);cursor:pointer;display:inline-flex;align-items:center;justify-content:center;margin-left:auto}
 .ds-modal__close:hover:not(:disabled){background:var(--surface-alt);color:var(--foreground)}
 .ds-modal__close:disabled{opacity:.4;cursor:not-allowed;background:transparent;color:var(--muted-foreground)}
+/* LA MODALE REND L'EN-TÊTE DE CARTE — v0.21.0. Jusqu'à la 0.20.0 elle mettait la
+   pastille et la croix sur un rang (.ds-modal__head) et le titre sur un second
+   (.ds-modal__title), sans sous-titre. Les maquettes v2 (q8, q10) posent tout sur UNE
+   ligne — pastille · titre + sous-titre · croix — et c'est exactement la grammaire de
+   .ds-card__header : la croix est son `action`, le sous-titre son `subtitle`, le titre
+   en cran `lg` (--text-subheading, la taille qu'avait déjà le h3 de la modale). Modal.tsx
+   compose CardHeader ; il n'existe plus de second en-tête au socle.
+   Le rang .ds-modal__head ne survit que pour la phase `result`, où il ne porte que la
+   croix, au bout (--end) ; .ds-modal__title est parti avec le second rang.
+   LE CORPS COMMENCE À 1,5 REM SOUS L'EN-TÊTE — relevé q8/q10 (`margin-top:1.5rem`).
+   La modale espace ses enfants de 0.875rem ; l'en-tête garde donc 0.625rem de marge
+   basse, et la somme fait le relevé. (Trois écarts absorbés par l'en-tête unique, tous
+   sous 2px : gap icône-texte .875 -> --space-3, gap titre-sous-titre .25 -> .1875rem,
+   interligne du sous-titre normal -> snug. Un seul en-tête vaut ces trois pixels.) */
+.ds-modal>.ds-card__header{margin-bottom:0.625rem}
 .ds-modal__head{display:flex;align-items:flex-start;justify-content:space-between}
 .ds-modal__head--end{justify-content:flex-end}
-.ds-modal__title{margin:0}
 .ds-modal__text{margin:0}
 /* Modal phases — __desc and __foot officialise Modal.tsx's inline styles, values identical. */
 .ds-modal__desc{font-size:var(--text-body-sm);color:var(--muted-foreground);line-height:1.5;display:flex;flex-direction:column;gap:var(--space-3)}
@@ -467,27 +525,41 @@
 .ds-navbar__cta{display:flex;align-items:center;gap:var(--space-3)}
 .ds-navlink{font-size:var(--text-body);font-weight:var(--weight-medium);color:var(--text-secondary);text-decoration:none;padding:var(--space-2) 0;transition:color var(--duration-fast) var(--ease-standard)}
 .ds-navlink:hover,.ds-navlink.is-hover{color:var(--foreground)}
-/* L'item actif se signale par sa GRAISSE, pas par un libellé coloré : l'orange est
-   rationné, et le lien actif cessait d'être lisible comme du texte. */
-.ds-navlink.is-active{color:var(--foreground);font-weight:var(--weight-semibold)}
+/* L'item actif prend --active, LA couleur de tout ce qui est actif — v0.21.0, décision
+   de Julien. Il se signalait par sa seule graisse (« l'orange est rationné ») ; il porte
+   désormais la couleur d'actif comme l'entrée de menu, l'onglet et la page courante — un
+   seul jeton, un seul réflexe. La graisse reste le second signal. Contraste : écart
+   assumé par la marque (3,2 sur --secondary), voir @a11y-assume dans son fichier. */
+.ds-navlink.is-active{color:var(--active);font-weight:var(--weight-semibold)}
 .ds-tabs{display:inline-flex;align-items:center;gap:var(--space-1);padding:var(--space-1);border-radius:var(--tabs-radius);min-height:var(--control-md);box-sizing:border-box;background:var(--secondary);border:1px solid var(--border)}
 .ds-tabs--on-card{background:var(--background)}
 .ds-tab{appearance:none;border:0;background:transparent;color:var(--text-muted);font-family:var(--font-body);font-size:var(--text-control);font-weight:var(--weight-semibold);padding:var(--space-2) var(--space-4);border-radius:var(--radius-sm);cursor:pointer;transition:background-color var(--duration-fast) var(--ease-standard),color var(--duration-fast) var(--ease-standard)}
 .ds-tab:hover,.ds-tab.is-hover{color:var(--foreground)}
-.ds-tab[aria-selected="true"],.ds-tab.is-selected{background:var(--background);color:var(--foreground);box-shadow:var(--shadow-sm)}
-/* En SOMBRE, l'ombre ne porte plus l'élévation et --secondary est le sommet de l'échelle
-   des surfaces : un onglet actif posé en --background serait plus sombre que sa barre —
-   il se lirait comme un creux, pas comme une sélection. On monte AU-DESSUS de la barre en
-   mêlant l'encre au remplissage. Les barres posées sur une carte (règles ci-dessous, plus
-   spécifiques ou postérieures) gardent leur régime : barre en creux, actif au niveau carte. */
-.dark .ds-tab[aria-selected="true"],.dark .ds-tab.is-selected{background:color-mix(in srgb,var(--foreground) 12%,var(--secondary))}
-/* Sur une carte, la barre est en --background : l'onglet actif reprend --card pour garder l'écart. */
-.ds-tabs--on-card .ds-tab[aria-selected="true"],.ds-tabs--on-card .ds-tab.is-selected{background:var(--card)}
+/* L'ONGLET SÉLECTIONNÉ EST UNE PLAQUE ACCENT CERCLÉE DE MARQUE — v0.21.0, décision de
+   Julien : « en orange clair, sur le fond du menu, franchement visible ». Jusqu'à la
+   0.20.0 c'était une plaque --background sous --shadow-sm : deux crèmes et une ombre,
+   avec un régime par porteuse (--card sur une carte, un mélange d'encre en sombre).
+   --accent est LA surface « orange clair » du contrat, et elle seule. Le libellé prend
+   --active, LA couleur de tout ce qui est actif (v0.21.0) — la barre d'onglets que
+   Julien a montrée en référence le 12/09/2026 : plaque orange clair, libellé orange.
+   PAS DE CONTOUR. Un filet interne --active à 45 % (la forme de l'étape courante de la
+   barre des 7 étapes des maquettes v2) a été posé puis retiré le même jour, sur son
+   verdict : « pas très moderne, pas très joli ». Ce qui distingue le sélectionné du
+   survol n'est donc PAS un contour : c'est que le survol d'un onglet n'a PAS de fond (la
+   règle juste au-dessus, couleur seule) et ne doit pas en prendre — en clair, --accent et
+   --surface-alt sont LA MÊME couleur, un survol sur --surface-alt serait indiscernable
+   de la sélection. Contraste du libellé : 3,00 en clair, 3,94 en sombre sur --accent
+   (paire `.ds-tab[aria-selected]` de check-contrast.mjs) — sous le 4,5 du texte, ÉCART
+   ASSUMÉ par la marque, par écrit (@a11y-assume dans son fichier) : la plaque, la
+   graisse et aria-selected portent l'état avec la couleur.
+   MÊME PLAQUE PARTOUT : sur la page, sur une carte (où la barre reste en creux
+   --background par la déduction ci-dessous), en clair, en sombre. Les règles par
+   porteuse de l'ancien régime n'ont plus d'objet et sont parties. */
+.ds-tab[aria-selected="true"],.ds-tab.is-selected{background:var(--accent);color:var(--active)}
 /* La barre d'onglets DÉDUIT la carte comme le champ (même défaut d'opt-in que surface="card") :
-   posée dans une carte, elle se creuse en --background et son onglet actif remonte au niveau
-   de la carte. La prop onCard reste comme échappatoire explicite. */
+   posée dans une carte, elle se creuse en --background. La prop onCard reste comme
+   échappatoire explicite. */
 .ds-card .ds-tabs{background:var(--background)}
-.ds-card .ds-tabs .ds-tab[aria-selected="true"],.ds-card .ds-tabs .ds-tab.is-selected{background:var(--card)}
 .ds-tab:focus-visible{outline:2px solid var(--ring);outline-offset:2px}
 .ds-footer{border-top:1px solid var(--border);background:var(--background);color:var(--text-secondary)}
 .ds-footer__inner{display:flex;flex-wrap:wrap;gap:var(--space-7);justify-content:space-between;padding-block:var(--space-7)}
@@ -545,7 +617,10 @@
 .ds-pagination{display:inline-flex;align-items:center;gap:var(--space-1);padding:var(--space-1);background:var(--secondary);border:1px solid var(--border);border-radius:var(--pagination-radius);min-height:var(--control-md);box-sizing:border-box}
 .ds-page{appearance:none;border:0;background:transparent;min-width:var(--page-min);min-height:var(--page-min);padding:0 var(--space-2);display:inline-flex;align-items:center;justify-content:center;border-radius:var(--radius-sm);font-family:var(--font-body);font-size:var(--text-control);font-weight:var(--weight-semibold);color:var(--text-muted);cursor:pointer;transition:background-color var(--duration-fast) var(--ease-standard),color var(--duration-fast) var(--ease-standard)}
 .ds-page:hover:not(:disabled):not(.ds-page--ellipsis){color:var(--foreground);background:var(--surface-alt)}
-.ds-page[aria-current="page"]{background:var(--card);color:var(--foreground);box-shadow:var(--shadow-sm)}
+/* La page courante est ACTIVE : elle prend --active (v0.21.0), comme l'onglet et
+   l'entrée de menu — un seul jeton pour cet état. Écart de contraste assumé par la
+   marque (3,1 sur --card), @a11y-assume dans son fichier. */
+.ds-page[aria-current="page"]{background:var(--card);color:var(--active);box-shadow:var(--shadow-sm)}
 .ds-page:disabled{opacity:.5;cursor:not-allowed}
 .ds-page:focus-visible{outline:2px solid var(--ring);outline-offset:2px}
 .ds-page--ellipsis{cursor:default;pointer-events:none}
@@ -560,7 +635,7 @@
    Le document défile normalement, ce qui laisse fonctionner les barres `sticky top-0` des
    écrans sans compensation de décalage. Sous le seuil, la barre redevient un tiroir. */
 @media (min-width:64.0625rem){
-  .ds-appshell .ds-sidebar{position:sticky;top:0;align-self:start;height:100dvh}
+  .ds-appshell .ds-sidebar,.ds-appshell .ds-rail{position:sticky;top:0;align-self:start;height:100dvh}
 }
 .ds-appshell__main{min-width:0}
 .ds-sidebar{display:flex;flex-direction:column;gap:var(--space-2);width:var(--sidebar-w);background:var(--secondary);border-right:1px solid var(--border);padding:var(--space-5) var(--space-4);box-sizing:border-box;transition:width var(--duration-base) var(--ease-standard)}
@@ -609,21 +684,19 @@
    contrat pour une valeur que personne ne redéclarera. */
 .ds-sidenav{display:flex;align-items:center;gap:var(--space-3);min-height:var(--sidenav-h);padding:0 var(--space-2);border-radius:var(--radius-md);border:0;background:transparent;color:var(--text-secondary);font-family:var(--font-body);font-size:var(--text-control);font-weight:var(--weight-medium);text-align:left;text-decoration:none;cursor:pointer;white-space:nowrap;transition:background-color var(--duration-fast) var(--ease-standard),color var(--duration-fast) var(--ease-standard)}
 .ds-sidenav:hover{background:var(--surface-alt);color:var(--foreground)}
-/* L'item actif se signale par sa GRAISSE et son ICÔNE, pas par un libellé coloré.
-   L'orange est rationné : une icône de 20 px le porte, une ligne de texte entière le
-   gaspille — et un libellé en encre pleine sur la plaque tient bien mieux son contraste.
-   L'icône, elle, est de MARQUE : elle prend --primary — voir la règle et sa mesure juste
-   en dessous. (La phrase qui tenait ici — « le jumeau lisible --primary-readable, jamais
-   --primary » — décrivait un état que la ligne suivante dément depuis deux versions.) */
-.ds-sidenav.is-active{background:var(--surface-alt);color:var(--foreground);font-weight:var(--weight-semibold)}
-/* L'icône de l'item actif est DÉCORATIVE et de marque : elle prend --primary, comme la
-   pastille de marque. Voir la règle consolidée au-dessus de .ds-pastille--brand.
-   Le bloc qui décrivait ici un --brand-via « pâle mais assumé » (2,29 / 5,34) est parti :
-   il décrivait l'état d'AVANT, contredisait la ligne juste en dessous, et ses chiffres ne
-   sont plus ceux de docs/accessibilite.md. --brand-via a bien été essayé et écarté — à
-   2,34, sous le seuil ; --primary tient 3,00 / 3,78. L'historique est dans le § de
-   docs/accessibilite.md, pas dans un commentaire que la règle dément. */
-.ds-sidenav.is-active svg{color:var(--primary)}
+/* L'ITEM ACTIF EST D'UNE SEULE COULEUR, ICÔNE ET LIBELLÉ — v0.21.0. Une règle `svg`
+   posait l'icône en --primary pendant que le libellé restait en encre : deux couleurs
+   sur une même entrée, et le survol n'y changeait rien. Les deux passent ensemble en
+   --active, LA couleur de tout ce qui est actif — décision de Julien du 12/09/2026, la
+   même que l'onglet sélectionné, l'entrée de rail, la page courante. L'icône suit son
+   texte par currentColor, comme toute icône décorative ; elle quitte la liste des
+   « décoratives mais de marque » du bloc consolidé au-dessus de .ds-pastille--brand.
+   Contraste : 3,00 en clair, 3,78 en sombre sur --surface-alt (paire `.ds-sidenav.is-active`
+   de check-contrast.mjs) — sous le 4,5 du texte, ÉCART ASSUMÉ par la marque, par écrit
+   (@a11y-assume) : la plaque et la graisse portent l'état avec la couleur.
+   Le survol d'une entrée active ne la repasse pas en encre : cette règle arrive après
+   :hover à spécificité égale, et c'est voulu — l'état actif prime sur le pointeur. */
+.ds-sidenav.is-active{background:var(--surface-alt);color:var(--active);font-weight:var(--weight-semibold)}
 .ds-sidenav:focus-visible{outline:2px solid var(--ring);outline-offset:2px}
 .ds-sidebar.is-collapsed .ds-sidenav{justify-content:center;padding:0}
 .ds-sidebar.is-collapsed .ds-sidenav__label{display:none}
@@ -639,6 +712,38 @@
 .ds-appshell:not(.ds-appshell--static) .ds-sidebar:not(.ds-sidebar--static){position:fixed;inset-block:0;left:0;z-index:var(--z-drawer);transform:translateX(-100%);transition:transform var(--duration-slow) var(--ease-standard)}
 .ds-appshell:not(.ds-appshell--static) .ds-sidebar.is-open{transform:none;box-shadow:var(--shadow-lg)}
 }
+
+/* ---------- rail ---------- */
+/* LE RAIL D'ICÔNES — v0.21.0. Une colonne de --rail-w (3.75rem) sur --secondary, filet
+   droit : le point de marque en tête, des entrées en icône SEULE (le libellé est leur
+   `title`), un ressort, les entrées de pied, l'avatar. Relevé sur les quinze écrans et
+   la planche f1 des maquettes v2 d'une app : `padding 1rem .5rem`, `gap .375rem`, point
+   de marque 1.75rem à .875rem du premier item, entrées `icon-btn ghost` de
+   --icon-control-md (2.625rem — pas 2.375, l'audit de l'app s'était trompé), icône
+   1.25rem (le repli, aucune règle à écrire), avatar 1.75rem rond.
+   CE N'EST PAS LA BARRE LATÉRALE REPLIÉE, et la règle qui départage les deux est
+   simple : RAIL = icônes seules, largeur fixe, jamais de repli · SIDEBAR = libellés,
+   repliable par l'utilisateur. Une app choisit l'un, pas les deux ; le rail ne touche
+   aucune règle .ds-sidebar*.
+   UNE ENTRÉE EST UN IconButton, PAR SES CLASSES : `ghost` au repos, `accent` quand elle
+   est active — la variante née en 0.17.0 pour exactement cet état (« sélectionné doux
+   d'un lien-icône », plaque --accent, icône --active, 3,00 / 3,94). Le rail ne
+   redessine ni le carré, ni le survol, ni le focus, ni l'état actif : il compose.
+   .ds-rail__item n'ajoute que la couleur de REPOS, --text-muted (5,17 / 6,47 sur
+   --secondary), et la remonte en encre au survol — le geste de .ds-sidenav. Les deux
+   sélecteurs sont à 0,2,0 pour battre .ds-icon-btn (0,1,0) sans toucher `accent`, qui
+   n'est pas `ghost` : l'entrée active garde --active, au repos comme au survol.
+   PAS DE FORME TIROIR : un rail est un châssis de bureau. Il se monte dans un AppShell
+   `responsive={false}` — sous 64rem, un AppShell responsive passe sa grille en une
+   colonne et le rail s'empilerait au-dessus du contenu. AppShell le signale en console
+   en développement. */
+.ds-rail{display:flex;flex-direction:column;align-items:center;gap:0.375rem;width:var(--rail-w);padding:var(--space-4) var(--space-2);background:var(--secondary);border-right:1px solid var(--border);box-sizing:border-box}
+.ds-rail__brand{display:flex;flex:none;margin-bottom:0.875rem}
+.ds-rail__nav,.ds-rail__footnav{display:flex;flex-direction:column;align-items:center;gap:0.375rem}
+.ds-rail__spacer{flex:1}
+.ds-rail__foot{display:flex;flex:none;justify-content:center}
+.ds-icon-btn--ghost.ds-rail__item{color:var(--text-muted)}
+.ds-icon-btn--ghost.ds-rail__item:hover:not(:disabled),.ds-icon-btn--ghost.ds-rail__item.is-hover{color:var(--foreground)}
 
 /* ---------- calendar / datepicker ---------- */
 .ds-cal{display:inline-flex;flex-direction:column;gap:var(--space-2);padding:var(--space-3);background:var(--secondary);color:var(--popover-foreground);border:1px solid var(--border);border-radius:var(--radius-lg);box-shadow:var(--shadow-sm)}

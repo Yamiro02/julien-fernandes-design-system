@@ -44,10 +44,12 @@ export { FormField } from './components/forms/FormField';
 export type { FormFieldProps } from './components/forms/FormField';
 
 /* data-display */
-export { Card } from './components/data-display/Card';
-export type { CardProps } from './components/data-display/Card';
+export { Card, CardHeader } from './components/data-display/Card';
+export type { CardProps, CardHeaderProps } from './components/data-display/Card';
 export { Badge } from './components/data-display/Badge';
 export type { BadgeProps } from './components/data-display/Badge';
+export { Kbd } from './components/data-display/Kbd';
+export type { KbdProps } from './components/data-display/Kbd';
 export { Pastille } from './components/data-display/Pastille';
 export type { PastilleProps } from './components/data-display/Pastille';
 export { Tooltip } from './components/data-display/Tooltip';
@@ -94,6 +96,8 @@ export { AppShell } from './components/navigation/AppShell';
 export type { AppShellProps } from './components/navigation/AppShell';
 export { Sidebar } from './components/navigation/Sidebar';
 export type { SidebarProps, SidebarItem, SidebarSection } from './components/navigation/Sidebar';
+export { Rail } from './components/navigation/Rail';
+export type { RailProps } from './components/navigation/Rail';
 
 /* brand */
 export { Logo } from './components/brand/Logo';

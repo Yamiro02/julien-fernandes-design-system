@@ -23,6 +23,216 @@ concordent.
 
 ---
 
+## 0.21.0 — le rail, l'en-tête unique, et UNE couleur d'actif
+
+Un lot porté depuis les maquettes v2 d'une app, relevé sur pièces, plus une décision de
+Julien prise en cours de lot et qui pèse plus lourd que le reste : **tout ce qui est actif
+a désormais UN jeton, `--active`**, et un garde qui l'impose. Quatre changements modifient
+le rendu d'écrans existants ; ils sont listés en tête, parce que c'est ce qu'on lit en
+montant de version.
+
+### ⚠ Ce qui change à l'écran chez QUI monte de version — sans toucher à son code
+
+| Ce qui bouge | Avant (0.20.0) | Après | Sites concernés |
+|---|---|---|---|
+| **La couleur de tout état actif** | trois couleurs selon le composant : `--primary-readable` (brique `#b23a1c` en clair) sur l'entrée de menu active et le bouton-icône enfoncé, `--primary` (`#e85d2f`) sur le bouton-icône `accent`, l'**encre** sur le lien de navbar actif et la page courante de pagination | **`--active`** partout — `#e85d2f`, l'orange clair, dans cette marque : libellé ET icône de l'entrée de menu, libellé de l'onglet, page courante, lien de navbar, icône et contour du bouton-icône enfoncé, icône du bouton-icône `accent` | Creator, Dashboard, Editing — chaque `Sidebar`, `Tabs`, `Pagination`, `IconButton` pressé ou `accent`, `Navbar` |
+| **L'onglet sélectionné** (`.ds-tab[aria-selected]`, `.is-selected`) | plaque `--background` + `--shadow-sm` (sur une carte : `--card` ; en sombre : encre mêlée à `--secondary`), libellé en encre | plaque **`--accent`**, libellé **`--active`**, aucune ombre, aucun contour — la même plaque sur la page, sur une carte, en clair, en sombre | Creator (2 `Tabs`), Dashboard (5 `Tabs` + `OngletsDocuments`, qui émet `ds-tab is-selected` en dur), Editing |
+| **L'entrée active du menu latéral** (`.ds-sidenav.is-active`) | libellé en encre, icône en `--primary` | libellé **et** icône en **`--active`** — une seule couleur ; la règle `svg` est partie | Creator, Dashboard, Editing (toutes trois en `Sidebar collapsible={false}`) |
+| **L'en-tête de toute modale** (`Modal` en phase `confirm` / `loading`) | pastille et croix sur un rang, titre sur un second | pastille · titre · croix sur **une ligne** (l'en-tête de `Card`), le corps à 1,5 rem sous l'en-tête. Même taille de titre (`--text-subheading`), même pastille, même croix | Creator (4 modales), Dashboard (~14), Editing (~5) |
+
+**⚠ Rien de tout cela ne descend tout seul.** `Dashboard` est épinglé à **v0.19.0** et
+`Creator` à **v0.14.0** dans leur `package.json` ; `Editing` à v0.20.0. Tant que Julien ne
+change pas cette ligne — et ne réinstalle pas par la spec explicite, puis vérifie le SHA du
+lock (GOVERNANCE, « côté app ») — ces apps rendent exactement ce qu'elles rendaient hier.
+La colonne « sites concernés » dit ce qui bougera **le jour où** chacune monte.
+
+Ce qui ne bouge pas, vérifié dans les trois apps : les cartes à en-tête sans `flush`
+(Dashboard en a six, toutes au cran `sm`), les cartes `flush` sans slot d'en-tête (Creator
+en a sept), la barre latérale hors de son entrée active, tout `Input` sans `icon` ni `unit`
+(le DOM est le même nœud nu), le jour sélectionné et le jour courant du calendrier.
+**Rien de ce lot ne touche une règle `.ds-sidebar*`.**
+
+### `--active` — LA couleur de tout ce qui est actif, et le garde qui l'impose
+
+Julien, le 12/09/2026 : « la couleur d'un icône actif, d'un texte actif, d'un texte d'onglet
+actif, de n'importe quoi actif, ce n'est pas la couleur primaire qu'on utilise, c'est
+l'orange clair. Il faut que ça soit un réflexe, je le redemande tout le temps. » Le socle
+lisait trois couleurs pour cet état (voir le tableau) — chacune avec sa raison écrite, et
+le résultat était trois oranges pour dire « tu es ici ». Une demande qu'on refait n'est
+pas une règle ; celle-ci en devient une, en trois pièces :
+
+1. **Le jeton `--active`**, au contrat de marque (§ OBLIGATOIRE, en `:root` et `.dark`),
+   exposé à Tailwind en **`text-active`**. Un RÔLE, pas un alias de `--primary` : la marque
+   du dépôt y met son orange d'aplat (`#e85d2f`, la valeur A parmi les trois candidats
+   rendus côte à côte, choisie par Julien), une autre marque y mettra ce qu'elle veut.
+2. **Toutes les règles d'état actif de `patterns.css` le lisent** — quatorze règles :
+   `.ds-sidenav.is-active`, `.ds-tab[aria-selected]`, `.ds-page[aria-current]`,
+   `.ds-navlink.is-active`, `.ds-icon-btn--accent`, `.ds-icon-btn[aria-pressed]` et son
+   contour. Le jour courant du calendrier (`is-today`) reste en `--primary-readable` :
+   c'est une information (une date), pas un état actif ; le jour sélectionné reste blanc
+   sur le dégradé.
+3. **`check-active.mjs`**, le **quatorzième garde** de `npm run lint` : toute règle dont
+   le sélecteur nomme un état actif (`.is-active`, `.is-selected`, `[aria-selected="true"]`,
+   `[aria-current…]`, `[aria-pressed="true"]`, `.ds-icon-btn--accent`) ne peut colorer son
+   contenu et ses contours qu'avec `var(--active)` — `color:`, `border-color:`,
+   `box-shadow:` ; seule exception, `--primary-foreground` sur un remplissage de marque
+   (le jour sélectionné). Le pseudo-état `:active` (le clic) n'est pas regardé. Jumeau de
+   falsification de 16 cas, rejoué à chaque appel ; falsifié aussi sur le dépôt (une règle
+   fautive injectée, échec constaté, retirée).
+
+**⚠ Le prix, mesuré et assumé.** Sur les icônes, le seuil des graphiques tient (3,00 /
+3,94 sur `--accent`). Sur le **texte**, `#e85d2f` ne tient pas 4,5 : l'entrée de menu
+**3,00 / 3,78**, l'onglet **3,00 / 3,94**, la page courante **3,25 / 4,12**, le lien de
+navbar **3,28 / 4,12**. Ce sont **quatre écarts assumés par écrit** dans
+`brand-julien-fernandes.css` (`@a11y-assume`, 15 → **19**), repris dans
+`docs/accessibilite.md` § 3.5 — une décision de marque prise en connaissance de la mesure,
+avec ce qui l'atténue (l'état n'est jamais porté par la couleur seule : plaque, graisse,
+`aria-current` / `aria-selected`) et son remède, qui est **une ligne dans le fichier de
+marque** (`--active:#b23a1c` en clair), jamais un retour à trois jetons. C'est exactement le
+mécanisme que le dépôt s'est donné pour ça : le script porte la mécanique, la marque porte
+ses renoncements.
+
+La charte (`docs/DESIGN.md`), le gabarit, `PIEGES.md` § 8 et le catalogue le disent au même
+mot ; la règle consolidée des icônes (au-dessus de `.ds-pastille--brand`) gagne sa
+quatrième ligne, **ACTIVE → `--active`**, et l'icône de nav active quitte celle des
+« décoratives mais de marque » pour suivre son texte.
+
+### L'onglet sélectionné — en orange clair, sans contour
+
+Demande de Julien, hors maquette (ses onglets portent encore l'ancien régime) : « en orange
+clair, sur le fond du menu, franchement visible ». Plaque **`--accent`** — la seule surface
+« orange clair » du contrat — et libellé `--active`, la référence qu'il a montrée. **Pas de
+contour** : le filet interne `--primary` à 45 % de l'étape courante de la barre des 7
+étapes (f2) a été posé, rendu, puis retiré le même jour sur son verdict (« pas très moderne,
+pas très joli »). Ce qui distingue le sélectionné du survol n'est donc pas un contour :
+c'est que le survol d'un onglet n'a **pas de fond** (couleur seule, inchangé) et ne doit pas
+en prendre — en clair, `--accent` et `--surface-alt` sont la même couleur.
+
+Les règles par porteuse de l'ancien régime (`--card` sur une carte, l'override `.dark`)
+n'ont plus d'objet et sont parties : la barre garde sa déduction de surface, la plaque est
+la même partout. Nouvelle paire mesurée, `.ds-tab[aria-selected]`.
+
+### `Rail` — le rail d'icônes, un composant à part
+
+Une colonne de **`--rail-w` (3.75rem)** sur `--secondary`, filet droit : le point de marque
+en tête, des entrées en icône SEULE (le libellé est leur `title` et leur nom accessible),
+un ressort, les entrées de pied, l'avatar. Relevé sur les quinze écrans et la planche f1
+des maquettes : `padding 1rem .5rem`, `gap .375rem`, point de marque 1.75rem à .875rem du
+premier item, entrées de `--icon-control-md` (2.625rem — **pas 2.375**, l'audit de l'app
+s'était trompé d'un cran), icône 1.25rem, avatar 1.75rem rond.
+
+**Pourquoi un composant et pas un mode de `Sidebar`.** Rien n'est partagé sauf le type
+`SidebarItem` et `linkAs`. Largeur, padding, gap, l'entrée (un carré `IconButton` contre
+une pilule `.ds-sidenav` de 2.75rem), l'état actif, la marque, le pied — tout diverge ; et
+`collapsible`, `defaultCollapsed`, `storageKey`, `brandCollapsed`, les titres de section
+seraient devenus des **props qui mentent** en mode rail (GOVERNANCE, test 4). **La règle
+qui départage, écrite dans les deux composants et le catalogue** : rail = icônes seules,
+largeur fixe, jamais de repli · sidebar = libellés, repliable. Une app choisit l'un.
+
+Une entrée est un `IconButton` par ses classes — `ghost` au repos (`--text-muted`, 5,17 /
+6,47 ; encre au survol, le geste de `.ds-sidenav`), **`accent` quand elle est active** : la
+variante née en 0.17.0 pour exactement cet état, plaque `--accent`, icône `--active`. Le
+rail compose, il ne redessine rien.
+
+Ce qui l'accompagne : `--rail-w` entre au § FACULTATIF du contrat (et à la planche
+Fondations de la vitrine) ; **`Logo variant="dot"`** rend la pastille seule, dimensionnée à
+`height` — le même nœud `.ds-logo__dot`, pas un second dessin de la marque ; la règle
+sticky d'`AppShell` couvre `.ds-rail`. **Pas de forme tiroir** : un rail est un châssis de
+bureau et se monte en `responsive={false}` — `AppShell` le signale en console en
+développement si on l'oublie (il reconnaît l'élément `Rail` dans son slot).
+
+### L'entrée active du menu, d'une seule couleur
+
+Une règle `svg` posait l'icône en `--primary` pendant que le libellé restait en encre.
+Julien veut les deux identiques, partout : les deux passent en `--active`. La règle `svg`
+est partie, l'icône suit son texte par `currentColor`. Le survol d'une entrée active ne la
+repasse plus en encre : l'état actif prime sur le pointeur. `check-portage.sh` cherche la
+nouvelle règle, plus l'ancienne (20 → **24 correctifs**, avec l'onglet, le rail et le jeton `--active` au contrat).
+
+### Un seul en-tête au socle — `CardHeader` et le mode à filet
+
+L'audit de l'app (§ 6) a relevé cinq en-têtes — carte, carte étroite, modale, chat, zone —
+et conclu qu'un seul suffit. L'en-tête sort du JSX de `Card` en **`CardHeader`, exporté du
+même fichier** (pas de 40ᵉ composant) : `Card` le compose par ses props, l'API de `Card` ne
+bouge pas, une app peut le poser seul en tête d'une zone.
+
+**`flush`** — le mode à FILET : `padding var(--space-4) var(--space-5)`, `border-bottom`,
+marge basse à zéro. Relevé sur les **quinze** en-têtes de carte `flush` des maquettes
+(`1rem 1.5rem`) ; dix en-têtes d'une colonne étroite sont à `1rem 1.25rem`, c'est un
+resserrement de largeur, pas un second en-tête — UNE valeur, sur l'échelle. **Une `Card
+flush` qui porte un slot d'en-tête le rend à filet toute seule** : c'est la carte qui le
+sait, comme l'alignement depuis la 0.18.0. Aucune app ne combinait `flush` et un slot.
+
+**Pas de nouveau cran de titre, et l'interdit tient.** La v2 pose ses en-têtes de carte en
+`h3` à `--text-control` — 15 px en Anton. Un cran `control` a été écrit, rendu, puis
+**retiré** sur pièces : `--text-control` est un palier de CONTRÔLE (« boutons, champs,
+chips, onglets »), et le plus petit palier de la display est `--text-heading-sm`
+(1.125rem), celui que `.ds-card__title` porte déjà. Le 15 px de la maquette est une
+approximation de l'outil, pas une décision de marque. `titleSize` reste `sm` / `lg`,
+l'interdit « jamais `--font-display` sous 1.125rem » n'est pas touché, et `PIEGES.md` n'en
+parle pas.
+
+### `Modal` rend l'en-tête de `Card` — « le titre avec la croix sur la même ligne »
+
+Le composant que Julien a explicitement demandé. Pastille · titre + sous-titre · croix sur
+**une** ligne, par `CardHeader` : titre en cran `lg` (`--text-subheading`, la taille
+qu'avait déjà le h3 de la modale), la croix en `action`, **`subtitle` nouveau** (la ligne
+sous le titre, DANS l'en-tête), `description` **reste le corps**. Relevé q8/q10 : le corps
+commence à **1,5 rem** sous l'en-tête — la modale espace ses enfants de 0.875rem, l'en-tête
+garde 0.625rem de marge basse, la somme fait le relevé. Trois écarts absorbés par l'en-tête
+unique, tous sous 2 px : gap icône-texte `.875` → `--space-3`, gap titre-sous-titre `.25` →
+`.1875rem`, interligne du sous-titre `normal` → `snug`. Un seul en-tête vaut ces trois
+pixels. Le pied de la modale ne bouge pas (la v2 le pose à 1,75 rem, hors périmètre).
+`.ds-modal__title` est parti avec le second rang ; `.ds-modal__head` ne survit que pour la
+phase `result`. La croix est désormais le **premier** focusable du panneau — le choix
+`initialFocus: 'container'` tient pour la même raison qu'avant, et ses deux commentaires
+disent l'ordre réel.
+
+### Le reste de la liste É19 — tranché
+
+- **`Kbd` entre.** La touche : 1.375rem, rayon `xs`, `--secondary`, filet interne, caption
+  semi-gras — **47 occurrences** d'une seule forme dans les maquettes, sur neuf écrans sur
+  vingt. Une vraie balise `<kbd>`, en corps de texte (`kbd` retombe sur `--font-mono` dans
+  le socle ; `.ds-kbd` le redit). Atomique, mesuré, incomposable depuis un `Badge`.
+- **`Input icon` entre.** L'icône de tête (« Chercher une vidéo… ») — le miroir exact du
+  mécanisme `unit` de la 0.17.0 : `padding-left 2.5rem`, l'icône à `.875rem`, 1rem par le
+  créneau des déclencheurs de champ, `--text-muted`, `aria-hidden`. Ce qu'un site d'appel
+  ne peut pas recopier sans recopier aussi le padding du champ et son créneau. L'enveloppe
+  `.ds-input-unit` devient **`.ds-input-wrap`** avec deux modificateurs (`--icon`,
+  `--unit`) qui se cumulent — classe interne, aucune app ne l'écrivait (vérifié).
+- **La poignée de redimensionnement reste métier.** Un seul produit ; sa valeur est le
+  drag et le clavier, que l'app possède déjà (`SeparateurGlissant`) ; ses quatre jetons
+  (`--border`, `--primary`, `--accent`, `--surface-alt`) sont atteignables. On promeut au
+  deuxième appelant.
+- **La densité est écartée.** Un réglage produit (q7) dont l'état « compacte » n'est
+  dessiné nulle part : l'écrire, c'est inventer un second jeu de paliers. « Ce projet
+  préfère telle densité » est une décision d'app (PIEGES, critère d'admission).
+- **Les sept icônes sont closes sans rien ajouter.** `Icon` accepte `glyph={LucideIcon}`
+  depuis la 0.15.0 et `lucide-react` est une peer dependency — chaque app l'a. C'est
+  écrit dans le catalogue et le README pour que personne ne redemande un glyphe.
+
+### Les gardes et la doc
+
+- **Quatorze gardes** : `check-active.mjs` entre dans `npm run lint`, entre `contraste` et
+  `surfaces` ; README, GOVERNANCE, PORTAGE et `ci.yml` comptent quatorze.
+- `check-contrast.mjs` : **53 → 58 paires** — les états actifs mesurés sur `--active`
+  (`.ds-navlink.is-active`, `.ds-sidenav.is-active`, `.ds-page[aria-current]`,
+  `.ds-tab[aria-selected]`, `.ds-icon-btn[aria-pressed]`, `.ds-icon-btn--accent`), l'entrée
+  de rail au repos, `.ds-kbd`. 39 conformes, **19 écarts assumés** (15 + les quatre de
+  `--active`). `docs/accessibilite.md` régénéré ; § 1.1 réécrit (la ligne ACTIVE), § 1.2 et
+  § 3.5 ajoutés.
+- `check-portage.sh` : 20 → **24 correctifs**.
+- `docs/PIEGES.md` : **§ 8** « L'état actif a UN jeton, `--active` — et ni `text-primary`
+  ni `text-primary-readable` ne le sont ».
+- `docs/DESIGN.md` : la ligne `--active` de la charte. `brand.template.css` : le jeton au
+  § OBLIGATOIRE, avec sa règle.
+- Le catalogue : `Rail`, `Kbd`, et les sections `Card`, `Modal`, `Input`, `Tabs`,
+  `Sidebar`, `AppShell`, `Pagination`, `IconButton`, `Logo`, `Icon` mises à jour ;
+  **39 composants**.
+
+**Vérifié avant tag :** les treize gardes hors version, `npm run demo:build`, `npm run build`.
+**Après tag, avant push :** `npm run lint` en entier, les quatorze.
+
 ## 0.20.0 — les pièges du socle cessent d'être du savoir oral
 
 Trois pièges du code livré ne vivaient que dans la tête de qui s'était fait avoir, ou dans

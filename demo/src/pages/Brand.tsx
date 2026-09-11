@@ -12,6 +12,7 @@ export function BrandPage() {
           <Row label="wordmark"><Logo variant="wordmark" wordmark={IDENTITY.wordmark} height="1.75rem" /></Row>
           <Row label="stacked"><Logo variant="stacked" wordmark={IDENTITY.wordmark} height="1.75rem" /></Row>
           <Row label="monogram"><Logo variant="monogram" wordmark={IDENTITY.wordmark} height="2.5rem" /></Row>
+          <Row label="dot — la pastille seule (v0.21.0), le point de marque en tête d'un Rail : height EST le côté"><Logo variant="dot" wordmark={IDENTITY.wordmark} height="1.75rem" /><Logo variant="dot" wordmark={IDENTITY.wordmark} height="2.5rem" /></Row>
         </Block>
         <Block label="Tailles" hint="height pilote la hauteur du mark ; la taille de police en découle.">
           <Row>

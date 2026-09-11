@@ -1,11 +1,15 @@
-import { Badge, Button, Card, EmptyState, Icon, IconButton, Input, Pastille, Separator, Table, TBody, Td, Th, THead, Tooltip, Tr } from '@julienfernandes/ds';
+import { useState } from 'react';
+import { Badge, Button, Card, CardHeader, EmptyState, Icon, IconButton, Input, Kbd, Pastille, Separator, Table, Tabs, TBody, Td, Th, THead, Tooltip, Tr } from '@julienfernandes/ds';
 import { Block, Grid, Row, Section, Stack } from '../ui';
 
 const TONES = ['coral', 'amber', 'danger', 'warning', 'success', 'neutral', 'accent', 'outline'] as const;
 const TAILLES = ['carte', 'dialogue', 'panneau', 'heros', 'ecran'] as const;
 const TONS_PASTILLE = ['brand', 'brand-solid', 'coral', 'amber', 'success', 'warning', 'danger', 'neutral', 'inverse'] as const;
 
+const FILTRES = [{ value: 'all', label: 'Tout' }, { value: 'shorts', label: 'Shorts' }, { value: 'long', label: 'Longues' }];
+
 export function DataDisplayPage() {
+  const [filtre, setFiltre] = useState('all');
   return (
     <div className="flex flex-col gap-space-7">
       <Section title="Card" note="La surface signature : fond --card teinté, bordure 1px, rayon lg ou xl, ombre teintée. Jamais une card blanche.">
@@ -80,6 +84,69 @@ export function DataDisplayPage() {
               </Stack>
             </Card>
           </Grid>
+        </Block>
+
+        <Block label="L'en-tête à filet — Card flush" hint="v0.21.0. Une Card flush qui porte un slot d'en-tête le rend À FILET toute seule : padding --space-4 --space-5, border-bottom, pas de gouttière — le corps porte son padding. Le titre reste au cran sm (1.125rem, le plus petit palier de la display) : la display ne descend jamais dessous.">
+          <Grid cols={2}>
+            <Card flush title="Projets actifs"
+              action={<Tabs onCard items={FILTRES} value={filtre} onChange={setFiltre} />}
+            >
+              <div className="flex flex-col gap-space-3 p-space-5">
+                <p className="caption">Onglets dans l'action ; le filet sépare l'en-tête du corps.</p>
+                <Badge tone="neutral" pad="dense">4</Badge>
+              </div>
+            </Card>
+            <Card flush title="Le studio"
+              icon={<Pastille size="carte" tone="brand"><Icon name="sliders-horizontal" /></Pastille>}
+              action={<Badge tone="neutral" pad="dense">4 règles</Badge>}
+            >
+              <div className="p-space-5"><p className="caption">Pastille carte, badge dans l'action.</p></div>
+            </Card>
+            <Card flush title="Réglages de l'app" subtitle="L'application, pas le process"
+              action={<IconButton size="sm" label="Actions"><Icon name="ellipsis" /></IconButton>}
+            >
+              <div className="p-space-5"><p className="caption">Avec un sous-titre : l'en-tête passe en --stacked, comme partout.</p></div>
+            </Card>
+            <div className="dark rounded-lg bg-background p-space-4">
+              <Card flush title="Réglages de l'app"
+                icon={<Pastille size="carte" tone="brand"><Icon name="settings" /></Pastille>}
+                action={<Badge tone="neutral" pad="dense">Sombre</Badge>}
+              >
+                <div className="p-space-5"><p className="caption">Le même en-tête en thème sombre.</p></div>
+              </Card>
+            </div>
+          </Grid>
+        </Block>
+
+        <Block label="CardHeader seul" hint="L'en-tête est exporté : une app le pose en tête d'une zone qui n'est pas une Card (un panneau, une colonne). Même grammaire, mêmes réglages — flush pour le filet, titleSize sm ou lg. C'est aussi lui que Modal rend.">
+          <div className="overflow-hidden rounded-lg border border-border bg-card">
+            <CardHeader flush title="Sections"
+              subtitle="Dans l'ordre de lecture"
+              action={<Button size="sm" variant="secondary" surface="card">Proposer un découpage</Button>}
+            />
+            <div className="p-space-5"><p className="caption">Le corps de la zone.</p></div>
+          </div>
+        </Block>
+      </Section>
+
+      <Section title="Kbd" note="La touche (v0.21.0) : 1.375rem de côté au moins, rayon xs, fond --secondary, filet interne --border, caption semi-gras. Une vraie balise <kbd>, en corps de texte. Une combinaison est une SUITE de touches — jamais une touche qui contient « ⌘K ».">
+        <Block label="Touches et combinaisons">
+          <Row>
+            <span className="flex items-center gap-space-1"><Kbd>⌘</Kbd><Kbd>K</Kbd></span>
+            <span className="flex items-center gap-space-1"><Kbd>⌘</Kbd><Kbd>↵</Kbd></span>
+            <span className="flex items-center gap-space-1"><Kbd>←</Kbd><Kbd>→</Kbd></span>
+            <Kbd>A</Kbd>
+            <Kbd>R</Kbd>
+            <Kbd>Échap</Kbd>
+          </Row>
+          <Row label="dans une légende de raccourcis">
+            <span className="flex flex-wrap items-center gap-space-3 text-caption text-text-muted">
+              <span className="flex items-center gap-space-1"><Kbd>←</Kbd><Kbd>→</Kbd> Section</span>
+              <span className="flex items-center gap-space-1"><Kbd>A</Kbd> Approuver</span>
+              <span className="flex items-center gap-space-1"><Kbd>R</Kbd> Rejeter</span>
+              <span className="flex items-center gap-space-1"><Kbd>Échap</Kbd> Grille</span>
+            </span>
+          </Row>
         </Block>
       </Section>
 

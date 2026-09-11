@@ -39,11 +39,16 @@ export function FormsPage() {
             <Input surface="card" placeholder="surface=card" />
           </Stack>
         </Block>
-        <Block label="Unité" hint="unit pose l'unité dans le champ, à droite, en sourdine — trois caractères au plus. aria-hidden : c'est le libellé du FormField qui la nomme.">
+        <Block label="Unité et icône de tête" hint="unit pose l'unité dans le champ, à droite, en sourdine — trois caractères au plus. icon (v0.21.0) est son miroir à gauche : l'icône à .875rem du bord, 1rem par le créneau des déclencheurs, --text-muted. Les deux sont aria-hidden — c'est le libellé du FormField ou le placeholder qui nomme le champ — et se cumulent.">
           <Stack>
             <Input unit="kg" inputMode="decimal" placeholder="72" />
             <Input unit="€" inputMode="decimal" placeholder="49" />
             <Input unit="min" inputMode="numeric" invalid defaultValue="beaucoup" />
+          </Stack>
+          <Stack label="icon — l'icône de tête">
+            <Input icon={<Icon name="search" />} type="search" placeholder="Chercher une vidéo…" />
+            <Input icon={<Icon name="search" />} surface="card" placeholder="Chercher une règle…" />
+            <Input icon={<Icon name="mail" />} unit="@" placeholder="ton@email" />
           </Stack>
         </Block>
       </Section>

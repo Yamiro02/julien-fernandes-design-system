@@ -124,3 +124,9 @@ img{max-width:100%;display:block}
    à une ouverture (jetons ou doc de surcharge), PAS un besoin : un seul appelant, un
    seul contexte — on promeut au deuxième demandeur. */
 .ds-logo__dot{display:inline-block;flex:none;width:0.26em;height:0.26em;border-radius:25%;margin-left:0.08em;margin-bottom:0.02em;background:var(--brand-gradient-diagonal);box-shadow:var(--shadow-logo-dot)}
+/* LA PASTILLE SEULE — `Logo variant="dot"`, v0.21.0 : le point de marque en tête d'un Rail.
+   Le même nœud, mais sans mot-marque il n'a plus de corps à suivre : le composant pose le
+   font-size à `height`, et la pastille fait 1em — c'est-à-dire exactement la hauteur
+   demandée. Les deux marges tombent : elles espaçaient la pastille d'une lettre. */
+.ds-logo--dot{align-items:center;line-height:1}
+.ds-logo--dot .ds-logo__dot{width:1em;height:1em;margin:0}

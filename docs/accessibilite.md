@@ -28,7 +28,7 @@
 ## 1. La règle qui est sortie de la mesure
 
 **`--primary` et `--destructive` sont des couleurs de REMPLISSAGE. Elles ne sont jamais une
-`color:`.**
+`color:`.** (L'état ACTIF a son propre jeton, `--active`, et c'est un autre rôle — § 1.2.)
 
 Une couleur conçue pour tenir un aplat de bouton ne peut pas, en général, atteindre 4,5:1
 comme texte sur une surface claire : ici `--primary` (`#e85d2f`) mesure **3,48 sur son
@@ -41,9 +41,9 @@ Le contrat porte donc deux **jumeaux lisibles** — la même marque, rendue lisi
 | `--primary-readable` | `#b23a1c` | `#f0916b` | ≥ 4,5:1 sur `--background`, `--card`, `--popover`, `--secondary`, `--accent`, `--surface-alt` |
 | `--destructive-readable` | `#a32d2d` | `#ec8f8f` | idem |
 
-Les lignes `a{}`, `.ds-navlink.is-active`, `.ds-error`, etc. du tableau § 2 mesurent ces
-jumeaux : de **5,16 à 7,11** selon la porteuse et le thème pour le primaire, de **5,73 à
-6,62** pour le destructif. Le survol de lien ne demande pas de troisième jeton : il se
+Les lignes `a{}`, `.ds-badge--accent`, `.ds-cal__day.is-today`, `.ds-error`, etc. du
+tableau § 2 mesurent ces jumeaux : de **5,16 à 7,11** selon la porteuse et le thème pour
+le primaire, de **5,73 à 6,62** pour le destructif. Le survol de lien ne demande pas de troisième jeton : il se
 **dérive** en tirant le jumeau vers `--foreground`
 (`color-mix(in srgb, var(--primary-readable) 80%, var(--foreground))`), ce qui ne peut
 qu'**augmenter** le ratio — 6,76 en clair, 8,21 en sombre.
@@ -63,14 +63,15 @@ qu'on cassera un jour en voulant « harmoniser » :
 
 | l'icône est… | sa couleur | exemples |
 |---|---|---|
-| décorative | `currentColor` | elle suit son texte |
-| décorative mais **de marque** | `--primary` | pastille d'état vide, pastille d'en-tête de carte, icône de l'item de nav actif |
+| décorative | `currentColor` | elle suit son texte — dont l'icône de l'item de nav actif, depuis la 0.21.0 : elle suit son libellé |
+| **active** | `--active` | l'icône du bouton-icône `accent` et du bouton enfoncé, l'entrée active d'un `Rail` — et le TEXTE actif prend le même jeton (§ 1.2) |
+| décorative mais **de marque** | `--primary` | pastille d'état vide, pastille d'en-tête de carte |
 | **porteuse d'information** | `--primary-readable` | message d'erreur, jour courant, état — et là le seuil de 4,5:1 s'applique pleinement |
 
-**Ces deux emplois de marque sont les seuls** où `--primary` touche du non-texte : partout
-ailleurs il reste un aplat — CTA, piste de switch, case cochée. Les deux tiennent le seuil
-de 3:1 des graphiques non textuels : la pastille à **3,08 / 3,14**, l'icône de nav active à
-**3,00 / 3,78**.
+**Cet emploi de marque est le seul** où `--primary` touche du non-texte : partout ailleurs
+il reste un aplat — CTA, piste de switch, case cochée. Il tient le seuil de 3:1 des
+graphiques non textuels : la pastille à **3,08 / 3,14**. L'icône active, en `--active`, tient
+le même seuil sur `--accent` : **3,00 / 3,94**.
 
 Le chemin y a mené en deux temps, et les deux étapes sont instructives.
 `--primary-readable` tenait le seuil (5,30) mais rendait un brun-brique sombre sur un lavis
@@ -82,14 +83,32 @@ densité ce qu'elle perd en éclat.
 **Les tons sémantiques ne suivent pas.** `success`, `warning`, `danger`, `coral`, `amber`,
 `neutral` gardent leur couleur lisible : une pastille de statut porte une information.
 
-> L'icône de nav active est à **3,0027** en clair — au-dessus du seuil, mais de 0,003. Ni
-> `--primary` ni `--surface-alt` ne peuvent bouger d'un cran sans la faire passer dessous.
+> L'icône du bouton-icône `accent` est à **3,0027** en clair — au-dessus du seuil, mais de
+> 0,003. Ni `--active` ni `--accent` ne peuvent bouger d'un cran sans la faire passer
+> dessous.
+
+### 1.2 · L'état actif — UN jeton, `--active`, et quatre écarts assumés
+
+Depuis la 0.21.0, **tout ce qui est actif** lit `--active` : l'icône du bouton-icône
+`accent` et du bouton enfoncé, l'entrée active d'un `Rail`, et le TEXTE actif — le libellé
+(avec son icône) de l'entrée de menu, le libellé de l'onglet sélectionné, la page courante
+de pagination, le lien actif de navbar. Décision de Julien du 12/09/2026 : « la couleur
+d'un icône actif, d'un texte actif, d'un texte d'onglet actif, de n'importe quoi actif,
+c'est l'orange clair » — le socle en lisait trois. `check-active.mjs` refuse désormais
+toute autre couleur dans une règle d'état actif.
+
+La marque du dépôt y met son orange d'aplat (`#e85d2f`). Sur les **icônes**, le seuil des
+graphiques est tenu (3,00 / 3,94 sur `--accent`). Sur le **texte**, il ne l'est pas : de
+**3,00 à 3,28** en clair, **3,78 à 4,12** en sombre, sous le 4,5 du texte courant. Ce sont
+**quatre écarts assumés par écrit** dans le fichier de marque (§ 3.5) — une décision de
+marque, prise en connaissance de la mesure, et le remède est une ligne dans ce fichier
+(`--active:#b23a1c` en clair), jamais un retour à trois jetons.
 
 ---
 
 ## 2. Les paires conformes
 
-38 paires sur 53, dans les deux thèmes.
+39 paires sur 58, dans les deux thèmes.
 
 | Paire | contenu | seuil | clair | sombre |
 |---|---|--:|--:|--:|
@@ -102,13 +121,15 @@ densité ce qu'elle perd en éclat.
 | `a{} au repos sur --background` | 16 / 400 | 4,5 | 5,36 | 7,11 |
 | `a{} au repos sur --card` | 16 / 400 | 4,5 | 5,59 | 6,12 |
 | `a:hover — dérivé vers --foreground` | 16 / 400 | 4,5 | 6,76 | 8,21 |
-| `.ds-navlink.is-active` | 16 / 500 | 4,5 | 5,64 | 6,12 |
-| `.ds-sidenav.is-active` | 15 / 500 | 4,5 | 5,16 | 5,62 |
 | `.ds-badge--accent` | 12 / 700 | 4,5 | 5,16 | 5,85 |
 | `.ds-banner--info` | 15 / 400 | 4,5 | 5,16 | 5,85 |
 | `.ds-cal__day.is-today` | 14 / 700 | 4,5 | 5,59 | 6,12 |
 | `.ds-pastille--brand — icône` | icône | 3 | 3,08 | 3,14 |
-| `.ds-icon-btn[aria-pressed] — icône` | icône | 3 | 5,16 | 5,85 |
+| `.ds-pastille--brand-solid — glyphe sur --brand-to` | icône | 3 | 3,80 | 3,80 |
+| `.ds-icon-btn[aria-pressed] — icône` | icône | 3 | 3,00 | 3,94 |
+| `.ds-icon-btn--accent — icône` | icône | 3 | 3,00 | 3,94 |
+| `.ds-rail__item au repos — icône --text-muted sur --secondary` | icône | 3 | 5,17 | 6,47 |
+| `.ds-kbd — --text-secondary sur --secondary` | 13 / 600 | 4,5 | 10,40 | 9,22 |
 | `.ds-error` | 13 / 500 | 4,5 | 6,62 | 6,07 |
 | `.ds-dropdown__item--danger` | 14 / 400 | 4,5 | 6,84 | 5,73 |
 | `.ds-actionsheet__item--danger` | 15 / 500 | 4,5 | 6,84 | 5,73 |
@@ -135,23 +156,27 @@ densité ce qu'elle perd en éclat.
 
 ## 3. Les écarts assumés
 
-15 paires. Chacune est déclarée **dans le fichier de marque**,
+19 paires. Chacune est déclarée **dans le fichier de marque**,
 `src/styles/brand-julien-fernandes.css`, par un bloc `@a11y-assume:` — pas dans le script.
 Le script porte la mécanique, la marque porte ses renoncements : un client qui écrit sa
 marque repart d'une liste VIDE et n'hérite d'aucune dérogation qu'il n'a pas prise. Le
-build tombe si une **seizième** apparaît.
+build tombe si une **vingtième** apparaît.
 
-Quatre familles, et les quatre sont des décisions de marque — aucune n'est un oubli. Une
-seule a été prise après le portage : l'anneau de focus, en v0.8.0.
+Cinq familles, et les cinq sont des décisions de marque — aucune n'est un oubli. Deux ont
+été prises après le portage : l'anneau de focus (v0.8.0) et la couleur d'actif (v0.21.0).
 
 | Paire | contenu | seuil | clair | sombre |
 |---|---|--:|--:|--:|
+| `.ds-navlink.is-active` | 16 / 600 | 4,5 | 3,28 ✗ | 4,12 ✗ |
+| `.ds-sidenav.is-active` | 15 / 600 | 4,5 | 3,00 ✗ | 3,78 ✗ |
+| `.ds-page[aria-current]` | 15 / 600 | 4,5 | 3,25 ✗ | 4,12 ✗ |
+| `.ds-pastille--brand-solid — glyphe sur --brand-from` | icône | 3 | 2,04 ✗ | 2,04 ✗ |
+| `.ds-pastille--brand-solid — glyphe sur --brand-via` | icône | 3 | 2,68 ✗ | 2,68 ✗ |
+| `.ds-tab[aria-selected]` | 15 / 600 | 4,5 | 3,00 ✗ | 3,94 ✗ |
 | `.ds-btn--primary — label sur --primary à plat` | 15 / 600 | 4,5 | 3,48 ✗ | 3,48 ✗ |
 | `.ds-btn--primary — label sur --brand-from (pire arrêt)` | 15 / 600 | 4,5 | 2,04 ✗ | 2,04 ✗ |
 | `.ds-btn--primary — label sur --brand-via` | 15 / 600 | 4,5 | 2,68 ✗ | 2,68 ✗ |
 | `.ds-btn--primary — label sur --brand-to` | 15 / 600 | 4,5 | 3,80 ✗ | 3,80 ✗ |
-| `.ds-pastille--brand-solid — glyphe sur --brand-from` | icône | 3 | 2,04 ✗ | 2,04 ✗ |
-| `.ds-pastille--brand-solid — glyphe sur --brand-via` | icône | 3 | 2,68 ✗ | 2,68 ✗ |
 | `.ds-btn--danger — label sur --destructive` | 15 / 600 | 4,5 | 3,80 ✗ | 3,80 ✗ |
 | `.ds-cal__day.is-selected` | 14 / 600 | 4,5 | 3,48 ✗ | 3,48 ✗ |
 | `.eyebrow / .accent — dégradé clippé en texte` | 12 / 600 | 4,5 | 1,83 ✗ | 8,16 |
@@ -265,6 +290,31 @@ sert aux boutons, aux onglets et aux entrées de nav.
 **Le remède.** `--brand-to` (`#e84c3d`), qui tient **3,40** en restant un arrêt du dégradé.
 Si quelqu'un retire un jour le halo du champ, c'est ce basculement qu'il faut faire dans le
 même geste.
+
+### 3.5 · La couleur d'actif en texte — `3,00` à `3,28` en clair
+
+**L'écart.** Quatre paires, toutes en `--active` (`#e85d2f`) : l'entrée de menu active sur
+`--surface-alt` (**3,00 / 3,78**), l'onglet sélectionné sur `--accent` (**3,00 / 3,94**),
+la page courante de pagination sur `--card` (**3,25 / 4,12**), le lien de navbar actif sur
+`--secondary` (**3,28 / 4,12**). Du texte de 15-16 px / 600 : le seuil est 4,5, et
+`--active` vaut l'orange d'aplat.
+
+**Pourquoi il est assumé.** C'est la décision de Julien du 12/09/2026, prise sur pièces et
+sur mesure : un état actif se reconnaît à UNE couleur d'un composant à l'autre — l'orange
+clair, celui que le rail et la pastille portaient déjà — et le jumeau lisible (brique en
+clair) ne la donnait pas. Le socle lisait trois couleurs pour cet état ; il n'en lit plus
+qu'une, `--active`, et `check-active.mjs` le tient.
+
+**Ce qui l'atténue.** L'état actif n'est **jamais porté par la couleur seule** : la plaque
+(`--surface-alt`, `--accent`, `--card`), la graisse (600 partout, contre 500 au repos) et
+`aria-current` / `aria-selected` le portent avec elle. Et un état actif ne porte aucune
+information que le contexte ne donne pas déjà — c'est LÀ où on est, et le titre de la
+page le dit. Le seuil des graphiques (3) est tenu partout.
+
+**Le remède, si l'écart ne peut plus être assumé.** `--active:#b23a1c` en clair (le jumeau
+lisible), dans le fichier de marque : une ligne, et les quatre paires repassent 4,5. C'est
+une autre décision de marque, pas une correction technique — et surtout pas un retour à
+trois jetons.
 
 ---
 

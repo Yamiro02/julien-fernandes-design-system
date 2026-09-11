@@ -97,6 +97,24 @@ export function OverlaysPage() {
           </div>
         </Block>
 
+        <Block label="Titre, sous-titre et croix sur UNE ligne" hint="v0.21.0 : l'en-tête de la modale est celui de Card — pastille · titre + sous-titre · croix. subtitle est la ligne sous le titre, DANS l'en-tête ; description reste le corps, à 1,5 rem sous l'en-tête. Sans sous-titre, la rangée est centrée ; avec, elle passe en --stacked et la croix s'aligne sur le titre.">
+          <div className="flex flex-wrap gap-space-5">
+            <Modal inline onClose={() => undefined} iconVariant="brand" icon={<Icon name="video" />}
+              title="Nouveau Short" subtitle="Trois décisions, pas une de plus."
+              className="[--modal-w:30rem]"
+              footer={<><Button variant="secondary" size="sm">Annuler</Button><Button size="sm">Créer le Short</Button></>}>
+              <FormField label="Nom de la vidéo" htmlFor="demo-short-nom">
+                <Input id="demo-short-nom" placeholder="Short 12 — la vraie contrainte" />
+              </FormField>
+            </Modal>
+            <Modal inline onClose={() => undefined} iconVariant="brand" icon={<Icon name="file-text" />}
+              title="Ajouter au process"
+              subtitle="Cette règle s'appliquera à toutes les vidéos suivantes, sans que tu aies à la redire."
+              description="La règle, reformulée, puis ce qui change dans le fichier."
+              footer={<><Button variant="secondary" size="sm">Annuler</Button><Button size="sm">Écrire la règle</Button></>} />
+          </div>
+        </Block>
+
         <Block label="Sans icône, avec fermeture">
           <Modal inline onClose={() => undefined} title="Ta session a expiré" description="Reconnecte-toi pour reprendre là où tu en étais."
             footer={<Button size="sm">Se reconnecter</Button>} />

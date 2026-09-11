@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { ContentIcon } from '@julienfernandes/ds/brand-content';
 import { IDENTITY } from '../identity';
-import { AppShell, Avatar, Button, Footer, Icon, IconButton, Navbar, Pagination, Sidebar, Tabs, Logo } from '@julienfernandes/ds';
+import { AppShell, Avatar, Button, Footer, Icon, IconButton, Navbar, Pagination, Rail, Sidebar, Tabs, Logo } from '@julienfernandes/ds';
 import { Block, Row, Section } from '../ui';
 
 const LINKS = [{ label: 'Vidéos', active: true }, { label: 'Séries' }, { label: 'À propos' }];
@@ -41,12 +41,12 @@ export function NavigationPage() {
         </Block>
       </Section>
 
-      <Section title="Tabs" note="Groupe d'onglets pill sur --muted. Le pill est légal ici — onglets, badges, compteurs.">
+      <Section title="Tabs" note="Groupe d'onglets segmenté sur le rail de contrôle. Rectangle (barre 0.875rem · onglet --radius-sm) — jamais un pill. L'onglet SÉLECTIONNÉ est une plaque --accent, libellé en --active — LA couleur de tout ce qui est actif (v0.21.0), sans contour. Le survol reste couleur seule, sans fond : c'est ce qui le distingue de la sélection, puisqu'en clair --accent et --surface-alt sont la même couleur.">
         <Block label="Interactif">
           <Row><Tabs items={SERIES} value={tab} onChange={setTab} /></Row>
           <p className="caption">Onglet actif : {SERIES.find(s => s.value === tab)?.label}</p>
         </Block>
-        <Block label="onCard" hint="La barre contraste avec sa surface porteuse ET l'onglet actif contraste avec la barre : il descend d'un cran de surface, jamais au niveau de la barre. Sur la page : barre --secondary, actif --background. Sur une card : barre --background, actif --card. Vérifie les deux en clair ET en sombre — en sombre, --card et --secondary valent tous les deux #2b2a28, un actif en --card y serait invisible.">
+        <Block label="onCard" hint="La barre contraste avec sa surface porteuse : --secondary sur la page, --background sur une card (déduit, ou forcé par onCard). L'onglet sélectionné, lui, est la MÊME plaque accent partout — sur la page, sur une card, en clair, en sombre. Vérifie les deux thèmes.">
           <Row label="sur la page (défaut)"><Tabs items={SERIES} value="build" onChange={() => undefined} /></Row>
           <Row label="sur une card — onCard">
             <span className="inline-flex rounded-lg border border-border bg-card p-space-4">
@@ -83,7 +83,7 @@ export function NavigationPage() {
         </Block>
       </Section>
 
-      <Section title="AppShell et Sidebar" note="Le squelette des outils internes : grille [barre latérale | contenu]. La barre est sur --secondary, repliable en icônes seules, et l'état est persisté en localStorage.">
+      <Section title="AppShell et Sidebar" note="Le squelette des outils internes : grille [barre latérale | contenu]. La barre est sur --secondary, repliable en icônes seules, et l'état est persisté en localStorage. L'entrée ACTIVE est d'une seule couleur, icône et libellé — --active, la couleur de tout ce qui est actif (v0.21.0), sur --surface-alt. RAIL OU SIDEBAR : sidebar = libellés, repliable ; rail = icônes seules, largeur fixe, jamais de repli — voir la section suivante.">
         <Block label="Complet" hint="responsive={false} et staticLayout épinglent la mise en page à deux colonnes pour la vitrine. Chaque section est un groupe : 16px les séparent, avec ou sans titre — le dernier groupe, sans titre, ne se colle plus au précédent.">
           <div className="overflow-hidden rounded-xl border border-border">
             <AppShell
@@ -150,6 +150,42 @@ export function NavigationPage() {
               <div className="p-space-5"><p className="caption">Mode icônes seules : le libellé est masqué, il passe en title.</p></div>
             </AppShell>
           </div>
+        </Block>
+      </Section>
+
+      <Section title="Rail" note="Le rail d'icônes (v0.21.0) : une colonne de --rail-w (3.75rem) sur --secondary, filet droit. Le point de marque (Logo variant=&quot;dot&quot;, 1.75rem) en tête, des entrées en icône SEULE — leur libellé est leur title et leur nom accessible —, un ressort, les entrées de pied, l'avatar. Ce n'est PAS la Sidebar repliée : 3.75rem contre 4.5, des carrés d'icône contre des pilules, pas de bouton de repli. Rail = icônes seules, largeur fixe, jamais de repli · Sidebar = libellés, repliable. Une app choisit l'un.">
+        <Block label="Dans l'AppShell" hint="Une entrée est un IconButton par ses classes : ghost au repos (--text-muted, encre au survol), accent quand elle est active — plaque --accent, icône --active (3,00 / 3,94, seuil 3 des graphiques). Pas de forme tiroir : responsive={false}, obligatoire — AppShell le signale en console sinon.">
+          <div className="overflow-hidden rounded-xl border border-border">
+            <AppShell
+              responsive={false}
+              sidebar={
+                <Rail
+                  items={[
+                    { label: 'Accueil — la liste des vidéos', icon: <Icon name="house" />, active: true, href: '#' },
+                    { label: 'Pipeline — la vidéo ouverte', icon: <Icon name="video" />, href: '#' },
+                    { label: 'Studio — le process maître', icon: <Icon name="sliders-horizontal" />, href: '#' },
+                  ]}
+                  footerItems={[{ label: "Réglages de l'application", icon: <Icon name="settings" />, href: '#' }]}
+                  footer={<Avatar size="1.75rem" halo={false} initials={IDENTITY.monogram} alt={IDENTITY.personne} />}
+                />
+              }
+            >
+              <div className="flex min-h-80 flex-col gap-space-4 p-space-5">
+                <h3>Accueil</h3>
+                <p className="caption">Le contenu de l'outil vit ici. Survole les entrées : le libellé arrive en title.</p>
+              </div>
+            </AppShell>
+          </div>
+        </Block>
+        <Block label="Les états d'une entrée" hint="Repos · survol forcé · active · focus. Le rail ne redessine rien : ce sont les états d'IconButton ghost et accent.">
+          <Row>
+            <Rail className="h-72 rounded-md border border-border" items={[
+              { label: 'Repos', icon: <Icon name="house" />, href: '#' },
+              { label: 'Survol', icon: <Icon name="video" />, href: '#', onClick: e => e.preventDefault() },
+              { label: 'Active', icon: <Icon name="sliders-horizontal" />, href: '#', active: true },
+            ]} />
+            <span className="caption">Les états d'une entrée sont ceux du bouton-icône : va les voir sur la page Actions.</span>
+          </Row>
         </Block>
       </Section>
 

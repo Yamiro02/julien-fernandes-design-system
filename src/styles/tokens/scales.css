@@ -71,9 +71,10 @@
   --card-pad-lg:2rem;    /* 32 — large card / panel */
 
   /* ---------- DIMENSIONS DE COMPOSANTS — DES DÉFAUTS, PAS DES INVARIANTS ----------
-     Vingt mesures qui étaient des littéraux dans patterns.css, et qui portent de
-     l'IDENTITÉ : la hauteur d'une navbar, la largeur d'un tiroir, la taille d'une case à
-     cocher, l'arrondi propre à une barre d'onglets. Deux marques peuvent légitimement les
+     Vingt mesures qui étaient des littéraux dans patterns.css — plus la largeur du rail,
+     née jeton en 0.21.0 — et qui portent de l'IDENTITÉ : la hauteur d'une navbar, la
+     largeur d'un tiroir, la taille d'une case à cocher, l'arrondi propre à une barre
+     d'onglets. Deux marques peuvent légitimement les
      vouloir différentes sans que la STRUCTURE bouge d'une ligne.
 
      LE MÉCANISME, et il n'y a rien d'autre à savoir. Ces valeurs restent ICI : ce sont
@@ -117,6 +118,11 @@
      était déjà généreux avec l'ancien retrait ; avec le nouveau, c'est un couloir. */
   --sidebar-w:clamp(15rem,11rem + 5vw,18rem); /* 240 -> 288 — .ds-sidebar déployée */
   --sidebar-w-collapsed:4.5rem;   /* 72 — .ds-sidebar.is-collapsed */
+  /* LE RAIL N'EST PAS LA BARRE REPLIÉE. 3.75rem contre 4.5 : le rail n'a jamais de
+     libellé, pas de bouton de repli, et ses entrées sont des carrés d'icône
+     (--icon-control-md) et non des pilules de --sidenav-h. Relevé sur les quinze écrans
+     d'une maquette v2 (v0.21.0) — voir .ds-rail dans patterns.css. */
+  --rail-w:3.75rem;               /* 60 — .ds-rail */
   --sidebar-head-h:3rem;          /* 48 — .ds-sidebar__head. Vaut le --control-md de bureau
                                      par coïncidence, PAS par alignement : il ne descend pas
                                      à 2.75rem sous 64rem, il est resté 3rem. */

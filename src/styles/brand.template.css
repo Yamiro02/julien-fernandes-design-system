@@ -146,6 +146,15 @@
   --primary-readable:;
   --destructive-readable:;
 
+  /* LA COULEUR DE TOUT CE QUI EST ACTIF — v0.21.0. Une icône active, un texte actif, le
+     libellé d'un onglet sélectionné, le contour d'une sélection, la page courante d'une
+     pagination : UN jeton, et toutes les règles d'état actif du socle le lisent
+     (check-active.mjs refuse toute autre couleur dans une règle d'actif). C'est un RÔLE,
+     pas un alias : la marque de ce dépôt y met son orange d'aplat, une autre y mettra ce
+     qu'elle veut. Si la valeur ne tient pas 4,5:1 sur ses porteuses en texte, le
+     contraste l'exige en @a11y-assume — une décision écrite, jamais une découverte. */
+  --active:;
+
   /* Sémantique — les 6 pilules. Le FOND est traditionnellement translucide (color-mix
      avec transparent) pour se poser sur n'importe quelle surface ; le TEXTE doit tenir
      4,5:1 une fois le fond composité sur --card ET sur --background.
@@ -224,6 +233,7 @@
   --destructive:; --destructive-foreground:;
   --primary-readable:;
   --destructive-readable:;
+  --active:;
   --grad-soft:;
   --pill-coral-fg:;
   --pill-amber-fg:;
@@ -299,7 +309,7 @@
   /* --icon-control-lg:3rem; */         /* socle : 48 */
 
   /* ---------- 4.3 · DIMENSIONS DE COMPOSANTS ----------
-     Vingt mesures, une par décision de forme. Elles n'ont AUCUN effet les unes sur les
+     Vingt et une mesures, une par décision de forme. Elles n'ont AUCUN effet les unes sur les
      autres : changer --navbar-h ne bouge pas le tiroir.
      Ce qui n'est PAS ici, et n'y sera pas : les espacements internes d'un composant — le
      gap entre une icône et son libellé, le padding d'une cellule. Ce sont des mesures de
@@ -314,6 +324,9 @@
                                            gouverne tous les portables. Une valeur fixe ici
                                            la fige, c'est permis. */
   /* --sidebar-w-collapsed:4.5rem; */   /* socle : 72 — tiroir replié */
+  /* --rail-w:3.75rem; */               /* socle : 60 — le rail d'icônes (Rail), qui n'est
+                                           PAS le tiroir replié : jamais de libellé, jamais
+                                           de bouton de repli */
   /* --sidebar-head-h:3rem; */          /* socle : 48 — en-tête du tiroir */
   /* --sidenav-h:2.75rem; */           /* socle : 44 — un lien de tiroir, au seuil tactile */
   /* --page-min:2.5rem; */              /* socle : 40 — carré minimum d'un bouton de pagination */
