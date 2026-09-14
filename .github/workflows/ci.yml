@@ -50,7 +50,8 @@ jobs:
         run: npm run lint
 
       # Le garde qui lit les COMPOSANTS et la DOC (les autres lisent le CSS) : sections du
-      # catalogue ↔ exports réels, icônes citées ↔ IconName, compte annoncé ↔ décompte réel.
+      # catalogue ↔ exports réels (racine + sous-chemin brand-content), icônes citées ↔
+      # IconName / ContentIconName, comptes annoncés ↔ décomptes réels.
       # Déjà couvert par `lint`, mais nommé ici pour que son échec se lise d'un coup d'œil.
       - name: catalogue ↔ code
         run: node check-catalogue.mjs

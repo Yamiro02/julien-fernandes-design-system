@@ -1,4 +1,5 @@
 import { Icon, type IconName } from '@julienfernandes/ds';
+import { ContentIcon, type ContentIconName } from '@julienfernandes/ds/brand-content';
 import { Block, Section, Spec } from '../ui';
 
 const NAMES: IconName[] = [
@@ -11,6 +12,10 @@ const NAMES: IconName[] = [
   'chevrons-left', 'chevrons-right', 'ellipsis', 'panel-left', 'sliders-horizontal',
   'layout-dashboard', 'house', 'video', 'dumbbell', 'settings',
 ];
+
+/* Les icônes de PLATEFORME ne sont pas dans IconName : elles vivent sur le sous-chemin
+   optionnel brand-content, sous ContentIcon. Trois depuis la 0.22.0. */
+const PLATEFORMES: ContentIconName[] = ['youtube', 'instagram', 'tiktok'];
 
 export function IconsPage() {
   return (
@@ -45,6 +50,20 @@ export function IconsPage() {
                 <span className="mono text-caption text-text-muted w-full truncate text-center">{name}</span>
               </div>
             ))}
+          </div>
+        </Block>
+
+        <Block label="Icônes de plateforme — ContentIcon" hint={`${PLATEFORMES.length} icônes, sur le sous-chemin optionnel @julienfernandes/ds/brand-content. Hors d'IconName : un écran d'interface ne les importe pas. Dessinées dans le socle (lucide ne livre plus de logo), en currentColor — aucune couleur de plateforme.`}>
+          <div className="grid grid-cols-2 gap-space-3 sm:grid-cols-4 lg:grid-cols-6">
+            {PLATEFORMES.map(name => (
+              <div key={name} className="flex flex-col items-center gap-space-2 rounded-md border border-border bg-card p-space-3">
+                <ContentIcon name={name} size="1.25rem" />
+                <span className="mono text-caption text-text-muted w-full truncate text-center">{name}</span>
+              </div>
+            ))}
+          </div>
+          <div className="flex flex-wrap items-center gap-space-5">
+            {PLATEFORMES.map(name => <ContentIcon key={name} name={name} size="1.5rem" />)}
           </div>
         </Block>
       </Section>

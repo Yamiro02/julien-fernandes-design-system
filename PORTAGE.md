@@ -60,9 +60,9 @@ Chemin : `src/components/<famille>/<Nom>.tsx` · classes CSS : `src/styles/patte
 | `navigation` | AppShell · Footer · Navbar · Pagination · Rail · Sidebar · Tabs |
 | `overlays` | ActionSheet · Dropdown · Modal *(+ `useModalSurface`, le hook partagé)* |
 
-**En plus, et optionnels** — `src/brand-content.tsx` : `HaloHot`, `ContentIcon`. Outils de
-miniature et de motion design, pas d'interface. Une app qui n'en fait pas ne les importe
-jamais.
+**En plus, et optionnels** — `src/brand-content.tsx` : `HaloHot`, `ContentIcon` (3 icônes de
+plateforme : `youtube`, `instagram`, `tiktok`). Outils de miniature et de motion design, pas
+d'interface. Une app qui n'en fait pas ne les importe jamais.
 
 ## La vitrine — 9 pages
 

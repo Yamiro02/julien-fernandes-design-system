@@ -23,6 +23,71 @@ concordent.
 
 ---
 
+## 0.22.0 — `ContentIcon` gagne `tiktok`
+
+Un lot d'une seule pièce, entré par la règle du deuxième demandeur (GOVERNANCE, test 2) :
+Creator affiche trois plateformes de publication — YouTube, Instagram, TikTok — et une
+autre app en aura besoin demain. Le logo remonte donc dans le socle, jamais dans l'app.
+
+**Rien ne change à l'écran chez qui monte de version** : aucune règle CSS ne bouge, aucun
+composant existant ne change de rendu. `youtube` et `instagram` sont au pixel près ce
+qu'ils étaient. Dashboard et Creator sont épinglés à **v0.21.0** ; Creator monte à
+`#v0.22.0` dans son lot front, par la spec explicite puis le SHA du lock (GOVERNANCE,
+« côté app »).
+
+### Le glyphe — dessiné à la main, parce qu'il n'y a rien à relever
+
+`Github`, `Youtube` et `Instagram` ont été *relevés* sur lucide 0.469 en 0.5.3, la dernière
+version à les livrer. **TikTok, lucide ne l'a jamais eu** — et lucide v1 ne livre plus
+aucun logo, donc ne pas l'importer de là n'était pas un choix. `Tiktok` est écrit dans
+`src/components/icons/brand-glyphs.ts`, sur la même grille 24 avec 2 de marge, le même
+trait de 2, 2 de jour partout entre deux traits, en un seul tracé fermé : la hampe (bande
+12→16), le crochet (quart d'anneau centré en (21,3), rayons 5 et 9, pointe verticale de 8 à
+12 — la concavité du logo), le corps (anneau centré en (9.5,14.5), rayons 6.5 et 2.5, ouvert
+par une coupe verticale à x=8 — le « C » qui le sépare d'une note ordinaire). Reconstruit
+par `createLucideIcon` comme les trois autres : un `LucideIcon` ordinaire, qui traverse le
+même `Glyph`, hérite du même créneau de taille et rend en **`currentColor`**. Aucune
+couleur de marque TikTok n'entre au socle, ni en JS ni en CSS — même règle que le rouge
+YouTube et le dégradé Instagram, qui n'y sont pas non plus.
+
+Vérifié à 24, 20 et 16 px, en clair et en sombre, à côté des deux autres : la note se lit,
+le « C » reste ouvert à 16 px.
+
+### L'API
+
+`ContentIconName` devient `'youtube' | 'instagram' | 'tiktok'` — extension pure d'une
+union : tout code qui compilait compile. `ContentIcon` ne change pas de signature.
+
+### Le catalogue sait maintenant lire le sous-chemin
+
+`ContentIcon` n'avait **pas de section** dans `docs/PROMPTS.md` — une mention dans celle
+de `Icon`, rien d'autre — parce que `check-catalogue.mjs` ne connaissait que
+`src/index.ts` et aurait tenu `## ContentIcon` pour une section fantôme. Le garde lit
+désormais aussi les `export function` de `src/brand-content.tsx` : `ContentIcon` et
+`HaloHot` ont leur section (famille `# brand-content`, entre `icons` et `navigation`),
+chaque `<ContentIcon name="…">` cité dans un bloc `tsx` doit exister dans
+`ContentIconName`, et le compte « N icônes de plateforme » annoncé dans README.md,
+PORTAGE.md et docs/PROMPTS.md est celui du type. Falsifié avant d'être gardé : un nom
+inventé et un compte faux font tomber le garde.
+
+À noter, pour lire le verdict : « 48 glyphes » **ne bouge pas**. `ContentIconName` et
+`IconName` sont deux listes disjointes — c'est le compte des icônes de plateforme (3) qui
+naît, pas celui des glyphes qui monte.
+
+### Le reste
+
+- vitrine : la page Icônes montre les 3 icônes de plateforme dans leur propre bloc, le pied
+  de page de la page Navigation gagne un bouton TikTok à côté de YouTube et Instagram ;
+- `check-portage.sh` : deux contrôles de plus (`Tiktok` dessinée, `ContentIcon` la connaît)
+  — et le verdict dit le vrai compte, 25 : la ligne annonçait 24 pour 23 contrôles réels
+  depuis la 0.21.0 ;
+- la notice de `Icon.tsx` et celle de `brand-glyphs.ts` disent quatre logos et non trois ;
+  README et PORTAGE nomment les trois plateformes.
+
+**Aucune rupture.** 39 composants, 48 glyphes, quatorze gardes — inchangés.
+
+---
+
 ## 0.21.0 — le rail, l'en-tête unique, et UNE couleur d'actif
 
 Un lot porté depuis les maquettes v2 d'une app, relevé sur pièces, plus une décision de

@@ -14,7 +14,7 @@
  * ══════════════════════════════════════════════════════════════════════════════
  */
 import type { LucideIcon } from 'lucide-react';
-import { Instagram, Youtube } from './components/icons/brand-glyphs';
+import { Instagram, Tiktok, Youtube } from './components/icons/brand-glyphs';
 import type { CSSProperties, JSX } from 'react';
 import { Glyph, type GlyphProps } from './components/icons/Icon';
 import { Halo, type HaloProps } from './components/brand/Halo';
@@ -36,12 +36,18 @@ export function HaloHot({ style, ...rest }: HaloHotProps): JSX.Element {
  * bundle de toute app qui importait `Icon`, qu'elle s'en serve ou non.
  * `github` est resté dans `Icon` : c'est une plateforme de développement, présente à peu
  * près partout dans un produit technique.
+ *
+ * `tiktok` — v0.22.0 — entre au deuxième demandeur, comme le veut GOVERNANCE : une app
+ * publie sur trois plateformes, une autre le fera demain. Le tracé est dessiné dans
+ * `brand-glyphs.ts` (lucide n'a jamais eu ce glyphe), et il rend en `currentColor` comme
+ * les deux autres : aucune couleur de marque TikTok n'entre au socle, ni ici ni en CSS.
  */
-export type ContentIconName = 'youtube' | 'instagram';
+export type ContentIconName = 'youtube' | 'instagram' | 'tiktok';
 
 const CONTENT_ICONS: Record<ContentIconName, LucideIcon> = {
   'youtube': Youtube,
   'instagram': Instagram,
+  'tiktok': Tiktok,
 };
 
 export interface ContentIconProps extends Omit<GlyphProps, 'glyph'> { name: ContentIconName }

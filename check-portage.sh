@@ -19,6 +19,8 @@ n=$(grep -rl "import type {.*JSX.*} from 'react'" src/components src/*.tsx 2>/de
 if [ "$n" -ge 37 ]; then printf '  ✓ JSX importé depuis react (%s fichiers)\n' "$n"
 else printf '  ✗ JSX importé depuis react : %s fichiers seulement, 37 attendus\n' "$n"; ko=$((ko+1)); fi
 v "brand-glyphs : github/youtube/instagram dessinés ici" src/components/icons/brand-glyphs.ts "createLucideIcon"
+v "brand-glyphs : tiktok dessinée ici (0.22.0)"          src/components/icons/brand-glyphs.ts "createLucideIcon('Tiktok'"
+v "ContentIcon connaît tiktok"                          src/brand-content.tsx                "'tiktok': Tiktok"
 v "Icon n'importe plus Github de lucide"                 src/components/icons/Icon.tsx        "from './brand-glyphs'"
 v "house dessinée ici (nom lucide instable)"            src/components/icons/compat-glyphs.ts "createLucideIcon('House'"
 v "l'entrée d'accueil porte house"                      src/components/icons/Icon.tsx        "'house': House"
@@ -54,5 +56,5 @@ if grep -q -- "--text-" src/styles/app-scale.css; then
 else printf '  ✓ app-scale.css ne retouche aucun palier typo\n'; fi
 
 echo
-if [ "$ko" -eq 0 ]; then echo "✓ portage — les 24 correctifs sont intacts"; exit 0
+if [ "$ko" -eq 0 ]; then echo "✓ portage — les 25 correctifs sont intacts"; exit 0
 else echo "✗ portage — $ko correctif(s) perdu(s). Les rejouer AVANT de taguer."; exit 1; fi

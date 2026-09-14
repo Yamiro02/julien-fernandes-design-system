@@ -203,6 +203,7 @@ export function NavigationPage() {
               social={<>
                 <IconButton label="YouTube"><ContentIcon name="youtube" /></IconButton>
                 <IconButton label="Instagram"><ContentIcon name="instagram" /></IconButton>
+                <IconButton label="TikTok"><ContentIcon name="tiktok" /></IconButton>
                 <IconButton label="GitHub"><Icon name="github" /></IconButton>
               </>}
             />

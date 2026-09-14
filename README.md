@@ -58,7 +58,7 @@ gabarit, dont la marque d'exemple est froide et n'est celle de personne.)
 Pas de registry : chaque app épingle une version par un tag git.
 
 ```bash
-npm i github:Yamiro02/julien-fernandes-design-system#v0.21.0
+npm i github:Yamiro02/julien-fernandes-design-system#v0.22.0
 ```
 
 Cinq **peer dependencies**, à la charge de l'app :
@@ -120,9 +120,10 @@ jetons et polices compris. L'import JS reste la voie recommandée : c'est celle 
 vitrine, donc celle qui est vérifiée à chaque version.
 
 **L'extension métier est à part et optionnelle.** `brand-content.css` et le sous-chemin
-`@julienfernandes/ds/brand-content` portent les halos de vignette et les icônes de plateformes : de
-quoi fabriquer une miniature ou une carte de motion, pas un écran. Une app d'interface ne
-les importe pas et ne perd rien.
+`@julienfernandes/ds/brand-content` portent le halo de vignette (`HaloHot`) et les
+3 icônes de plateforme (`ContentIcon` : YouTube, Instagram, TikTok — dessinées dans le
+socle, en `currentColor`, sans couleur de plateforme) : de quoi fabriquer une miniature ou
+une carte de motion, pas un écran. Une app d'interface ne les importe pas et ne perd rien.
 
 ### 2. La couche Tailwind — import **CSS**
 

@@ -5,9 +5,11 @@ Une section par composant : à quoi il sert, quand ne PAS l'utiliser, un exemple
 qui compile, et les états qu'il sait rendre.
 
 Ce document est **gardé par `check-catalogue.mjs`** : chaque composant exporté par
-`src/index.ts` doit avoir sa section ici, chaque section doit correspondre à un export
-réel, et chaque `<Icon name="…">` cité doit exister dans le type `IconName`. Si vous
-ajoutez un composant, ajoutez sa section — le build vous le rappellera.
+`src/index.ts` — et par le sous-chemin optionnel `src/brand-content.tsx` — doit avoir sa
+section ici, chaque section doit correspondre à un export réel, chaque `<Icon name="…">`
+cité doit exister dans le type `IconName` et chaque `<ContentIcon name="…">` dans
+`ContentIconName`. Si vous ajoutez un composant, ajoutez sa section — le build vous le
+rappellera.
 
 Les exemples supposent les imports depuis la racine du paquet :
 
@@ -726,9 +728,9 @@ LE système d'icônes : Lucide, exclusivement. Jamais un emoji, jamais un SVG de
 main. 48 glyphes typés (`IconName`) — un nom hors du type est une erreur TypeScript, et
 c'est voulu.
 
-**Ne pas** chercher `youtube` ou `instagram` ici : les icônes de PLATEFORME vivent dans
-`ContentIcon`, sur le sous-chemin optionnel `@julienfernandes/ds/brand-content`. Et jamais
-`sparkles` : l'étoile-éclair est bannie du set.
+**Ne pas** chercher `youtube`, `instagram` ou `tiktok` ici : les icônes de PLATEFORME
+vivent dans `ContentIcon`, sur le sous-chemin optionnel `@julienfernandes/ds/brand-content`
+(section plus bas). Et jamais `sparkles` : l'étoile-éclair est bannie du set.
 
 **La taille vient du CRÉNEAU, plus du site d'appel — v0.17.0.** Une icône sans `size` lit
 `var(--ds-icon-size, 1.25rem)` ; les créneaux du socle posent la propriété par une règle
@@ -771,6 +773,64 @@ import { ShoppingBag } from 'lucide-react';
 - `glyph` n'autorise PAS un SVG maison : le rendu reste celui du socle. Ce qui s'ouvre,
   c'est le choix du tracé dans lucide, pas la liberté graphique.
 - La couleur suit `currentColor`. Les actions destructives prennent `trash-2`.
+
+---
+
+# brand-content — l'extension métier, optionnelle
+
+Deux outils de VISUEL — une vignette, une carte de motion, un export social —, pas
+d'interface. Ils ne sont pas exportés par la racine du paquet : ils vivent sur le
+sous-chemin `@julienfernandes/ds/brand-content`, avec `brand-content.css` en face côté CSS.
+Une app d'écrans ne les importe pas et ne perd rien.
+
+```tsx
+import { ContentIcon, HaloHot } from '@julienfernandes/ds/brand-content';
+```
+
+## ContentIcon
+
+Les icônes de PLATEFORME — 3 icônes de plateforme, typées (`ContentIconName`) : `youtube`,
+`instagram`, `tiktok`. Hors d'`IconName` exprès : un design system générique n'a aucune
+raison d'embarquer un logo dans le bundle de toute app qui importe `Icon`. Le rendu est
+celui de `Icon` — même grille 24, même trait, même créneau de taille (`--ds-icon-size`) —
+parce que c'est le même `Glyph` derrière.
+
+**Ne pas** lui donner la couleur d'une plateforme. Comme `Icon`, il rend en `currentColor`
+et le socle ne connaît aucun rouge YouTube, aucun dégradé Instagram, aucun cyan-rose
+TikTok — c'est voulu, et c'est la même règle que pour `github` dans `Icon`. Un état actif
+qui la porte prend `text-active`, comme tout état actif.
+
+**Ne pas** chercher un logo de plus par `glyph` : lucide a retiré toutes ses icônes de
+marque en v1. Les tracés sont dessinés dans le socle (`brand-glyphs.ts`) — un quatrième
+logo entre ici, au deuxième demandeur, jamais dans l'app.
+
+```tsx
+<Button variant="secondary" icon={<ContentIcon name="youtube" />}>Voir la chaîne</Button>
+<IconButton label="TikTok"><ContentIcon name="tiktok" /></IconButton>
+<ContentIcon name="instagram" size="1.5rem" />
+```
+
+- Props : `name` (`ContentIconName`) · `size` (longueur CSS, toujours rem — omise, le
+  créneau décide) · `strokeWidth` · `className` · `style`. Rendu `aria-hidden` : le nom
+  accessible est celui du bouton ou du lien qui la porte.
+
+## HaloHot
+
+Le halo CHAUD des miniatures — l'ancien `<Halo hot />`, sorti du socle parce que c'était la
+seule prop d'un composant d'interface à lire un jeton métier. Il lit `--gradient-thumbnail`,
+un des trois jetons du contrat de `brand-content.css` : sans ce CSS, il rend une boîte vide,
+et c'est voulu — un manque doit se voir.
+
+**Ne pas** l'utiliser dans un écran : l'atmosphère d'une section, c'est `Halo`.
+
+```tsx
+<div style={{ position: 'relative', overflow: 'hidden' }}>
+  <HaloHot intensity={0.8} />
+  <img src={vignette} alt="" style={{ position: 'relative' }} />
+</div>
+```
+
+- Props : celles de `Halo` sans `placement` — `intensity` (0–1), `className`, `style`.
 
 ---
 

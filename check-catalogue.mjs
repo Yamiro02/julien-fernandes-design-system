@@ -9,20 +9,26 @@
  * ne compile pas.
  *
  * CINQ VÉRITÉS, vérifiées à chaque `npm run lint` :
- *   1. chaque composant exporté par src/index.ts a sa section `## <Nom>` dans
- *      docs/PROMPTS.md — un composant non documenté ne sera jamais bien utilisé ;
+ *   1. chaque composant exporté par src/index.ts — et par le sous-chemin optionnel
+ *      src/brand-content.tsx (v0.22.0) — a sa section `## <Nom>` dans docs/PROMPTS.md :
+ *      un composant non documenté ne sera jamais bien utilisé ;
  *   2. chaque section de docs/PROMPTS.md correspond à un export réel — une section
  *      fantôme fait écrire du code qui n'existe pas ;
- *   3. chaque `<Icon name="…">` écrit dans la doc existe dans le type IconName ;
+ *   3. chaque `<Icon name="…">` écrit dans la doc existe dans le type IconName, et
+ *      chaque `<ContentIcon name="…">` dans ContentIconName ;
  *   4. le nombre de composants annoncé dans PORTAGE.md, README.md et
  *      src/styles/core.css est le décompte réel de src/components/[star][star]/*.tsx ;
  *   5. le nombre de GLYPHES annoncé dans README.md et docs/PROMPTS.md est la taille réelle
- *      du type IconName. Le point 3 vérifiait que chaque icône CITÉE existe, jamais le
- *      COMPTE : trois lignes ont annoncé 47 pour 48 glyphes pendant deux versions, dans
- *      les deux dépôts. Une liste dont on annonce la taille doit voir sa taille vérifiée.
+ *      du type IconName — et le nombre d'« icônes de plateforme » annoncé dans README.md,
+ *      PORTAGE.md et docs/PROMPTS.md, la taille de ContentIconName. Le point 3 vérifiait
+ *      que chaque icône CITÉE existe, jamais le COMPTE : trois lignes ont annoncé 47 pour
+ *      48 glyphes pendant deux versions, dans les deux dépôts. Une liste dont on annonce
+ *      la taille doit voir sa taille vérifiée.
  *
  * « Composant » = le FICHIER : les sous-exports d'un même fichier (THead, Tr, Td…)
- * appartiennent à la section de leur composant (Table) et n'exigent pas la leur.
+ * appartiennent à la section de leur composant (Table) et n'exigent pas la leur. Le
+ * sous-chemin n'est pas un fichier de composants mais un module qui en DÉFINIT deux
+ * (HaloHot, ContentIcon) : ce sont ses `export function` qui comptent.
  *
  * Usage : node check-catalogue.mjs
  */
@@ -38,6 +44,11 @@ const composants = new Set();
 for (const m of index.matchAll(/^export \{[^}]+\} from '\.\/components\/[^/]+\/([A-Za-z]+)';/gm)) {
   composants.add(m[1]);
 }
+/* …plus ceux que DÉFINIT le sous-chemin optionnel : ils ne passent pas par index.ts, et
+   c'est voulu (outils de visuel, pas d'interface) — mais un appelant les écrit avec les
+   mêmes yeux, donc ils ont leur section. */
+const sousChemin = lire('src/brand-content.tsx');
+for (const m of sousChemin.matchAll(/^export function ([A-Za-z]+)\(/gm)) composants.add(m[1]);
 
 /* ── 2 · les sections du catalogue ────────────────────────────────────────── */
 const doc = lire('docs/PROMPTS.md');
@@ -70,6 +81,15 @@ for (const m of blocs.matchAll(/<Icon\s+name="([^"]+)"/g)) {
     + `      Un agent qui recopie cet exemple a une erreur TypeScript. Corrige le nom, ou`
     + ` ajoute le glyphe au set (src/components/icons/Icon.tsx).`);
 }
+/* Même règle pour les icônes de PLATEFORME : leur type vit dans le sous-chemin. */
+const unionContenu = /export type ContentIconName =([^;]*);/.exec(sousChemin);
+const plateformes = new Set([...(unionContenu ? unionContenu[1] : '').matchAll(/'([a-z0-9-]+)'/g)].map(m => m[1]));
+for (const m of blocs.matchAll(/<ContentIcon\s+name="([^"]+)"/g)) {
+  if (!plateformes.has(m[1])) erreurs.push(
+    `docs/PROMPTS.md cite <ContentIcon name="${m[1]}"> — ce nom n'existe pas dans ContentIconName.\n`
+    + `      Un agent qui recopie cet exemple a une erreur TypeScript. Corrige le nom, ou`
+    + ` dessine le glyphe (src/components/icons/brand-glyphs.ts) et ajoute-le au type.`);
+}
 
 /* ── 4 · le compte annoncé = le compte réel ───────────────────────────────── */
 let reel = 0;
@@ -101,6 +121,16 @@ for (const f of ['README.md', 'docs/PROMPTS.md']) {
       + `      Un compte faux fait chercher un glyphe qui n'existe pas — ou en rate un.`);
   }
 }
+/* Et le compte des icônes de plateforme — celui de ContentIconName, pas d'IconName : les
+   deux listes sont disjointes, et « 48 glyphes » ne bouge pas quand un logo entre. */
+for (const f of ['README.md', 'PORTAGE.md', 'docs/PROMPTS.md']) {
+  const texte = lire(f);
+  for (const m of texte.matchAll(/(\d+)\s+icônes de plateforme/g)) {
+    if (Number(m[1]) !== plateformes.size) erreurs.push(
+      `${f} annonce « ${m[0]} », le type ContentIconName en compte ${plateformes.size}.\n`
+      + `      Un compte faux fait chercher un logo qui n'existe pas — ou en rate un.`);
+  }
+}
 
 /* ── verdict ──────────────────────────────────────────────────────────────── */
 if (erreurs.length) {
@@ -112,5 +142,5 @@ if (erreurs.length) {
   process.exit(1);
 }
 console.log(`✓ catalogue — ${composants.size} composants exportés, ${sections.size} sections, `
-  + `icônes de la doc toutes dans IconName, comptes « ${reel} composants » et `
-  + `« ${noms.size} glyphes » exacts partout`);
+  + `icônes de la doc toutes dans IconName et ContentIconName, comptes « ${reel} composants », `
+  + `« ${noms.size} glyphes » et « ${plateformes.size} icônes de plateforme » exacts partout`);

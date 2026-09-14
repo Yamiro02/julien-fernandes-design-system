@@ -1,7 +1,7 @@
 import { createLucideIcon, type LucideIcon } from 'lucide-react';
 
 /**
- * LES TROIS ICÔNES DE MARQUE, DESSINÉES ICI — et pas importées de lucide.
+ * LES QUATRE ICÔNES DE MARQUE, DESSINÉES ICI — et pas importées de lucide.
  *
  * POURQUOI. lucide-react a RETIRÉ toutes ses icônes de marque en v1 : GitHub, YouTube,
  * Instagram, X… Ce n’est pas une régression, c’est une décision juridique — ces logos sont
@@ -11,12 +11,14 @@ import { createLucideIcon, type LucideIcon } from 'lucide-react';
  * mensonge, et le symptôme arrivait au build de l’app, jamais ici.
  *
  * CE QUE ÇA N’EST PAS. Aucune bibliothèque d’icônes n’a été ajoutée. Ce fichier ne porte que
- * les COORDONNÉES des trois dessins — relevées sur lucide 0.469, la dernière version à les
- * livrer — reconstruites par `createLucideIcon`, l’usine que lucide expose toujours. Le
- * résultat est un `LucideIcon` ordinaire : il traverse le même `Glyph`, hérite des mêmes
- * règles de taille et d’épaisseur, et rien ne change pour l’appelant.
+ * les COORDONNÉES des dessins, reconstruites par `createLucideIcon`, l’usine que lucide
+ * expose toujours. Trois sont relevées sur lucide 0.469, la dernière version à les livrer ;
+ * la quatrième, TikTok, lucide ne l’a JAMAIS livrée — elle est dessinée à la main, sur la
+ * même grille 24, avec le même trait de 2 (voir sa notice). Le résultat est un `LucideIcon`
+ * ordinaire : il traverse le même `Glyph`, hérite des mêmes règles de taille et d’épaisseur,
+ * et rien ne change pour l’appelant.
  *
- * CE QUE ÇA COÛTE. Ces trois dessins sont désormais à nous : si une de ces marques change
+ * CE QUE ÇA COÛTE. Ces quatre dessins sont désormais à nous : si une de ces marques change
  * son logo, c’est ici qu’on le met à jour. Aucune mise à jour de lucide ne le fera plus.
  */
 
@@ -34,4 +36,19 @@ export const Instagram: LucideIcon = createLucideIcon('Instagram', [
   ['rect', { width: '20', height: '20', x: '2', y: '2', rx: '5', ry: '5', key: '2e1cvw' }],
   ['path', { d: 'M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z', key: '9exkf1' }],
   ['line', { x1: '17.5', x2: '17.51', y1: '6.5', y2: '6.5', key: 'r4j83e' }],
+]);
+
+/**
+ * TIKTOK — v0.22.0, dessinée à la main : lucide n’a jamais eu ce glyphe, il n’y a rien à
+ * relever. Le contour de la note, en un seul tracé fermé, sur la grille 24 avec 2 de marge
+ * et un trait de 2 comme les trois autres — et 2 de jour partout entre deux traits :
+ *   · la HAMPE, une bande verticale de 12 à 16, du haut (3) au flanc droit du corps ;
+ *   · le CROCHET, un quart d’anneau centré en (21,3), rayons 5 et 9, dont la pointe tombe
+ *     verticale de 8 à 12 — c’est la concavité du logo, pas un drapeau de croche ;
+ *   · le CORPS, un anneau centré en (9.5,14.5), rayons 6.5 et 2.5, ouvert en haut à gauche
+ *     par une coupe verticale à x=8 — le « C » qui sépare TikTok d’une note ordinaire.
+ * Aucune couleur : comme les deux autres icônes de plateforme, elle rend en currentColor.
+ */
+export const Tiktok: LucideIcon = createLucideIcon('Tiktok', [
+  ['path', { d: 'M12 3h4a5 5 0 0 0 5 5v4a9 9 0 0 1-5-1.52v4.02a6.5 6.5 0 1 1-8-6.32v4.32a2.5 2.5 0 1 0 4 2z', key: 'tiktok' }],
 ]);
